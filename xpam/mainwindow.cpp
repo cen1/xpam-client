@@ -244,7 +244,10 @@ void MainWindow::updateFinished(bool ok, bool utd) {
                 msgBox.exec();
             }
             if (isrestartNeeded){
-
+                QStringList args;
+                args << "/c";
+                args << "update.bat";
+                QProcess::startDetached("C:\\Windows\\system32\\cmd.exe", args);
             }
             else {
                 unlockTabs();

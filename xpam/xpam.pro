@@ -36,7 +36,8 @@ RESOURCES += \
     xpam.qrc
 
 OTHER_FILES += \
-    update.json
+    update.json \
+    update.bat
 
 CONFIG += static
 
