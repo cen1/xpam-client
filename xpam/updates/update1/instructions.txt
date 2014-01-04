@@ -1,0 +1,3 @@
+MOVE DotA v6.79c.w3x MAPPATH
+MOVE changelog.txt EUROPATH
+MOVE changelog_full.txt EUROPATH

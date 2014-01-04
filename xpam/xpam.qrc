@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/">
+        <file>favicon.ico</file>
+        <file>eb_back_small.png</file>
+        <file>splash.png</file>
+    </qresource>
+</RCC>
