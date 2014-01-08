@@ -1,3 +1,4 @@
 # no .a files and .exe files
 *.a
 *.obj
+*.exe

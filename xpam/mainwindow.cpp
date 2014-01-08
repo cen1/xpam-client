@@ -199,6 +199,8 @@ void MainWindow::on_pushButton_3_clicked()
 {
     isStartupUpdate=false;
     ui->textBrowserUpdate->clear();
+    if (QSslSocket::supportsSsl()) ui->statusLabel->setText("SSL supported");
+    else ui->statusLabel->setText("SSL not supported");
 
     if (config->BETAPIN!=ui->betapinbox->text()) return;
     lockTabs(ui->tabWidget->currentIndex());
@@ -230,6 +232,7 @@ void MainWindow::updateFinished(bool ok, bool utd) {
         ui->statusLabel->setText("Client is up to date");
         if (isStartupUpdate) emit updateCheckFinished();
         unlockTabs();
+        ui->pushButton_3->setEnabled(true);
     }
     else {
         if (ok) {
@@ -243,6 +246,7 @@ void MainWindow::updateFinished(bool ok, bool utd) {
                 msgBox.setText(text);
                 msgBox.exec();
             }
+            ui->pushButton_3->setEnabled(true);
             if (isrestartNeeded){
                 QStringList args;
                 args << "/c";
@@ -257,6 +261,7 @@ void MainWindow::updateFinished(bool ok, bool utd) {
             unlockTabs();
             ui->textBrowserUpdate->append("Update failed. Check the log or update tab to find out the reason.");
             ui->statusLabel->setText("Update failed due to critical error");
+            ui->pushButton_3->setEnabled(true);
         }
     }
 }
