@@ -17,6 +17,7 @@ public:
     QString MAPPATH;
     QString EUROPATH;
     QString APPDATA;
+    QString SYSTEM;
 
     QUrl json1;
     QUrl json2;

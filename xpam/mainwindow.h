@@ -28,6 +28,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include <QMainWindow>
 #include "QString"
+#include "QMouseEvent"
 
 namespace Ui {
 class MainWindow;
@@ -37,37 +38,53 @@ class MainWindow : public QMainWindow
 {
     Q_OBJECT
 signals:
-    void readStdout();
-    void startUpdate();
-    void updateCheckFinished();
+    void readStdout();              //starts the gproxy
+    void startW3();                 //starts w3
+    void startUpdate();             //starts the update
+    void updateCheckFinished();     //terminates the splash screen event loop
+
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
     void checkUpdates();
     
 private slots:
-    void on_pushButton_2_clicked();
+    void on_pushButtonSWGP_clicked();
+    void on_pushButtonSWOGP_clicked();
+    void on_pushButtonBU_clicked();
+    void on_closeButton_clicked();
+    void on_maxButton_clicked();
+    void on_minButton_clicked();
 
-    void on_pushButton_clicked();
-    void on_pushButton_3_clicked();
 
 public slots:
     void gproxyReady();
     void gproxyExiting();
+    void w3Exited();
 
-    void updateFinished(bool ok, bool utd); //utd is up to date
+    void updateFinished(bool restartNeeded, bool ok, bool utd); //utd: Up To Date
     void hideSplashScreen();
     void logUpdate(QString line);
     void modifyLastLineSlot(QString line);
-    void restartNeeded();
+
 private:
+    Ui::MainWindow *ui;
+
     void lockTabs(int except);
     void unlockTabs();
     void removeLastLine();
-    Ui::MainWindow *ui;
+    void status(QString status);
 
     bool isStartupUpdate;
-    bool isrestartNeeded;
+
+    //window moving
+    bool down;
+    QPoint lastPos;
+
+protected:
+    void mousePressEvent(QMouseEvent *event);
+    void mouseReleaseEvent(QMouseEvent *event);
+    void mouseMoveEvent(QMouseEvent *event);
 };
 
 #endif // MAINWINDOW_H

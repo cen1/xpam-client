@@ -41,31 +41,32 @@ class Updater : public QObject
     Q_OBJECT
 public:
     Updater(Config * c, bool b);
+    ~Updater();
     
 private:
     Config *        config;
     bool            beta;
     QByteArray      archive;
-    QThread *       dlthread;
-    Downloader *    downloader;
+    QThread         dlthread;
+    Downloader *     downloader;
     int             mirrorno;
     QString         zippath;
     QJsonObject     real;
     QStringList     mirrors;
     QTime           progressTime;
     int             latestVersion;
+    bool            restartNeeded;
 
     bool extractZip();
     bool instructions();
     QByteArray simpleDl(QUrl url);
 
 signals:
-    void updateFinished(bool ok, bool utd);
+    void updateFinished(bool restartNeeded, bool ok, bool utd);
     void sendLine(QString line);
     void modifyLastLine(QString line);
     void startDl();
     void hideSplashScreen();
-    void restartNeeded();
 
 public slots:
     void startUpdate();

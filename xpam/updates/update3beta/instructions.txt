@@ -1,0 +1,6 @@
+MOVE DotA v6.79e.w3x MAPPATH
+MOVE newxpam.exe EUROPATH
+MOVE changelog.txt EUROPATH
+MOVE changelog_full.txt EUROPATH
+DELETE libeay32.dll
+DELETE libssl32.dll

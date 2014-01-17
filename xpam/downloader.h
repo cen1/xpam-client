@@ -41,8 +41,9 @@ public:
 
 private:
     QUrl url;
-    QNetworkAccessManager * nam;
+    QNetworkAccessManager nam;
     QNetworkReply * reply;
+    bool erroremitted;              //if error() and finished() are both emitted with errors, we only emit one signal to updater thread
 
 signals:
     void progress(qint64 bytesReceived, qint64 bytesTotal);
@@ -52,6 +53,7 @@ signals:
 public slots:
     void progressSlot(qint64 bytesReceived, qint64 bytesTotal);
     void finishedSlot();
+    void errorSlot(QNetworkReply::NetworkError code);
     void startDl();
 };
 

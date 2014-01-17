@@ -48,14 +48,21 @@ Updater::Updater(Config * c, bool b) {
     beta=b;
     mirrorno=0;
     zippath=config->APPDATA+"\\patch.zip";
+    restartNeeded=false;
+    downloader=nullptr;
+}
+
+Updater::~Updater() {
+    delete downloader;
 }
 
 void Updater::startUpdate() {
     /*
      * XPAM CLIENT UPDATE PROCEDURE - DOCUMENTATION
-     * 1. Access 3 different update.json mirrors. 2 out of 3 must be the same and avalible for the procedure to continue
+     * 1. Access 3 different update.json mirrors. 2 out of 3 must be the same for the procedure to continue
      * 2. First object is latest stable patch, second object is beta patch. Each patch has current patch version,
      *    4 mirrors to the update zip archive and sha1 hash of the archive. Patches are full, not incremental.
+     *    See Other Files->update.json
      * 3. Mirrors are Google Drive, SkyDrive, Ubuntu ONE and files.eurobattle.net in that order
      * 4. If JSON patch version is bigger than your current in registry, download the archive.
      * 5. If you fail to download from the first mirror, fallback to the second etc
@@ -67,7 +74,8 @@ void Updater::startUpdate() {
      *    DELETE <filename> <location EUROPATH | W3PATH | MAPPATH>  //deletes a file
      *
      * 10. Cleanup %appdata$ after update
-     * 11. Start clientpatcher.exe, exit app. Clientpatcher removes xpam.exe and renames newxpam.exe (if it exists). Then starts xpam.exe
+     * 11. If instructions.txt included a file called newxpam.exe then start update.bat and exit app.
+     *     Update.bat removes xpam.exe and renames newxpam.exe (if it exists). Then starts xpam.exe
      *
      *
      * UPLOAD INSTRUCTIONS
@@ -75,13 +83,20 @@ void Updater::startUpdate() {
      * -SkyDrive: ID from public link
      * -Ubuntu ONE: More->Publish
      */
+
+    if (downloader!=nullptr) {
+        emit sendLine("FORBIDDEN RESTART");
+        emit updateFinished(restartNeeded, false, false);
+        return;
+    }
+
     QByteArray j1=simpleDl(config->json1);
     QByteArray j2=simpleDl(config->json2);
     QByteArray j3=simpleDl(config->json3);
 
-    if ((j1.isEmpty() && j2.isEmpty()) || (j1.isEmpty() && j3.isEmpty()) || (j2.isEmpty() && j3.isEmpty())){
-        emit sendLine("Update info is empty. Update server are down or there might be a problem with your internet connection");
-        emit updateFinished(false, false);
+    if ((j1.isEmpty() && j2.isEmpty()) || (j1.isEmpty() && j3.isEmpty()) || (j2.isEmpty() && j3.isEmpty())) {
+        emit sendLine("Update info is empty. Update servers are down or there might be a problem with your internet connection");
+        emit updateFinished(restartNeeded, false, false);
         return;
     }
 
@@ -96,8 +111,8 @@ void Updater::startUpdate() {
         jsonba=j2;
     }
     else {
-        emit sendLine("Update info mismatch");
-        emit updateFinished(false, false);
+        emit sendLine("Update info mismatch.");
+        emit updateFinished(restartNeeded, false, false);
         return;
     }
 
@@ -116,6 +131,7 @@ void Updater::startUpdate() {
         emit sendLine("Received an array instead of an object");
         return;
     }*/
+
     if (json.isObject()){
         emit sendLine("JSON build OK");
     }
@@ -133,14 +149,16 @@ void Updater::startUpdate() {
         real=latest_o;
     }
 
-    latestVersion = real.value("version").toInt();
+    latestVersion = qRound(real.value("version").toDouble());
     emit sendLine("Local version: "+QString::number(config->PATCH)+" Latest version: "+QString::number(latestVersion));
+
     if (latestVersion <= config->PATCH) {
         emit sendLine("Xpam is up to date");
-        emit updateFinished(true, true);
+        emit updateFinished(restartNeeded, true, true);
         return;
     }
-    //tell splash screen to hide, will only work on startup update
+
+    //tell splash screen to hide, only taken into account if it is a startup update
     //this means that we have an update so it'd be nice to see the progress
     emit hideSplashScreen();
 
@@ -151,7 +169,7 @@ void Updater::startUpdate() {
 
     emit sendLine("Downloading from: mirror "+QString::number(mirrorno));
     QUrl url(mirrors[mirrorno]);
-    dlthread=new QThread();
+
     downloader=new Downloader(url);
 
     QObject::connect(this, SIGNAL(startDl()), downloader, SLOT(startDl()));
@@ -159,8 +177,8 @@ void Updater::startUpdate() {
     QObject::connect(downloader, SIGNAL(progress(qint64,qint64)), this, SLOT(receiveProgress(qint64,qint64)));
     QObject::connect(downloader, SIGNAL(sendInfo(QString)), this, SIGNAL(sendLine(QString)));
 
-    downloader->moveToThread(dlthread);
-    dlthread->start();
+    downloader->moveToThread(&dlthread);
+    dlthread.start();
     emit startDl();
 
     progressTime = QTime().currentTime();
@@ -251,7 +269,7 @@ bool Updater::instructions() {
                     emit sendLine("Could not move file "+from.fileName()+" to "+dstPath+"\\"+midParam+" -- "+from.errorString());
                     return false;
                 }
-                if (midParam=="newxpam.exe") emit restartNeeded(); //this is new client so we tell gui thread to restart after update
+                if (midParam=="newxpam.exe") restartNeeded=true;
             }
             else if (l[0]=="DELETE") {
                 emit sendLine("Deleting "+midParam);
@@ -276,9 +294,11 @@ bool Updater::instructions() {
     return true;
 }
 
+//receives download progress from downloader
+//we use a timer so we don't waste cycles
 void Updater::receiveProgress(qint64 bytesReceived, qint64 bytesTotal) {
     if (progressTime.elapsed() > 1000 && bytesTotal != -1) {
-        int percents = (int)(((float)bytesReceived/(float)bytesTotal)*100.0);
+        int percents = qRound((((float)bytesReceived/(float)bytesTotal)*100.0));
         emit modifyLastLine("("+QString::number(bytesReceived)+" Bytes / "+QString::number(bytesTotal)+" Bytes) -- "+QString::number(percents)+"%");
 
         progressTime.restart();
@@ -286,9 +306,7 @@ void Updater::receiveProgress(qint64 bytesReceived, qint64 bytesTotal) {
 }
 
 void Updater::receiveFinishdl(QByteArray data) {
-    dlthread->exit();
-    delete downloader;
-    delete dlthread;
+    dlthread.exit();
 
     emit sendLine("...");
 
@@ -301,7 +319,7 @@ void Updater::receiveFinishdl(QByteArray data) {
     if (data.isEmpty() || !hashok) {
         if (mirrorno==3) {
             emit sendLine("All mirrors failed. Aborting the update");
-            emit updateFinished(false, false);
+            emit updateFinished(restartNeeded, false, false);
             return;
         }
 
@@ -309,16 +327,16 @@ void Updater::receiveFinishdl(QByteArray data) {
         mirrorno++;
 
         QUrl url(mirrors[mirrorno]);
-        dlthread=new QThread();
-        downloader=new Downloader(url);
+        delete downloader;
+        downloader= new Downloader(url);
 
         QObject::connect(this, SIGNAL(startDl()), downloader, SLOT(startDl()));
         QObject::connect(downloader, SIGNAL(finisheddl(QByteArray)), this, SLOT(receiveFinishdl(QByteArray)));
         QObject::connect(downloader, SIGNAL(progress(qint64,qint64)), this, SLOT(receiveProgress(qint64,qint64)));
         QObject::connect(downloader, SIGNAL(sendInfo(QString)), this, SIGNAL(sendLine(QString)));
 
-        downloader->moveToThread(dlthread);
-        dlthread->start();
+        downloader->moveToThread(&dlthread);
+        dlthread.start();
         emit startDl();
     }
     else {
@@ -347,13 +365,12 @@ void Updater::receiveFinishdl(QByteArray data) {
             return;
         }
         //change registry version
-        Registry reg;
-        if (!reg.setPatchVersion(latestVersion)){
+        if (!Registry::setPatchVersion(latestVersion)){
             emit sendLine("Error changing current version in registry. Aborting update");
             return;
         }
         //change config
-        config->PATCH=reg.getPatchVersion();
+        config->PATCH=Registry::getPatchVersion();
 
         QFile f(config->EUROPATH+"\\changelog.txt");
         f.open(QFile::ReadOnly);
@@ -362,7 +379,7 @@ void Updater::receiveFinishdl(QByteArray data) {
             emit sendLine(changelog);
         }
 
-        emit updateFinished(true, false);
+        emit updateFinished(restartNeeded, true, false);
     }
 }
 
@@ -379,11 +396,14 @@ QByteArray Updater::simpleDl(QUrl url) {
     loop.exec();
 
     if (reply->error() == QNetworkReply::NoError) {
-        return reply->readAll();
+        QByteArray ba(reply->readAll());
+        reply->deleteLater();
+        return ba;
     }
     else {
         emit sendLine("Error with simple download: "+reply->errorString());
         QByteArray ba;
+        reply->deleteLater();
         return ba;
     }
 }

@@ -6,20 +6,20 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>500</width>
-    <height>350</height>
+    <width>900</width>
+    <height>600</height>
    </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
   </property>
   <property name="minimumSize">
    <size>
-    <width>500</width>
-    <height>350</height>
-   </size>
-  </property>
-  <property name="maximumSize">
-   <size>
-    <width>500</width>
-    <height>350</height>
+    <width>900</width>
+    <height>600</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -30,225 +30,661 @@
     <normaloff>:/favicon.ico</normaloff>:/favicon.ico</iconset>
   </property>
   <property name="styleSheet">
-   <string notr="true"/>
+   <string notr="true">QStatusBar {
+     /*background: #878787;*/
+  background: #4C4C4C;
+    color:white;
+    font-family: &quot;Lucida Sans Unicode&quot;;
+ }</string>
   </property>
   <property name="locale">
    <locale language="English" country="UnitedKingdom"/>
   </property>
   <widget class="QWidget" name="centralWidget">
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
    <property name="minimumSize">
     <size>
-     <width>500</width>
-     <height>330</height>
+     <width>900</width>
+     <height>580</height>
     </size>
    </property>
-   <property name="maximumSize">
-    <size>
-     <width>500</width>
-     <height>350</height>
-    </size>
+   <property name="font">
+    <font>
+     <pointsize>-1</pointsize>
+    </font>
+   </property>
+   <property name="layoutDirection">
+    <enum>Qt::LeftToRight</enum>
    </property>
    <property name="styleSheet">
     <string notr="true">#centralWidget {
-	background-color: black;
+  background-color: rgba(150, 150, 150);
+  margin: 0px;
+  padding: 0px;
+  font-size: 14px;
+  color: white;
+}
+
+QPushButton {
+  border: 2px solid #4C4C4C;
+  background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 rgba(63,63,63,1), stop:1 rgba(14,14,14,1));
+  color: #ffffff;
+  font-family: &quot;Lucida Sans Unicode&quot;;
+}
+
+QPushButton:hover {
+  background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 rgba(84,84,84,1), stop:1 rgba(14,14,14,1));
+}
+
+#logoBar {
+  background-color: #007dc1;
+  text-align: center;
+}
+
+#labelTitle {
+  font-weight: bold;
+  
+}
+
+#hs1 {
+  width: 10%;
 }
 
 #tabWidget {
-	margin: 0px
+ 
+}
+
+#tabWidget:pane {
+  /*borde-top: none;    */  
+}
+
+QTabBar::tab {
+  background-color: rgba(150, 150, 150);
+  color:#ffffff;
+  height: 30px;
+  font-family: &quot;Lucida Sans Unicode&quot;;
+
+}
+QTabBar::tab:hover{  
+  background-color: rgba(180, 180, 180);
+}
+
+QTabBar::tab:selected{  
+  background-color: rgba(180, 180, 180);
 }
 
 #tab0 {
-	background-image: url(:/eb_back_small.png);
+  border-image: url(&quot;:/back.png&quot;) 0 0 0 0 stretch stretch;
+  border-width: 0px;
 }
 #tab1 {
-	background-image: url(:/eb_back_small.png);
+  border-image: url(&quot;:/back.png&quot;) 0 0 0 0 stretch stretch;
+  border-width: 0px;
 }
 #tab2 {
-	background-image: url(:/eb_back_small.png);
+  border-image: url(&quot;:/back.png&quot;) 0 0 0 0 stretch stretch;
+  border-width: 0px;
 }
 #tab3 {
-	background-image: url(:/eb_back_small.png);
+  border-image: url(&quot;:/back.png&quot;) 0 0 0 0 stretch stretch;
+  border-width: 0px;
 }
 
 QLabel {
 	color: white;
 }
 
+#horizontalLayoutX {
+  
+}
+
+#horizontalLayoutLogo {
+ 
+}
+
 QCheckBox {
-	color:white;
-}</string>
+  color:white;
+  font-family: &quot;Lucida Sans Unicode&quot;;
+}
+
+QCheckBox::indicator {
+  border: 1px solid grey;
+  border-radius: 2px;
+  padding: 1px 1px 1px 1px;
+}
+
+QCheckBox::indicator:unchecked {
+  background-color: white;
+}
+
+QCheckBox::indicator:unchecked:hover {
+  border: 1px solid grey;
+}
+
+QCheckBox::indicator:checked {
+  background: #007dc1;
+}
+
+ QCheckBox::indicator:checked:hover {
+      border: 1px solid grey;
+ }
+
+
+#closeButton {
+  background-image: url(&quot;:/close_window.png&quot;);
+  border: none;
+}
+
+#maxButton {
+  background-image: url(&quot;:/maximize_window.png&quot;);
+  border: none;
+}
+
+#minButton {
+  background-image: url(&quot;:/minimize_window.png&quot;);
+  border: none;
+}
+
+#closeButton:hover {
+  background-image: url(&quot;:/close_window_hover.png&quot;);
+}
+
+#maxButton:hover {
+  background-image: url(&quot;:/maximize_window_hover.png&quot;);
+}
+
+#minButton:hover {
+  background-image: url(&quot;:/minimize_window_hover.png&quot;);
+}
+
+#closeButton:pressed {
+  background-image: url(&quot;:/close_window_hover.png&quot;);
+}
+
+#maxButton:pressed {
+  background-image: url(&quot;:/maximize_window_hover.png&quot;);
+}
+
+#minButton:pressed {
+  background-image: url(&quot;:/minimize_window_hover.png&quot;);
+}
+
+#pushButtonSWGP {
+  background-image: url(&quot;:/gproxygate.png&quot;);
+  background-repeat: no-repeat;
+}
+
+#pushButtonSWGP:hover {
+  background-image: url(&quot;:/gproxygate_hover.png&quot;);  
+  background-repeat: no-repeat;
+}
+
+#pushButtonSWOGP {
+  background-image: url(&quot;:/normalgate.png&quot;);
+  background-repeat: no-repeat;
+}
+
+#pushButtonSWOGP:hover {
+  background-image: url(&quot;:/normalgate_hover.png&quot;);
+  background-repeat: no-repeat;
+}
+
+</string>
    </property>
-   <widget class="QTabWidget" name="tabWidget">
-    <property name="geometry">
-     <rect>
-      <x>0</x>
-      <y>0</y>
-      <width>501</width>
-      <height>331</height>
-     </rect>
+   <layout class="QHBoxLayout" name="horizontalLayout">
+    <property name="spacing">
+     <number>0</number>
     </property>
-    <property name="currentIndex">
-     <number>2</number>
+    <property name="leftMargin">
+     <number>0</number>
     </property>
-    <widget class="QWidget" name="tab0">
-     <attribute name="title">
-      <string>Launcher</string>
-     </attribute>
-     <widget class="QCheckBox" name="checkBox">
-      <property name="geometry">
-       <rect>
-        <x>200</x>
-        <y>220</y>
-        <width>73</width>
-        <height>17</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Windowed</string>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="pushButton">
-      <property name="geometry">
-       <rect>
-        <x>180</x>
-        <y>160</y>
-        <width>121</width>
-        <height>41</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Start without GProxy</string>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="pushButton_2">
-      <property name="geometry">
-       <rect>
-        <x>180</x>
-        <y>100</y>
-        <width>121</width>
-        <height>41</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Start with GProxy</string>
-      </property>
-     </widget>
-    </widget>
-    <widget class="QWidget" name="tab1">
-     <attribute name="title">
-      <string>GProxy console</string>
-     </attribute>
-     <widget class="QTextBrowser" name="textBrowser">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>90</y>
-        <width>471</width>
-        <height>221</height>
-       </rect>
-      </property>
-     </widget>
-    </widget>
-    <widget class="QWidget" name="tab2">
-     <attribute name="title">
-      <string>Update</string>
-     </attribute>
-     <widget class="QPushButton" name="pushButton_3">
-      <property name="geometry">
-       <rect>
-        <x>60</x>
-        <y>90</y>
-        <width>111</width>
-        <height>23</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Get Beta patch</string>
-      </property>
-     </widget>
-     <widget class="QTextBrowser" name="textBrowserUpdate">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>120</y>
-        <width>471</width>
-        <height>171</height>
-       </rect>
-      </property>
-     </widget>
-     <widget class="QLineEdit" name="betapinbox">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>90</y>
-        <width>41</width>
-        <height>20</height>
-       </rect>
-      </property>
-     </widget>
-    </widget>
-    <widget class="QWidget" name="tab3">
-     <attribute name="title">
-      <string>About</string>
-     </attribute>
-     <widget class="QLabel" name="label">
-      <property name="geometry">
-       <rect>
-        <x>150</x>
-        <y>100</y>
-        <width>181</width>
-        <height>16</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Eurobattle.net Client version 0.2.0.1</string>
-      </property>
-      <property name="wordWrap">
-       <bool>true</bool>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label_2">
-      <property name="geometry">
-       <rect>
-        <x>70</x>
-        <y>160</y>
-        <width>341</width>
-        <height>16</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>We are searching for Qt/ C++ developers to further expand this client.</string>
-      </property>
-     </widget>
-    </widget>
-   </widget>
-   <widget class="QLabel" name="statusLabel">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>330</y>
-      <width>391</width>
-      <height>16</height>
-     </rect>
+    <property name="topMargin">
+     <number>0</number>
     </property>
-    <property name="text">
-     <string/>
+    <property name="rightMargin">
+     <number>0</number>
     </property>
-   </widget>
-   <widget class="QLabel" name="debugLabel">
-    <property name="geometry">
-     <rect>
-      <x>420</x>
-      <y>330</y>
-      <width>71</width>
-      <height>20</height>
-     </rect>
+    <property name="bottomMargin">
+     <number>0</number>
     </property>
-    <property name="text">
-     <string/>
-    </property>
-   </widget>
+    <item>
+     <layout class="QGridLayout" name="gridLayoutMain">
+      <property name="spacing">
+       <number>0</number>
+      </property>
+      <item row="0" column="0">
+       <widget class="QWidget" name="logoBar" native="true">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>20</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>20</height>
+         </size>
+        </property>
+        <layout class="QHBoxLayout" name="horizontalLayout_4">
+         <property name="spacing">
+          <number>0</number>
+         </property>
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
+          <number>0</number>
+         </property>
+         <item>
+          <widget class="QLabel" name="labelTitle">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="layoutDirection">
+            <enum>Qt::LeftToRight</enum>
+           </property>
+           <property name="text">
+            <string>Eurobattle.net Client</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <layout class="QHBoxLayout" name="horizontalLayoutX">
+        <property name="spacing">
+         <number>0</number>
+        </property>
+        <property name="sizeConstraint">
+         <enum>QLayout::SetDefaultConstraint</enum>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="QPushButton" name="minButton">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>20</width>
+            <height>20</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>20</width>
+            <height>20</height>
+           </size>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="flat">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="maxButton">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>20</width>
+            <height>20</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>20</width>
+            <height>20</height>
+           </size>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="flat">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="closeButton">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>20</width>
+            <height>20</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>20</width>
+            <height>20</height>
+           </size>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="flat">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="1" column="0" colspan="3">
+       <widget class="QTabWidget" name="tabWidget">
+        <property name="layoutDirection">
+         <enum>Qt::LeftToRight</enum>
+        </property>
+        <property name="currentIndex">
+         <number>3</number>
+        </property>
+        <widget class="QWidget" name="tab0">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <attribute name="title">
+          <string> LAUNCHER </string>
+         </attribute>
+         <layout class="QHBoxLayout" name="horizontalLayout_6">
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_5">
+            <item>
+             <spacer name="hs1">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>18</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <layout class="QVBoxLayout" name="verticalLayout">
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayoutLauncher">
+                <property name="spacing">
+                 <number>0</number>
+                </property>
+                <item>
+                 <widget class="QPushButton" name="pushButtonSWOGP">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>400</width>
+                    <height>367</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>400</width>
+                    <height>367</height>
+                   </size>
+                  </property>
+                  <property name="toolTip">
+                   <string>Start without GProxy to play PG&lt;br /&gt;
+or manually host your games.</string>
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="pushButtonSWGP">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>400</width>
+                    <height>367</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>400</width>
+                    <height>367</height>
+                   </size>
+                  </property>
+                  <property name="font">
+                   <font>
+                    <family>Lucida Sans Unicode</family>
+                   </font>
+                  </property>
+                  <property name="toolTip">
+                   <string>Starting with GProxy is required for some DotA leagues&lt;br /&gt;
+to be able to join their games. It also provides reconnection&lt;br /&gt;
+in case you drop in the middle of the game.&lt;br /&gt;
+YOU CAN'T PLAY PG OR MANUALLY HOST GAMES IN THIS MODE!</string>
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <widget class="QCheckBox" name="checkBoxWindowed">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="text">
+                 <string>Windowed</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <spacer name="verticalSpacer">
+                <property name="orientation">
+                 <enum>Qt::Vertical</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>20</width>
+                  <height>40</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <spacer name="hs2">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>18</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="tab1">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <attribute name="title">
+          <string>  GPROXY CONSOLE  </string>
+         </attribute>
+         <layout class="QHBoxLayout" name="horizontalLayout_2">
+          <item>
+           <widget class="QTextBrowser" name="textBrowser">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="tab2">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <attribute name="title">
+          <string> UPDATE </string>
+         </attribute>
+         <layout class="QHBoxLayout" name="horizontalLayout_3">
+          <item>
+           <widget class="QSplitter" name="splitter">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <widget class="QTextBrowser" name="textBrowserUpdate"/>
+            <widget class="QWidget" name="layoutWidget">
+             <layout class="QFormLayout" name="formLayoutBU">
+              <property name="topMargin">
+               <number>5</number>
+              </property>
+              <item row="0" column="0">
+               <widget class="QLineEdit" name="betapinbox">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="1">
+               <widget class="QPushButton" name="pushButtonBU">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>150</width>
+                  <height>20</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>150</width>
+                  <height>20</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>Get Beta patch</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="tab3">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <attribute name="title">
+          <string> ABOUT </string>
+         </attribute>
+         <widget class="QLabel" name="labelAbout">
+          <property name="geometry">
+           <rect>
+            <x>20</x>
+            <y>20</y>
+            <width>351</width>
+            <height>461</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Eurobattle.net Client version 0.3.0.0, developed by cen&lt;/p&gt;&lt;p&gt;&lt;br/&gt;We are searching for Qt/ C++ developers to further expand this client.&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;TODO:&lt;/p&gt;&lt;p&gt;-bnet Chat client&lt;/p&gt;&lt;p&gt;-DotA 2 support&lt;/p&gt;&lt;p&gt;-TS integration&lt;/p&gt;&lt;p&gt;-Displaying player's profile and league stats in the client&lt;/p&gt;&lt;p&gt;-and more...&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;Special thanks to:&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;IStealSkills&lt;/span&gt; - help with desig&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Stefos007&lt;/span&gt; - original GProxy implementation&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Ladislav Zezula&lt;/span&gt; - Stormlib (&lt;a href=&quot;http://www.zezula.net/en/mpq/stormlib.html&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;zezula.net&lt;/span&gt;&lt;/a&gt;)&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;http://pvpgn.org/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;PvPGN.org&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
+          <property name="openExternalLinks">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </widget>
+       </widget>
+      </item>
+     </layout>
+    </item>
+   </layout>
   </widget>
+  <widget class="QStatusBar" name="statusBar"/>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources>

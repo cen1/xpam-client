@@ -30,15 +30,15 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 Config::Config()
 {
-    VERSION = "0.1.0.0";
+    VERSION = "0.3.0.0";
     BETAPIN = "1377";
 
-    Registry reg;
-    EUROPATH = reg.getEuroPath();
-    W3PATH   = reg.getW3dir();
-    MAPPATH  = reg.getW3dir()+"\\Maps\\Download";
-    PATCH    = reg.getPatchVersion();
+    EUROPATH = Registry::getEuroPath();
+    W3PATH   = Registry::getW3dir();
+    MAPPATH  = Registry::getW3dir()+"\\Maps\\Download";
+    PATCH    = Registry::getPatchVersion();
     APPDATA  = Winutils::getAppData()+"\\Eurobattle.net";
+    SYSTEM   = Winutils::getSystem32();
 
     json1 = "http://xpam.pl/update/update.json";
     json2 = "http://tools.eurobattle.net/update/update.json";

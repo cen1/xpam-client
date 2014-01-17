@@ -1,0 +1,5 @@
+CHANGELOG #3 beta:
+
+-added DotA v6.79e
+-new client design
+-client bug fixes

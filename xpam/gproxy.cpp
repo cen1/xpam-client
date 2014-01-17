@@ -48,18 +48,19 @@ void GProxy::readStdout() {
     p.start(exedir);
     if (!p.waitForStarted()) {
         emit sendLine("Could not start GProxy: "+p.errorString());
+        emit gproxyExiting();
         return;
     }
-    if (!p.isOpen()) emit sendLine("Stream is not open");
-    if (!p.isReadable()) emit sendLine("Stream is not readable");
+    if (!p.isOpen()) emit sendLine("Console stream is not open");
+    if (!p.isReadable()) emit sendLine("Console stream is not readable");
 
     while(!abort) {
-        p.waitForReadyRead();
+        p.waitForReadyRead(500);
         //if (!r) sendLine("False return after 5 seconds "+p.errorString());
 
         if (p.canReadLine()) {
             QString line(p.readLine());
-            line=line.simplified();
+            line=line.simplified(); //mostly for removing newline
 
             emit sendLine(line);
 

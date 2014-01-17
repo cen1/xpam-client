@@ -27,24 +27,29 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 Downloader::Downloader(QUrl u) {
     url=u;
-    reply=NULL;
-    nam=NULL;
+    reply=nullptr;
+    erroremitted=false;
 }
 
 Downloader::~Downloader(){
     delete reply;
-    delete nam;
 }
 
 // Slot to be triggered from the updater thread
 void Downloader::startDl() {
-    nam = new QNetworkAccessManager();
-    reply = nam->get(QNetworkRequest(url));
+    if (reply==nullptr) {
+        reply = nam.get(QNetworkRequest(url));
 
-    emit sendInfo("Starting download");
-    emit sendInfo("");
-    QObject::connect(reply, SIGNAL(finished()), this, SLOT(finishedSlot()));
-    QObject::connect(reply, SIGNAL(downloadProgress(qint64, qint64)), this, SLOT(progressSlot(qint64, qint64)));
+        emit sendInfo("Starting download");
+        emit sendInfo(""); //empty line which will be removed for the progress text
+
+        QObject::connect(reply, SIGNAL(finished()), this, SLOT(finishedSlot()));
+        QObject::connect(reply, SIGNAL(error(QNetworkReply::NetworkError)), this, SLOT(errorSlot(QNetworkReply::NetworkError)));
+        QObject::connect(reply, SIGNAL(downloadProgress(qint64, qint64)), this, SLOT(progressSlot(qint64, qint64)));
+    }
+    else {
+        emit sendInfo("You can't start the same download several times!!!");
+    }
 }
 
 //intermediate slot for sending progress info to updater thread
@@ -64,22 +69,37 @@ void Downloader::finishedSlot(){
             //make new request
             //emit sendInfo("Redirected to "+possibleRedirectUrl.toUrl().toString());
             delete reply;
-            reply = nam->get(QNetworkRequest(possibleRedirectUrl.toUrl())); //when this reply is finished this slot will get re-triggered
+            reply = nam.get(QNetworkRequest(possibleRedirectUrl.toUrl())); //when this reply is finished this slot will get re-triggered
 
             emit sendInfo("Starting download");
             emit sendInfo("");
+
+            //reconnect since deleting reply disconnects all slots
             QObject::connect(reply, SIGNAL(finished()), this, SLOT(finishedSlot()));
+            QObject::connect(reply, SIGNAL(error(QNetworkReply::NetworkError)), this, SLOT(errorSlot(QNetworkReply::NetworkError)));
             QObject::connect(reply, SIGNAL(downloadProgress(qint64, qint64)), this, SLOT(progressSlot(qint64, qint64)));
         }
         else {
             //all ok
-            emit sendInfo("Downloader exiting");
+            emit sendInfo("Downloader exiting with no errors");
             emit finisheddl(reply->readAll());
         }
     }
-    else{
-        emit sendInfo("Network error: "+reply->errorString());
+    else {
+        if (!erroremitted) {
+            emit sendInfo("Network error: "+reply->errorString());
+            QByteArray ba;
+            erroremitted=true;
+            emit finisheddl(ba);
+        }
+    }
+}
+
+void Downloader::errorSlot(QNetworkReply::NetworkError code) {
+    if (!erroremitted) {
+        emit sendInfo("Network error: "+QString::number(code));
         QByteArray ba;
+        erroremitted=true;
         emit finisheddl(ba);
     }
 }

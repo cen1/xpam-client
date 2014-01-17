@@ -30,19 +30,22 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "QProcess"
 #include "QThread"
 #include "QTextStream"
+#include "QDesktopWidget"
 #include "gproxy.h"
+#include "w3.h"
 #include "updater.h"
 #include "config.h"
+//#include "QSslSocket"
 
-QProcess * w3p=NULL;
+W3 * w3=nullptr;         //w3 process
+GProxy * gproxy=nullptr;        //gproxy object
+Updater * updater=nullptr;      //updater object
 
-QThread * gpt=NULL;
-QThread * upt=NULL;
+QThread * w3t=nullptr;
+QThread * gpt=nullptr;          //gproxy thread
+QThread * upt=nullptr;          //updater thread
 
-GProxy * gproxy=NULL;
-Updater * updater=NULL;
-
-Config * config=new Config();
+Config * config=new Config();   //global config
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -50,8 +53,8 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     ui->tabWidget->setCurrentIndex(0);
+
     isStartupUpdate=true;
-    isrestartNeeded=false;
 }
 
 MainWindow::~MainWindow()
@@ -60,30 +63,27 @@ MainWindow::~MainWindow()
 }
 
 //start w3 and gproxy
-void MainWindow::on_pushButton_2_clicked()
+void MainWindow::on_pushButtonSWGP_clicked()
 {
+    //hard WINAPI checks for w3 and gproxy running, all kind of problems if they are...
     if (Util::isRunning("war3.exe")) {
-        ui->statusLabel->setText("Warcraft III is already running");
+        status("Warcraft III is already running");
         return;
     }
     if (Util::isRunning("gproxy.exe")) {
-        ui->statusLabel->setText("GProxy is already running");
+        status("GProxy is already running");
         return;
     }
 
     ui->tabWidget->setCurrentIndex(1);
 
-    //start gproxy
-    Registry reg;
-
     //set gproxy gateway as default
-    reg.setGproxyGateways();
-    //ui->debugLabel->setText(QString::number(ret));
+    Registry::setGproxyGateways();
 
-    QString gpdir=reg.getEuroPath();
+    QString gpdir=config->EUROPATH;
     QString gpexe="\""+gpdir+"\\gproxy.exe\"";
 
-    ui->statusLabel->setText("Launching GProxy...");
+    status("Launching GProxy...");
     ui->textBrowser->append("Working directory: "+gpdir);
 
     gproxy=new GProxy(gpdir, gpexe);
@@ -100,76 +100,84 @@ void MainWindow::on_pushButton_2_clicked()
 }
 
 //start w3 only
-void MainWindow::on_pushButton_clicked()
+void MainWindow::on_pushButtonSWOGP_clicked()
 {    
+    //again, hard WINAPI check
     if (Util::isRunning("war3.exe")) {
-        ui->statusLabel->setText("Warcraft III is already running");
+        status("Warcraft III is already running");
         return;
     }
-
-    Registry reg;
 
     //set normal gateway as default
-    reg.setGateways();
+    Registry::setGateways();
 
-    QString w3dir=reg.getW3dir();
+    QString w3dir=config->W3PATH;
     QString w3exe=w3dir+"\\w3l.exe";
 
-    ui->statusLabel->setText("Launching Warcraft III...");
+    status("Launching Warcraft III...");
 
     QStringList list;
-    if (ui->checkBox->isChecked()) list << "-windowed";
+    if (ui->checkBoxWindowed->isChecked()) list << "-windowed";
 
-    w3p = new QProcess(0);
-    w3p->setWorkingDirectory(w3dir);
-    w3p->start(w3exe, list);
-    if (!w3p->waitForStarted(5000)) {
-        ui->statusLabel->setText("Could not start Warcraft: "+w3p->errorString());
-        return;
-    }
-    ui->statusLabel->setText("Warcraft III started");
+    w3=new W3(w3dir, w3exe, list);
+    QObject::connect(this, SIGNAL(startW3()), w3, SLOT(startW3()));
+    QObject::connect(w3, SIGNAL(w3Exited()), this, SLOT(w3Exited()));
+
+    w3t=new QThread();
+
+    w3->moveToThread(w3t);
+    w3t->start();
+    emit startW3();
 }
 
 //start w3 when gproxy emits
 void MainWindow::gproxyReady() {
     ui->textBrowser->append("EMITTED");
     if (Util::isRunning("war3.exe")) {
-        ui->statusLabel->setText("Warcraft III is already running");
+        status("Warcraft III is already running");
         return;
     }
 
-    Registry reg;
-
-    QString w3dir=reg.getW3dir();
+    QString w3dir=config->W3PATH;
     QString w3exe=w3dir+"\\w3l.exe";
 
-    ui->statusLabel->setText("Launching Warcraft III...");
+    status("Launching Warcraft III...");
 
     QStringList list;
-    if (ui->checkBox->isChecked()) list << "-windowed";
+    if (ui->checkBoxWindowed->isChecked()) list << "-windowed";
 
-    w3p = new QProcess(0);
-    w3p->setWorkingDirectory(w3dir);
-    w3p->start(w3exe, list);
-    if (!w3p->waitForStarted(5000)) {
-        ui->statusLabel->setText("Could not start Warcraft: "+w3p->errorString());
-        return;
-    }
-    ui->statusLabel->setText("Warcraft III started");
+    w3=new W3(w3dir, w3exe, list);
+    QObject::connect(this, SIGNAL(startW3()), w3, SLOT(startW3()));
+    QObject::connect(w3, SIGNAL(w3Exited()), this, SLOT(w3Exited()));
+
+    w3t=new QThread();
+
+    w3->moveToThread(w3t);
+    w3t->start();
+    emit startW3();
 }
 
 void MainWindow::gproxyExiting() {
-    ui->statusLabel->setText("GProxy has closed");
+    status("GProxy has closed");
+    gpt->exit();
     gproxy->deleteLater();
     gpt->deleteLater();
+
     ui->tabWidget->setCurrentIndex(0);
+}
+
+void MainWindow::w3Exited() {
+    status("W3 closed");
+    w3t->exit();
+    w3->deleteLater();
+    w3t->deleteLater();
 }
 
 //update at startup
 void MainWindow::checkUpdates(){
 
     //disable beta button or all kind of hell will ensue
-    ui->pushButton_3->setDisabled(true);
+    ui->pushButtonBU->setDisabled(true);
 
     //clean the update log on every startup
     QFile log(config->EUROPATH+"\\xpam.log");
@@ -182,7 +190,7 @@ void MainWindow::checkUpdates(){
     updater=new Updater(config, false);
 
     QObject::connect(this, SIGNAL(startUpdate()), updater, SLOT(startUpdate()));
-    QObject::connect(updater, SIGNAL(updateFinished(bool, bool)), this, SLOT(updateFinished(bool, bool)));
+    QObject::connect(updater, SIGNAL(updateFinished(bool, bool, bool)), this, SLOT(updateFinished(bool, bool, bool)));
     QObject::connect(updater, SIGNAL(sendLine(QString)), this, SLOT(logUpdate(QString)));
     QObject::connect(updater, SIGNAL(sendLine(QString)), ui->textBrowserUpdate, SLOT(append(QString)), Qt::QueuedConnection);
     QObject::connect(updater, SIGNAL(modifyLastLine(QString)), this, SLOT(modifyLastLineSlot(QString)));
@@ -195,12 +203,12 @@ void MainWindow::checkUpdates(){
 }
 
 //beta update
-void MainWindow::on_pushButton_3_clicked()
+void MainWindow::on_pushButtonBU_clicked()
 {
     isStartupUpdate=false;
     ui->textBrowserUpdate->clear();
-    if (QSslSocket::supportsSsl()) ui->statusLabel->setText("SSL supported");
-    else ui->statusLabel->setText("SSL not supported");
+    /*if (QSslSocket::supportsSsl()) status("SSL supported");
+    else status("SSL not supported");*/
 
     if (config->BETAPIN!=ui->betapinbox->text()) return;
     lockTabs(ui->tabWidget->currentIndex());
@@ -208,7 +216,7 @@ void MainWindow::on_pushButton_3_clicked()
     updater=new Updater(config, true);
 
     QObject::connect(this, SIGNAL(startUpdate()), updater, SLOT(startUpdate()));
-    QObject::connect(updater, SIGNAL(updateFinished(bool, bool)), this, SLOT(updateFinished(bool, bool)));
+    QObject::connect(updater, SIGNAL(updateFinished(bool, bool, bool)), this, SLOT(updateFinished(bool, bool, bool)));
     QObject::connect(updater, SIGNAL(sendLine(QString)), this, SLOT(logUpdate(QString)));
     QObject::connect(updater, SIGNAL(sendLine(QString)), ui->textBrowserUpdate, SLOT(append(QString)), Qt::QueuedConnection);
     QObject::connect(updater, SIGNAL(modifyLastLine(QString)), this, SLOT(modifyLastLineSlot(QString)));
@@ -221,7 +229,9 @@ void MainWindow::on_pushButton_3_clicked()
 
 //ok tells us if there was a critical error
 //utd tells us if client is up to date
-void MainWindow::updateFinished(bool ok, bool utd) {
+void MainWindow::updateFinished(bool restartNeeded, bool ok, bool utd) {
+    ui->textBrowserUpdate->append("Updater finished");
+    hideSplashScreen();
 
     upt->exit();
     updater->deleteLater();
@@ -229,10 +239,10 @@ void MainWindow::updateFinished(bool ok, bool utd) {
 
     if (utd) {
         ui->tabWidget->setCurrentIndex(0);
-        ui->statusLabel->setText("Client is up to date");
+        status("Client is up to date");
         if (isStartupUpdate) emit updateCheckFinished();
         unlockTabs();
-        ui->pushButton_3->setEnabled(true);
+        ui->pushButtonBU->setEnabled(true);
     }
     else {
         if (ok) {
@@ -246,12 +256,14 @@ void MainWindow::updateFinished(bool ok, bool utd) {
                 msgBox.setText(text);
                 msgBox.exec();
             }
-            ui->pushButton_3->setEnabled(true);
-            if (isrestartNeeded){
+            ui->pushButtonBU->setEnabled(true);
+            if (restartNeeded){
                 QStringList args;
                 args << "/c";
                 args << "update.bat";
-                QProcess::startDetached("C:\\Windows\\system32\\cmd.exe", args);
+                QProcess::startDetached(config->SYSTEM+"\\cmd.exe", args);
+                QApplication::quit();
+
             }
             else {
                 unlockTabs();
@@ -260,8 +272,8 @@ void MainWindow::updateFinished(bool ok, bool utd) {
         else {
             unlockTabs();
             ui->textBrowserUpdate->append("Update failed. Check the log or update tab to find out the reason.");
-            ui->statusLabel->setText("Update failed due to critical error");
-            ui->pushButton_3->setEnabled(true);
+            status("Update failed due to critical error");
+            ui->pushButtonBU->setEnabled(true);
         }
     }
 }
@@ -273,6 +285,7 @@ void MainWindow::hideSplashScreen() {
     emit updateCheckFinished();
 }
 
+//update log in case program crashes and you can't see the text browser for errors
 void MainWindow::logUpdate(QString line) {
     QFile log(config->EUROPATH+"\\xpam.log");
     log.open(QFile::WriteOnly | QFile::Append | QFile::Text);
@@ -282,12 +295,8 @@ void MainWindow::logUpdate(QString line) {
         log.close();
     }
     else {
-        ui->statusLabel->setText("Can't write to log file");
+        status("Can't write to log file");
     }
-}
-
-void MainWindow::restartNeeded(){
-    isrestartNeeded=true;
 }
 
 void MainWindow::lockTabs(int except){
@@ -302,11 +311,13 @@ void MainWindow::unlockTabs() {
     }
 }
 
+//deletes last in in text browser and appends a new one
 void MainWindow::modifyLastLineSlot(QString line) {
     removeLastLine();
     ui->textBrowserUpdate->append(line);
 }
 
+//deletes last line in text browser
 void MainWindow::removeLastLine() {
     ui->textBrowserUpdate->setFocus();
     QTextCursor storeCursorPos = ui->textBrowserUpdate->textCursor();
@@ -316,4 +327,59 @@ void MainWindow::removeLastLine() {
     ui->textBrowserUpdate->textCursor().removeSelectedText();
     ui->textBrowserUpdate->textCursor().deletePreviousChar();
     ui->textBrowserUpdate->setTextCursor(storeCursorPos);
+}
+
+//write to status bar
+void MainWindow::status(QString status) {
+    ui->statusBar->showMessage(status, 10000);
+}
+
+
+//close, max, min
+void MainWindow::on_closeButton_clicked()
+{
+    QApplication::quit();
+}
+
+void MainWindow::on_maxButton_clicked()
+{
+    if (!isMaximized()) {
+        showMaximized();
+    }
+    else {
+        this->showNormal();
+    }
+}
+
+void MainWindow::on_minButton_clicked()
+{
+    this->showMinimized();
+}
+
+//window moving handlers
+void MainWindow::mousePressEvent(QMouseEvent *event) {
+  if (event->button() == Qt::LeftButton) {
+    down = true;
+    lastPos = event->globalPos();
+  }
+
+  QWidget::mousePressEvent(event);
+}
+
+void MainWindow::mouseReleaseEvent(QMouseEvent *event) {
+  down = false;
+  QWidget::mouseReleaseEvent(event);
+}
+
+void MainWindow::mouseMoveEvent(QMouseEvent *event) {
+  if (down) {
+    QPoint curPos = event->globalPos();
+    if (curPos != lastPos) {
+      QPoint diff = (lastPos - curPos);
+      move(pos() - diff);
+      lastPos = curPos;
+    }
+  }
+
+  QWidget::mouseMoveEvent(event);
 }

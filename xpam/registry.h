@@ -38,18 +38,24 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 class Registry {
 public:
-    QString getInstallPath();
-    QString getGproxyReady();
-    QString getW3dir();
-    QString getEuroPath();
-    QString getRegString(CRegKey * reg, QString name);
-    int getPatchVersion();
-    DWORD getRegDWORD(CRegKey reg, QString name);
-    bool setRegString(CRegKey reg, QString name, QString value);
-    bool setRegDWORD(CRegKey reg, QString name, DWORD value);
-    DWORD setGateways();
-    DWORD setGproxyGateways();
-    bool setPatchVersion(int version);
+    static QString getInstallPath();
+    static QString getW3dir();
+    static QString getEuroPath();
+    static int getPatchVersion();
+    static QString getGproxyReady();
+
+    static QString getRegString(CRegKey * reg, QString name);
+    static DWORD getRegDWORD(CRegKey reg, QString name);
+
+    static bool setRegString(CRegKey reg, QString name, QString value);
+    static bool setRegDWORD(CRegKey reg, QString name, DWORD value);
+
+    static DWORD setGateways();
+    static DWORD setGproxyGateways();
+    static bool setPatchVersion(int version);
+
+    static bool delGM();
+
     Registry();
 };
 

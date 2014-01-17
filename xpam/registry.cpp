@@ -6,7 +6,7 @@ Registry::Registry() {}
 QString Registry :: getInstallPath() {
     CRegKey reg;
     if (reg.Open(HKEY_CURRENT_USER, _T("Software\\Blizzard Entertainment\\Warcraft III"), KEY_READ | KEY_WOW64_64KEY)==ERROR_SUCCESS) {
-        QString s=this->getRegString(&reg, "InstallPath");
+        QString s=Registry::getRegString(&reg, "InstallPath");
         reg.Close();
         return s;
     }
@@ -16,7 +16,7 @@ QString Registry :: getInstallPath() {
 QString Registry :: getW3dir() {
     CRegKey reg;
     if (reg.Open(HKEY_CURRENT_USER, _T("Software\\Eurobattle.net"), KEY_READ | KEY_WOW64_64KEY)==ERROR_SUCCESS) {
-        QString s=this->getRegString(&reg, "w3dir");
+        QString s=Registry::getRegString(&reg, "w3dir");
         reg.Close();
         return s;
     }
@@ -26,7 +26,7 @@ QString Registry :: getW3dir() {
 QString Registry :: getEuroPath() {
     CRegKey reg;
     if (reg.Open(HKEY_CURRENT_USER, _T("Software\\Eurobattle.net"), KEY_READ | KEY_WOW64_64KEY)==ERROR_SUCCESS) {
-        QString s=this->getRegString(&reg, "europath");
+        QString s=Registry::getRegString(&reg, "europath");
         reg.Close();
         return s;
     }
@@ -36,7 +36,7 @@ QString Registry :: getEuroPath() {
 int Registry :: getPatchVersion() {
     CRegKey reg;
     if (reg.Open(HKEY_CURRENT_USER, _T("Software\\Eurobattle.net"), KEY_READ | KEY_WOW64_64KEY)==ERROR_SUCCESS) {
-        DWORD s=this->getRegDWORD(reg, "patch");
+        DWORD s=Registry::getRegDWORD(reg, "patch");
         reg.Close();
         return (int)s;
     }
@@ -46,7 +46,7 @@ int Registry :: getPatchVersion() {
 QString Registry :: getGproxyReady() {
     CRegKey reg;
     if (reg.Open(HKEY_CURRENT_USER, _T("Software\\Eurobattle.net"), KEY_READ | KEY_WOW64_64KEY)==ERROR_SUCCESS) {
-        QString s=this->getRegString(&reg, "gproxy_ready");
+        QString s=Registry::getRegString(&reg, "gproxy_ready");
         reg.Close();
         return s;
     }
@@ -215,10 +215,21 @@ DWORD Registry :: setGproxyGateways() {
 bool Registry::setPatchVersion(int version) {
     CRegKey reg;
     if (reg.Open(HKEY_CURRENT_USER, _T("Software\\Eurobattle.net"), KEY_WRITE | KEY_WOW64_64KEY)==ERROR_SUCCESS) {
-        bool r = this->setRegDWORD(reg, "patch", (DWORD)version);
+        bool r = Registry::setRegDWORD(reg, "patch", (DWORD)version);
         //RegFlushKey(HKEY_CURRENT_USER);
         reg.Close();
         return r;
+    }
+    return false;
+}
+
+bool Registry::delGM() {
+    CRegKey reg;
+    if (reg.Open(HKEY_CURRENT_USER, _T("Software"), KEY_ALL_ACCESS | KEY_WOW64_64KEY)==ERROR_SUCCESS) {
+        DWORD ret = reg.RecurseDeleteKey(_T("Garenamaster"));
+        reg.Close();
+        if (ret==ERROR_SUCCESS) return true;
+        else return false;
     }
     return false;
 }

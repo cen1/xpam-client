@@ -38,10 +38,11 @@ signals:
     void gproxyReady();
     void gproxyExiting();
 private:
-    QProcess * proc;
+
 public:
     GProxy(QString w, QString e);
     ~GProxy();
+
     bool abort;
     QString workdir;
     QString exedir;

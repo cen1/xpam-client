@@ -19,7 +19,8 @@ SOURCES += main.cpp\
     gproxy.cpp \
     config.cpp \
     downloader.cpp \
-    updater.cpp
+    updater.cpp \
+    w3.cpp
 
 HEADERS  += mainwindow.h \
     registry.h \
@@ -28,7 +29,8 @@ HEADERS  += mainwindow.h \
     config.h \
     winutils.h \
     downloader.h \
-    updater.h
+    updater.h \
+    w3.h
 
 FORMS    += mainwindow.ui
 
@@ -41,17 +43,13 @@ OTHER_FILES += \
 
 CONFIG += static
 
-CONFIG(debug, debug|release){
-    DESTDIR = $$PWD/../Debug
-    OBJECTS_DIR = $$PWD/../Debug
-    MOC_DIR = $$PWD/../Debug
-}
+release: DESTDIR = $$PWD/release
+debug:   DESTDIR = $$PWD/debug
 
-CONFIG(release, debug|release){
-    DESTDIR = $$PWD/../Release
-    OBJECTS_DIR = $$PWD/../Release
-    MOC_DIR = $$PWD/../Release
-}
+OBJECTS_DIR = $$DESTDIR/.obj
+MOC_DIR = $$DESTDIR/.moc
+RCC_DIR = $$DESTDIR/.qrc
+#UI_DIR = $$DESTDIR/.ui
 
 #quazip
 win32:CONFIG(release, debug|release): LIBS += -L$$PWD/quazip/ -lquazip
@@ -65,9 +63,9 @@ else:win32:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/quazip/quazipd.
 
 DEFINES += NOMINMAX
 DEFINES += QUAZIP_STATIC
-INCLUDEPATH += C:\git\qt5\qt5\qtbase\src\3rdparty\zlib
+INCLUDEPATH += C:\git\qt5win32-msvc2010\qt5\qtbase\src\3rdparty\zlib
 #end quazip
 
 #CONFIG -= embed_manifest_exe
 
-#QMAKE_POST_LINK += upx.exe ../Release-static/release/xpam.exe
+#win32:CONFIG(release, debug|release): QMAKE_POST_LINK += cd $$PWD/release && copy /Y \"xpam.exe\" \"$$PWD/../../installer/installer/data/xpam.exe\" && upx \"$$PWD/../../installer/installer/data/xpam.exe\"
