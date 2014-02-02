@@ -33,10 +33,10 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
     MainWindow w;
     w.setWindowIcon(QIcon(":/favicon.ico"));
-    w.checkUpdates();
+    //w.checkUpdates();
 
     //splash screen to hide the few seconds of update check
-    QPixmap pixmap(":/splash.png");
+    /*QPixmap pixmap(":/splash.png");
     QSplashScreen splash(pixmap);
     splash.show();
     splash.showMessage("Checking for updates...", Qt::AlignLeft, Qt::white);
@@ -44,11 +44,11 @@ int main(int argc, char *argv[])
     //wait for update check to finish
     QEventLoop loop;
     QObject::connect(&w, SIGNAL(updateCheckFinished()), &loop, SLOT(quit()));
-    loop.exec();
+    loop.exec();*/
 
     w.setWindowFlags(Qt::FramelessWindowHint);
     w.show();
-    splash.finish(&w);
+    //splash.finish(&w);
     
     return a.exec();
 }

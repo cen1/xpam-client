@@ -248,14 +248,6 @@ void MainWindow::updateFinished(bool restartNeeded, bool ok, bool utd) {
         if (ok) {
             ui->textBrowserUpdate->append("Client was updated");
 
-            QFile changelog(config->EUROPATH+"\\changelog.txt");
-            changelog.open(QFile::ReadOnly);
-            if (changelog.isOpen()){
-                QString text(changelog.readAll());
-                QMessageBox msgBox;
-                msgBox.setText(text);
-                msgBox.exec();
-            }
             ui->pushButtonBU->setEnabled(true);
             if (restartNeeded){
                 QStringList args;

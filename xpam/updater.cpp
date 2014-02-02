@@ -137,26 +137,32 @@ void Updater::startUpdate() {
     }
     QJsonObject obj=json.object();
 
-    QJsonObject latest_o = obj.value("latest").toObject();
-    QJsonObject beta_o   = obj.value("beta").toObject();
+    QJsonValue value=NULL;
+    QJsonObject real=NULL;
 
     if (beta) {
         emit sendLine("Requested patch: beta");
-        real=beta_o;
+        value=obj.value("beta");
+        if (value == QJsonValue::Undefined) {
+            emit sendLine("No beta patch exists. Xpam is up to date");
+            emit updateFinished(restartNeeded, true, true);
+            return;
+        }
+        real=value.toObject();
     }
     else {
         emit sendLine("Requested patch: stable");
-        real=latest_o;
+        value=obj.value(QString::number(config->PATCH+1)); //we check current+1
+        if (value == QJsonValue::Undefined) {
+            emit sendLine("No new patch exists. Xpam is up to date");
+            emit updateFinished(restartNeeded, true, true);
+            return;
+        }
+        real=value.toObject();
     }
 
     latestVersion = qRound(real.value("version").toDouble());
     emit sendLine("Local version: "+QString::number(config->PATCH)+" Latest version: "+QString::number(latestVersion));
-
-    if (latestVersion <= config->PATCH) {
-        emit sendLine("Xpam is up to date");
-        emit updateFinished(restartNeeded, true, true);
-        return;
-    }
 
     //tell splash screen to hide, only taken into account if it is a startup update
     //this means that we have an update so it'd be nice to see the progress

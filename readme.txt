@@ -7,7 +7,7 @@ http://download.qt-project.org/official_releases/qtcreator/3.0/3.0.0/qt-creator-
 - http://www.activestate.com/activeperl/downloads
 - add the executable to your system PATH if it was no added automatically
 
-3. Install Visual Studio 2013 (Express for Windows Desktop)
+3. Install Visual Studio 2010 (Express for Windows Desktop)
 http://www.visualstudio.com/en-us/products/visual-studio-express-vs.aspx
 
 4. Download latest source of OpenSSL
@@ -33,7 +33,7 @@ git clone https://github.com/qtproject/qt5.git
 
 Open cmd, execute:
 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\vcvarsall.bat
-configure -static -qmake -opensource -nomake examples -opengl desktop -platform win32-msvc2013 -openssl -openssl-linked -I C:\git\openssl\build\include -L C:\git\openssl\build\lib OPENSSL_LIBS="-llibeay32 -lssleay32 -lgdi32"
+configure -static -qmake -opensource -nomake examples -opengl desktop -platform win32-msvc2010 -openssl -openssl-linked -I C:\git\openssl\build\include -L C:\git\openssl\build\lib OPENSSL_LIBS="-llibeay32 -lssleay32 -lgdi32"
 ->Accept the license with "y"
 nmake 
 
@@ -44,7 +44,7 @@ It should build faster than nmake.
 
 7. Open Qt Creator
 Tools->Options->Build & Run->Qt Versions->C:\git\qt5\qt5\qtbase\bin\qmake.exe
-Kits->Add->Name it "Qt5-Desktop-msvc2013-static", Compiler choose MS C++ Compiler 12.0 (x86), Version choose Qt 5.2.0 (qt5) STATIC
+Kits->Add->Name it "Qt5-Desktop-msvc2010-static", Compiler choose MS C++ Compiler 12.0 (x86), Version choose Qt 5.2.0 (qt5) STATIC
 Debugger should be auto detected
 
 8. Get the client repo
@@ -56,8 +56,6 @@ C:\git\xpam\xpam\release
 C:\git\xpam\xpam\debug
 
 Done!
-
-
 
 
 
