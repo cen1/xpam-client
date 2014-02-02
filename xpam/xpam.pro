@@ -55,7 +55,7 @@ else:win32:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/quazip/quazipd.
 
 DEFINES += NOMINMAX
 DEFINES += QUAZIP_STATIC
-INCLUDEPATH += C:\git\qt5win32-msvc2010\qt5\qtbase\src\3rdparty\zlib
+win32:INCLUDEPATH += C:\git\qt5win32-msvc2010\qt5\qtbase\src\3rdparty\zlib
 
 #end quazip
 
