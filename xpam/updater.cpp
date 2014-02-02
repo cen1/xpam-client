@@ -138,7 +138,7 @@ void Updater::startUpdate() {
     QJsonObject obj=json.object();
 
     QJsonValue value=NULL;
-    QJsonObject real=NULL;
+    QJsonObject real;
 
     if (beta) {
         emit sendLine("Requested patch: beta");

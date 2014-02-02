@@ -1,6 +1,6 @@
-# no .a files and .exe files
 *.a
 *.obj
 *.exe
+*.pro
 build-xpam-Qt_5_2_static_msvc2010-Debug/
 build-xpam-Qt_5_2_static_msvc2010-Release/
