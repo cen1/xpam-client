@@ -24,8 +24,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #include "w3.h"
-#include "QProcess"
-#include "QThread"
+#include <QProcess>
+#include <QThread>
+//arbalest
 
 W3::W3(QString w, QString e, QStringList a) {
     workdir=w;
