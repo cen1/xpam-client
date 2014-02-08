@@ -57,8 +57,11 @@ DEFINES += NOMINMAX
 DEFINES += QUAZIP_STATIC
 win32:INCLUDEPATH += C:\git\qt5win32-msvc2010\qt5\qtbase\src\3rdparty\zlib
 
+#fix for UI changes not taking effect
+UI_DIR = $$PWD
+
 #end quazip
 
 #CONFIG -= embed_manifest_exe
 
-#win32:CONFIG(release, debug|release): QMAKE_POST_LINK += cd $$PWD/release && copy /Y \"xpam.exe\" \"$$PWD/../../installer/installer/data/xpam.exe\" && upx \"$$PWD/../../installer/installer/data/xpam.exe\"
+#win32:CONFIG(release, debug|release): QMAKE_POST_LINK += cd \"C:/git/xpam/build-xpam-Qt_5_2_static_msvc2010-Release\" && copy /Y \"xpam.exe\" \"$$PWD/../../installer/installer/data/xpam.exe\" && upx \"$$PWD/../../installer/installer/data/xpam.exe\"

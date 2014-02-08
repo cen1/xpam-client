@@ -51,6 +51,7 @@ private:
     Downloader *     downloader;
     int             mirrorno;
     QString         zippath;
+    QByteArray      jsonba;
     QJsonObject     real;
     QStringList     mirrors;
     QTime           progressTime;
@@ -60,6 +61,7 @@ private:
     bool extractZip();
     bool instructions();
     QByteArray simpleDl(QUrl url);
+    bool setCurrentPlusOneJson();
 
 signals:
     void updateFinished(bool restartNeeded, bool ok, bool utd);

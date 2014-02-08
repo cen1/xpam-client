@@ -360,6 +360,8 @@ void MainWindow::mousePressEvent(QMouseEvent *event) {
 
 void MainWindow::mouseReleaseEvent(QMouseEvent *event) {
   down = false;
+  QPoint curPos = event->globalPos();
+  if (this->y()<2 && !isMaximized() && curPos.y()<2 && this->ui->labelTitle->underMouse()) showMaximized();
   QWidget::mouseReleaseEvent(event);
 }
 

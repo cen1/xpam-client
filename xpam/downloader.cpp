@@ -59,7 +59,6 @@ void Downloader::progressSlot(qint64 bytesReceived, qint64 bytesTotal){
 
 //reply finished
 void Downloader::finishedSlot(){
-    emit sendInfo("Network reply finished");
 
     if (reply->error() == QNetworkReply::NoError){
         QVariant possibleRedirectUrl = reply->attribute(QNetworkRequest::RedirectionTargetAttribute);
@@ -71,7 +70,7 @@ void Downloader::finishedSlot(){
             delete reply;
             reply = nam.get(QNetworkRequest(possibleRedirectUrl.toUrl())); //when this reply is finished this slot will get re-triggered
 
-            emit sendInfo("Starting download");
+            emit sendInfo("Redirecting...");
             emit sendInfo("");
 
             //reconnect since deleting reply disconnects all slots

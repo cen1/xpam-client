@@ -27,6 +27,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <QProcess>
 #include <QThread>
 //arbalest
+//arbalest2
 
 W3::W3(QString w, QString e, QStringList a) {
     workdir=w;

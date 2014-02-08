@@ -100,7 +100,6 @@ void Updater::startUpdate() {
         return;
     }
 
-    QByteArray jsonba;
     if (j1==j2){
         jsonba=j1;
     }
@@ -116,53 +115,12 @@ void Updater::startUpdate() {
         return;
     }
 
-    //emit sendLine("Json received: "+QString(jsonba));
-
-    QJsonDocument json = QJsonDocument::fromJson(jsonba);
-    /*if (json.isEmpty()){
-        emit sendLine("Json is empty");
+    if (!setCurrentPlusOneJson()){ //if false it is up to date
+        emit updateFinished(restartNeeded, true, true);
         return;
     }
-    if (json.isNull()){
-        emit sendLine("Json is null");
-        return;
-    }
-    if (json.isArray()){
-        emit sendLine("Received an array instead of an object");
-        return;
-    }*/
-
-    if (json.isObject()){
-        emit sendLine("JSON build OK");
-    }
-    QJsonObject obj=json.object();
-
-    QJsonValue value=NULL;
-    QJsonObject real;
-
-    if (beta) {
-        emit sendLine("Requested patch: beta");
-        value=obj.value("beta");
-        if (value == QJsonValue::Undefined) {
-            emit sendLine("No beta patch exists. Xpam is up to date");
-            emit updateFinished(restartNeeded, true, true);
-            return;
-        }
-        real=value.toObject();
-    }
-    else {
-        emit sendLine("Requested patch: stable");
-        value=obj.value(QString::number(config->PATCH+1)); //we check current+1
-        if (value == QJsonValue::Undefined) {
-            emit sendLine("No new patch exists. Xpam is up to date");
-            emit updateFinished(restartNeeded, true, true);
-            return;
-        }
-        real=value.toObject();
-    }
-
     latestVersion = qRound(real.value("version").toDouble());
-    emit sendLine("Local version: "+QString::number(config->PATCH)+" Latest version: "+QString::number(latestVersion));
+    emit sendLine("Local version: "+QString::number(config->PATCH)+" Incremental version: "+QString::number(latestVersion));
 
     //tell splash screen to hide, only taken into account if it is a startup update
     //this means that we have an update so it'd be nice to see the progress
@@ -173,7 +131,7 @@ void Updater::startUpdate() {
     mirrors << real.value("mirror3").toString();
     mirrors << real.value("mirror4").toString();
 
-    emit sendLine("Downloading from: mirror "+QString::number(mirrorno));
+    emit sendLine("Downloading from: mirror "+(QString::number(mirrorno))+" ("+mirrors[mirrorno]+")");
     QUrl url(mirrors[mirrorno]);
 
     downloader=new Downloader(url);
@@ -196,6 +154,7 @@ void Updater::startUpdate() {
  */
 bool Updater::extractZip() {
 
+    emit sendLine("...");
     QuaZip zip(zippath);
     zip.open(QuaZip::mdUnzip);
 
@@ -238,7 +197,6 @@ bool Updater::extractZip() {
     //cleanup
     QFile::remove(zippath);
 
-    emit sendLine("...");
     emit sendLine("...");
     return true;
 }
@@ -296,14 +254,13 @@ bool Updater::instructions() {
     QFile::remove(config->APPDATA+"\\instructions.txt");
 
     emit sendLine("...");
-    emit sendLine("...");
     return true;
 }
 
 //receives download progress from downloader
 //we use a timer so we don't waste cycles
 void Updater::receiveProgress(qint64 bytesReceived, qint64 bytesTotal) {
-    if (progressTime.elapsed() > 1000 && bytesTotal != -1) {
+    if (progressTime.elapsed() > 500 && bytesTotal != -1) {
         int percents = qRound((((float)bytesReceived/(float)bytesTotal)*100.0));
         emit modifyLastLine("("+QString::number(bytesReceived)+" Bytes / "+QString::number(bytesTotal)+" Bytes) -- "+QString::number(percents)+"%");
 
@@ -313,8 +270,6 @@ void Updater::receiveProgress(qint64 bytesReceived, qint64 bytesTotal) {
 
 void Updater::receiveFinishdl(QByteArray data) {
     dlthread.exit();
-
-    emit sendLine("...");
 
     //check hash
     QString sha1(QCryptographicHash::hash(data, QCryptographicHash::Sha1).toHex());
@@ -328,7 +283,7 @@ void Updater::receiveFinishdl(QByteArray data) {
             emit updateFinished(restartNeeded, false, false);
             return;
         }
-
+        emit sendLine("Remote checksum: "+real.value("sha1").toString()+"; Local checksum: "+sha1);
         emit sendLine("There was an error downloading the update files. Trying another mirror");
         mirrorno++;
 
@@ -344,6 +299,8 @@ void Updater::receiveFinishdl(QByteArray data) {
         downloader->moveToThread(&dlthread);
         dlthread.start();
         emit startDl();
+
+        emit sendLine("Downloading from: mirror "+(QString::number(mirrorno))+" ("+mirrors[mirrorno]+")");
     }
     else {
         //download was OK
@@ -385,8 +342,53 @@ void Updater::receiveFinishdl(QByteArray data) {
             emit sendLine(changelog);
         }
 
+        emit sendLine("...");
+
+        //check if an even newer (incremental) update exists
+        emit sendLine("Checking if there is an even newer patch...");
+        if (setCurrentPlusOneJson()) { //if next patch exists
+            restartNeeded=true; //client will restart and then do the next incremental update
+        }
+
         emit updateFinished(restartNeeded, true, false);
     }
+}
+
+bool Updater::setCurrentPlusOneJson() {
+    QJsonDocument json = QJsonDocument::fromJson(jsonba);
+    QJsonObject obj=json.object();
+    QJsonValue value=NULL;
+
+    if (beta) {
+        emit sendLine("Requested patch: beta");
+        QString key = "beta";
+        QStringList keys = obj.keys();
+
+        if (!keys.contains(key)) {
+            emit sendLine("No beta patch exists. Xpam is up to date");
+            return false;
+        }
+        value=obj.value("beta");
+        real=value.toObject();
+        if (qRound(real.value("version").toDouble()) <= config->PATCH) {
+            emit sendLine("Beta patch is current. Xpam is up to date");
+            return false;
+        }
+    }
+    else {
+        emit sendLine("Requested patch: stable");
+        int incremental=config->PATCH+1;
+        QString key = QString::number(incremental);
+        QStringList keys = obj.keys();
+
+        if (!keys.contains(key)) {
+            emit sendLine("No newer patch exists. Xpam is up to date");
+            return false;
+        }
+        value=obj.value("key");
+        real=value.toObject();
+    }
+    return true;
 }
 
 /*

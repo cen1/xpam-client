@@ -135,6 +135,10 @@ public:
 "  width: 10%;\n"
 "}\n"
 "\n"
+".a {\n"
+" color: #007dc1;\n"
+"}\n"
+"\n"
 "#tabWidget {\n"
 " \n"
 "}\n"
@@ -150,9 +154,9 @@ public:
 "  font-family: \"Lucida Sans Unicode\";\n"
 "\n"
 "}\n"
-"QTabBar::tab:hover{  \n"
-"  background-"
-                        "color: rgba(180, 180, 180);\n"
+""
+                        "QTabBar::tab:hover{  \n"
+"  background-color: rgba(180, 180, 180);\n"
 "}\n"
 "\n"
 "QTabBar::tab:selected{  \n"
@@ -202,9 +206,9 @@ public:
 "QCheckBox::indicator:unchecked {\n"
 "  background-color: white;\n"
 "}\n"
-"\n"
-"QCheckBox::indicator:unchecked:hov"
-                        "er {\n"
+""
+                        "\n"
+"QCheckBox::indicator:unchecked:hover {\n"
 "  border: 1px solid grey;\n"
 "}\n"
 "\n"
@@ -249,11 +253,11 @@ public:
 "}\n"
 "\n"
 "#maxButton:pressed {\n"
-"  background-image: url(\":/maximize_window_hover.png\");\n"
+"  background-image: url(\":/maximize_window_hover."
+                        "png\");\n"
 "}\n"
 "\n"
-"#minButton:press"
-                        "ed {\n"
+"#minButton:pressed {\n"
 "  background-image: url(\":/minimize_window_hover.png\");\n"
 "}\n"
 "\n"
@@ -539,7 +543,7 @@ public:
         tabWidget->setTabText(tabWidget->indexOf(tab1), QApplication::translate("MainWindow", "  GPROXY CONSOLE  ", 0));
         pushButtonBU->setText(QApplication::translate("MainWindow", "Get Beta patch", 0));
         tabWidget->setTabText(tabWidget->indexOf(tab2), QApplication::translate("MainWindow", " UPDATE ", 0));
-        labelAbout->setText(QApplication::translate("MainWindow", "<html><head/><body><p>Eurobattle.net Client version 0.3.0.0, developed by cen</p><p><br/>We are searching for Qt/ C++ developers to further expand this client.</p><p><br/></p><p>TODO:</p><p>-bnet Chat client</p><p>-DotA 2 support</p><p>-TS integration</p><p>-Displaying player's profile and league stats in the client</p><p>-and more...</p><p><br/></p><p>Special thanks to:</p><p><span style=\" font-weight:600;\">IStealSkills</span> - help with desig</p><p><span style=\" font-weight:600;\">Stefos007</span> - original GProxy implementation</p><p><span style=\" font-weight:600;\">Ladislav Zezula</span> - Stormlib (<a href=\"http://www.zezula.net/en/mpq/stormlib.html\"><span style=\" text-decoration: underline; color:#0000ff;\">zezula.net</span></a>)</p><p><a href=\"http://pvpgn.org/\"><span style=\" text-decoration: underline; color:#0000ff;\">PvPGN.org</span></a></p></body></html>", 0));
+        labelAbout->setText(QApplication::translate("MainWindow", "<html><head/><body><p>Eurobattle.net Client version 0.3.0.0, developed by cen</p><p><br/>We are searching for Qt/ C++ developers to further expand this client.</p><p><br/></p><p>TODO:</p><p>-bnet Chat client</p><p>-DotA 2 support</p><p>-TS integration</p><p>-Displaying player's profile and league stats in the client</p><p>-and more...</p><p><br/></p><p>Special thanks to:</p><p><span style=\" font-weight:600;\">IStealSkills</span> - help with desig</p><p><span style=\" font-weight:600;\">Stefos007</span> - original GProxy implementation</p><p><span style=\" font-weight:600;\">Ladislav Zezula</span> - Stormlib (<a href=\"http://www.zezula.net/en/mpq/stormlib.html\"><span style=\" text-decoration: underline; color:#007dc1;\">zezula.net</span></a>)</p><p><a href=\"http://pvpgn.org/\"><span style=\" text-decoration: underline; color:#007dc1;\">PvPGN.org</span></a></p></body></html>", 0));
         tabWidget->setTabText(tabWidget->indexOf(tab3), QApplication::translate("MainWindow", " ABOUT ", 0));
     } // retranslateUi
 

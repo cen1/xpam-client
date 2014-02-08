@@ -1,0 +1,3 @@
+MOVE rzrlgo.exe EUROPATH
+MOVE changelog.txt EUROPATH
+MOVE changelog_full.txt EUROPATH

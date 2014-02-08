@@ -1,19 +1,19 @@
 {
     "beta" : {
-        "mirror1" : "https://drive.google.com/uc?id=0B3Yu5IASRCBPMk00cDNMV2d0dk0",
-        "mirror2" : "https://skydrive.live.com/download?resid=C8412414CD9F5184%21111",
-        "mirror3" : "http://ubuntuone.com/4B7IzclGQnGY6WM8m9S4eS",
-        "mirror4" : "http://files.eurobattle.net/updates/update3beta.zip",
-
-        "sha1" : "4b97f32d598eccedb20e4faae6e4e9a179a3d0b1"
+        "version" : 0,
+        "mirror1" : "https://drive.google.com/uc?id=0B3Yu5IASRCBPa1liYTF0bGRCX2M",
+        "mirror2" : "https://skydrive.live.com/download?resid=C8412414CD9F5184%21112",
+        "mirror3" : "http://ubuntuone.com/0arXkH8AKv18WSYEp5Ii6R",
+        "mirror4" : "http://files.eurobattle.net/updates/update3.zip",
+        "sha1" : "4de36dc63700fb7c7afc9cd3298ba1574a4e61fc"
     },
-    "1" : {
-        "mirror1" : "https://drive.google.com/uc?id=0B3Yu5IASRCBPMk00cDNMV2d0dk0",
-        "mirror2" : "https://skydrive.live.com/download?resid=C8412414CD9F5184%21111",
-        "mirror3" : "http://ubuntuone.com/4B7IzclGQnGY6WM8m9S4eS",
-        "mirror4" : "http://files.eurobattle.net/updates/update3beta.zip",
-
-        "sha1" : "4b97f32d598eccedb20e4faae6e4e9a179a3d0b1"
-    }
+    "0" : {
+        "version" : 0,
+        "mirror1" : "https://drive.google.com/uc?id=0B3Yu5IASRCBPa1liYTF0bGRCX2M",
+        "mirror2" : "https://skydrive.live.com/download?resid=C8412414CD9F5184%21112",
+        "mirror3" : "http://ubuntuone.com/0arXkH8AKv18WSYEp5Ii6R",
+        "mirror4" : "http://files.eurobattle.net/updates/update3.zip",
+        "sha1" : "4de36dc63700fb7c7afc9cd3298ba1574a4e61fc"
+    },
 
 }

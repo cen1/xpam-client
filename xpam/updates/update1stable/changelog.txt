@@ -1,3 +1,0 @@
-CHANGELOG #1:
-
--added DotA v6.79c
