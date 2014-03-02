@@ -55,6 +55,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->tabWidget->setCurrentIndex(0);
 
     isStartupUpdate=true;
+    ismax=false;
 }
 
 MainWindow::~MainWindow()
@@ -87,16 +88,19 @@ void MainWindow::on_pushButtonSWGP_clicked()
     ui->textBrowser->append("Working directory: "+gpdir);
 
     gproxy=new GProxy(gpdir, gpexe);
-    QObject::connect(this, SIGNAL(readStdout()), gproxy, SLOT(readStdout()));
+    gpt=new QThread();
+    gproxy->moveToThread(gpt);
+
+    QObject::connect(gpt, SIGNAL(started()), gproxy, SLOT(readStdout()));
     QObject::connect(gproxy, SIGNAL(gproxyReady()), this, SLOT(gproxyReady()));
     QObject::connect(gproxy, SIGNAL(gproxyExiting()), this, SLOT(gproxyExiting()));
     QObject::connect(gproxy, SIGNAL(sendLine(QString)), ui->textBrowser, SLOT(append(QString)), Qt::QueuedConnection);
 
-    gpt=new QThread();
+    QObject::connect(gproxy, SIGNAL(gproxyExiting()), gpt, SLOT(quit()));
+    QObject::connect(gproxy, SIGNAL(gproxyExiting()), gproxy, SLOT(deleteLater()));
+    QObject::connect(gpt, SIGNAL(finished()), gpt, SLOT(deleteLater()));
 
-    gproxy->moveToThread(gpt);
     gpt->start();
-    emit readStdout();
 }
 
 //start w3 only
@@ -120,14 +124,17 @@ void MainWindow::on_pushButtonSWOGP_clicked()
     if (ui->checkBoxWindowed->isChecked()) list << "-windowed";
 
     w3=new W3(w3dir, w3exe, list);
-    QObject::connect(this, SIGNAL(startW3()), w3, SLOT(startW3()));
+    w3t=new QThread();
+    w3->moveToThread(w3t);
+
+    QObject::connect(w3t, SIGNAL(started()), w3, SLOT(startW3()));
     QObject::connect(w3, SIGNAL(w3Exited()), this, SLOT(w3Exited()));
 
-    w3t=new QThread();
+    QObject::connect(w3, SIGNAL(w3Exited()), w3t, SLOT(quit()));
+    QObject::connect(w3, SIGNAL(w3Exited()), w3, SLOT(deleteLater()));
+    QObject::connect(w3t, SIGNAL(finished()), w3t, SLOT(deleteLater()));
 
-    w3->moveToThread(w3t);
     w3t->start();
-    emit startW3();
 }
 
 //start w3 when gproxy emits
@@ -147,35 +154,31 @@ void MainWindow::gproxyReady() {
     if (ui->checkBoxWindowed->isChecked()) list << "-windowed";
 
     w3=new W3(w3dir, w3exe, list);
-    QObject::connect(this, SIGNAL(startW3()), w3, SLOT(startW3()));
+    w3t=new QThread();
+    w3->moveToThread(w3t);
+
+    QObject::connect(w3t, SIGNAL(started()), w3, SLOT(startW3()));
     QObject::connect(w3, SIGNAL(w3Exited()), this, SLOT(w3Exited()));
 
-    w3t=new QThread();
+    QObject::connect(w3, SIGNAL(w3Exited()), w3t, SLOT(quit()));
+    QObject::connect(w3, SIGNAL(w3Exited()), w3, SLOT(deleteLater()));
+    QObject::connect(w3t, SIGNAL(finished()), w3t, SLOT(deleteLater()));
 
-    w3->moveToThread(w3t);
     w3t->start();
-    emit startW3();
 }
 
 void MainWindow::gproxyExiting() {
     status("GProxy has closed");
-    gpt->exit();
-    gproxy->deleteLater();
-    gpt->deleteLater();
-
-    ui->tabWidget->setCurrentIndex(0);
 }
 
 void MainWindow::w3Exited() {
     status("W3 closed");
-    w3t->exit();
-    w3->deleteLater();
-    w3t->deleteLater();
 }
 
 //update at startup
 void MainWindow::checkUpdates(){
 
+    isStartupUpdate=true;
     //disable beta button or all kind of hell will ensue
     ui->pushButtonBU->setDisabled(true);
 
@@ -188,18 +191,21 @@ void MainWindow::checkUpdates(){
     lockTabs(ui->tabWidget->currentIndex());
 
     updater=new Updater(config, false);
+    upt=new QThread();
+    updater->moveToThread(upt);
 
-    QObject::connect(this, SIGNAL(startUpdate()), updater, SLOT(startUpdate()));
+    QObject::connect(upt, SIGNAL(started()), updater, SLOT(startUpdate()));
     QObject::connect(updater, SIGNAL(updateFinished(bool, bool, bool)), this, SLOT(updateFinished(bool, bool, bool)));
     QObject::connect(updater, SIGNAL(sendLine(QString)), this, SLOT(logUpdate(QString)));
     QObject::connect(updater, SIGNAL(sendLine(QString)), ui->textBrowserUpdate, SLOT(append(QString)), Qt::QueuedConnection);
     QObject::connect(updater, SIGNAL(modifyLastLine(QString)), this, SLOT(modifyLastLineSlot(QString)));
     QObject::connect(updater, SIGNAL(hideSplashScreen()), this, SLOT(hideSplashScreen()));
 
-    upt=new QThread();
-    updater->moveToThread(upt);
+    QObject::connect(updater, SIGNAL(updateFinished(bool,bool,bool)), upt, SLOT(quit()));
+    QObject::connect(updater, SIGNAL(updateFinished(bool,bool,bool)), updater, SLOT(deleteLater()));
+    QObject::connect(upt, SIGNAL(finished()), upt, SLOT(deleteLater()));
+
     upt->start();
-    emit startUpdate();
 }
 
 //beta update
@@ -207,35 +213,32 @@ void MainWindow::on_pushButtonBU_clicked()
 {
     isStartupUpdate=false;
     ui->textBrowserUpdate->clear();
-    /*if (QSslSocket::supportsSsl()) status("SSL supported");
-    else status("SSL not supported");*/
 
     if (config->BETAPIN!=ui->betapinbox->text()) return;
     lockTabs(ui->tabWidget->currentIndex());
 
     updater=new Updater(config, true);
+    upt=new QThread();
+    updater->moveToThread(upt);
 
-    QObject::connect(this, SIGNAL(startUpdate()), updater, SLOT(startUpdate()));
+    QObject::connect(upt, SIGNAL(started()), updater, SLOT(startUpdate()));
     QObject::connect(updater, SIGNAL(updateFinished(bool, bool, bool)), this, SLOT(updateFinished(bool, bool, bool)));
     QObject::connect(updater, SIGNAL(sendLine(QString)), this, SLOT(logUpdate(QString)));
     QObject::connect(updater, SIGNAL(sendLine(QString)), ui->textBrowserUpdate, SLOT(append(QString)), Qt::QueuedConnection);
     QObject::connect(updater, SIGNAL(modifyLastLine(QString)), this, SLOT(modifyLastLineSlot(QString)));
 
-    upt=new QThread();
-    updater->moveToThread(upt);
+    QObject::connect(updater, SIGNAL(updateFinished(bool,bool,bool)), upt, SLOT(quit()));
+    QObject::connect(updater, SIGNAL(updateFinished(bool,bool,bool)), updater, SLOT(deleteLater()));
+    QObject::connect(upt, SIGNAL(finished()), upt, SLOT(deleteLater()));
+
     upt->start();
-    emit startUpdate();
 }
 
 //ok tells us if there was a critical error
 //utd tells us if client is up to date
 void MainWindow::updateFinished(bool restartNeeded, bool ok, bool utd) {
     ui->textBrowserUpdate->append("Updater finished");
-    hideSplashScreen();
-
-    upt->exit();
-    updater->deleteLater();
-    upt->deleteLater();
+    if (isStartupUpdate) hideSplashScreen();
 
     if (utd) {
         ui->tabWidget->setCurrentIndex(0);
@@ -255,7 +258,6 @@ void MainWindow::updateFinished(bool restartNeeded, bool ok, bool utd) {
                 args << "update.bat";
                 QProcess::startDetached(config->SYSTEM+"\\cmd.exe", args);
                 QApplication::quit();
-
             }
             else {
                 unlockTabs();
@@ -335,11 +337,20 @@ void MainWindow::on_closeButton_clicked()
 
 void MainWindow::on_maxButton_clicked()
 {
-    if (!isMaximized()) {
-        showMaximized();
+    if (!ismax) {
+        normalpos=this->pos();
+        normalsize=this->size();
+
+        //we can't use showMaximized() because we use frameless window
+        QDesktopWidget *desktop = QApplication::desktop();
+        this->setGeometry(desktop->availableGeometry());
+
+        ismax=true;
     }
     else {
-        this->showNormal();
+        this->resize(normalsize);
+        this->move(normalpos);
+        ismax=false;
     }
 }
 
@@ -361,7 +372,11 @@ void MainWindow::mousePressEvent(QMouseEvent *event) {
 void MainWindow::mouseReleaseEvent(QMouseEvent *event) {
   down = false;
   QPoint curPos = event->globalPos();
-  if (this->y()<2 && !isMaximized() && curPos.y()<2 && this->ui->labelTitle->underMouse()) showMaximized();
+  if (this->y()<2 && !ismax && curPos.y()<2 && this->ui->labelTitle->underMouse()) {
+      QDesktopWidget *desktop = QApplication::desktop();
+      this->setGeometry(desktop->availableGeometry());
+      ismax=true;
+  }
   QWidget::mouseReleaseEvent(event);
 }
 

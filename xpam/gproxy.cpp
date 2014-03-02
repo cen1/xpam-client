@@ -78,5 +78,4 @@ void GProxy::readStdout() {
         }
     }
     emit gproxyExiting();
-    return;
 }

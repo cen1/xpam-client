@@ -81,6 +81,11 @@ private:
     bool down;
     QPoint lastPos;
 
+    //min and max
+    bool ismax;
+    QPoint normalpos;
+    QSize normalsize;
+
 protected:
     void mousePressEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);

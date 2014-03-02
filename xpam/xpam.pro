@@ -20,7 +20,8 @@ SOURCES += main.cpp\
     config.cpp \
     downloader.cpp \
     updater.cpp \
-    w3.cpp
+    w3.cpp \
+    test.cpp
 
 HEADERS  += mainwindow.h \
     registry.h \
@@ -30,7 +31,8 @@ HEADERS  += mainwindow.h \
     winutils.h \
     downloader.h \
     updater.h \
-    w3.h
+    w3.h \
+    test.h
 
 FORMS    += mainwindow.ui
 
@@ -39,7 +41,8 @@ RESOURCES += \
 
 OTHER_FILES += \
     update.json \
-    update.bat
+    update.bat \
+    update.json.example
 
 CONFIG += static
 

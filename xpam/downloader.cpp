@@ -67,7 +67,8 @@ void Downloader::finishedSlot(){
             //there is redirect
             //make new request
             //emit sendInfo("Redirected to "+possibleRedirectUrl.toUrl().toString());
-            delete reply;
+
+            reply->deleteLater();
             reply = nam.get(QNetworkRequest(possibleRedirectUrl.toUrl())); //when this reply is finished this slot will get re-triggered
 
             emit sendInfo("Redirecting...");

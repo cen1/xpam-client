@@ -23,32 +23,22 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
+#ifndef TEST_H
+#define TEST_H
 
-#include "mainwindow.h"
-#include <QApplication>
-#include "QSplashScreen"
+#include <QObject>
 
-int main(int argc, char *argv[])
+class test : public QObject
 {
-    QApplication a(argc, argv);
-    MainWindow w;
-    w.setWindowIcon(QIcon(":/favicon.ico"));
-    w.checkUpdates();
-
-    //splash screen to hide the few seconds of update check
-    QPixmap pixmap(":/splash.png");
-    QSplashScreen splash(pixmap);
-    splash.show();
-    splash.showMessage("Checking for updates...", Qt::AlignLeft, Qt::white);
-
-    //wait for update check to finish
-    QEventLoop loop;
-    QObject::connect(&w, SIGNAL(updateCheckFinished()), &loop, SLOT(quit()));
-    loop.exec();
-
-    w.setWindowFlags(Qt::FramelessWindowHint | Qt::WindowMinimizeButtonHint);
-    w.show();
-    splash.finish(&w);
+    Q_OBJECT
+public:
+    explicit test(int tmp,QObject *parent = 0);
+    ~test();
+    int t;
+signals:
     
-    return a.exec();
-}
+public slots:
+    
+};
+
+#endif // TEST_H

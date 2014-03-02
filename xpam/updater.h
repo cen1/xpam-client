@@ -47,8 +47,8 @@ private:
     Config *        config;
     bool            beta;
     QByteArray      archive;
-    QThread         dlthread;
-    Downloader *     downloader;
+    QThread *       dlthread;
+    Downloader *    downloader;
     int             mirrorno;
     QString         zippath;
     QByteArray      jsonba;

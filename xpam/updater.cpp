@@ -53,7 +53,7 @@ Updater::Updater(Config * c, bool b) {
 }
 
 Updater::~Updater() {
-    delete downloader;
+
 }
 
 void Updater::startUpdate() {
@@ -124,7 +124,7 @@ void Updater::startUpdate() {
 
     //tell splash screen to hide, only taken into account if it is a startup update
     //this means that we have an update so it'd be nice to see the progress
-    emit hideSplashScreen();
+    if (!beta) emit hideSplashScreen();
 
     mirrors << real.value("mirror1").toString();
     mirrors << real.value("mirror2").toString();
@@ -135,18 +135,22 @@ void Updater::startUpdate() {
     QUrl url(mirrors[mirrorno]);
 
     downloader=new Downloader(url);
+    dlthread = new QThread();
+    downloader->moveToThread(dlthread);
 
-    QObject::connect(this, SIGNAL(startDl()), downloader, SLOT(startDl()));
-    QObject::connect(downloader, SIGNAL(finisheddl(QByteArray)), this, SLOT(receiveFinishdl(QByteArray)));
+    QObject::connect(dlthread, SIGNAL(started()), downloader, SLOT(startDl()));
     QObject::connect(downloader, SIGNAL(progress(qint64,qint64)), this, SLOT(receiveProgress(qint64,qint64)));
     QObject::connect(downloader, SIGNAL(sendInfo(QString)), this, SIGNAL(sendLine(QString)));
+    QObject::connect(downloader, SIGNAL(finisheddl(QByteArray)), this, SLOT(receiveFinishdl(QByteArray)));
 
-    downloader->moveToThread(&dlthread);
-    dlthread.start();
-    emit startDl();
+    QObject::connect(downloader, SIGNAL(finisheddl(QByteArray)), dlthread, SLOT(quit()));
+    QObject::connect(downloader, SIGNAL(finisheddl(QByteArray)), downloader, SLOT(deleteLater()));
+    QObject::connect(dlthread, SIGNAL(finished()), dlthread, SLOT(deleteLater()));
 
     progressTime = QTime().currentTime();
     progressTime.start();
+
+    dlthread->start();
 }
 
 /*
@@ -269,7 +273,6 @@ void Updater::receiveProgress(qint64 bytesReceived, qint64 bytesTotal) {
 }
 
 void Updater::receiveFinishdl(QByteArray data) {
-    dlthread.exit();
 
     //check hash
     QString sha1(QCryptographicHash::hash(data, QCryptographicHash::Sha1).toHex());
@@ -288,17 +291,21 @@ void Updater::receiveFinishdl(QByteArray data) {
         mirrorno++;
 
         QUrl url(mirrors[mirrorno]);
-        delete downloader;
-        downloader= new Downloader(url);
 
-        QObject::connect(this, SIGNAL(startDl()), downloader, SLOT(startDl()));
-        QObject::connect(downloader, SIGNAL(finisheddl(QByteArray)), this, SLOT(receiveFinishdl(QByteArray)));
+        downloader=new Downloader(url);
+        dlthread = new QThread();
+        downloader->moveToThread(dlthread);
+
+        QObject::connect(dlthread, SIGNAL(started()), downloader, SLOT(startDl()));
         QObject::connect(downloader, SIGNAL(progress(qint64,qint64)), this, SLOT(receiveProgress(qint64,qint64)));
         QObject::connect(downloader, SIGNAL(sendInfo(QString)), this, SIGNAL(sendLine(QString)));
+        QObject::connect(downloader, SIGNAL(finisheddl(QByteArray)), this, SLOT(receiveFinishdl(QByteArray)));
 
-        downloader->moveToThread(&dlthread);
-        dlthread.start();
-        emit startDl();
+        QObject::connect(downloader, SIGNAL(finisheddl(QByteArray)), dlthread, SLOT(quit()));
+        QObject::connect(downloader, SIGNAL(finisheddl(QByteArray)), downloader, SLOT(deleteLater()));
+        QObject::connect(dlthread, SIGNAL(finished()), dlthread, SLOT(deleteLater()));
+
+        dlthread->start();
 
         emit sendLine("Downloading from: mirror "+(QString::number(mirrorno))+" ("+mirrors[mirrorno]+")");
     }
@@ -357,7 +364,7 @@ void Updater::receiveFinishdl(QByteArray data) {
 bool Updater::setCurrentPlusOneJson() {
     QJsonDocument json = QJsonDocument::fromJson(jsonba);
     QJsonObject obj=json.object();
-    QJsonValue value=NULL;
+    QJsonValue value;
 
     if (beta) {
         emit sendLine("Requested patch: beta");
@@ -385,7 +392,7 @@ bool Updater::setCurrentPlusOneJson() {
             emit sendLine("No newer patch exists. Xpam is up to date");
             return false;
         }
-        value=obj.value("key");
+        value=obj.value(key);
         real=value.toObject();
     }
     return true;
