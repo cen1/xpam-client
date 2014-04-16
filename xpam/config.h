@@ -16,6 +16,7 @@ public:
     QString W3PATH;
     QString MAPPATH;
     QString EUROPATH;
+    QString SOUNDPATH;
     QString APPDATA;
     QString SYSTEM;
 

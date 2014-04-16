@@ -30,10 +30,11 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 Config::Config()
 {
-    VERSION = "0.3.0.0";
+    VERSION = "0.4.0.0";
     BETAPIN = "1377";
 
     EUROPATH = Registry::getEuroPath();
+    SOUNDPATH= EUROPATH+"\\sounds";
     W3PATH   = Registry::getW3dir();
     MAPPATH  = Registry::getW3dir()+"\\Maps\\Download";
     PATCH    = Registry::getPatchVersion();

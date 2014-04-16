@@ -65,6 +65,20 @@ UI_DIR = $$PWD
 
 #end quazip
 
-#CONFIG -= embed_manifest_exe
+#MANIFEST
+
+
+#win32 {
+#    CONFIG -= embed_manifest_exe
+#    WINSDK_DIR = C:/Program Files (x86)/Microsoft SDKs/Windows/v7.0A/Bin
+#    WIN_PWD = $$replace(PWD, /, \\)
+#    OUT_PWD_WIN = $$replace(OUT_PWD, /, \\)
+#    QMAKE_POST_LINK = "$$WINSDK_DIR/mt.exe -manifest $$quote($$WIN_PWD\\$$basename(TARGET).manifest) -outputresource:$$quote($$OUT_PWD_WIN\\$${DESTDIR_TARGET};1)"
+#}
+
+win32 {
+    CONFIG += embed_manifest_exe
+    QMAKE_LFLAGS_WINDOWS += /MANIFESTUAC:level=\'requireAdministrator\'
+}
 
 #win32:CONFIG(release, debug|release): QMAKE_POST_LINK += cd \"C:/git/xpam/build-xpam-Qt_5_2_static_msvc2010-Release\" && copy /Y \"xpam.exe\" \"$$PWD/../../installer/installer/data/xpam.exe\" && upx \"$$PWD/../../installer/installer/data/xpam.exe\"

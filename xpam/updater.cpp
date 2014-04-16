@@ -210,7 +210,7 @@ bool Updater::instructions() {
     /*
      * MOVE or DELETE
      * Filename
-     * EUROPATH, W3PATH or MAPS
+     * EUROPATH, SOUNDPATH, W3PATH or MAPPATH
     */
     QFile inst(config->APPDATA+"\\instructions.txt");
     if (inst.open(QIODevice::ReadOnly)) {
@@ -228,6 +228,7 @@ bool Updater::instructions() {
                 if      (l.last()=="EUROPATH") dstPath=config->EUROPATH;
                 else if (l.last()=="W3PATH") dstPath=config->W3PATH;
                 else if (l.last()=="MAPPATH") dstPath=config->MAPPATH;
+                else if (l.last()=="SOUNDPATH") dstPath=config->SOUNDPATH;
 
                 QFile from(config->APPDATA+"\\"+midParam);
                 if (QFile::exists(dstPath+"\\"+midParam)) QFile::remove(dstPath+"\\"+midParam);
@@ -245,6 +246,7 @@ bool Updater::instructions() {
                 if     (l.last()=="EUROPATH") QFile::remove(config->EUROPATH+"\\"+midParam);
                 else if(l.last()=="W3PATH")   QFile::remove(config->W3PATH+"\\"+midParam);
                 else if(l.last()=="MAPPATH")  QFile::remove(config->MAPPATH+"\\"+midParam);
+                else if(l.last()=="SOUNDPATH")  QFile::remove(config->SOUNDPATH+"\\"+midParam);
             }
         }
     }

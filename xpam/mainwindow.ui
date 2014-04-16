@@ -26,7 +26,7 @@
    <string>Eurobattle.net Client</string>
   </property>
   <property name="windowIcon">
-   <iconset>
+   <iconset resource="xpam.qrc">
     <normaloff>:/favicon.ico</normaloff>:/favicon.ico</iconset>
   </property>
   <property name="styleSheet">
@@ -675,7 +675,7 @@ YOU CAN'T PLAY PG OR MANUALLY HOST GAMES IN THIS MODE!</string>
            </rect>
           </property>
           <property name="text">
-           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Eurobattle.net Client version 0.3.0.0, developed by cen&lt;/p&gt;&lt;p&gt;&lt;br/&gt;We are searching for Qt/ C++ developers to further expand this client.&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;TODO:&lt;/p&gt;&lt;p&gt;-bnet Chat client&lt;/p&gt;&lt;p&gt;-DotA 2 support&lt;/p&gt;&lt;p&gt;-TS integration&lt;/p&gt;&lt;p&gt;-Displaying player's profile and league stats in the client&lt;/p&gt;&lt;p&gt;-and more...&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;Special thanks to:&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;IStealSkills&lt;/span&gt; - help with desig&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Stefos007&lt;/span&gt; - original GProxy implementation&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Ladislav Zezula&lt;/span&gt; - Stormlib (&lt;a href=&quot;http://www.zezula.net/en/mpq/stormlib.html&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#007dc1;&quot;&gt;zezula.net&lt;/span&gt;&lt;/a&gt;)&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;http://pvpgn.org/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#007dc1;&quot;&gt;PvPGN.org&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Eurobattle.net Client version 0.4.0.0, developed by cen&lt;/p&gt;&lt;p&gt;&lt;br/&gt;We are searching for Qt/ C++ developers to further expand this client.&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;TODO:&lt;/p&gt;&lt;p&gt;-bnet Chat client&lt;/p&gt;&lt;p&gt;-DotA 2 support&lt;/p&gt;&lt;p&gt;-TS integration&lt;/p&gt;&lt;p&gt;-Displaying player's profile and league stats in the client&lt;/p&gt;&lt;p&gt;-and more...&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;Special thanks to:&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;IStealSkills&lt;/span&gt; - help with desig&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Stefos007&lt;/span&gt; - original GProxy implementation&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Ladislav Zezula&lt;/span&gt; - Stormlib (&lt;a href=&quot;http://www.zezula.net/en/mpq/stormlib.html&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#007dc1;&quot;&gt;zezula.net&lt;/span&gt;&lt;/a&gt;)&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;http://pvpgn.org/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#007dc1;&quot;&gt;PvPGN.org&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
           <property name="openExternalLinks">
            <bool>true</bool>
