@@ -186,7 +186,7 @@ bool Updater::extractZip() {
                 dstFile.close();
             }
             else {
-                emit sendLine("Could not extract file "+dstFile.errorString());
+                emit sendLine("Could not extract file "+filePath+" "+dstFile.errorString());
                 return false;
             }
             delete buffer;

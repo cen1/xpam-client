@@ -1,19 +1,18 @@
 {
     "beta" : {
-        "version" : 0,
-        "mirror1" : "https://drive.google.com/uc?id=0B3Yu5IASRCBPa1liYTF0bGRCX2M",
-        "mirror2" : "https://skydrive.live.com/download?resid=C8412414CD9F5184%21112",
-        "mirror3" : "http://ubuntuone.com/0arXkH8AKv18WSYEp5Ii6R",
-        "mirror4" : "http://files.eurobattle.net/updates/update3.zip",
-        "sha1" : "4de36dc63700fb7c7afc9cd3298ba1574a4e61fc"
+            "version" : 2,
+            "mirror1" : "https://drive.google.com/uc?id=0B3Yu5IASRCBPMnhkbFBsMFhqeW8",
+            "mirror2" : "https://skydrive.live.com/download?resid=C8412414CD9F5184%21117",
+            "mirror3" : "http://files.eurobattle.net/updates/update2beta.zip",
+            "mirror4" : "http://leaguebots.com/cen/update/update2beta.zip",
+            "sha1" : "da71b5504dece2997aa9e84197cf1512b5d9fc83"
     },
-    "0" : {
-        "version" : 0,
-        "mirror1" : "https://drive.google.com/uc?id=0B3Yu5IASRCBPa1liYTF0bGRCX2M",
-        "mirror2" : "https://skydrive.live.com/download?resid=C8412414CD9F5184%21112",
-        "mirror3" : "http://ubuntuone.com/0arXkH8AKv18WSYEp5Ii6R",
-        "mirror4" : "http://files.eurobattle.net/updates/update3.zip",
-        "sha1" : "4de36dc63700fb7c7afc9cd3298ba1574a4e61fc"
-    },
-
+    "1" : {
+        "version" : 1,
+        "mirror1" : "https://drive.google.com/uc?id=0B3Yu5IASRCBPME9DSkVqM1dndXM",
+        "mirror2" : "https://skydrive.live.com/download?resid=C8412414CD9F5184%21116",
+        "mirror3" : "http://files.eurobattle.net/updates/update1beta.zip",
+        "mirror4" : "http://leaguebots.com/cen/update/update1beta.zip",
+        "sha1" : "ff2ee4efff025f834be435a2ada1f9deb5c9af6e"
+    }
 }

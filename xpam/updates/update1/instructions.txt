@@ -1,1 +1,0 @@
-MOVE DotA v6.79c.w3x MAPPATH

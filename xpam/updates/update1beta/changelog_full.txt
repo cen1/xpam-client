@@ -1,0 +1,4 @@
+CHANGELOG #1:
+
+-client now requests admin privileges by default
+-small change in updater
