@@ -170,6 +170,53 @@ namespace Winutils
             return "ERROR 1: "+Util::getLastErrorMsg()+" -- "+filename;
         }
     }
+
+    inline void GenerateKey( int vk )
+    {
+        INPUT ip;
+        ip.type = INPUT_KEYBOARD;
+        ip.ki.wScan = 0;
+        ip.ki.time = 0;
+        ip.ki.dwExtraInfo = 0;
+        //press
+        ip.ki.wVk = vk;
+        ip.ki.dwFlags = 0; // 0 for key press
+        SendInput(1, &ip, sizeof(INPUT));
+
+        //release
+        ip.ki.wVk = vk;
+        ip.ki.dwFlags = KEYEVENTF_KEYUP;
+        SendInput(1, &ip, sizeof(INPUT));
+    }
+
+    inline void GenerateKeyCombo( int vk1 , int vk2)
+    {
+        INPUT ip;
+        ip.type = INPUT_KEYBOARD;
+        ip.ki.wScan = 0;
+        ip.ki.time = 0;
+        ip.ki.dwExtraInfo = 0;
+
+        // Press the vk1 key
+        ip.ki.wVk = vk1;
+        ip.ki.dwFlags = 0; // 0 for key press
+        SendInput(1, &ip, sizeof(INPUT));
+
+        // Press the vk2 key
+        ip.ki.wVk = vk2;
+        ip.ki.dwFlags = 0; // 0 for key press
+        SendInput(1, &ip, sizeof(INPUT));
+
+        // Release the vk2 key
+        ip.ki.wVk = vk2;
+        ip.ki.dwFlags = KEYEVENTF_KEYUP;
+        SendInput(1, &ip, sizeof(INPUT));
+
+        // Release the vk1 key
+        ip.ki.wVk = vk1;
+        ip.ki.dwFlags = KEYEVENTF_KEYUP;
+        SendInput(1, &ip, sizeof(INPUT));
+    }
 }
 
 #endif // WINUTILS_H

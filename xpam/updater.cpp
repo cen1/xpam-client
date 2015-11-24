@@ -42,6 +42,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "util.h"
 #include "updater.h"
 #include "registry.h"
+#include "mpq.h"
 
 Updater::Updater(Config * c, bool b) {
     config=c;
@@ -208,7 +209,7 @@ bool Updater::extractZip() {
 bool Updater::instructions() {
     //read instructions.txt and execute
     /*
-     * MOVE or DELETE
+     * MOVE, DELETE or ICONS
      * Filename
      * EUROPATH, SOUNDPATH, W3PATH or MAPPATH
     */
@@ -233,6 +234,13 @@ bool Updater::instructions() {
                 QFile from(config->APPDATA+"\\"+midParam);
                 if (QFile::exists(dstPath+"\\"+midParam)) QFile::remove(dstPath+"\\"+midParam);
 
+                //check if download folder exists
+                if(l.last()=="MAPPATH")
+                {
+                    if (!QDir().exists(dstPath))
+                        QDir().mkdir(dstPath);
+                }
+
                 emit sendLine("Moving to "+dstPath+"\\"+midParam);
                 if (!from.rename(dstPath+"\\"+midParam)) {
                     emit sendLine("Could not move file "+from.fileName()+" to "+dstPath+"\\"+midParam+" -- "+from.errorString());
@@ -248,6 +256,13 @@ bool Updater::instructions() {
                 else if(l.last()=="MAPPATH")  QFile::remove(config->MAPPATH+"\\"+midParam);
                 else if(l.last()=="SOUNDPATH")  QFile::remove(config->SOUNDPATH+"\\"+midParam);
             }
+            else if (l[0]=="ICONS") {
+                if (!updateMPQ()) {
+                    emit sendLine("Failed to update icons. Please contact Technical Support");
+                    return false;
+                }
+                QFile::remove(config->APPDATA+"\\icons.txt");
+            }
         }
     }
     else {
@@ -261,6 +276,78 @@ bool Updater::instructions() {
 
     emit sendLine("...");
     return true;
+}
+
+bool Updater::updateMPQ()
+{
+    emit sendLine("Updating MPQ with custom icons");
+    //O = open
+    //d = delete file
+    //f = flush
+    //a = add from to
+    //C = close
+    //exit
+    Mpq mpq;
+    QFile inputFile(config->APPDATA+"\\icons.txt");
+    if (inputFile.open(QIODevice::ReadOnly)) {
+        QTextStream in(&inputFile);
+        while (!in.atEnd()) {
+            QString line = in.readLine();
+            QStringList l = line.split(" ");
+
+            if (l[0]=="O") {
+                if (mpq.open(config->W3PATH+"\\"+l[1])==false) {
+                    emit sendLine(Util::getLastErrorMsg()+config->W3PATH+"\\"+l[1]);
+                    return false;
+                }
+            }
+            else if(l[0]=="d") {
+                mpq.removeFile(l[1]);
+            }
+            else if(l[0]=="f") {
+
+            }
+            else if(l[0]=="a") {
+                QFile f(config->APPDATA+"\\"+l[1]);
+                f.open(QIODevice::ReadOnly);
+                QByteArray ba;
+                ba = f.readAll();
+                DWORD size=ba.size();
+                emit sendLine(l[2]+" ("+QString::number(size)+")");
+
+                if (size==0) return false;
+                if (mpq.createFile(l[2], size)==false) {
+                    emit sendLine(Util::getLastErrorMsg());
+                    return false;
+                }
+                if (mpq.writeFile(ba)==false) {
+                    emit sendLine(Util::getLastErrorMsg());
+                    return false;
+                }
+                if (mpq.finishWriteFile()==false) {
+                    emit sendLine(Util::getLastErrorMsg());
+                    return false;
+                }
+                f.close();
+                QFile::remove(config->APPDATA+"\\"+l[1]);
+            }
+            else if(l[0]=="c") {
+                emit sendLine("Closing mpq");
+                mpq.close();
+            }
+            else if(l[0]=="exit") {
+                emit sendLine("End of icons.txt instruction file");
+                inputFile.close();
+                return true;
+            }
+        }
+    }
+    else {
+        emit sendLine("Could not open file icons.txt");
+        return false;
+    }
+    emit sendLine("Something went terribly wrong...");
+    return false;
 }
 
 //receives download progress from downloader

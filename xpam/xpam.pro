@@ -21,7 +21,8 @@ SOURCES += main.cpp\
     downloader.cpp \
     updater.cpp \
     w3.cpp \
-    test.cpp
+    test.cpp \
+    mpq.cpp
 
 HEADERS  += mainwindow.h \
     registry.h \
@@ -32,7 +33,8 @@ HEADERS  += mainwindow.h \
     downloader.h \
     updater.h \
     w3.h \
-    test.h
+    test.h \
+    mpq.h
 
 FORMS    += mainwindow.ui
 
@@ -44,29 +46,37 @@ OTHER_FILES += \
     update.bat \
     update.json.example
 
-CONFIG += static
+### DEFINES
+#CONFIG += static
+#DEFINES += QUAZIP_STATIC
+DEFINES += NOMINMAX
+DEFINES += _UNICODE
+DEFINES += UNICODE
 
-#quazip
+### QUAZIP
 win32:CONFIG(release, debug|release): LIBS += -L$$PWD/quazip/ -lquazip
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/quazip/ -lquazipd
 
 INCLUDEPATH += $$PWD/quazip
 DEPENDPATH += $$PWD/quazip
 
 win32:CONFIG(release, debug|release): PRE_TARGETDEPS += $$PWD/quazip/quazip.lib
-else:win32:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/quazip/quazipd.lib
+else:win32:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/quazip/quazip.lib
 
-DEFINES += NOMINMAX
-DEFINES += QUAZIP_STATIC
-win32:INCLUDEPATH += C:\git\qt5win32-msvc2010\qt5\qtbase\src\3rdparty\zlib
+### ZLIB
+INCLUDEPATH +=$$PWD/zlib
+DEPENDPATH += $$PWD/zlib
 
-#fix for UI changes not taking effect
+## STORMLIB
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/stormlib/ -lStormLib
+
+INCLUDEPATH += $$PWD/stormlib
+DEPENDPATH += $$PWD/stormlib
+
+# Fix for UI changes not taking effect
 UI_DIR = $$PWD
 
-#end quazip
 
-#MANIFEST
-
+### MANIFEST
 
 #win32 {
 #    CONFIG -= embed_manifest_exe
@@ -81,4 +91,4 @@ win32 {
     QMAKE_LFLAGS_WINDOWS += /MANIFESTUAC:level=\'requireAdministrator\'
 }
 
-win32:CONFIG(release, debug|release): QMAKE_POST_LINK += cd \"C:/git/xpam/build-xpam-Qt_5_2_static_msvc2010-Release\" && copy /Y \"xpam.exe\" \"$$PWD/../../installer/installer/data/xpam.exe\" && upx \"$$PWD/../../installer/installer/data/xpam.exe\"
+#win32:CONFIG(release, debug|release): QMAKE_POST_LINK += cd \"C:/git/xpam/build-xpam-Qt_5_2_static_msvc2010-Release\" && copy /Y \"xpam.exe\" \"$$PWD/../../installer/installer/data/xpam.exe\" && upx \"$$PWD/../../installer/installer/data/xpam.exe\"

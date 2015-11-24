@@ -31,11 +31,14 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "QThread"
 #include "QTextStream"
 #include "QDesktopWidget"
+#include "QClipboard"
+#include "QDesktopServices"
 #include "gproxy.h"
 #include "w3.h"
 #include "updater.h"
 #include "config.h"
-//#include "QSslSocket"
+#include "QMovie"
+#include "QObjectList"
 
 W3 * w3=nullptr;         //w3 process
 GProxy * gproxy=nullptr;        //gproxy object
@@ -56,6 +59,31 @@ MainWindow::MainWindow(QWidget *parent) :
 
     isStartupUpdate=true;
     ismax=false;
+
+    //gproxy options
+    connect(ui->checkBox_console, SIGNAL(clicked(bool)), this, SLOT(handleCheckbox(bool)));
+    connect(ui->checkBox_option_sounds, SIGNAL(clicked(bool)), this, SLOT(handleCheckbox(bool)));
+    connect(ui->checkBox_sound_1, SIGNAL(clicked(bool)), this, SLOT(handleCheckbox(bool)));
+    connect(ui->checkBox_sound_2, SIGNAL(clicked(bool)), this, SLOT(handleCheckbox(bool)));
+    connect(ui->checkBox_sound_3, SIGNAL(clicked(bool)), this, SLOT(handleCheckbox(bool)));
+    connect(ui->checkBox_sound_4, SIGNAL(clicked(bool)), this, SLOT(handleCheckbox(bool)));
+    connect(ui->checkBox_sound_5, SIGNAL(clicked(bool)), this, SLOT(handleCheckbox(bool)));
+    connect(ui->checkBox_sound_6, SIGNAL(clicked(bool)), this, SLOT(handleCheckbox(bool)));
+    connect(ui->checkBox_sound_7, SIGNAL(clicked(bool)), this, SLOT(handleCheckbox(bool)));
+    connect(ui->checkBox_sound_8, SIGNAL(clicked(bool)), this, SLOT(handleCheckbox(bool)));
+    connect(ui->checkBox_sound_9, SIGNAL(clicked(bool)), this, SLOT(handleCheckbox(bool)));
+    connect(ui->checkBox_sound_10, SIGNAL(clicked(bool)), this, SLOT(handleCheckbox(bool)));
+    connect(ui->checkBox_chatbuffer, SIGNAL(clicked(bool)), this, SLOT(handleCheckbox(bool)));
+
+    //w3 options
+    connect(ui->checkBox_windowed, SIGNAL(clicked(bool)), this, SLOT(handleCheckboxClient(bool)));
+    connect(ui->checkBox_opengl, SIGNAL(clicked(bool)), this, SLOT(handleCheckboxClient(bool)));
+
+    //load w3 options
+    this->initClientOptions();
+
+    //initiate gproxy options
+    this->initGproxyOptions();
 }
 
 MainWindow::~MainWindow()
@@ -78,6 +106,11 @@ void MainWindow::on_pushButtonSWGP_clicked()
 
     ui->tabWidget->setCurrentIndex(1);
 
+    //preloader
+    QMovie *movie = new QMovie(":/preloader.gif");
+    ui->preloaderLabel1->setMovie(movie);
+    ui->preloaderLabel1->movie()->start();
+
     //set gproxy gateway as default
     Registry::setGproxyGateways();
 
@@ -85,7 +118,7 @@ void MainWindow::on_pushButtonSWGP_clicked()
     QString gpexe="\""+gpdir+"\\gproxy.exe\"";
 
     status("Launching GProxy...");
-    ui->textBrowser->append("Working directory: "+gpdir);
+    ui->labelGproxyout->setText("Working directory: "+gpdir);
 
     gproxy=new GProxy(gpdir, gpexe);
     gpt=new QThread();
@@ -94,7 +127,7 @@ void MainWindow::on_pushButtonSWGP_clicked()
     QObject::connect(gpt, SIGNAL(started()), gproxy, SLOT(readStdout()));
     QObject::connect(gproxy, SIGNAL(gproxyReady()), this, SLOT(gproxyReady()));
     QObject::connect(gproxy, SIGNAL(gproxyExiting()), this, SLOT(gproxyExiting()));
-    QObject::connect(gproxy, SIGNAL(sendLine(QString)), ui->textBrowser, SLOT(append(QString)), Qt::QueuedConnection);
+    QObject::connect(gproxy, SIGNAL(sendLine(QString)), this, SLOT(receiveLine(QString)), Qt::QueuedConnection);
 
     QObject::connect(gproxy, SIGNAL(gproxyExiting()), gpt, SLOT(quit()));
     QObject::connect(gproxy, SIGNAL(gproxyExiting()), gproxy, SLOT(deleteLater()));
@@ -121,7 +154,8 @@ void MainWindow::on_pushButtonSWOGP_clicked()
     status("Launching Warcraft III...");
 
     QStringList list;
-    if (ui->checkBoxWindowed->isChecked()) list << "-windowed";
+    if (ui->checkBox_windowed->isChecked()) list << "-windowed";
+    if (ui->checkBox_opengl->isChecked()) list << "-opengl";
 
     w3=new W3(w3dir, w3exe, list);
     w3t=new QThread();
@@ -139,7 +173,7 @@ void MainWindow::on_pushButtonSWOGP_clicked()
 
 //start w3 when gproxy emits
 void MainWindow::gproxyReady() {
-    ui->textBrowser->append("EMITTED");
+    ui->labelGproxyout->setText("EMITTED");
     if (Util::isRunning("war3.exe")) {
         status("Warcraft III is already running");
         return;
@@ -151,7 +185,7 @@ void MainWindow::gproxyReady() {
     status("Launching Warcraft III...");
 
     QStringList list;
-    if (ui->checkBoxWindowed->isChecked()) list << "-windowed";
+    if (ui->checkBox_windowed->isChecked()) list << "-windowed";
 
     w3=new W3(w3dir, w3exe, list);
     w3t=new QThread();
@@ -165,10 +199,59 @@ void MainWindow::gproxyReady() {
     QObject::connect(w3t, SIGNAL(finished()), w3t, SLOT(deleteLater()));
 
     w3t->start();
+
+    ui->preloaderLabel1->movie()->stop();
 }
 
 void MainWindow::gproxyExiting() {
     status("GProxy has closed");
+}
+
+void MainWindow::receiveLine(QString line)
+{
+    ui->labelGproxyout->setText(line);
+    if (line=="[GPROXY] Detected W3 as running")
+    {
+        if (ui->preloaderLabel1->movie()!=0)
+        {
+            ui->preloaderLabel1->movie()->stop();
+            ui->preloaderLabel1->movie()->deleteLater();
+        }
+        ui->preloaderLabel1->setText(QString("✓"));
+        ui->preloaderLabel1->setStyleSheet("color: green");
+    }
+    else if (line=="GProxy process exited")
+    {
+        if (ui->preloaderLabel1->movie()!=0)
+        {
+            ui->preloaderLabel1->movie()->stop();
+            ui->preloaderLabel1->movie()->deleteLater();
+        }
+        ui->preloaderLabel1->setText(QString("x"));
+        ui->preloaderLabel1->setStyleSheet("color: red");
+    }
+    else if (line.startsWith("[AMH]"))
+    {
+        ui->labelGproxywarnings->setText("Antihack detected a possible hack program.");
+        if (ui->preloaderLabel1->movie()!=0)
+        {
+            ui->preloaderLabel1->movie()->stop();
+            ui->preloaderLabel1->movie()->deleteLater();
+        }
+        ui->preloaderLabel1->setText(QString("x"));
+        ui->preloaderLabel1->setStyleSheet("color: red");
+    }
+    else if (line.startsWith("[SYSERROR]"))
+    {
+        this->ui->labelGproxywarnings->setText("A critical error encountered.. if you can't fix it yourself, send log to <a style=\"color: #007dc1;\" href=\"http://eurobattle.net/forums/18-Technical-Support\">Tech Support</a>");
+        if (this->ui->preloaderLabel1->movie()!=0)
+        {
+            this->ui->preloaderLabel1->movie()->stop();
+            this->ui->preloaderLabel1->movie()->deleteLater();
+        }
+        this->ui->preloaderLabel1->setText("x");
+        this->ui->preloaderLabel1->setStyleSheet("color: red");
+    }
 }
 
 void MainWindow::w3Exited() {
@@ -272,6 +355,68 @@ void MainWindow::updateFinished(bool restartNeeded, bool ok, bool utd) {
     }
 }
 
+void MainWindow::handleCheckbox(bool checked)
+{
+    QString option = QObject::sender()->objectName().remove("checkBox_");
+    QString value = "0";
+    if (checked) value="1";
+
+    bool r=config->SetOption(config->EUROPATH+"\\gproxy.cfg", option, value);
+    if (!r) ui->statusBar->showMessage("Could not change gproxy config", 10000);
+}
+
+void MainWindow::handleCheckboxClient(bool checked)
+{
+    QString option = QObject::sender()->objectName().remove("checkBox_");
+    QString value = "0";
+    if (checked) value="1";
+
+    bool r=config->SetOption(config->EUROPATH+"\\xpam.cfg", option, value);
+    if (!r) ui->statusBar->showMessage("Could not change client config", 10000);
+}
+
+void MainWindow::initGproxyOptions() {
+    QFile conf(config->EUROPATH+"\\gproxy.cfg");
+    if (conf.open(QFile::ReadOnly))
+        ui->statusBar->showMessage("Unable to load gproxy options", 10000);
+
+    QStringList lines;
+    while(!conf.atEnd())
+        lines.append(conf.readLine());
+
+    conf.close();
+    for (auto i = lines.begin(); i!=lines.end(); i++) {
+        if ((*i).startsWith("#")) continue;
+        QStringList l = (*i).split("=");
+        QCheckBox * find = this->findChild<QCheckBox *>("checkBox_"+l[0].simplified());
+        if (find!=0) {
+            if (l[1].simplified()=="1") find->setChecked(true);
+            else if (l[1].simplified()=="0") find->setChecked(false);
+        }
+    }
+}
+
+void MainWindow::initClientOptions() {
+    QFile conf(config->EUROPATH+"\\xpam.cfg");
+    if (conf.open(QFile::ReadOnly))
+        ui->statusBar->showMessage("Unable to load client options", 10000);
+
+    QStringList lines;
+    while(!conf.atEnd())
+        lines.append(conf.readLine());
+
+    conf.close();
+    for (auto i = lines.begin(); i!=lines.end(); i++) {
+        if ((*i).startsWith("#")) continue;
+        QStringList l = (*i).split("=");
+        QCheckBox * find = this->findChild<QCheckBox *>("checkBox_"+l[0].simplified());
+        if (find!=0) {
+            if (l[1].simplified()=="1") find->setChecked(true);
+            else if (l[1].simplified()=="0") find->setChecked(false);
+        }
+    }
+}
+
 //this slot is only connected for startup update check
 //signal emitted when there is an update avalible
 //so we hide splash screen to see progress
@@ -369,19 +514,36 @@ void MainWindow::mousePressEvent(QMouseEvent *event) {
   QWidget::mousePressEvent(event);
 }
 
+//max on top, left and right max
 void MainWindow::mouseReleaseEvent(QMouseEvent *event) {
   down = false;
   QPoint curPos = event->globalPos();
-  if (this->y()<2 && !ismax && curPos.y()<2 && this->ui->labelTitle->underMouse()) {
-      QDesktopWidget *desktop = QApplication::desktop();
-      this->setGeometry(desktop->availableGeometry());
-      ismax=true;
+  if (this->ui->labelTitle->underMouse() && !ismax)
+  {
+      if (curPos.y()<2) {
+          this->setGeometry(QApplication::desktop()->availableGeometry());
+          ismax=true;
+      }
+      else if (curPos.x()<2) {
+          this->setGeometry(QRect(
+                                QPoint(0,0),
+                                QSize(
+                                    this->minimumWidth(),
+                                    QApplication::desktop()->availableGeometry().bottom())));
+      }
+      else if (curPos.x() > QApplication::desktop()->availableGeometry().right()-2) {
+          this->setGeometry(QRect(
+                                QPoint(QApplication::desktop()->availableGeometry().right()-this->minimumWidth(),0),
+                                QSize(
+                                    this->minimumWidth(),
+                                    QApplication::desktop()->availableGeometry().bottom())));
+      }
   }
   QWidget::mouseReleaseEvent(event);
 }
 
 void MainWindow::mouseMoveEvent(QMouseEvent *event) {
-  if (down) {
+  if (down && ui->logoBar->underMouse()) {
     QPoint curPos = event->globalPos();
     if (curPos != lastPos) {
       QPoint diff = (lastPos - curPos);
@@ -391,4 +553,19 @@ void MainWindow::mouseMoveEvent(QMouseEvent *event) {
   }
 
   QWidget::mouseMoveEvent(event);
+}
+
+void MainWindow::on_pushButton_clicked()
+{
+    QFile logfile(config->EUROPATH+"/gproxy.log");
+    if (logfile.open(QFile::ReadOnly))
+    {
+        QString s(logfile.readAll());
+        QApplication::clipboard()->setText(s);
+    }
+}
+
+void MainWindow::on_pushButton_2_clicked()
+{
+    QDesktopServices::openUrl(QUrl("file:///"+config->EUROPATH+"/gproxy.log"));
 }

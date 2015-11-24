@@ -45,3 +45,33 @@ Config::Config()
     json2 = "http://tools.eurobattle.net/update/update.json";
     json3 = "http://leaguebots.com/cen/update/update.json";
 }
+
+bool Config::SetOption(QString file, QString option, QString value) {
+    QFile conf(file);
+    if (!conf.open(QFile::ReadOnly)) return false;
+
+    QStringList lines;
+    while(!conf.atEnd())
+        lines.append(conf.readLine());
+
+    conf.close();
+    for (auto i = lines.begin(); i!=lines.end(); i++) {
+        if ((*i).startsWith("#")) continue;
+        QStringList l = (*i).split("=");
+        if (l[0].simplified()==option) {
+            l[1]=" "+value+"\r\n";
+            (*i)=l[0]+"="+l[1];
+        }
+    }
+    QFile conf2(file);
+    if (!conf2.open(QFile::WriteOnly)) {
+        return false;
+    }
+
+    for (auto i = lines.begin(); i!=lines.end(); i++) {
+        QByteArray ba = (*i).toLocal8Bit();
+        conf2.write(ba.data());
+    }
+    conf2.close();
+    return true;
+}

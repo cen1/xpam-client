@@ -27,6 +27,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "mainwindow.h"
 #include <QApplication>
 #include "QSplashScreen"
+#include "QTextCodec"
 
 int main(int argc, char *argv[])
 {

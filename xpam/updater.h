@@ -60,6 +60,8 @@ private:
 
     bool extractZip();
     bool instructions();
+    bool updateMPQ();
+
     QByteArray simpleDl(QUrl url);
     bool setCurrentPlusOneJson();
 

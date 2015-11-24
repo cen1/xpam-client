@@ -28,6 +28,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "QString"
 #include "QStringList"
+#include <QObject>
 
 class W3 : public QObject
 {

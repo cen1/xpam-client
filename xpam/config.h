@@ -26,6 +26,7 @@ public:
 
     QString BETAPIN;
 
+    bool SetOption(QString file, QString option, QString value);
     Config();
 };
 

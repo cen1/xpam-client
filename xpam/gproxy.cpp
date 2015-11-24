@@ -30,6 +30,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #ifndef QBYTEARRAY_H
     #include "QByteArray"
 #endif
+#include "winutils.h"
 
 GProxy::GProxy(QString w, QString e)
 {
@@ -39,7 +40,7 @@ GProxy::GProxy(QString w, QString e)
 }
 
 GProxy::~GProxy() {
-    emit sendLine("Destructing gproxy object");
+    //emit sendLine("Destructing gproxy object");
 }
 
 void GProxy::readStdout() {
@@ -55,22 +56,27 @@ void GProxy::readStdout() {
     if (!p.isReadable()) emit sendLine("Console stream is not readable");
 
     while(!abort) {
-        p.waitForReadyRead(500);
-        //if (!r) sendLine("False return after 5 seconds "+p.errorString());
+        p.waitForReadyRead(100);
 
         if (p.canReadLine()) {
             QString line(p.readLine());
             line=line.simplified(); //mostly for removing newline
+            QStringList tokens = parseTokens(line);
 
             emit sendLine(line);
-
-            if (line=="GPROXY READY") {
+            //if (tokens.count() >= 4) emit sendLine(tokens[1]+"---"+tokens[2]+"---"+tokens[3]);
+            //general
+            if (tokens[1] == "SYSTEM" && tokens[2] == "LOG_INFO" && tokens[3] == "GPROXY READY") {
                 emit gproxyReady();
             }
-            else if (line=="GPROXY EXITING") {
+            else if (tokens[1] == "SYSTEM" && tokens[2] == "LOG_INFO" && tokens[3] == "GPROXY EXITING") {
                 emit sendLine("Received the EXIT signal");
                 abort=true;
             }
+            else if (tokens[2]=="ERROR") {
+                abort=true;
+            }
+
             if (p.state() != QProcess::Running) {
                 emit sendLine("GProxy process exited");
                 abort=true;
@@ -78,4 +84,14 @@ void GProxy::readStdout() {
         }
     }
     emit gproxyExiting();
+}
+
+QStringList GProxy::parseTokens(QString s) {
+    //example [24-11-2015 16:38:54][SYSTEM][LOG_INFO] GPROXY READY
+    QStringList tokens = s.split("]");
+    for (unsigned int i = 0; i<tokens.count(); i++) {
+        tokens[i] = tokens[i].remove("[");
+        tokens[i] = tokens[i].simplified();
+    }
+    return tokens;
 }

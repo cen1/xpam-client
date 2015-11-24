@@ -13,5 +13,6 @@
         <file>maximize_window_hover.png</file>
         <file>minimize_window.png</file>
         <file>minimize_window_hover.png</file>
+        <file>preloader.gif</file>
     </qresource>
 </RCC>

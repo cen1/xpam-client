@@ -38,7 +38,7 @@ signals:
     void gproxyReady();
     void gproxyExiting();
 private:
-
+    QStringList parseTokens(QString s);
 public:
     GProxy(QString w, QString e);
     ~GProxy();

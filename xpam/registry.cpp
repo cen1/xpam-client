@@ -107,7 +107,7 @@ bool Registry :: setRegDWORD(CRegKey reg, QString name, DWORD value) {
 DWORD Registry :: setGateways() {
     CRegKey reg;
     if (reg.Open(HKEY_CURRENT_USER, _T("Software\\Blizzard Entertainment\\Warcraft III"), KEY_WRITE | KEY_WOW64_64KEY)==ERROR_SUCCESS){
-        wchar_t *lines[21]= {
+        wchar_t lines[21][255]= {
             _T("1008"),
             _T("04"),
             _T("uswest.battle.net"),
@@ -161,7 +161,7 @@ DWORD Registry :: setGateways() {
 DWORD Registry :: setGproxyGateways() {
     CRegKey reg;
     if (reg.Open(HKEY_CURRENT_USER, _T("Software\\Blizzard Entertainment\\Warcraft III"), KEY_WRITE | KEY_WOW64_64KEY)==ERROR_SUCCESS){
-        wchar_t *lines[21]= {
+        wchar_t lines[21][255]= {
             _T("1008"),
             _T("05"),
             _T("uswest.battle.net"),
