@@ -54,6 +54,9 @@ public:
     static DWORD setGproxyGateways();
     static bool setPatchVersion(int version);
 
+    bool setW3dir(QString w3dir);
+    bool setInstallPath(QString w3dir);
+
     static bool delGM();
 
     Registry();

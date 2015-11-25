@@ -47,6 +47,7 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
     void checkUpdates();
+    bool updatesEnabled;
     
 private slots:
     void on_pushButtonSWGP_clicked();
@@ -63,6 +64,7 @@ private slots:
     void on_pushButton_clicked();
 
     void on_pushButton_2_clicked();
+    void on_pushButton_w3path_clicked();
 
 public slots:
     void gproxyReady();

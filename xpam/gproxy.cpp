@@ -66,14 +66,14 @@ void GProxy::readStdout() {
             emit sendLine(line);
             //if (tokens.count() >= 4) emit sendLine(tokens[1]+"---"+tokens[2]+"---"+tokens[3]);
             //general
-            if (tokens[1] == "SYSTEM" && tokens[2] == "LOG_INFO" && tokens[3] == "GPROXY READY") {
+            if (tokens.size() >= 4 && tokens[1] == "SYSTEM" && tokens[2] == "LOG_INFO" && tokens[3] == "GPROXY READY") {
                 emit gproxyReady();
             }
-            else if (tokens[1] == "SYSTEM" && tokens[2] == "LOG_INFO" && tokens[3] == "GPROXY EXITING") {
+            else if (tokens.size() >= 4 && tokens[1] == "SYSTEM" && tokens[2] == "LOG_INFO" && tokens[3] == "GPROXY EXITING") {
                 emit sendLine("Received the EXIT signal");
                 abort=true;
             }
-            else if (tokens[2]=="ERROR") {
+            else if (tokens.size() >= 3 && tokens[2]=="ERROR") {
                 abort=true;
             }
 
@@ -89,7 +89,7 @@ void GProxy::readStdout() {
 QStringList GProxy::parseTokens(QString s) {
     //example [24-11-2015 16:38:54][SYSTEM][LOG_INFO] GPROXY READY
     QStringList tokens = s.split("]");
-    for (unsigned int i = 0; i<tokens.count(); i++) {
+    for (unsigned int i = 0; i<tokens.size(); i++) {
         tokens[i] = tokens[i].remove("[");
         tokens[i] = tokens[i].simplified();
     }

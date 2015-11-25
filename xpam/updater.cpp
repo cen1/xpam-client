@@ -353,7 +353,8 @@ bool Updater::updateMPQ()
 //receives download progress from downloader
 //we use a timer so we don't waste cycles
 void Updater::receiveProgress(qint64 bytesReceived, qint64 bytesTotal) {
-    if (progressTime.elapsed() > 500 && bytesTotal != -1) {
+    //emit sendLine("Slot activated "+QString::number(bytesReceived));
+    if (progressTime.elapsed() > 100 && bytesTotal != -1) {
         int percents = qRound((((float)bytesReceived/(float)bytesTotal)*100.0));
         emit modifyLastLine("("+QString::number(bytesReceived)+" Bytes / "+QString::number(bytesTotal)+" Bytes) -- "+QString::number(percents)+"%");
 

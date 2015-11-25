@@ -39,6 +39,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "config.h"
 #include "QMovie"
 #include "QObjectList"
+#include "QFileDialog"
 
 W3 * w3=nullptr;         //w3 process
 GProxy * gproxy=nullptr;        //gproxy object
@@ -74,16 +75,21 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->checkBox_sound_9, SIGNAL(clicked(bool)), this, SLOT(handleCheckbox(bool)));
     connect(ui->checkBox_sound_10, SIGNAL(clicked(bool)), this, SLOT(handleCheckbox(bool)));
     connect(ui->checkBox_chatbuffer, SIGNAL(clicked(bool)), this, SLOT(handleCheckbox(bool)));
+    connect(ui->checkBox_debug, SIGNAL(clicked(bool)), this, SLOT(handleCheckbox(bool)));
+    connect(ui->checkBox_telemetry, SIGNAL(clicked(bool)), this, SLOT(handleCheckbox(bool)));
 
     //w3 options
     connect(ui->checkBox_windowed, SIGNAL(clicked(bool)), this, SLOT(handleCheckboxClient(bool)));
     connect(ui->checkBox_opengl, SIGNAL(clicked(bool)), this, SLOT(handleCheckboxClient(bool)));
+    connect(ui->checkBox_updates, SIGNAL(clicked(bool)), this, SLOT(handleCheckboxClient(bool)));
 
     //load w3 options
     this->initClientOptions();
 
     //initiate gproxy options
     this->initGproxyOptions();
+
+    updatesEnabled = ui->checkBox_updates->isChecked();
 }
 
 MainWindow::~MainWindow()
@@ -262,6 +268,7 @@ void MainWindow::w3Exited() {
 void MainWindow::checkUpdates(){
 
     isStartupUpdate=true;
+
     //disable beta button or all kind of hell will ensue
     ui->pushButtonBU->setDisabled(true);
 
@@ -326,7 +333,7 @@ void MainWindow::updateFinished(bool restartNeeded, bool ok, bool utd) {
     if (utd) {
         ui->tabWidget->setCurrentIndex(0);
         status("Client is up to date");
-        if (isStartupUpdate) emit updateCheckFinished();
+        //if (isStartupUpdate) emit updateCheckFinished();
         unlockTabs();
         ui->pushButtonBU->setEnabled(true);
     }
@@ -421,6 +428,7 @@ void MainWindow::initClientOptions() {
 //signal emitted when there is an update avalible
 //so we hide splash screen to see progress
 void MainWindow::hideSplashScreen() {
+    qDebug() << "Closing splash screen";
     emit updateCheckFinished();
 }
 
@@ -568,4 +576,19 @@ void MainWindow::on_pushButton_clicked()
 void MainWindow::on_pushButton_2_clicked()
 {
     QDesktopServices::openUrl(QUrl("file:///"+config->EUROPATH+"/gproxy.log"));
+}
+
+void MainWindow::on_pushButton_w3path_clicked()
+{
+    const QString path = QFileDialog::getExistingDirectory(this);
+    QString p = path;
+    p=p.replace(QChar('/'), QChar('\\'));
+
+    Registry reg;
+    if (reg.setInstallPath(p) && reg.setW3dir(p)) {
+        status("W3 path set to "+p);
+    }
+    else {
+        status("Failed to set W3 path");
+    }
 }

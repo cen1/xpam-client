@@ -233,3 +233,23 @@ bool Registry::delGM() {
     }
     return false;
 }
+
+bool Registry::setW3dir(QString w3dir) {
+    CRegKey reg;
+    if (reg.Open(HKEY_CURRENT_USER, _T("Software\\Eurobattle.net"), KEY_WRITE | KEY_WOW64_64KEY)==ERROR_SUCCESS) {
+        bool r = this->setRegString(reg, "w3dir", w3dir);
+        reg.Close();
+        return r;
+    }
+    return false;
+}
+
+bool Registry::setInstallPath(QString w3dir) {
+    CRegKey reg;
+    if (reg.Open(HKEY_CURRENT_USER, _T("Software\\Blizzard Entertainment\\Warcraft III"), KEY_WRITE | KEY_WOW64_64KEY)==ERROR_SUCCESS) {
+        bool r = this->setRegString(reg, "InstallPath", w3dir);
+        reg.Close();
+        return r;
+    }
+    return false;
+}

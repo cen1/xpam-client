@@ -426,7 +426,7 @@ QCheckBox::indicator:checked {
          <enum>Qt::LeftToRight</enum>
         </property>
         <property name="currentIndex">
-         <number>0</number>
+         <number>1</number>
         </property>
         <widget class="QWidget" name="tab0">
          <property name="sizePolicy">
@@ -673,7 +673,7 @@ YOU CAN'T PLAY PG OR MANUALLY HOST GAMES IN THIS MODE!</string>
             <x>40</x>
             <y>120</y>
             <width>241</width>
-            <height>311</height>
+            <height>351</height>
            </rect>
           </property>
           <property name="styleSheet">
@@ -688,7 +688,7 @@ YOU CAN'T PLAY PG OR MANUALLY HOST GAMES IN THIS MODE!</string>
              <x>10</x>
              <y>30</y>
              <width>221</width>
-             <height>269</height>
+             <height>311</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -819,8 +819,35 @@ YOU CAN'T PLAY PG OR MANUALLY HOST GAMES IN THIS MODE!</string>
               </property>
              </widget>
             </item>
+            <item>
+             <widget class="QCheckBox" name="checkBox_debug">
+              <property name="text">
+               <string>Debugging</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="checkBox_telemetry">
+              <property name="text">
+               <string>Telemetry</string>
+              </property>
+             </widget>
+            </item>
            </layout>
           </widget>
+         </widget>
+         <widget class="QPushButton" name="pushButton_w3path">
+          <property name="geometry">
+           <rect>
+            <x>340</x>
+            <y>80</y>
+            <width>111</width>
+            <height>23</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Change W3 path</string>
+          </property>
          </widget>
         </widget>
         <widget class="QWidget" name="tab2">
@@ -877,6 +904,13 @@ YOU CAN'T PLAY PG OR MANUALLY HOST GAMES IN THIS MODE!</string>
                 </property>
                 <property name="text">
                  <string>Get Beta patch</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0">
+               <widget class="QCheckBox" name="checkBox_updates">
+                <property name="text">
+                 <string>Enable automatic updates</string>
                 </property>
                </widget>
               </item>
