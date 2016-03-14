@@ -8,6 +8,10 @@ QT += core gui network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
+QMAKE_LFLAGS_WINDOWS = /SUBSYSTEM:WINDOWS,5.01
+DEFINES += _ATL_XP_TARGETING
+DEFINES += PSAPI_VERSION=1
+
 TARGET = xpam
 TEMPLATE = app
 

@@ -1,3 +1,0 @@
-CHANGELOG #2:
-
--added new executable

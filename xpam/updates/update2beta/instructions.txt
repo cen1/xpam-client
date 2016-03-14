@@ -1,4 +1,0 @@
-MOVE gproxy.exe EUROPATH
-MOVE kicked.wav SOUNDPATH
-MOVE changelog.txt EUROPATH
-MOVE changelog_full.txt EUROPATH

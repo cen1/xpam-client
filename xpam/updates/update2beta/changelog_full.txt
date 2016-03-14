@@ -1,9 +1,0 @@
-CHANGELOG #2:
-
--added "You were kicked" sound when you are kicked from lobby
--antihack improvements
-
-CHANGELOG #1:
-
--client now requests admin privileges by default
--small change in updater

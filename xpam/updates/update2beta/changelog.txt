@@ -1,4 +1,0 @@
-CHANGELOG #2:
-
--added "You were kicked" sound when you are kicked from lobby
--antihack improvements

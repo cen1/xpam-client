@@ -38,6 +38,7 @@ Downloader::~Downloader(){
 // Slot to be triggered from the updater thread
 void Downloader::startDl() {
     if (reply==nullptr) {
+        //nam.setNetworkAccessible(QNetworkAccessManager::Accessible);
         reply = nam.get(QNetworkRequest(url));
 
         emit sendInfo("Starting download");

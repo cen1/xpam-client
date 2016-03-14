@@ -236,6 +236,16 @@ void MainWindow::receiveLine(QString line)
         ui->preloaderLabel1->setText(QString("x"));
         ui->preloaderLabel1->setStyleSheet("color: red");
     }
+    else if (line=="Received the EXIT signal")
+    {
+        if (ui->preloaderLabel1->movie()!=0)
+        {
+            ui->preloaderLabel1->movie()->stop();
+            ui->preloaderLabel1->movie()->deleteLater();
+        }
+        ui->preloaderLabel1->setText(QString("x"));
+        ui->preloaderLabel1->setStyleSheet("color: red");
+    }
     else if (line.startsWith("[AMH]"))
     {
         ui->labelGproxywarnings->setText("Antihack detected a possible hack program.");

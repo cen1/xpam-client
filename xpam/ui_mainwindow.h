@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'mainwindow.ui'
 **
-** Created by: Qt User Interface Compiler version 5.5.1
+** Created by: Qt User Interface Compiler version 5.6.0
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -82,6 +82,9 @@ public:
     QCheckBox *checkBox_sound_9;
     QCheckBox *checkBox_sound_10;
     QCheckBox *checkBox_chatbuffer;
+    QCheckBox *checkBox_debug;
+    QCheckBox *checkBox_telemetry;
+    QPushButton *pushButton_w3path;
     QWidget *tab2;
     QHBoxLayout *horizontalLayout_3;
     QSplitter *splitter;
@@ -90,6 +93,7 @@ public:
     QFormLayout *formLayoutBU;
     QLineEdit *betapinbox;
     QPushButton *pushButtonBU;
+    QCheckBox *checkBox_updates;
     QWidget *tab3;
     QLabel *labelAbout;
     QStatusBar *statusBar;
@@ -485,11 +489,11 @@ public:
         pushButton_2->setGeometry(QRect(220, 80, 111, 23));
         gpoptionsgroupBox = new QGroupBox(tab1);
         gpoptionsgroupBox->setObjectName(QStringLiteral("gpoptionsgroupBox"));
-        gpoptionsgroupBox->setGeometry(QRect(40, 120, 241, 311));
+        gpoptionsgroupBox->setGeometry(QRect(40, 120, 241, 351));
         gpoptionsgroupBox->setStyleSheet(QStringLiteral(""));
         layoutWidget = new QWidget(gpoptionsgroupBox);
         layoutWidget->setObjectName(QStringLiteral("layoutWidget"));
-        layoutWidget->setGeometry(QRect(10, 30, 221, 269));
+        layoutWidget->setGeometry(QRect(10, 30, 221, 311));
         verticalLayout_2 = new QVBoxLayout(layoutWidget);
         verticalLayout_2->setSpacing(6);
         verticalLayout_2->setContentsMargins(11, 11, 11, 11);
@@ -572,6 +576,19 @@ public:
 
         verticalLayout_2->addWidget(checkBox_chatbuffer);
 
+        checkBox_debug = new QCheckBox(layoutWidget);
+        checkBox_debug->setObjectName(QStringLiteral("checkBox_debug"));
+
+        verticalLayout_2->addWidget(checkBox_debug);
+
+        checkBox_telemetry = new QCheckBox(layoutWidget);
+        checkBox_telemetry->setObjectName(QStringLiteral("checkBox_telemetry"));
+
+        verticalLayout_2->addWidget(checkBox_telemetry);
+
+        pushButton_w3path = new QPushButton(tab1);
+        pushButton_w3path->setObjectName(QStringLiteral("pushButton_w3path"));
+        pushButton_w3path->setGeometry(QRect(340, 80, 111, 23));
         tabWidget->addTab(tab1, QString());
         tab2 = new QWidget();
         tab2->setObjectName(QStringLiteral("tab2"));
@@ -613,6 +630,11 @@ public:
 
         formLayoutBU->setWidget(0, QFormLayout::FieldRole, pushButtonBU);
 
+        checkBox_updates = new QCheckBox(layoutWidget1);
+        checkBox_updates->setObjectName(QStringLiteral("checkBox_updates"));
+
+        formLayoutBU->setWidget(1, QFormLayout::LabelRole, checkBox_updates);
+
         splitter->addWidget(layoutWidget1);
 
         horizontalLayout_3->addWidget(splitter);
@@ -640,7 +662,7 @@ public:
 
         retranslateUi(MainWindow);
 
-        tabWidget->setCurrentIndex(0);
+        tabWidget->setCurrentIndex(1);
 
 
         QMetaObject::connectSlotsByName(MainWindow);
@@ -687,8 +709,12 @@ public:
         checkBox_sound_9->setText(QApplication::translate("MainWindow", "\"Whisper\" sound", 0));
         checkBox_sound_10->setText(QApplication::translate("MainWindow", "\"You were kicked\" sound", 0));
         checkBox_chatbuffer->setText(QApplication::translate("MainWindow", "Chat buffer (experimental)", 0));
+        checkBox_debug->setText(QApplication::translate("MainWindow", "Debugging", 0));
+        checkBox_telemetry->setText(QApplication::translate("MainWindow", "Telemetry", 0));
+        pushButton_w3path->setText(QApplication::translate("MainWindow", "Change W3 path", 0));
         tabWidget->setTabText(tabWidget->indexOf(tab1), QApplication::translate("MainWindow", "  GPROXY  ", 0));
         pushButtonBU->setText(QApplication::translate("MainWindow", "Get Beta patch", 0));
+        checkBox_updates->setText(QApplication::translate("MainWindow", "Enable automatic updates", 0));
         tabWidget->setTabText(tabWidget->indexOf(tab2), QApplication::translate("MainWindow", " UPDATE ", 0));
         labelAbout->setText(QApplication::translate("MainWindow", "<html><head/><body><p>Eurobattle.net Client version 0.7 (November 2015), developed by cen</p><p><br/>We are searching for Qt/ C++ developers to further expand this client.</p><p><br/></p><p>TODO:</p><p>-bnet Chat client</p><p>-TS integration</p><p>-Displaying player's profile and league stats in the client</p><p>-and more...</p><p><br/></p><p>Special thanks to:</p><p><span style=\" font-weight:600;\">IStealSkills</span> - help with desig</p><p><span style=\" font-weight:600;\">Stefos007</span> - original GProxy implementation</p><p><span style=\" font-weight:600;\">Ladislav Zezula</span> - Stormlib (<a href=\"http://www.zezula.net/en/mpq/stormlib.html\"><span style=\" text-decoration: underline; color:#007dc1;\">zezula.net</span></a>)</p><p><a href=\"http://pvpgn.org/\"><span style=\" text-decoration: underline; color:#007dc1;\">PvPGN.org</span></a></p></body></html>", 0));
         tabWidget->setTabText(tabWidget->indexOf(tab3), QApplication::translate("MainWindow", " ABOUT ", 0));
