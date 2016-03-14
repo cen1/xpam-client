@@ -2,5 +2,5 @@
 *.obj
 *.exe
 *.user
-build-xpam-Qt_5_2_static_msvc2010-Debug/
-build-xpam-Qt_5_2_static_msvc2010-Release/
+build*/
+build*/
