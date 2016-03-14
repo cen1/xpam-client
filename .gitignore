@@ -4,3 +4,6 @@
 *.user
 build*/
 build*/
+xpam/debug/
+xpam/release/
+xpam/updates/
