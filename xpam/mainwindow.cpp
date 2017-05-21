@@ -41,6 +41,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "QObjectList"
 #include "QFileDialog"
 
+#ifndef WINUTILS_H
+    #include "winutils.h"
+#endif
+
 W3 * w3=nullptr;         //w3 process
 GProxy * gproxy=nullptr;        //gproxy object
 Updater * updater=nullptr;      //updater object
@@ -90,6 +94,38 @@ MainWindow::MainWindow(QWidget *parent) :
     this->initGproxyOptions();
 
     updatesEnabled = ui->checkBox_updates->isChecked();
+
+    //Check w3 version
+    QString w3version = Winutils::getFileVersion(config->W3PATH+"\\war3.exe");
+    if (w3version != config->W3VERSION) {
+        QMessageBox msgBox;
+        msgBox.setText("You need to manually update your Warcraft 3 version. See forum for instructions. Found version: "+w3version+" but needs version "+config->W3VERSION);
+
+        msgBox.exec();
+    }
+    else if (w3version==config->W3VERSION) {
+        QDir doc(config->DOCMAPPATH);
+        if (!doc.exists()) {
+            QMessageBox msgBox;
+            msgBox.setText("Version 1.28.1 moves writable folders such as Maps and ScreenShots to user Documents folder. Would you like the client to move them for you? (BACKUP YOUR GAME FIRST!)");
+            QPushButton *yes = msgBox.addButton(tr("Yes, move the folders"), QMessageBox::ActionRole);
+            QPushButton *no = msgBox.addButton(QMessageBox::Abort);
+
+            msgBox.exec();
+
+            if (msgBox.clickedButton() == yes) {
+                QString result = Updater::moveToDocuments(config);
+                QMessageBox msgBoxR;
+                msgBoxR.setText(result);
+                msgBoxR.exec();
+            }
+        }
+    }
+
+    //Add CD keys if needed
+    Updater::replaceCDKeys(config);
+
+    ui->labelW3Version->setText("Detected W3 version: "+w3version+" (expected: "+config->W3VERSION+")");
 }
 
 MainWindow::~MainWindow()

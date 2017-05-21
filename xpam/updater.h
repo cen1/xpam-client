@@ -27,6 +27,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define UPDATER_H
 
 #include <QObject>
+#include <QMessageBox>
 #include "QThread"
 #include "QJsonObject"
 #include "QStringList"
@@ -42,6 +43,9 @@ class Updater : public QObject
 public:
     Updater(Config * c, bool b);
     ~Updater();
+
+    static QString Updater::moveToDocuments(Config *config);
+    static void Updater::replaceCDKeys(Config *config);
     
 private:
     Config *        config;

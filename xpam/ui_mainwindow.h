@@ -96,6 +96,7 @@ public:
     QCheckBox *checkBox_updates;
     QWidget *tab3;
     QLabel *labelAbout;
+    QLabel *labelW3Version;
     QStatusBar *statusBar;
 
     void setupUi(QMainWindow *MainWindow)
@@ -648,6 +649,9 @@ public:
         labelAbout->setObjectName(QStringLiteral("labelAbout"));
         labelAbout->setGeometry(QRect(20, 20, 351, 461));
         labelAbout->setOpenExternalLinks(true);
+        labelW3Version = new QLabel(tab3);
+        labelW3Version->setObjectName(QStringLiteral("labelW3Version"));
+        labelW3Version->setGeometry(QRect(20, 500, 351, 16));
         tabWidget->addTab(tab3, QString());
 
         gridLayoutMain->addWidget(tabWidget, 1, 0, 1, 3);
@@ -662,7 +666,7 @@ public:
 
         retranslateUi(MainWindow);
 
-        tabWidget->setCurrentIndex(1);
+        tabWidget->setCurrentIndex(3);
 
 
         QMetaObject::connectSlotsByName(MainWindow);
@@ -716,7 +720,8 @@ public:
         pushButtonBU->setText(QApplication::translate("MainWindow", "Get Beta patch", 0));
         checkBox_updates->setText(QApplication::translate("MainWindow", "Enable automatic updates", 0));
         tabWidget->setTabText(tabWidget->indexOf(tab2), QApplication::translate("MainWindow", " UPDATE ", 0));
-        labelAbout->setText(QApplication::translate("MainWindow", "<html><head/><body><p>Eurobattle.net Client version 0.7 (November 2015), developed by cen</p><p><br/>We are searching for Qt/ C++ developers to further expand this client.</p><p><br/></p><p>TODO:</p><p>-bnet Chat client</p><p>-TS integration</p><p>-Displaying player's profile and league stats in the client</p><p>-and more...</p><p><br/></p><p>Special thanks to:</p><p><span style=\" font-weight:600;\">IStealSkills</span> - help with desig</p><p><span style=\" font-weight:600;\">Stefos007</span> - original GProxy implementation</p><p><span style=\" font-weight:600;\">Ladislav Zezula</span> - Stormlib (<a href=\"http://www.zezula.net/en/mpq/stormlib.html\"><span style=\" text-decoration: underline; color:#007dc1;\">zezula.net</span></a>)</p><p><a href=\"http://pvpgn.org/\"><span style=\" text-decoration: underline; color:#007dc1;\">PvPGN.org</span></a></p></body></html>", 0));
+        labelAbout->setText(QApplication::translate("MainWindow", "<html><head/><body><p>Eurobattle.net Client version 0.8 (January 2017), developed by cen</p><p><br/>We are searching for Qt/ C++ developers to further expand this client.</p><p><br/></p><p>TODO:</p><p>-bnet Chat client</p><p>-TS integration</p><p>-Displaying player's profile and league stats in the client</p><p>-and more...</p><p><br/></p><p>Special thanks to:</p><p><span style=\" font-weight:600;\">IStealSkills</span> - help with desig</p><p><span style=\" font-weight:600;\">Stefos007</span> - original GProxy implementation</p><p>BNETtdocs, Stormlib, PvPGN and GHost projects</p></body></html>", 0));
+        labelW3Version->setText(QString());
         tabWidget->setTabText(tabWidget->indexOf(tab3), QApplication::translate("MainWindow", " ABOUT ", 0));
     } // retranslateUi
 

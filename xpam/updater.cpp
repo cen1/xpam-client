@@ -512,3 +512,62 @@ QByteArray Updater::simpleDl(QUrl url) {
         return ba;
     }
 }
+
+QString Updater::moveToDocuments(Config *config) {
+
+    QStringList folders;
+    folders << "Ai Scripts";
+    folders << "Campaigns";
+    folders << "Errors";
+    folders << "Maps";
+    folders << "Replay";
+    folders << "ScreenShots";
+    folders << "Scripts";
+    folders << "Strings";
+    folders << "Logs";
+
+    QString log="";
+
+    QDir w3doc(config->DOCPATH);
+    if (!w3doc.exists()) {
+        w3doc.mkpath(".");
+    }
+
+    QDir dir;
+
+    for (int i = 0; i < folders.size(); ++i) {
+        boolean moved = dir.rename(config->W3PATH+"\\"+folders.at(i), config->DOCPATH+"/"+folders.at(i));
+
+        log+="<br />"+config->W3PATH+"\\"+folders.at(i)+" -> "+config->DOCPATH+"/"+folders.at(i);
+        if (moved) {
+            log+=" (MOVED)";
+        }
+        else {
+            log+=" (FAILED)";
+            QDir newdir(config->DOCPATH+"//"+folders.at(i));
+            if (!newdir.exists()) {
+                newdir.mkpath(".");
+                log+=" (created new empty folder)";
+            }
+        }
+    }
+    return log;
+}
+
+void Updater::replaceCDKeys(Config *config) {
+       QFile roc(config->W3PATH+"\\roc.w3k");
+       if (!roc.exists()) {
+           QFile rocNew(config->W3PATH+"\\roc.w3k.new");
+           if (rocNew.exists()) {
+               rocNew.rename(config->W3PATH+"\\roc.w3k");
+           }
+       }
+
+       QFile tft(config->W3PATH+"\\tft.w3k");
+       if (!tft.exists()) {
+           QFile tftnew(config->W3PATH+"\\tft.w3k.new");
+           if (tftnew.exists()) {
+               tftnew.rename(config->W3PATH+"\\tft.w3k");
+           }
+       }
+}

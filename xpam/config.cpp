@@ -27,16 +27,20 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "config.h"
 #include "registry.h"
 #include "winutils.h"
+#include <QStandardPaths>
 
 Config::Config()
 {
-    VERSION = "0.4.0.0";
+    VERSION = "0.8.0.0";
+    W3VERSION = "1.28.2.7395";
     BETAPIN = "1377";
 
     EUROPATH = Registry::getEuroPath();
     SOUNDPATH= EUROPATH+"\\sounds";
     W3PATH   = Registry::getW3dir();
-    MAPPATH  = Registry::getW3dir()+"\\Maps\\Download";
+    DOCPATH  = QStandardPaths::locate(QStandardPaths::DocumentsLocation, QString(), QStandardPaths::LocateDirectory)+"Warcraft III";
+    DOCMAPPATH  = QStandardPaths::locate(QStandardPaths::DocumentsLocation, QString(), QStandardPaths::LocateDirectory)+"Warcraft III/Maps";
+    MAPPATH  = QStandardPaths::locate(QStandardPaths::DocumentsLocation, QString(), QStandardPaths::LocateDirectory)+"Warcraft III/Maps/Download";
     PATCH    = Registry::getPatchVersion();
     APPDATA  = Winutils::getAppData()+"\\Eurobattle.net";
     SYSTEM   = Winutils::getSystem32();

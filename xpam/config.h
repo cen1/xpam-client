@@ -12,8 +12,11 @@ class Config : public QObject
     Q_OBJECT
 public:
     QString VERSION;
+    QString W3VERSION;
     int PATCH;
     QString W3PATH;
+    QString DOCPATH;
+    QString DOCMAPPATH;
     QString MAPPATH;
     QString EUROPATH;
     QString SOUNDPATH;

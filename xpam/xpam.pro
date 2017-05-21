@@ -76,6 +76,9 @@ win32:CONFIG(release, debug|release): LIBS += -L$$PWD/stormlib/ -lStormLib
 INCLUDEPATH += $$PWD/stormlib
 DEPENDPATH += $$PWD/stormlib
 
+## WINDOWS
+LIBS += version.lib
+
 # Fix for UI changes not taking effect
 UI_DIR = $$PWD
 
