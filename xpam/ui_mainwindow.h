@@ -57,6 +57,7 @@ public:
     QPushButton *pushButtonSWOGP;
     QPushButton *pushButtonSWGP;
     QCheckBox *checkBox_windowed;
+    QCheckBox *checkBox_fullscreen;
     QCheckBox *checkBox_opengl;
     QSpacerItem *verticalSpacer;
     QSpacerItem *hs2;
@@ -445,6 +446,11 @@ public:
 
         verticalLayout->addWidget(checkBox_windowed);
 
+        checkBox_fullscreen = new QCheckBox(tab0);
+        checkBox_fullscreen->setObjectName(QStringLiteral("checkBox_fullscreen"));
+
+        verticalLayout->addWidget(checkBox_fullscreen);
+
         checkBox_opengl = new QCheckBox(tab0);
         checkBox_opengl->setObjectName(QStringLiteral("checkBox_opengl"));
 
@@ -648,6 +654,11 @@ public:
         labelAbout = new QLabel(tab3);
         labelAbout->setObjectName(QStringLiteral("labelAbout"));
         labelAbout->setGeometry(QRect(20, 20, 351, 461));
+        QSizePolicy sizePolicy5(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
+        sizePolicy5.setHorizontalStretch(0);
+        sizePolicy5.setVerticalStretch(0);
+        sizePolicy5.setHeightForWidth(labelAbout->sizePolicy().hasHeightForWidth());
+        labelAbout->setSizePolicy(sizePolicy5);
         labelAbout->setOpenExternalLinks(true);
         labelW3Version = new QLabel(tab3);
         labelW3Version->setObjectName(QStringLiteral("labelW3Version"));
@@ -666,7 +677,7 @@ public:
 
         retranslateUi(MainWindow);
 
-        tabWidget->setCurrentIndex(3);
+        tabWidget->setCurrentIndex(0);
 
 
         QMetaObject::connectSlotsByName(MainWindow);
@@ -692,6 +703,7 @@ public:
 #endif // QT_NO_TOOLTIP
         pushButtonSWGP->setText(QString());
         checkBox_windowed->setText(QApplication::translate("MainWindow", "Windowed", 0));
+        checkBox_fullscreen->setText(QApplication::translate("MainWindow", "Native fullscreen", 0));
         checkBox_opengl->setText(QApplication::translate("MainWindow", "OpenGL", 0));
         tabWidget->setTabText(tabWidget->indexOf(tab0), QApplication::translate("MainWindow", " LAUNCHER ", 0));
         preloaderLabel1->setText(QString());
@@ -720,7 +732,7 @@ public:
         pushButtonBU->setText(QApplication::translate("MainWindow", "Get Beta patch", 0));
         checkBox_updates->setText(QApplication::translate("MainWindow", "Enable automatic updates", 0));
         tabWidget->setTabText(tabWidget->indexOf(tab2), QApplication::translate("MainWindow", " UPDATE ", 0));
-        labelAbout->setText(QApplication::translate("MainWindow", "<html><head/><body><p>Eurobattle.net Client version 0.8 (January 2017), developed by cen</p><p><br/>We are searching for Qt/ C++ developers to further expand this client.</p><p><br/></p><p>TODO:</p><p>-bnet Chat client</p><p>-TS integration</p><p>-Displaying player's profile and league stats in the client</p><p>-and more...</p><p><br/></p><p>Special thanks to:</p><p><span style=\" font-weight:600;\">IStealSkills</span> - help with desig</p><p><span style=\" font-weight:600;\">Stefos007</span> - original GProxy implementation</p><p>BNETtdocs, Stormlib, PvPGN and GHost projects</p></body></html>", 0));
+        labelAbout->setText(QApplication::translate("MainWindow", "<html><head/><body><p>Eurobattle.net Client version 0.81 (May 2017), developed by cen</p><p><br/>We are searching for Qt/ C++ developers to further expand this client.</p><p><br/></p><p>TODO:</p><p>-bnet Chat client</p><p>-TS integration</p><p>-Displaying player's profile and league stats in the client</p><p>-and more...</p><p><br/></p><p>Special thanks to:</p><p><span style=\" font-weight:600;\">IStealSkills</span> - help with desig</p><p><span style=\" font-weight:600;\">Stefos007</span> - original GProxy implementation</p><p>BNETtdocs, Stormlib, PvPGN and GHost projects</p></body></html>", 0));
         labelW3Version->setText(QString());
         tabWidget->setTabText(tabWidget->indexOf(tab3), QApplication::translate("MainWindow", " ABOUT ", 0));
     } // retranslateUi

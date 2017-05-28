@@ -1,19 +1,11 @@
 {
     "beta" : {
-            "version" : 20,
-            "mirror1" : "http://files.eurobattle.net/updates/update20beta.zip",
-            "mirror2" : "http://files.eurobattle.net/updates/update20beta.zip",
-            "mirror3" : "http://files.eurobattle.net/updates/update20beta.zip",
-            "mirror4" : "http://files.eurobattle.net/updates/update20beta.zip",
-            "sha1" : "509cb4739076d5b1b4b3e905ff473f31137269b2"
-    },
-    "20" : {
-            "version" : 20,
-            "mirror1" : "https://drive.google.com/uc?id=0B3Yu5IASRCBPTXNXODFqaUtuc3M",
-            "mirror2" : "https://drive.google.com/uc?id=0B6cPcpH1ZToaYWVMRDQxYnJpTFE",
-            "mirror3" : "http://files.eurobattle.net/updates/update20beta.zip",
-            "mirror4" : "http://files.eurobattle.net/updates/update20beta.zip",
-            "sha1" : "509cb4739076d5b1b4b3e905ff473f31137269b2"
+            "version" : 19,
+            "mirror1" : "http://files.eurobattle.net/updates/update19beta.zip",
+            "mirror2" : "http://files.eurobattle.net/updates/update19beta.zip",
+            "mirror3" : "http://files.eurobattle.net/updates/update19beta.zip",
+            "mirror4" : "http://files.eurobattle.net/updates/update19beta.zip",
+            "sha1" : "d03069c10a9f42840a4b9736c9ba6a2fa6019d63"
     },
     "19" : {
             "version" : 19,

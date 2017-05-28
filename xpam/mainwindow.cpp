@@ -85,6 +85,7 @@ MainWindow::MainWindow(QWidget *parent) :
     //w3 options
     connect(ui->checkBox_windowed, SIGNAL(clicked(bool)), this, SLOT(handleCheckboxClient(bool)));
     connect(ui->checkBox_opengl, SIGNAL(clicked(bool)), this, SLOT(handleCheckboxClient(bool)));
+    connect(ui->checkBox_fullscreen, SIGNAL(clicked(bool)), this, SLOT(handleCheckboxClient(bool)));
     connect(ui->checkBox_updates, SIGNAL(clicked(bool)), this, SLOT(handleCheckboxClient(bool)));
 
     //load w3 options
@@ -94,6 +95,11 @@ MainWindow::MainWindow(QWidget *parent) :
     this->initGproxyOptions();
 
     updatesEnabled = ui->checkBox_updates->isChecked();
+
+    //Clean the update log on every startup
+    QFile log(config->EUROPATH+"\\xpam.log");
+    log.open(QFile::WriteOnly | QFile::Truncate);
+    log.close();
 
     //Check w3 version
     QString w3version = Winutils::getFileVersion(config->W3PATH+"\\war3.exe");
@@ -115,6 +121,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
             if (msgBox.clickedButton() == yes) {
                 QString result = Updater::moveToDocuments(config);
+                logUpdate(result);
                 QMessageBox msgBoxR;
                 msgBoxR.setText(result);
                 msgBoxR.exec();
@@ -228,6 +235,7 @@ void MainWindow::gproxyReady() {
 
     QStringList list;
     if (ui->checkBox_windowed->isChecked()) list << "-windowed";
+    if (ui->checkBox_fullscreen->isChecked()) list << "-nativefullscr";
 
     w3=new W3(w3dir, w3exe, list);
     w3t=new QThread();
@@ -317,11 +325,6 @@ void MainWindow::checkUpdates(){
 
     //disable beta button or all kind of hell will ensue
     ui->pushButtonBU->setDisabled(true);
-
-    //clean the update log on every startup
-    QFile log(config->EUROPATH+"\\xpam.log");
-    log.open(QFile::WriteOnly | QFile::Truncate);
-    log.close();
 
     ui->tabWidget->setCurrentIndex(2);
     lockTabs(ui->tabWidget->currentIndex());
@@ -423,6 +426,17 @@ void MainWindow::handleCheckboxClient(bool checked)
     QString option = QObject::sender()->objectName().remove("checkBox_");
     QString value = "0";
     if (checked) value="1";
+
+    if (QObject::sender()==ui->checkBox_fullscreen) {
+        if (ui->checkBox_windowed->isChecked()) {
+            ui->checkBox_windowed->setChecked(false);
+        }
+    }
+    if (QObject::sender()==ui->checkBox_windowed) {
+        if (ui->checkBox_fullscreen->isChecked()) {
+            ui->checkBox_fullscreen->setChecked(false);
+        }
+    }
 
     bool r=config->SetOption(config->EUROPATH+"\\xpam.cfg", option, value);
     if (!r) ui->statusBar->showMessage("Could not change client config", 10000);

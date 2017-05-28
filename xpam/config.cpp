@@ -58,6 +58,8 @@ bool Config::SetOption(QString file, QString option, QString value) {
     while(!conf.atEnd())
         lines.append(conf.readLine());
 
+    bool optionWasUpdated=false;
+
     conf.close();
     for (auto i = lines.begin(); i!=lines.end(); i++) {
         if ((*i).startsWith("#")) continue;
@@ -65,11 +67,16 @@ bool Config::SetOption(QString file, QString option, QString value) {
         if (l[0].simplified()==option) {
             l[1]=" "+value+"\r\n";
             (*i)=l[0]+"="+l[1];
+            optionWasUpdated=true;
         }
     }
     QFile conf2(file);
     if (!conf2.open(QFile::WriteOnly)) {
         return false;
+    }
+
+    if (!optionWasUpdated) {
+        lines.append(option+"="+value);
     }
 
     for (auto i = lines.begin(); i!=lines.end(); i++) {
