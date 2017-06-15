@@ -132,7 +132,17 @@ MainWindow::MainWindow(QWidget *parent) :
     //Add CD keys if needed
     Updater::replaceCDKeys(config);
 
-    ui->labelW3Version->setText("Detected W3 version: "+w3version+" (expected: "+config->W3VERSION+")");
+    //Display w3 info
+    ui->labelW3Path->setText("W3 path: "+config->W3PATH);
+    if (w3version==config->W3VERSION) {
+        ui->labelW3Version->setText("Detected W3 version: "+w3version+" (OK)");
+    }
+    else {
+        ui->labelW3Version->setText("Detected W3 version: "+w3version+" (ERROR, needed: "+config->W3VERSION+")");
+    }
+
+    //Rename war3Patch.mpq to war3Mod.mpw as of 1.28.2
+    Updater::renamePatchMpq(config);
 }
 
 MainWindow::~MainWindow()
@@ -481,6 +491,10 @@ void MainWindow::initClientOptions() {
             if (l[1].simplified()=="1") find->setChecked(true);
             else if (l[1].simplified()=="0") find->setChecked(false);
         }
+    }
+
+    if (ui->checkBox_fullscreen->isChecked() && ui->checkBox_windowed->isChecked()) {
+        ui->checkBox_fullscreen->setChecked(true);
     }
 }
 

@@ -46,6 +46,7 @@ public:
 
     static QString Updater::moveToDocuments(Config *config);
     static void Updater::replaceCDKeys(Config *config);
+    static void Updater::renamePatchMpq(Config *config);
     
 private:
     Config *        config;

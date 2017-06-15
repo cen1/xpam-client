@@ -1,11 +1,27 @@
 {
     "beta" : {
-            "version" : 20,
-            "mirror1" : "http://files.eurobattle.net/updates/update20beta.zip",
-            "mirror2" : "http://files.eurobattle.net/updates/update20beta.zip",
-            "mirror3" : "http://files.eurobattle.net/updates/update20beta.zip",
-            "mirror4" : "http://files.eurobattle.net/updates/update20beta.zip",
-            "sha1" : "509cb4739076d5b1b4b3e905ff473f31137269b2"
+            "version" : 21,
+            "mirror1" : "http://files.eurobattle.net/updates/update21.zip",
+            "mirror2" : "http://files.eurobattle.net/updates/update21.zip",
+            "mirror3" : "http://files.eurobattle.net/updates/update21.zip",
+            "mirror4" : "http://files.eurobattle.net/updates/update21.zip",
+            "sha1" : "fef79753545bf55bf4385346fd63f6ae1394d31f"
+    },
+    "22" : {
+            "version" : 22,
+            "mirror1" : "https://drive.google.com/uc?id=0B6cPcpH1ZToaX1I3M2xHdWtKWFk",
+            "mirror2" : "https://drive.google.com/uc?id=0B3Yu5IASRCBPVnJoM3dfNHNOQmc",
+            "mirror3" : "http://files.eurobattle.net/updates/update22.zip",
+            "mirror4" : "http://files.eurobattle.net/updates/update22.zip",
+            "sha1" : "34d67d4c2626ff3c6846cd291a2d22c1a281b3a1"
+    },
+    "21" : {
+            "version" : 21,
+            "mirror1" : "https://drive.google.com/uc?id=0B6cPcpH1ZToaLWN5aFVXclpYUVE",
+            "mirror2" : "https://drive.google.com/uc?id=0B3Yu5IASRCBPZ3IyYnQ2UkNINUU",
+            "mirror3" : "http://files.eurobattle.net/updates/update21.zip",
+            "mirror4" : "http://files.eurobattle.net/updates/update21.zip",
+            "sha1" : "fef79753545bf55bf4385346fd63f6ae1394d31f"
     },
     "20" : {
             "version" : 20,

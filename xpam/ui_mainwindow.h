@@ -96,7 +96,10 @@ public:
     QPushButton *pushButtonBU;
     QCheckBox *checkBox_updates;
     QWidget *tab3;
+    QWidget *widget;
+    QVBoxLayout *verticalLayout_3;
     QLabel *labelAbout;
+    QLabel *labelW3Path;
     QLabel *labelW3Version;
     QStatusBar *statusBar;
 
@@ -651,18 +654,36 @@ public:
         tab3->setObjectName(QStringLiteral("tab3"));
         sizePolicy.setHeightForWidth(tab3->sizePolicy().hasHeightForWidth());
         tab3->setSizePolicy(sizePolicy);
-        labelAbout = new QLabel(tab3);
+        widget = new QWidget(tab3);
+        widget->setObjectName(QStringLiteral("widget"));
+        widget->setGeometry(QRect(20, 20, 283, 384));
+        verticalLayout_3 = new QVBoxLayout(widget);
+        verticalLayout_3->setSpacing(20);
+        verticalLayout_3->setContentsMargins(11, 11, 11, 11);
+        verticalLayout_3->setObjectName(QStringLiteral("verticalLayout_3"));
+        verticalLayout_3->setSizeConstraint(QLayout::SetDefaultConstraint);
+        verticalLayout_3->setContentsMargins(0, 0, 0, 0);
+        labelAbout = new QLabel(widget);
         labelAbout->setObjectName(QStringLiteral("labelAbout"));
-        labelAbout->setGeometry(QRect(20, 20, 351, 461));
         QSizePolicy sizePolicy5(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
         sizePolicy5.setHorizontalStretch(0);
         sizePolicy5.setVerticalStretch(0);
         sizePolicy5.setHeightForWidth(labelAbout->sizePolicy().hasHeightForWidth());
         labelAbout->setSizePolicy(sizePolicy5);
         labelAbout->setOpenExternalLinks(true);
-        labelW3Version = new QLabel(tab3);
+
+        verticalLayout_3->addWidget(labelAbout);
+
+        labelW3Path = new QLabel(widget);
+        labelW3Path->setObjectName(QStringLiteral("labelW3Path"));
+
+        verticalLayout_3->addWidget(labelW3Path);
+
+        labelW3Version = new QLabel(widget);
         labelW3Version->setObjectName(QStringLiteral("labelW3Version"));
-        labelW3Version->setGeometry(QRect(20, 500, 351, 16));
+
+        verticalLayout_3->addWidget(labelW3Version);
+
         tabWidget->addTab(tab3, QString());
 
         gridLayoutMain->addWidget(tabWidget, 1, 0, 1, 3);
@@ -677,7 +698,7 @@ public:
 
         retranslateUi(MainWindow);
 
-        tabWidget->setCurrentIndex(0);
+        tabWidget->setCurrentIndex(3);
 
 
         QMetaObject::connectSlotsByName(MainWindow);
@@ -733,6 +754,7 @@ public:
         checkBox_updates->setText(QApplication::translate("MainWindow", "Enable automatic updates", 0));
         tabWidget->setTabText(tabWidget->indexOf(tab2), QApplication::translate("MainWindow", " UPDATE ", 0));
         labelAbout->setText(QApplication::translate("MainWindow", "<html><head/><body><p>Eurobattle.net Client version 0.81 (May 2017), developed by cen</p><p><br/>We are searching for Qt/ C++ developers to further expand this client.</p><p><br/></p><p>TODO:</p><p>-bnet Chat client</p><p>-TS integration</p><p>-Displaying player's profile and league stats in the client</p><p>-and more...</p><p><br/></p><p>Special thanks to:</p><p><span style=\" font-weight:600;\">IStealSkills</span> - help with desig</p><p><span style=\" font-weight:600;\">Stefos007</span> - original GProxy implementation</p><p>BNETtdocs, Stormlib, PvPGN and GHost projects</p></body></html>", 0));
+        labelW3Path->setText(QString());
         labelW3Version->setText(QString());
         tabWidget->setTabText(tabWidget->indexOf(tab3), QApplication::translate("MainWindow", " ABOUT ", 0));
     } // retranslateUi

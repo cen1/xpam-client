@@ -571,3 +571,13 @@ void Updater::replaceCDKeys(Config *config) {
            }
        }
 }
+
+void Updater::renamePatchMpq(Config *config) {
+    QFile modMpq(config->W3PATH+"\\War3Mod.mpq");
+    if (!modMpq.exists()) {
+        QFile patchMpq(config->W3PATH+"\\War3Patch.mpq");
+        if (patchMpq.exists()) {
+            patchMpq.copy(config->W3PATH+"\\War3Mod.mpq");
+        }
+    }
+}
