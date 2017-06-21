@@ -53,9 +53,9 @@ private slots:
     void on_pushButtonSWGP_clicked();
     void on_pushButtonSWOGP_clicked();
     void on_pushButtonBU_clicked();
-    void on_closeButton_clicked();
-    void on_maxButton_clicked();
-    void on_minButton_clicked();
+    //void on_closeButton_clicked();
+    //void on_maxButton_clicked();
+    //void on_minButton_clicked();
     void handleCheckbox(bool checked);
     void handleCheckboxClient(bool checked);
     void initGproxyOptions();
@@ -97,9 +97,9 @@ private:
     QSize normalsize;
 
 protected:
-    void mousePressEvent(QMouseEvent *event);
-    void mouseReleaseEvent(QMouseEvent *event);
-    void mouseMoveEvent(QMouseEvent *event);
+    //void mousePressEvent(QMouseEvent *event);
+    //void mouseReleaseEvent(QMouseEvent *event);
+    //void mouseMoveEvent(QMouseEvent *event);
 };
 
 #endif // MAINWINDOW_H

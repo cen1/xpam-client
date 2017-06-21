@@ -110,6 +110,7 @@ MainWindow::MainWindow(QWidget *parent) :
         msgBox.exec();
     }
     else if (w3version==config->W3VERSION) {
+        /* Manual folder moving not necessary, it is done by w3
         QDir doc(config->DOCMAPPATH);
         if (!doc.exists()) {
             QMessageBox msgBox;
@@ -126,7 +127,7 @@ MainWindow::MainWindow(QWidget *parent) :
                 msgBoxR.setText(result);
                 msgBoxR.exec();
             }
-        }
+        }*/
     }
 
     //Add CD keys if needed
@@ -214,6 +215,7 @@ void MainWindow::on_pushButtonSWOGP_clicked()
 
     QStringList list;
     if (ui->checkBox_windowed->isChecked()) list << "-windowed";
+    if (ui->checkBox_fullscreen->isChecked()) list << "-nativefullscr";
     if (ui->checkBox_opengl->isChecked()) list << "-opengl";
 
     w3=new W3(w3dir, w3exe, list);
@@ -246,6 +248,7 @@ void MainWindow::gproxyReady() {
     QStringList list;
     if (ui->checkBox_windowed->isChecked()) list << "-windowed";
     if (ui->checkBox_fullscreen->isChecked()) list << "-nativefullscr";
+    if (ui->checkBox_opengl->isChecked()) list << "-opengl";
 
     w3=new W3(w3dir, w3exe, list);
     w3t=new QThread();
@@ -440,11 +443,13 @@ void MainWindow::handleCheckboxClient(bool checked)
     if (QObject::sender()==ui->checkBox_fullscreen) {
         if (ui->checkBox_windowed->isChecked()) {
             ui->checkBox_windowed->setChecked(false);
+            config->SetOption(config->EUROPATH+"\\xpam.cfg", "windowed", "0");
         }
     }
     if (QObject::sender()==ui->checkBox_windowed) {
         if (ui->checkBox_fullscreen->isChecked()) {
             ui->checkBox_fullscreen->setChecked(false);
+            config->SetOption(config->EUROPATH+"\\xpam.cfg", "fullscreen", "0");
         }
     }
 
@@ -495,6 +500,8 @@ void MainWindow::initClientOptions() {
 
     if (ui->checkBox_fullscreen->isChecked() && ui->checkBox_windowed->isChecked()) {
         ui->checkBox_fullscreen->setChecked(true);
+        ui->checkBox_windowed->setChecked(false);
+       config->SetOption(config->EUROPATH+"\\xpam.cfg", "windowed", "0");
     }
 }
 
@@ -556,12 +563,15 @@ void MainWindow::status(QString status) {
 }
 
 
-//close, max, min
+//Close, max, min
+/*
 void MainWindow::on_closeButton_clicked()
 {
     QApplication::quit();
 }
+*/
 
+/*
 void MainWindow::on_maxButton_clicked()
 {
     if (!ismax) {
@@ -580,13 +590,17 @@ void MainWindow::on_maxButton_clicked()
         ismax=false;
     }
 }
+*/
 
+/*
 void MainWindow::on_minButton_clicked()
 {
     this->showMinimized();
 }
+*/
 
-//window moving handlers
+//Window moving handlers
+/*
 void MainWindow::mousePressEvent(QMouseEvent *event) {
   if (event->button() == Qt::LeftButton) {
     down = true;
@@ -595,8 +609,10 @@ void MainWindow::mousePressEvent(QMouseEvent *event) {
 
   QWidget::mousePressEvent(event);
 }
+*/
 
-//max on top, left and right max
+//Button max on top, left and right max
+/*
 void MainWindow::mouseReleaseEvent(QMouseEvent *event) {
   down = false;
   QPoint curPos = event->globalPos();
@@ -623,7 +639,9 @@ void MainWindow::mouseReleaseEvent(QMouseEvent *event) {
   }
   QWidget::mouseReleaseEvent(event);
 }
+*/
 
+/* Drag window around with titlebar
 void MainWindow::mouseMoveEvent(QMouseEvent *event) {
   if (down && ui->logoBar->underMouse()) {
     QPoint curPos = event->globalPos();
@@ -635,7 +653,7 @@ void MainWindow::mouseMoveEvent(QMouseEvent *event) {
   }
 
   QWidget::mouseMoveEvent(event);
-}
+}*/
 
 void MainWindow::on_pushButton_clicked()
 {

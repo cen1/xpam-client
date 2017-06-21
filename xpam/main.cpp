@@ -52,7 +52,8 @@ int main(int argc, char *argv[])
         loop.exec();
     }
 
-    w.setWindowFlags(Qt::FramelessWindowHint | Qt::WindowMinimizeButtonHint);
+    //Uncomment for frameless window
+    //w.setWindowFlags(Qt::FramelessWindowHint | Qt::WindowMinimizeButtonHint);
     w.show();
     splash.finish(&w);
     

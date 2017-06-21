@@ -40,13 +40,6 @@ public:
     QWidget *centralWidget;
     QHBoxLayout *horizontalLayout;
     QGridLayout *gridLayoutMain;
-    QWidget *logoBar;
-    QHBoxLayout *horizontalLayout_4;
-    QLabel *labelTitle;
-    QHBoxLayout *horizontalLayoutX;
-    QPushButton *minButton;
-    QPushButton *maxButton;
-    QPushButton *closeButton;
     QTabWidget *tabWidget;
     QWidget *tab0;
     QHBoxLayout *horizontalLayout_6;
@@ -96,7 +89,7 @@ public:
     QPushButton *pushButtonBU;
     QCheckBox *checkBox_updates;
     QWidget *tab3;
-    QWidget *widget;
+    QWidget *layoutWidget2;
     QVBoxLayout *verticalLayout_3;
     QLabel *labelAbout;
     QLabel *labelW3Path;
@@ -324,73 +317,6 @@ public:
         gridLayoutMain = new QGridLayout();
         gridLayoutMain->setSpacing(0);
         gridLayoutMain->setObjectName(QStringLiteral("gridLayoutMain"));
-        logoBar = new QWidget(centralWidget);
-        logoBar->setObjectName(QStringLiteral("logoBar"));
-        QSizePolicy sizePolicy1(QSizePolicy::Expanding, QSizePolicy::Preferred);
-        sizePolicy1.setHorizontalStretch(0);
-        sizePolicy1.setVerticalStretch(0);
-        sizePolicy1.setHeightForWidth(logoBar->sizePolicy().hasHeightForWidth());
-        logoBar->setSizePolicy(sizePolicy1);
-        logoBar->setMinimumSize(QSize(0, 20));
-        logoBar->setMaximumSize(QSize(16777215, 20));
-        horizontalLayout_4 = new QHBoxLayout(logoBar);
-        horizontalLayout_4->setSpacing(0);
-        horizontalLayout_4->setContentsMargins(11, 11, 11, 11);
-        horizontalLayout_4->setObjectName(QStringLiteral("horizontalLayout_4"));
-        horizontalLayout_4->setContentsMargins(0, 0, 0, 0);
-        labelTitle = new QLabel(logoBar);
-        labelTitle->setObjectName(QStringLiteral("labelTitle"));
-        sizePolicy.setHeightForWidth(labelTitle->sizePolicy().hasHeightForWidth());
-        labelTitle->setSizePolicy(sizePolicy);
-        labelTitle->setLayoutDirection(Qt::LeftToRight);
-        labelTitle->setAlignment(Qt::AlignCenter);
-
-        horizontalLayout_4->addWidget(labelTitle);
-
-
-        gridLayoutMain->addWidget(logoBar, 0, 0, 1, 1);
-
-        horizontalLayoutX = new QHBoxLayout();
-        horizontalLayoutX->setSpacing(0);
-        horizontalLayoutX->setObjectName(QStringLiteral("horizontalLayoutX"));
-        horizontalLayoutX->setSizeConstraint(QLayout::SetDefaultConstraint);
-        horizontalLayoutX->setContentsMargins(-1, -1, -1, 0);
-        minButton = new QPushButton(centralWidget);
-        minButton->setObjectName(QStringLiteral("minButton"));
-        QSizePolicy sizePolicy2(QSizePolicy::Preferred, QSizePolicy::Preferred);
-        sizePolicy2.setHorizontalStretch(0);
-        sizePolicy2.setVerticalStretch(0);
-        sizePolicy2.setHeightForWidth(minButton->sizePolicy().hasHeightForWidth());
-        minButton->setSizePolicy(sizePolicy2);
-        minButton->setMinimumSize(QSize(20, 20));
-        minButton->setMaximumSize(QSize(20, 20));
-        minButton->setFlat(false);
-
-        horizontalLayoutX->addWidget(minButton);
-
-        maxButton = new QPushButton(centralWidget);
-        maxButton->setObjectName(QStringLiteral("maxButton"));
-        sizePolicy2.setHeightForWidth(maxButton->sizePolicy().hasHeightForWidth());
-        maxButton->setSizePolicy(sizePolicy2);
-        maxButton->setMinimumSize(QSize(20, 20));
-        maxButton->setMaximumSize(QSize(20, 20));
-        maxButton->setFlat(false);
-
-        horizontalLayoutX->addWidget(maxButton);
-
-        closeButton = new QPushButton(centralWidget);
-        closeButton->setObjectName(QStringLiteral("closeButton"));
-        sizePolicy2.setHeightForWidth(closeButton->sizePolicy().hasHeightForWidth());
-        closeButton->setSizePolicy(sizePolicy2);
-        closeButton->setMinimumSize(QSize(20, 20));
-        closeButton->setMaximumSize(QSize(20, 20));
-        closeButton->setFlat(false);
-
-        horizontalLayoutX->addWidget(closeButton);
-
-
-        gridLayoutMain->addLayout(horizontalLayoutX, 0, 1, 1, 1);
-
         tabWidget = new QTabWidget(centralWidget);
         tabWidget->setObjectName(QStringLiteral("tabWidget"));
         tabWidget->setLayoutDirection(Qt::LeftToRight);
@@ -417,8 +343,11 @@ public:
         horizontalLayoutLauncher->setObjectName(QStringLiteral("horizontalLayoutLauncher"));
         pushButtonSWOGP = new QPushButton(tab0);
         pushButtonSWOGP->setObjectName(QStringLiteral("pushButtonSWOGP"));
-        sizePolicy2.setHeightForWidth(pushButtonSWOGP->sizePolicy().hasHeightForWidth());
-        pushButtonSWOGP->setSizePolicy(sizePolicy2);
+        QSizePolicy sizePolicy1(QSizePolicy::Preferred, QSizePolicy::Preferred);
+        sizePolicy1.setHorizontalStretch(0);
+        sizePolicy1.setVerticalStretch(0);
+        sizePolicy1.setHeightForWidth(pushButtonSWOGP->sizePolicy().hasHeightForWidth());
+        pushButtonSWOGP->setSizePolicy(sizePolicy1);
         pushButtonSWOGP->setMinimumSize(QSize(400, 367));
         pushButtonSWOGP->setMaximumSize(QSize(400, 367));
 
@@ -426,8 +355,8 @@ public:
 
         pushButtonSWGP = new QPushButton(tab0);
         pushButtonSWGP->setObjectName(QStringLiteral("pushButtonSWGP"));
-        sizePolicy2.setHeightForWidth(pushButtonSWGP->sizePolicy().hasHeightForWidth());
-        pushButtonSWGP->setSizePolicy(sizePolicy2);
+        sizePolicy1.setHeightForWidth(pushButtonSWGP->sizePolicy().hasHeightForWidth());
+        pushButtonSWGP->setSizePolicy(sizePolicy1);
         pushButtonSWGP->setMinimumSize(QSize(400, 367));
         pushButtonSWGP->setMaximumSize(QSize(400, 367));
         QFont font1;
@@ -441,11 +370,11 @@ public:
 
         checkBox_windowed = new QCheckBox(tab0);
         checkBox_windowed->setObjectName(QStringLiteral("checkBox_windowed"));
-        QSizePolicy sizePolicy3(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
-        sizePolicy3.setHorizontalStretch(0);
-        sizePolicy3.setVerticalStretch(0);
-        sizePolicy3.setHeightForWidth(checkBox_windowed->sizePolicy().hasHeightForWidth());
-        checkBox_windowed->setSizePolicy(sizePolicy3);
+        QSizePolicy sizePolicy2(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
+        sizePolicy2.setHorizontalStretch(0);
+        sizePolicy2.setVerticalStretch(0);
+        sizePolicy2.setHeightForWidth(checkBox_windowed->sizePolicy().hasHeightForWidth());
+        checkBox_windowed->setSizePolicy(sizePolicy2);
 
         verticalLayout->addWidget(checkBox_windowed);
 
@@ -623,18 +552,18 @@ public:
         formLayoutBU->setContentsMargins(0, 5, 0, 0);
         betapinbox = new QLineEdit(layoutWidget1);
         betapinbox->setObjectName(QStringLiteral("betapinbox"));
-        QSizePolicy sizePolicy4(QSizePolicy::Fixed, QSizePolicy::Fixed);
-        sizePolicy4.setHorizontalStretch(0);
-        sizePolicy4.setVerticalStretch(0);
-        sizePolicy4.setHeightForWidth(betapinbox->sizePolicy().hasHeightForWidth());
-        betapinbox->setSizePolicy(sizePolicy4);
+        QSizePolicy sizePolicy3(QSizePolicy::Fixed, QSizePolicy::Fixed);
+        sizePolicy3.setHorizontalStretch(0);
+        sizePolicy3.setVerticalStretch(0);
+        sizePolicy3.setHeightForWidth(betapinbox->sizePolicy().hasHeightForWidth());
+        betapinbox->setSizePolicy(sizePolicy3);
 
         formLayoutBU->setWidget(0, QFormLayout::LabelRole, betapinbox);
 
         pushButtonBU = new QPushButton(layoutWidget1);
         pushButtonBU->setObjectName(QStringLiteral("pushButtonBU"));
-        sizePolicy2.setHeightForWidth(pushButtonBU->sizePolicy().hasHeightForWidth());
-        pushButtonBU->setSizePolicy(sizePolicy2);
+        sizePolicy1.setHeightForWidth(pushButtonBU->sizePolicy().hasHeightForWidth());
+        pushButtonBU->setSizePolicy(sizePolicy1);
         pushButtonBU->setMinimumSize(QSize(150, 20));
         pushButtonBU->setMaximumSize(QSize(150, 20));
 
@@ -654,32 +583,30 @@ public:
         tab3->setObjectName(QStringLiteral("tab3"));
         sizePolicy.setHeightForWidth(tab3->sizePolicy().hasHeightForWidth());
         tab3->setSizePolicy(sizePolicy);
-        widget = new QWidget(tab3);
-        widget->setObjectName(QStringLiteral("widget"));
-        widget->setGeometry(QRect(20, 20, 283, 384));
-        verticalLayout_3 = new QVBoxLayout(widget);
-        verticalLayout_3->setSpacing(20);
+        layoutWidget2 = new QWidget(tab3);
+        layoutWidget2->setObjectName(QStringLiteral("layoutWidget2"));
+        layoutWidget2->setGeometry(QRect(20, 20, 391, 501));
+        verticalLayout_3 = new QVBoxLayout(layoutWidget2);
+        verticalLayout_3->setSpacing(10);
         verticalLayout_3->setContentsMargins(11, 11, 11, 11);
         verticalLayout_3->setObjectName(QStringLiteral("verticalLayout_3"));
         verticalLayout_3->setSizeConstraint(QLayout::SetDefaultConstraint);
         verticalLayout_3->setContentsMargins(0, 0, 0, 0);
-        labelAbout = new QLabel(widget);
+        labelAbout = new QLabel(layoutWidget2);
         labelAbout->setObjectName(QStringLiteral("labelAbout"));
-        QSizePolicy sizePolicy5(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
-        sizePolicy5.setHorizontalStretch(0);
-        sizePolicy5.setVerticalStretch(0);
-        sizePolicy5.setHeightForWidth(labelAbout->sizePolicy().hasHeightForWidth());
-        labelAbout->setSizePolicy(sizePolicy5);
+        sizePolicy.setHeightForWidth(labelAbout->sizePolicy().hasHeightForWidth());
+        labelAbout->setSizePolicy(sizePolicy);
+        labelAbout->setAlignment(Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop);
         labelAbout->setOpenExternalLinks(true);
 
         verticalLayout_3->addWidget(labelAbout);
 
-        labelW3Path = new QLabel(widget);
+        labelW3Path = new QLabel(layoutWidget2);
         labelW3Path->setObjectName(QStringLiteral("labelW3Path"));
 
         verticalLayout_3->addWidget(labelW3Path);
 
-        labelW3Version = new QLabel(widget);
+        labelW3Version = new QLabel(layoutWidget2);
         labelW3Version->setObjectName(QStringLiteral("labelW3Version"));
 
         verticalLayout_3->addWidget(labelW3Version);
@@ -707,10 +634,6 @@ public:
     void retranslateUi(QMainWindow *MainWindow)
     {
         MainWindow->setWindowTitle(QApplication::translate("MainWindow", "Eurobattle.net Client", 0));
-        labelTitle->setText(QApplication::translate("MainWindow", "Eurobattle.net Client", 0));
-        minButton->setText(QString());
-        maxButton->setText(QString());
-        closeButton->setText(QString());
 #ifndef QT_NO_TOOLTIP
         pushButtonSWOGP->setToolTip(QApplication::translate("MainWindow", "Start without GProxy to play PG<br />\n"
 "or manually host your games.", 0));
