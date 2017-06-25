@@ -27,11 +27,16 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <QProcess>
 #include <QThread>
 #include "winutils.h"
+#include "logger.h"
 
-W3::W3(QString w, QString e, QStringList a) {
+const QString W3::W3_126="126";
+const QString W3::W3_LATEST="LATEST";
+
+W3::W3(QString w, QString e, QStringList a, Config * c) {
     workdir=w;
     exedir=e;
     args=a;
+    config = c;
 }
 
 W3::~W3() {
@@ -55,4 +60,41 @@ void W3::startW3() {
     }
     emit w3Exited();
     return;
+}
+
+bool W3::sanityCheck() {
+
+    return true;
+}
+
+QString W3::getActiveVersion() {
+
+    return "true";
+}
+
+bool W3::setVersion(QString version, Config * config) {
+    QString newExt = "";
+    QString currentExt = version;
+    if (version==W3::W3_126) {
+        newExt = W3::W3_LATEST;
+    }
+    else {
+        newExt = W3::W3_126;
+    }
+
+    QString w3path = config->W3PATH;
+
+    //Rename core files to newExt and currentExt to core
+    for (int i = 0; i < config->W3_COMMON_FILES.size(); ++i) {
+        bool ret =  QFile::rename(w3path + "/" + config->W3_COMMON_FILES.at(i),                     w3path + "/" + config->W3_COMMON_FILES.at(i) + "." + newExt );
+        bool ret2 = QFile::rename(w3path + "/" + config->W3_COMMON_FILES.at(i) + "." + currentExt,  w3path + "/" + config->W3_COMMON_FILES.at(i)                );
+
+        if (!ret || !ret2) {
+            Logger::log("Error switching version to "+version, config);
+            Logger::log(Winutils::getLastErrorMsg(), config);
+            return false;
+        }
+    }
+
+    return true;
 }

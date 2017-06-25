@@ -24,6 +24,7 @@
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QPushButton>
+#include <QtWidgets/QSlider>
 #include <QtWidgets/QSpacerItem>
 #include <QtWidgets/QSplitter>
 #include <QtWidgets/QStatusBar>
@@ -47,19 +48,22 @@ public:
     QSpacerItem *hs1;
     QVBoxLayout *verticalLayout;
     QHBoxLayout *horizontalLayoutLauncher;
-    QPushButton *pushButtonSWOGP;
-    QPushButton *pushButtonSWGP;
+    QPushButton *pushButtonGWN;
+    QPushButton *pushButtonGWG;
+    QPushButton *pushButtonGWD;
     QCheckBox *checkBox_windowed;
     QCheckBox *checkBox_fullscreen;
     QCheckBox *checkBox_opengl;
+    QPushButton *pushButtonClientLog;
+    QSlider *horizontalSlider;
     QSpacerItem *verticalSpacer;
     QSpacerItem *hs2;
     QWidget *tab1;
     QLabel *preloaderLabel1;
     QLabel *labelGproxyout;
     QLabel *labelGproxywarnings;
-    QPushButton *pushButton;
-    QPushButton *pushButton_2;
+    QPushButton *pushButtonGPCL;
+    QPushButton *pushButtonGPNOTEPAD;
     QGroupBox *gpoptionsgroupBox;
     QWidget *layoutWidget;
     QVBoxLayout *verticalLayout_2;
@@ -247,65 +251,27 @@ public:
 "      border: 1px solid grey;\n"
 " }\n"
 "\n"
-"\n"
-"#closeButton {\n"
-"  background-image: url(\":/close_window.png\");\n"
-"  border: none;\n"
+"#pushButtonGWN {\n"
+"  background-image: url(\":/gwselect1.png\");\n"
+"  background-repeat: no-repeat;\n"
 "}\n"
-"\n"
-"#maxButton {\n"
-"  background-image: url(\":/maximize_window.png\");\n"
-"  border: none;\n"
+"#pushButtonGWG {\n"
+"  background-image: url(\":/gwselect2.png\");\n"
+"  background-repeat: no-repeat;\n"
 "}\n"
-"\n"
-"#minButton {\n"
-"  background-image: url(\":/minimize_window.png\");\n"
-"  border: none;\n"
-"}\n"
-"\n"
-"#closeButton:hover {\n"
-"  background-image: url(\":/close_window_hover.png\");\n"
-"}\n"
-"\n"
-"#maxButton:hover {\n"
-"  background-image: url(\":/maximize_window_hover.png\");\n"
-"}\n"
-"\n"
-"#minButton:hover {\n"
-"  background-image: url(\":/minimize_window_hover.png\");\n"
-"}\n"
-"\n"
-"#closeButton:pressed {\n"
-"  background-image: url(\":/close_window_hover.png\");\n"
-"}\n"
-"\n"
-"#maxButton:pressed {\n"
-"  "
-                        "background-image: url(\":/maximize_window_hover.png\");\n"
-"}\n"
-"\n"
-"#minButton:pressed {\n"
-"  background-image: url(\":/minimize_window_hover.png\");\n"
-"}\n"
-"\n"
-"#pushButtonSWGP {\n"
-"  background-image: url(\":/gproxygate.png\");\n"
+"#pushButtonGWD {\n"
+"  background-image: url(\":/gwselect3.png\");\n"
 "  background-repeat: no-repeat;\n"
 "}\n"
 "\n"
-"#pushButtonSWGP:hover {\n"
-"  background-image: url(\":/gproxygate_hover.png\");  \n"
-"  background-repeat: no-repeat;\n"
+"#pushButtonGWN:hover {\n"
+"  border-color: #007dc1;\n"
 "}\n"
-"\n"
-"#pushButtonSWOGP {\n"
-"  background-image: url(\":/normalgate.png\");\n"
-"  background-repeat: no-repeat;\n"
+"#pushButtonGWG:hover {\n"
+"  border-color: #007dc1;\n"
 "}\n"
-"\n"
-"#pushButtonSWOGP:hover {\n"
-"  background-image: url(\":/normalgate_hover.png\");\n"
-"  background-repeat: no-repeat;\n"
+"#pushButtonGWD:hover {\n"
+"  border-color: #007dc1;\n"
 "}\n"
 "\n"
 ""));
@@ -341,29 +307,34 @@ public:
         horizontalLayoutLauncher = new QHBoxLayout();
         horizontalLayoutLauncher->setSpacing(0);
         horizontalLayoutLauncher->setObjectName(QStringLiteral("horizontalLayoutLauncher"));
-        pushButtonSWOGP = new QPushButton(tab0);
-        pushButtonSWOGP->setObjectName(QStringLiteral("pushButtonSWOGP"));
+        pushButtonGWN = new QPushButton(tab0);
+        pushButtonGWN->setObjectName(QStringLiteral("pushButtonGWN"));
         QSizePolicy sizePolicy1(QSizePolicy::Preferred, QSizePolicy::Preferred);
         sizePolicy1.setHorizontalStretch(0);
         sizePolicy1.setVerticalStretch(0);
-        sizePolicy1.setHeightForWidth(pushButtonSWOGP->sizePolicy().hasHeightForWidth());
-        pushButtonSWOGP->setSizePolicy(sizePolicy1);
-        pushButtonSWOGP->setMinimumSize(QSize(400, 367));
-        pushButtonSWOGP->setMaximumSize(QSize(400, 367));
+        sizePolicy1.setHeightForWidth(pushButtonGWN->sizePolicy().hasHeightForWidth());
+        pushButtonGWN->setSizePolicy(sizePolicy1);
+        pushButtonGWN->setMinimumSize(QSize(266, 370));
 
-        horizontalLayoutLauncher->addWidget(pushButtonSWOGP);
+        horizontalLayoutLauncher->addWidget(pushButtonGWN);
 
-        pushButtonSWGP = new QPushButton(tab0);
-        pushButtonSWGP->setObjectName(QStringLiteral("pushButtonSWGP"));
-        sizePolicy1.setHeightForWidth(pushButtonSWGP->sizePolicy().hasHeightForWidth());
-        pushButtonSWGP->setSizePolicy(sizePolicy1);
-        pushButtonSWGP->setMinimumSize(QSize(400, 367));
-        pushButtonSWGP->setMaximumSize(QSize(400, 367));
+        pushButtonGWG = new QPushButton(tab0);
+        pushButtonGWG->setObjectName(QStringLiteral("pushButtonGWG"));
+        sizePolicy1.setHeightForWidth(pushButtonGWG->sizePolicy().hasHeightForWidth());
+        pushButtonGWG->setSizePolicy(sizePolicy1);
+        pushButtonGWG->setMinimumSize(QSize(266, 370));
         QFont font1;
         font1.setFamily(QStringLiteral("Lucida Sans Unicode"));
-        pushButtonSWGP->setFont(font1);
+        pushButtonGWG->setFont(font1);
 
-        horizontalLayoutLauncher->addWidget(pushButtonSWGP);
+        horizontalLayoutLauncher->addWidget(pushButtonGWG);
+
+        pushButtonGWD = new QPushButton(tab0);
+        pushButtonGWD->setObjectName(QStringLiteral("pushButtonGWD"));
+        pushButtonGWD->setEnabled(true);
+        pushButtonGWD->setMinimumSize(QSize(266, 370));
+
+        horizontalLayoutLauncher->addWidget(pushButtonGWD);
 
 
         verticalLayout->addLayout(horizontalLayoutLauncher);
@@ -387,6 +358,21 @@ public:
         checkBox_opengl->setObjectName(QStringLiteral("checkBox_opengl"));
 
         verticalLayout->addWidget(checkBox_opengl);
+
+        pushButtonClientLog = new QPushButton(tab0);
+        pushButtonClientLog->setObjectName(QStringLiteral("pushButtonClientLog"));
+        pushButtonClientLog->setMaximumSize(QSize(120, 16777215));
+
+        verticalLayout->addWidget(pushButtonClientLog);
+
+        horizontalSlider = new QSlider(tab0);
+        horizontalSlider->setObjectName(QStringLiteral("horizontalSlider"));
+        horizontalSlider->setMinimumSize(QSize(120, 0));
+        horizontalSlider->setMaximumSize(QSize(120, 16777215));
+        horizontalSlider->setMaximum(1);
+        horizontalSlider->setOrientation(Qt::Horizontal);
+
+        verticalLayout->addWidget(horizontalSlider);
 
         verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
@@ -420,12 +406,12 @@ public:
         labelGproxywarnings->setTextFormat(Qt::RichText);
         labelGproxywarnings->setOpenExternalLinks(true);
         labelGproxywarnings->setTextInteractionFlags(Qt::TextBrowserInteraction);
-        pushButton = new QPushButton(tab1);
-        pushButton->setObjectName(QStringLiteral("pushButton"));
-        pushButton->setGeometry(QRect(40, 80, 171, 23));
-        pushButton_2 = new QPushButton(tab1);
-        pushButton_2->setObjectName(QStringLiteral("pushButton_2"));
-        pushButton_2->setGeometry(QRect(220, 80, 111, 23));
+        pushButtonGPCL = new QPushButton(tab1);
+        pushButtonGPCL->setObjectName(QStringLiteral("pushButtonGPCL"));
+        pushButtonGPCL->setGeometry(QRect(40, 80, 171, 23));
+        pushButtonGPNOTEPAD = new QPushButton(tab1);
+        pushButtonGPNOTEPAD->setObjectName(QStringLiteral("pushButtonGPNOTEPAD"));
+        pushButtonGPNOTEPAD->setGeometry(QRect(220, 80, 111, 23));
         gpoptionsgroupBox = new QGroupBox(tab1);
         gpoptionsgroupBox->setObjectName(QStringLiteral("gpoptionsgroupBox"));
         gpoptionsgroupBox->setGeometry(QRect(40, 120, 241, 351));
@@ -625,7 +611,7 @@ public:
 
         retranslateUi(MainWindow);
 
-        tabWidget->setCurrentIndex(3);
+        tabWidget->setCurrentIndex(0);
 
 
         QMetaObject::connectSlotsByName(MainWindow);
@@ -635,26 +621,31 @@ public:
     {
         MainWindow->setWindowTitle(QApplication::translate("MainWindow", "Eurobattle.net Client", 0));
 #ifndef QT_NO_TOOLTIP
-        pushButtonSWOGP->setToolTip(QApplication::translate("MainWindow", "Start without GProxy to play PG<br />\n"
+        pushButtonGWN->setToolTip(QApplication::translate("MainWindow", "Start without GProxy to play PG<br />\n"
 "or manually host your games.", 0));
 #endif // QT_NO_TOOLTIP
-        pushButtonSWOGP->setText(QString());
+        pushButtonGWN->setText(QString());
 #ifndef QT_NO_TOOLTIP
-        pushButtonSWGP->setToolTip(QApplication::translate("MainWindow", "Starting with GProxy is required for some DotA leagues<br />\n"
+        pushButtonGWG->setToolTip(QApplication::translate("MainWindow", "Starting with GProxy is required for some DotA leagues<br />\n"
 "to be able to join their games. It also provides reconnection<br />\n"
 "in case you drop in the middle of the game.<br />\n"
 "YOU CAN'T PLAY PG OR MANUALLY HOST GAMES IN THIS MODE!", 0));
 #endif // QT_NO_TOOLTIP
-        pushButtonSWGP->setText(QString());
+        pushButtonGWG->setText(QString());
+#ifndef QT_NO_TOOLTIP
+        pushButtonGWD->setToolTip(QApplication::translate("MainWindow", "COMING SOON", 0));
+#endif // QT_NO_TOOLTIP
+        pushButtonGWD->setText(QString());
         checkBox_windowed->setText(QApplication::translate("MainWindow", "Windowed", 0));
         checkBox_fullscreen->setText(QApplication::translate("MainWindow", "Native fullscreen", 0));
         checkBox_opengl->setText(QApplication::translate("MainWindow", "OpenGL", 0));
+        pushButtonClientLog->setText(QApplication::translate("MainWindow", "Open Client log file", 0));
         tabWidget->setTabText(tabWidget->indexOf(tab0), QApplication::translate("MainWindow", " LAUNCHER ", 0));
         preloaderLabel1->setText(QString());
         labelGproxyout->setText(QApplication::translate("MainWindow", "GProxy output", 0));
         labelGproxywarnings->setText(QString());
-        pushButton->setText(QApplication::translate("MainWindow", "Copy GProxy log to clipboard", 0));
-        pushButton_2->setText(QApplication::translate("MainWindow", "Open log file", 0));
+        pushButtonGPCL->setText(QApplication::translate("MainWindow", "Copy GProxy log to clipboard", 0));
+        pushButtonGPNOTEPAD->setText(QApplication::translate("MainWindow", "Open log file", 0));
         gpoptionsgroupBox->setTitle(QApplication::translate("MainWindow", "GProxy Options", 0));
         checkBox_console->setText(QApplication::translate("MainWindow", "Visible console (must start manually)", 0));
         checkBox_option_sounds->setText(QApplication::translate("MainWindow", "Enable sounds", 0));
@@ -676,7 +667,7 @@ public:
         pushButtonBU->setText(QApplication::translate("MainWindow", "Get Beta patch", 0));
         checkBox_updates->setText(QApplication::translate("MainWindow", "Enable automatic updates", 0));
         tabWidget->setTabText(tabWidget->indexOf(tab2), QApplication::translate("MainWindow", " UPDATE ", 0));
-        labelAbout->setText(QApplication::translate("MainWindow", "<html><head/><body><p>Eurobattle.net Client version 0.81 (May 2017), developed by cen</p><p><br/>We are searching for Qt/ C++ developers to further expand this client.</p><p><br/></p><p>TODO:</p><p>-bnet Chat client</p><p>-TS integration</p><p>-Displaying player's profile and league stats in the client</p><p>-and more...</p><p><br/></p><p>Special thanks to:</p><p><span style=\" font-weight:600;\">IStealSkills</span> - help with desig</p><p><span style=\" font-weight:600;\">Stefos007</span> - original GProxy implementation</p><p>BNETtdocs, Stormlib, PvPGN and GHost projects</p></body></html>", 0));
+        labelAbout->setText(QApplication::translate("MainWindow", "<html><head/><body><p>Eurobattle.net Client version 0.9 (July 2017), developed by cen</p><p><br/>We are searching for Qt/ C++ developers to further expand this client.</p><p><br/></p><p>TODO:</p><p>-bnet Chat client</p><p>-TS integration</p><p>-Displaying player's profile and league stats in the client</p><p>-and more...</p><p><br/></p><p>Special thanks to:</p><p><span style=\" font-weight:600;\">IStealSkills</span> - help with desig</p><p><span style=\" font-weight:600;\">Stefos007</span> - original GProxy implementation</p><p>BNETtdocs, Stormlib, PvPGN and GHost projects</p></body></html>", 0));
         labelW3Path->setText(QString());
         labelW3Version->setText(QString());
         tabWidget->setTabText(tabWidget->indexOf(tab3), QApplication::translate("MainWindow", " ABOUT ", 0));

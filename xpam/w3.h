@@ -29,21 +29,30 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "QString"
 #include "QStringList"
 #include <QObject>
+#include "config.h"
 
 class W3 : public QObject
 {
     Q_OBJECT
 signals:
     void w3Exited();
+    void log(QString line);
 private:
-
+    Config * config;
 public:
-    W3(QString w, QString e, QStringList a);
+    W3(QString w, QString e, QStringList a, Config * c);
     ~W3();
 
     QString workdir;
     QString exedir;
     QStringList args;
+
+    static bool sanityCheck();
+    static bool setVersion(QString version, Config * config);
+    static QString getActiveVersion();
+
+    static const  QString W3_126;
+    static const QString W3_LATEST;
 public slots:
     void startW3();
 

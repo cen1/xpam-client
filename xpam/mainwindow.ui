@@ -182,64 +182,27 @@ QCheckBox::indicator:checked {
       border: 1px solid grey;
  }
 
-
-#closeButton {
-  background-image: url(&quot;:/close_window.png&quot;);
-  border: none;
+#pushButtonGWN {
+  background-image: url(&quot;:/gwselect1.png&quot;);
+  background-repeat: no-repeat;
 }
-
-#maxButton {
-  background-image: url(&quot;:/maximize_window.png&quot;);
-  border: none;
+#pushButtonGWG {
+  background-image: url(&quot;:/gwselect2.png&quot;);
+  background-repeat: no-repeat;
 }
-
-#minButton {
-  background-image: url(&quot;:/minimize_window.png&quot;);
-  border: none;
-}
-
-#closeButton:hover {
-  background-image: url(&quot;:/close_window_hover.png&quot;);
-}
-
-#maxButton:hover {
-  background-image: url(&quot;:/maximize_window_hover.png&quot;);
-}
-
-#minButton:hover {
-  background-image: url(&quot;:/minimize_window_hover.png&quot;);
-}
-
-#closeButton:pressed {
-  background-image: url(&quot;:/close_window_hover.png&quot;);
-}
-
-#maxButton:pressed {
-  background-image: url(&quot;:/maximize_window_hover.png&quot;);
-}
-
-#minButton:pressed {
-  background-image: url(&quot;:/minimize_window_hover.png&quot;);
-}
-
-#pushButtonSWGP {
-  background-image: url(&quot;:/gproxygate.png&quot;);
+#pushButtonGWD {
+  background-image: url(&quot;:/gwselect3.png&quot;);
   background-repeat: no-repeat;
 }
 
-#pushButtonSWGP:hover {
-  background-image: url(&quot;:/gproxygate_hover.png&quot;);  
-  background-repeat: no-repeat;
+#pushButtonGWN:hover {
+  border-color: #007dc1;
 }
-
-#pushButtonSWOGP {
-  background-image: url(&quot;:/normalgate.png&quot;);
-  background-repeat: no-repeat;
+#pushButtonGWG:hover {
+  border-color: #007dc1;
 }
-
-#pushButtonSWOGP:hover {
-  background-image: url(&quot;:/normalgate_hover.png&quot;);
-  background-repeat: no-repeat;
+#pushButtonGWD:hover {
+  border-color: #007dc1;
 }
 
 </string>
@@ -271,7 +234,7 @@ QCheckBox::indicator:checked {
          <enum>Qt::LeftToRight</enum>
         </property>
         <property name="currentIndex">
-         <number>3</number>
+         <number>0</number>
         </property>
         <widget class="QWidget" name="tab0">
          <property name="sizePolicy">
@@ -307,7 +270,7 @@ QCheckBox::indicator:checked {
                  <number>0</number>
                 </property>
                 <item>
-                 <widget class="QPushButton" name="pushButtonSWOGP">
+                 <widget class="QPushButton" name="pushButtonGWN">
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                     <horstretch>0</horstretch>
@@ -316,14 +279,8 @@ QCheckBox::indicator:checked {
                   </property>
                   <property name="minimumSize">
                    <size>
-                    <width>400</width>
-                    <height>367</height>
-                   </size>
-                  </property>
-                  <property name="maximumSize">
-                   <size>
-                    <width>400</width>
-                    <height>367</height>
+                    <width>266</width>
+                    <height>370</height>
                    </size>
                   </property>
                   <property name="toolTip">
@@ -336,7 +293,7 @@ or manually host your games.</string>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QPushButton" name="pushButtonSWGP">
+                 <widget class="QPushButton" name="pushButtonGWG">
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                     <horstretch>0</horstretch>
@@ -345,14 +302,8 @@ or manually host your games.</string>
                   </property>
                   <property name="minimumSize">
                    <size>
-                    <width>400</width>
-                    <height>367</height>
-                   </size>
-                  </property>
-                  <property name="maximumSize">
-                   <size>
-                    <width>400</width>
-                    <height>367</height>
+                    <width>266</width>
+                    <height>370</height>
                    </size>
                   </property>
                   <property name="font">
@@ -365,6 +316,25 @@ or manually host your games.</string>
 to be able to join their games. It also provides reconnection&lt;br /&gt;
 in case you drop in the middle of the game.&lt;br /&gt;
 YOU CAN'T PLAY PG OR MANUALLY HOST GAMES IN THIS MODE!</string>
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="pushButtonGWD">
+                  <property name="enabled">
+                   <bool>true</bool>
+                  </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>266</width>
+                    <height>370</height>
+                   </size>
+                  </property>
+                  <property name="toolTip">
+                   <string>COMING SOON</string>
                   </property>
                   <property name="text">
                    <string/>
@@ -397,6 +367,41 @@ YOU CAN'T PLAY PG OR MANUALLY HOST GAMES IN THIS MODE!</string>
                <widget class="QCheckBox" name="checkBox_opengl">
                 <property name="text">
                  <string>OpenGL</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="pushButtonClientLog">
+                <property name="maximumSize">
+                 <size>
+                  <width>120</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>Open Client log file</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QSlider" name="horizontalSlider">
+                <property name="minimumSize">
+                 <size>
+                  <width>120</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>120</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="maximum">
+                 <number>1</number>
+                </property>
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
                 </property>
                </widget>
               </item>
@@ -493,7 +498,7 @@ YOU CAN'T PLAY PG OR MANUALLY HOST GAMES IN THIS MODE!</string>
            <set>Qt::TextBrowserInteraction</set>
           </property>
          </widget>
-         <widget class="QPushButton" name="pushButton">
+         <widget class="QPushButton" name="pushButtonGPCL">
           <property name="geometry">
            <rect>
             <x>40</x>
@@ -506,7 +511,7 @@ YOU CAN'T PLAY PG OR MANUALLY HOST GAMES IN THIS MODE!</string>
            <string>Copy GProxy log to clipboard</string>
           </property>
          </widget>
-         <widget class="QPushButton" name="pushButton_2">
+         <widget class="QPushButton" name="pushButtonGPNOTEPAD">
           <property name="geometry">
            <rect>
             <x>220</x>
@@ -807,7 +812,7 @@ YOU CAN'T PLAY PG OR MANUALLY HOST GAMES IN THIS MODE!</string>
               </sizepolicy>
              </property>
              <property name="text">
-              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Eurobattle.net Client version 0.81 (May 2017), developed by cen&lt;/p&gt;&lt;p&gt;&lt;br/&gt;We are searching for Qt/ C++ developers to further expand this client.&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;TODO:&lt;/p&gt;&lt;p&gt;-bnet Chat client&lt;/p&gt;&lt;p&gt;-TS integration&lt;/p&gt;&lt;p&gt;-Displaying player's profile and league stats in the client&lt;/p&gt;&lt;p&gt;-and more...&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;Special thanks to:&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;IStealSkills&lt;/span&gt; - help with desig&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Stefos007&lt;/span&gt; - original GProxy implementation&lt;/p&gt;&lt;p&gt;BNETtdocs, Stormlib, PvPGN and GHost projects&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Eurobattle.net Client version 0.9 (July 2017), developed by cen&lt;/p&gt;&lt;p&gt;&lt;br/&gt;We are searching for Qt/ C++ developers to further expand this client.&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;TODO:&lt;/p&gt;&lt;p&gt;-bnet Chat client&lt;/p&gt;&lt;p&gt;-TS integration&lt;/p&gt;&lt;p&gt;-Displaying player's profile and league stats in the client&lt;/p&gt;&lt;p&gt;-and more...&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;Special thanks to:&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;IStealSkills&lt;/span&gt; - help with desig&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Stefos007&lt;/span&gt; - original GProxy implementation&lt;/p&gt;&lt;p&gt;BNETtdocs, Stormlib, PvPGN and GHost projects&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>

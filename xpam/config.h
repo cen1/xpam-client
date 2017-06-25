@@ -6,22 +6,29 @@
 #include <QObject>
 #include <QMap>
 #include <QUrl>
+#include <QVector>
 
 class Config : public QObject
 {
     Q_OBJECT
 public:
-    QString VERSION;
-    QString W3VERSION;
+    QString VERSION_CLIENT;
+    QString W3_VERSION_LATEST;
+    QString W3_VERSION_126;
     int PATCH;
     QString W3PATH;
     QString DOCPATH;
     QString DOCMAPPATH;
-    QString MAPPATH;
+    QString DOCMAPPATHDL;
+    QString OLDMAPPATH;
+    QString OLDMAPPATHDL;
     QString EUROPATH;
     QString SOUNDPATH;
     QString APPDATA;
     QString SYSTEM;
+    bool USE_DUAL_VERSION;
+
+    QVector<QString> W3_COMMON_FILES;
 
     QUrl json1;
     QUrl json2;

@@ -38,7 +38,8 @@ HEADERS  += mainwindow.h \
     updater.h \
     w3.h \
     test.h \
-    mpq.h
+    mpq.h \
+    logger.h
 
 FORMS    += mainwindow.ui
 

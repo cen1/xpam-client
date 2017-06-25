@@ -228,7 +228,7 @@ bool Updater::instructions() {
                 QString dstPath;
                 if      (l.last()=="EUROPATH") dstPath=config->EUROPATH;
                 else if (l.last()=="W3PATH") dstPath=config->W3PATH;
-                else if (l.last()=="MAPPATH") dstPath=config->MAPPATH;
+                else if (l.last()=="MAPPATH") dstPath=config->DOCMAPPATHDL;
                 else if (l.last()=="SOUNDPATH") dstPath=config->SOUNDPATH;
 
                 QFile from(config->APPDATA+"\\"+midParam);
@@ -253,7 +253,7 @@ bool Updater::instructions() {
 
                 if     (l.last()=="EUROPATH") QFile::remove(config->EUROPATH+"\\"+midParam);
                 else if(l.last()=="W3PATH")   QFile::remove(config->W3PATH+"\\"+midParam);
-                else if(l.last()=="MAPPATH")  QFile::remove(config->MAPPATH+"\\"+midParam);
+                else if(l.last()=="MAPPATH")  QFile::remove(config->DOCMAPPATHDL+"\\"+midParam);
                 else if(l.last()=="SOUNDPATH")  QFile::remove(config->SOUNDPATH+"\\"+midParam);
             }
             else if (l[0]=="ICONS") {

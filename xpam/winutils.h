@@ -217,6 +217,20 @@ namespace Winutils
         ip.ki.dwFlags = KEYEVENTF_KEYUP;
         SendInput(1, &ip, sizeof(INPUT));
     }
+
+    inline QString getLastErrorMsg() {
+        LPWSTR bufPtr = NULL;
+        DWORD err = GetLastError();
+        FormatMessageW(FORMAT_MESSAGE_ALLOCATE_BUFFER |
+                       FORMAT_MESSAGE_FROM_SYSTEM |
+                       FORMAT_MESSAGE_IGNORE_INSERTS,
+                       NULL, err, 0, (LPWSTR)&bufPtr, 0, NULL);
+        const QString result =
+            (bufPtr) ? QString::fromUtf16((const ushort*)bufPtr).trimmed() :
+                       QString("Unknown Error %1").arg(err);
+        LocalFree(bufPtr);
+        return result;
+    }
 }
 
 #endif // WINUTILS_H

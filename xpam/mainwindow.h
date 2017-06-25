@@ -50,20 +50,18 @@ public:
     bool updatesEnabled;
     
 private slots:
-    void on_pushButtonSWGP_clicked();
-    void on_pushButtonSWOGP_clicked();
+    void on_pushButtonGWG_clicked();
+    void on_pushButtonGWN_clicked();
+    void on_pushButtonGWD_clicked();
     void on_pushButtonBU_clicked();
-    //void on_closeButton_clicked();
-    //void on_maxButton_clicked();
-    //void on_minButton_clicked();
     void handleCheckbox(bool checked);
     void handleCheckboxClient(bool checked);
     void initGproxyOptions();
     void initClientOptions();
 
-    void on_pushButton_clicked();
-
-    void on_pushButton_2_clicked();
+    void on_pushButtonGPCL_clicked();
+    void on_pushButtonGPNOTEPAD_clicked();
+    void on_pushButtonClientLog_clicked();
     void on_pushButton_w3path_clicked();
 
 public slots:

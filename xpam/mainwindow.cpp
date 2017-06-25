@@ -27,6 +27,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "ui_mainwindow.h"
 #include "registry.h"
 #include "util.h"
+#include "logger.h"
 #include "QProcess"
 #include "QThread"
 #include "QTextStream"
@@ -103,13 +104,13 @@ MainWindow::MainWindow(QWidget *parent) :
 
     //Check w3 version
     QString w3version = Winutils::getFileVersion(config->W3PATH+"\\war3.exe");
-    if (w3version != config->W3VERSION) {
+    if (w3version != config->W3_VERSION_LATEST) {
         QMessageBox msgBox;
-        msgBox.setText("You need to manually update your Warcraft 3 version. See forum for instructions. Found version: "+w3version+" but needs version "+config->W3VERSION);
+        msgBox.setText("You need to manually update your Warcraft 3 version. See forum for instructions. Found version: "+w3version+" but needs version "+config->W3_VERSION_LATEST);
 
         msgBox.exec();
     }
-    else if (w3version==config->W3VERSION) {
+    else if (w3version==config->W3_VERSION_LATEST) {
         /* Manual folder moving not necessary, it is done by w3
         QDir doc(config->DOCMAPPATH);
         if (!doc.exists()) {
@@ -135,15 +136,23 @@ MainWindow::MainWindow(QWidget *parent) :
 
     //Display w3 info
     ui->labelW3Path->setText("W3 path: "+config->W3PATH);
-    if (w3version==config->W3VERSION) {
+    if (w3version==config->W3_VERSION_LATEST) {
         ui->labelW3Version->setText("Detected W3 version: "+w3version+" (OK)");
     }
     else {
-        ui->labelW3Version->setText("Detected W3 version: "+w3version+" (ERROR, needed: "+config->W3VERSION+")");
+        ui->labelW3Version->setText("Detected W3 version: "+w3version+" (ERROR, needed: "+config->W3_VERSION_LATEST+")");
     }
 
     //Rename war3Patch.mpq to war3Mod.mpw as of 1.28.2
     Updater::renamePatchMpq(config);
+
+    //Enable or disable DotA gateway
+    if (config->USE_DUAL_VERSION) {
+        ui->pushButtonGWD->setEnabled(true);
+    }
+    else {
+        ui->pushButtonGWD->setEnabled(false);
+    }
 }
 
 MainWindow::~MainWindow()
@@ -151,8 +160,8 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-//start w3 and gproxy
-void MainWindow::on_pushButtonSWGP_clicked()
+//GProxy gateway, Start w3 and gproxy
+void MainWindow::on_pushButtonGWG_clicked()
 {
     //hard WINAPI checks for w3 and gproxy running, all kind of problems if they are...
     if (Util::isRunning("war3.exe")) {
@@ -196,8 +205,8 @@ void MainWindow::on_pushButtonSWGP_clicked()
     gpt->start();
 }
 
-//start w3 only
-void MainWindow::on_pushButtonSWOGP_clicked()
+//Start w3 only, NORMAL gateway
+void MainWindow::on_pushButtonGWN_clicked()
 {    
     //again, hard WINAPI check
     if (Util::isRunning("war3.exe")) {
@@ -218,7 +227,7 @@ void MainWindow::on_pushButtonSWOGP_clicked()
     if (ui->checkBox_fullscreen->isChecked()) list << "-nativefullscr";
     if (ui->checkBox_opengl->isChecked()) list << "-opengl";
 
-    w3=new W3(w3dir, w3exe, list);
+    w3=new W3(w3dir, w3exe, list, config);
     w3t=new QThread();
     w3->moveToThread(w3t);
 
@@ -232,7 +241,19 @@ void MainWindow::on_pushButtonSWOGP_clicked()
     w3t->start();
 }
 
-//start w3 when gproxy emits
+//Dota gateway, Start w3 and gproxy, switch version as needed
+void MainWindow::on_pushButtonGWD_clicked()
+{
+    if (config->USE_DUAL_VERSION) {
+        //Switch version
+        W3::setVersion(W3::W3_126, config);
+
+        //Start gproxy gateway
+        on_pushButtonGWG_clicked();
+    }
+}
+
+//Start w3 when gproxy emits READY state
 void MainWindow::gproxyReady() {
     ui->labelGproxyout->setText("EMITTED");
     if (Util::isRunning("war3.exe")) {
@@ -250,7 +271,7 @@ void MainWindow::gproxyReady() {
     if (ui->checkBox_fullscreen->isChecked()) list << "-nativefullscr";
     if (ui->checkBox_opengl->isChecked()) list << "-opengl";
 
-    w3=new W3(w3dir, w3exe, list);
+    w3=new W3(w3dir, w3exe, list, config);
     w3t=new QThread();
     w3->moveToThread(w3t);
 
@@ -331,7 +352,7 @@ void MainWindow::w3Exited() {
     status("W3 closed");
 }
 
-//update at startup
+//Update client at startup
 void MainWindow::checkUpdates(){
 
     isStartupUpdate=true;
@@ -360,7 +381,7 @@ void MainWindow::checkUpdates(){
     upt->start();
 }
 
-//beta update
+//Beta update
 void MainWindow::on_pushButtonBU_clicked()
 {
     isStartupUpdate=false;
@@ -386,8 +407,8 @@ void MainWindow::on_pushButtonBU_clicked()
     upt->start();
 }
 
-//ok tells us if there was a critical error
-//utd tells us if client is up to date
+//Ok tells us if there was a critical error
+//Utd tells us if client is up to date
 void MainWindow::updateFinished(bool restartNeeded, bool ok, bool utd) {
     ui->textBrowserUpdate->append("Updater finished");
     if (isStartupUpdate) hideSplashScreen();
@@ -424,6 +445,7 @@ void MainWindow::updateFinished(bool restartNeeded, bool ok, bool utd) {
     }
 }
 
+//Handle gproxy options
 void MainWindow::handleCheckbox(bool checked)
 {
     QString option = QObject::sender()->objectName().remove("checkBox_");
@@ -434,6 +456,7 @@ void MainWindow::handleCheckbox(bool checked)
     if (!r) ui->statusBar->showMessage("Could not change gproxy config", 10000);
 }
 
+//Handle client options
 void MainWindow::handleCheckboxClient(bool checked)
 {
     QString option = QObject::sender()->objectName().remove("checkBox_");
@@ -457,6 +480,7 @@ void MainWindow::handleCheckboxClient(bool checked)
     if (!r) ui->statusBar->showMessage("Could not change client config", 10000);
 }
 
+//Init checkboxes according to cfg file
 void MainWindow::initGproxyOptions() {
     QFile conf(config->EUROPATH+"\\gproxy.cfg");
     if (conf.open(QFile::ReadOnly))
@@ -478,6 +502,7 @@ void MainWindow::initGproxyOptions() {
     }
 }
 
+//Init checkboxes according to cfg
 void MainWindow::initClientOptions() {
     QFile conf(config->EUROPATH+"\\xpam.cfg");
     if (conf.open(QFile::ReadOnly))
@@ -505,7 +530,7 @@ void MainWindow::initClientOptions() {
     }
 }
 
-//this slot is only connected for startup update check
+//This slot is only connected for startup update check
 //signal emitted when there is an update avalible
 //so we hide splash screen to see progress
 void MainWindow::hideSplashScreen() {
@@ -513,18 +538,9 @@ void MainWindow::hideSplashScreen() {
     emit updateCheckFinished();
 }
 
-//update log in case program crashes and you can't see the text browser for errors
+//Update log in case program crashes and you can't see the text browser for errors
 void MainWindow::logUpdate(QString line) {
-    QFile log(config->EUROPATH+"\\xpam.log");
-    log.open(QFile::WriteOnly | QFile::Append | QFile::Text);
-    if (log.isOpen()) {
-        QTextStream out(&log);
-        out << line << "\n";
-        log.close();
-    }
-    else {
-        status("Can't write to log file");
-    }
+    Logger::log(line, config);
 }
 
 void MainWindow::lockTabs(int except){
@@ -539,13 +555,13 @@ void MainWindow::unlockTabs() {
     }
 }
 
-//deletes last in in text browser and appends a new one
+//Deletes last in text browser and appends a new one
 void MainWindow::modifyLastLineSlot(QString line) {
     removeLastLine();
     ui->textBrowserUpdate->append(line);
 }
 
-//deletes last line in text browser
+//Deletes last line in text browser
 void MainWindow::removeLastLine() {
     ui->textBrowserUpdate->setFocus();
     QTextCursor storeCursorPos = ui->textBrowserUpdate->textCursor();
@@ -557,105 +573,13 @@ void MainWindow::removeLastLine() {
     ui->textBrowserUpdate->setTextCursor(storeCursorPos);
 }
 
-//write to status bar
+//Write to status bar
 void MainWindow::status(QString status) {
     ui->statusBar->showMessage(status, 10000);
 }
 
-
-//Close, max, min
-/*
-void MainWindow::on_closeButton_clicked()
-{
-    QApplication::quit();
-}
-*/
-
-/*
-void MainWindow::on_maxButton_clicked()
-{
-    if (!ismax) {
-        normalpos=this->pos();
-        normalsize=this->size();
-
-        //we can't use showMaximized() because we use frameless window
-        QDesktopWidget *desktop = QApplication::desktop();
-        this->setGeometry(desktop->availableGeometry());
-
-        ismax=true;
-    }
-    else {
-        this->resize(normalsize);
-        this->move(normalpos);
-        ismax=false;
-    }
-}
-*/
-
-/*
-void MainWindow::on_minButton_clicked()
-{
-    this->showMinimized();
-}
-*/
-
-//Window moving handlers
-/*
-void MainWindow::mousePressEvent(QMouseEvent *event) {
-  if (event->button() == Qt::LeftButton) {
-    down = true;
-    lastPos = event->globalPos();
-  }
-
-  QWidget::mousePressEvent(event);
-}
-*/
-
-//Button max on top, left and right max
-/*
-void MainWindow::mouseReleaseEvent(QMouseEvent *event) {
-  down = false;
-  QPoint curPos = event->globalPos();
-  if (this->ui->labelTitle->underMouse() && !ismax)
-  {
-      if (curPos.y()<2) {
-          this->setGeometry(QApplication::desktop()->availableGeometry());
-          ismax=true;
-      }
-      else if (curPos.x()<2) {
-          this->setGeometry(QRect(
-                                QPoint(0,0),
-                                QSize(
-                                    this->minimumWidth(),
-                                    QApplication::desktop()->availableGeometry().bottom())));
-      }
-      else if (curPos.x() > QApplication::desktop()->availableGeometry().right()-2) {
-          this->setGeometry(QRect(
-                                QPoint(QApplication::desktop()->availableGeometry().right()-this->minimumWidth(),0),
-                                QSize(
-                                    this->minimumWidth(),
-                                    QApplication::desktop()->availableGeometry().bottom())));
-      }
-  }
-  QWidget::mouseReleaseEvent(event);
-}
-*/
-
-/* Drag window around with titlebar
-void MainWindow::mouseMoveEvent(QMouseEvent *event) {
-  if (down && ui->logoBar->underMouse()) {
-    QPoint curPos = event->globalPos();
-    if (curPos != lastPos) {
-      QPoint diff = (lastPos - curPos);
-      move(pos() - diff);
-      lastPos = curPos;
-    }
-  }
-
-  QWidget::mouseMoveEvent(event);
-}*/
-
-void MainWindow::on_pushButton_clicked()
+//Copy gproxy log to clipboard
+void MainWindow::on_pushButtonGPCL_clicked()
 {
     QFile logfile(config->EUROPATH+"/gproxy.log");
     if (logfile.open(QFile::ReadOnly))
@@ -665,11 +589,19 @@ void MainWindow::on_pushButton_clicked()
     }
 }
 
-void MainWindow::on_pushButton_2_clicked()
+//Open gproxy log in notepad
+void MainWindow::on_pushButtonGPNOTEPAD_clicked()
 {
     QDesktopServices::openUrl(QUrl("file:///"+config->EUROPATH+"/gproxy.log"));
 }
 
+//Open client log in notepad
+void MainWindow::on_pushButtonClientLog_clicked()
+{
+    QDesktopServices::openUrl(QUrl("file:///"+config->EUROPATH+"/xpam.log"));
+}
+
+//Set new w3 path
 void MainWindow::on_pushButton_w3path_clicked()
 {
     const QString path = QFileDialog::getExistingDirectory(this);

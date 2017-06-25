@@ -3,16 +3,9 @@
         <file>favicon.ico</file>
         <file>splash.png</file>
         <file>back.png</file>
-        <file>gproxygate.png</file>
-        <file>gproxygate_hover.png</file>
-        <file>normalgate.png</file>
-        <file>normalgate_hover.png</file>
-        <file>maximize_window.png</file>
-        <file>close_window.png</file>
-        <file>close_window_hover.png</file>
-        <file>maximize_window_hover.png</file>
-        <file>minimize_window.png</file>
-        <file>minimize_window_hover.png</file>
         <file>preloader.gif</file>
+        <file>gwselect1.png</file>
+        <file>gwselect2.png</file>
+        <file>gwselect3.png</file>
     </qresource>
 </RCC>

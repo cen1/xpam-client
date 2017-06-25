@@ -31,23 +31,41 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 Config::Config()
 {
-    VERSION = "0.8.0.0";
-    W3VERSION = "1.28.2.7395";
+    VERSION_CLIENT = "0.9.0.0";
+    W3_VERSION_LATEST = "1.28.2.7395";
     BETAPIN = "1377";
 
-    EUROPATH = Registry::getEuroPath();
-    SOUNDPATH= EUROPATH+"\\sounds";
-    W3PATH   = Registry::getW3dir();
-    DOCPATH  = QStandardPaths::locate(QStandardPaths::DocumentsLocation, QString(), QStandardPaths::LocateDirectory)+"Warcraft III";
+    EUROPATH    = Registry::getEuroPath();
+    SOUNDPATH   = EUROPATH+"\\sounds";
+    W3PATH      = Registry::getW3dir();
+    DOCPATH     = QStandardPaths::locate(QStandardPaths::DocumentsLocation, QString(), QStandardPaths::LocateDirectory)+"Warcraft III";
     DOCMAPPATH  = QStandardPaths::locate(QStandardPaths::DocumentsLocation, QString(), QStandardPaths::LocateDirectory)+"Warcraft III/Maps";
-    MAPPATH  = QStandardPaths::locate(QStandardPaths::DocumentsLocation, QString(), QStandardPaths::LocateDirectory)+"Warcraft III/Maps/Download";
-    PATCH    = Registry::getPatchVersion();
-    APPDATA  = Winutils::getAppData()+"\\Eurobattle.net";
-    SYSTEM   = Winutils::getSystem32();
+    DOCMAPPATHDL= QStandardPaths::locate(QStandardPaths::DocumentsLocation, QString(), QStandardPaths::LocateDirectory)+"Warcraft III/Maps/Download";
+    OLDMAPPATH  = W3PATH+"/Maps";
+    OLDMAPPATHDL= W3PATH+"/Maps/Download";
+    PATCH       = Registry::getPatchVersion();
+    APPDATA     = Winutils::getAppData()+"\\Eurobattle.net";
+    SYSTEM      = Winutils::getSystem32();
+
+    USE_DUAL_VERSION = true;
 
     json1 = "http://xpam.pl/update/update.json";
     json2 = "http://tools.eurobattle.net/update/update.json";
     json3 = "http://leaguebots.com/cen/update/update.json";
+
+    //Common files between 1.26 and LATEST which need to be renamed
+    //Unique files ot each version ar eleft untouched
+    W3_COMMON_FILES.append("bnupdate.exe");
+    W3_COMMON_FILES.append("game.dll");
+    W3_COMMON_FILES.append("icons-war3.bni");
+    W3_COMMON_FILES.append("storm.dll");
+    W3_COMMON_FILES.append("war3.exe");
+    W3_COMMON_FILES.append("war3.mpq");
+    W3_COMMON_FILES.append("war3patch.mpq");
+    W3_COMMON_FILES.append("war3x.mpq");
+    W3_COMMON_FILES.append("war3xlocal.mpq");
+    W3_COMMON_FILES.append("world editor.exe");
+    W3_COMMON_FILES.append("worldedit.exe");
 }
 
 bool Config::SetOption(QString file, QString option, QString value) {
