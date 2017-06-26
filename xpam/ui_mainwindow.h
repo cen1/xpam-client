@@ -42,7 +42,7 @@ public:
     QHBoxLayout *horizontalLayout;
     QGridLayout *gridLayoutMain;
     QTabWidget *tabWidget;
-    QWidget *tab0;
+    QWidget *tabLauncher;
     QHBoxLayout *horizontalLayout_6;
     QHBoxLayout *horizontalLayout_5;
     QSpacerItem *hs1;
@@ -54,11 +54,9 @@ public:
     QCheckBox *checkBox_windowed;
     QCheckBox *checkBox_fullscreen;
     QCheckBox *checkBox_opengl;
-    QPushButton *pushButtonClientLog;
-    QSlider *horizontalSlider;
     QSpacerItem *verticalSpacer;
     QSpacerItem *hs2;
-    QWidget *tab1;
+    QWidget *tabGproxy;
     QLabel *preloaderLabel1;
     QLabel *labelGproxyout;
     QLabel *labelGproxywarnings;
@@ -83,7 +81,14 @@ public:
     QCheckBox *checkBox_debug;
     QCheckBox *checkBox_telemetry;
     QPushButton *pushButton_w3path;
-    QWidget *tab2;
+    QWidget *tabW3;
+    QPushButton *pushButtonClientLog;
+    QWidget *widget;
+    QHBoxLayout *horizontalLayout_2;
+    QLabel *label126;
+    QSlider *horizontalSliderW3Version;
+    QLabel *labelLatest;
+    QWidget *tabUpdate;
     QHBoxLayout *horizontalLayout_3;
     QSplitter *splitter;
     QTextBrowser *textBrowserUpdate;
@@ -92,7 +97,7 @@ public:
     QLineEdit *betapinbox;
     QPushButton *pushButtonBU;
     QCheckBox *checkBox_updates;
-    QWidget *tab3;
+    QWidget *tabAbout;
     QWidget *layoutWidget2;
     QVBoxLayout *verticalLayout_3;
     QLabel *labelAbout;
@@ -194,22 +199,27 @@ public:
 "  background-color: rgba(180, 180, 180);\n"
 "}\n"
 "\n"
-"#tab0 {\n"
+"#tabLauncher {\n"
 "  border-image: url(\":/back.png\") 0 0 0 0 stretch stretch;\n"
 "  border-width: 0px;\n"
 "}\n"
-"#tab1 {\n"
+"#tabGproxy {\n"
 "  border-image: url(\":/back.png\") 0 0 0 0 stretch stretch;\n"
 "  border-width: 0px;\n"
 "}\n"
-"#tab2 {\n"
+"#tabW3 {\n"
 "  border-image: url(\":/back.png\") 0 0 0 0 stretch stretch;\n"
 "  border-width: 0px;\n"
 "}\n"
-"#tab3 {\n"
+"#tabUpdate {\n"
 "  border-image: url(\":/back.png\") 0 0 0 0 stretch stretch;\n"
 "  border-width: 0px;\n"
 "}\n"
+"#tabAbout {\n"
+"  border-image: url(\":/back.png\") 0 0 0 0 stretch stretch;\n"
+"  border-width: 0px;\n"
+"}\n"
+"\n"
 "\n"
 "QLabel {\n"
 "	color: white;\n"
@@ -228,14 +238,14 @@ public:
 "  font-family: \"Lucida Sans Unicode\";\n"
 "}\n"
 "\n"
-"QCheckBox::indicator {\n"
+"QCheckBox::indica"
+                        "tor {\n"
 "  border: 1px solid grey;\n"
 "  border-radius: 2px;\n"
 "  padding: 1px 1px 1px 1px;\n"
 "}\n"
 "\n"
-"QCheckBox::indicator:unche"
-                        "cked {\n"
+"QCheckBox::indicator:unchecked {\n"
 "  background-color: white;\n"
 "}\n"
 "\n"
@@ -286,11 +296,11 @@ public:
         tabWidget = new QTabWidget(centralWidget);
         tabWidget->setObjectName(QStringLiteral("tabWidget"));
         tabWidget->setLayoutDirection(Qt::LeftToRight);
-        tab0 = new QWidget();
-        tab0->setObjectName(QStringLiteral("tab0"));
-        sizePolicy.setHeightForWidth(tab0->sizePolicy().hasHeightForWidth());
-        tab0->setSizePolicy(sizePolicy);
-        horizontalLayout_6 = new QHBoxLayout(tab0);
+        tabLauncher = new QWidget();
+        tabLauncher->setObjectName(QStringLiteral("tabLauncher"));
+        sizePolicy.setHeightForWidth(tabLauncher->sizePolicy().hasHeightForWidth());
+        tabLauncher->setSizePolicy(sizePolicy);
+        horizontalLayout_6 = new QHBoxLayout(tabLauncher);
         horizontalLayout_6->setSpacing(6);
         horizontalLayout_6->setContentsMargins(11, 11, 11, 11);
         horizontalLayout_6->setObjectName(QStringLiteral("horizontalLayout_6"));
@@ -307,7 +317,7 @@ public:
         horizontalLayoutLauncher = new QHBoxLayout();
         horizontalLayoutLauncher->setSpacing(0);
         horizontalLayoutLauncher->setObjectName(QStringLiteral("horizontalLayoutLauncher"));
-        pushButtonGWN = new QPushButton(tab0);
+        pushButtonGWN = new QPushButton(tabLauncher);
         pushButtonGWN->setObjectName(QStringLiteral("pushButtonGWN"));
         QSizePolicy sizePolicy1(QSizePolicy::Preferred, QSizePolicy::Preferred);
         sizePolicy1.setHorizontalStretch(0);
@@ -318,7 +328,7 @@ public:
 
         horizontalLayoutLauncher->addWidget(pushButtonGWN);
 
-        pushButtonGWG = new QPushButton(tab0);
+        pushButtonGWG = new QPushButton(tabLauncher);
         pushButtonGWG->setObjectName(QStringLiteral("pushButtonGWG"));
         sizePolicy1.setHeightForWidth(pushButtonGWG->sizePolicy().hasHeightForWidth());
         pushButtonGWG->setSizePolicy(sizePolicy1);
@@ -329,7 +339,7 @@ public:
 
         horizontalLayoutLauncher->addWidget(pushButtonGWG);
 
-        pushButtonGWD = new QPushButton(tab0);
+        pushButtonGWD = new QPushButton(tabLauncher);
         pushButtonGWD->setObjectName(QStringLiteral("pushButtonGWD"));
         pushButtonGWD->setEnabled(true);
         pushButtonGWD->setMinimumSize(QSize(266, 370));
@@ -339,7 +349,7 @@ public:
 
         verticalLayout->addLayout(horizontalLayoutLauncher);
 
-        checkBox_windowed = new QCheckBox(tab0);
+        checkBox_windowed = new QCheckBox(tabLauncher);
         checkBox_windowed->setObjectName(QStringLiteral("checkBox_windowed"));
         QSizePolicy sizePolicy2(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
         sizePolicy2.setHorizontalStretch(0);
@@ -349,30 +359,15 @@ public:
 
         verticalLayout->addWidget(checkBox_windowed);
 
-        checkBox_fullscreen = new QCheckBox(tab0);
+        checkBox_fullscreen = new QCheckBox(tabLauncher);
         checkBox_fullscreen->setObjectName(QStringLiteral("checkBox_fullscreen"));
 
         verticalLayout->addWidget(checkBox_fullscreen);
 
-        checkBox_opengl = new QCheckBox(tab0);
+        checkBox_opengl = new QCheckBox(tabLauncher);
         checkBox_opengl->setObjectName(QStringLiteral("checkBox_opengl"));
 
         verticalLayout->addWidget(checkBox_opengl);
-
-        pushButtonClientLog = new QPushButton(tab0);
-        pushButtonClientLog->setObjectName(QStringLiteral("pushButtonClientLog"));
-        pushButtonClientLog->setMaximumSize(QSize(120, 16777215));
-
-        verticalLayout->addWidget(pushButtonClientLog);
-
-        horizontalSlider = new QSlider(tab0);
-        horizontalSlider->setObjectName(QStringLiteral("horizontalSlider"));
-        horizontalSlider->setMinimumSize(QSize(120, 0));
-        horizontalSlider->setMaximumSize(QSize(120, 16777215));
-        horizontalSlider->setMaximum(1);
-        horizontalSlider->setOrientation(Qt::Horizontal);
-
-        verticalLayout->addWidget(horizontalSlider);
 
         verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
@@ -388,31 +383,31 @@ public:
 
         horizontalLayout_6->addLayout(horizontalLayout_5);
 
-        tabWidget->addTab(tab0, QString());
-        tab1 = new QWidget();
-        tab1->setObjectName(QStringLiteral("tab1"));
-        sizePolicy.setHeightForWidth(tab1->sizePolicy().hasHeightForWidth());
-        tab1->setSizePolicy(sizePolicy);
-        preloaderLabel1 = new QLabel(tab1);
+        tabWidget->addTab(tabLauncher, QString());
+        tabGproxy = new QWidget();
+        tabGproxy->setObjectName(QStringLiteral("tabGproxy"));
+        sizePolicy.setHeightForWidth(tabGproxy->sizePolicy().hasHeightForWidth());
+        tabGproxy->setSizePolicy(sizePolicy);
+        preloaderLabel1 = new QLabel(tabGproxy);
         preloaderLabel1->setObjectName(QStringLiteral("preloaderLabel1"));
         preloaderLabel1->setGeometry(QRect(20, 20, 16, 16));
-        labelGproxyout = new QLabel(tab1);
+        labelGproxyout = new QLabel(tabGproxy);
         labelGproxyout->setObjectName(QStringLiteral("labelGproxyout"));
         labelGproxyout->setGeometry(QRect(40, 20, 581, 21));
         labelGproxyout->setTextInteractionFlags(Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse);
-        labelGproxywarnings = new QLabel(tab1);
+        labelGproxywarnings = new QLabel(tabGproxy);
         labelGproxywarnings->setObjectName(QStringLiteral("labelGproxywarnings"));
         labelGproxywarnings->setGeometry(QRect(40, 50, 841, 20));
         labelGproxywarnings->setTextFormat(Qt::RichText);
         labelGproxywarnings->setOpenExternalLinks(true);
         labelGproxywarnings->setTextInteractionFlags(Qt::TextBrowserInteraction);
-        pushButtonGPCL = new QPushButton(tab1);
+        pushButtonGPCL = new QPushButton(tabGproxy);
         pushButtonGPCL->setObjectName(QStringLiteral("pushButtonGPCL"));
         pushButtonGPCL->setGeometry(QRect(40, 80, 171, 23));
-        pushButtonGPNOTEPAD = new QPushButton(tab1);
+        pushButtonGPNOTEPAD = new QPushButton(tabGproxy);
         pushButtonGPNOTEPAD->setObjectName(QStringLiteral("pushButtonGPNOTEPAD"));
         pushButtonGPNOTEPAD->setGeometry(QRect(220, 80, 111, 23));
-        gpoptionsgroupBox = new QGroupBox(tab1);
+        gpoptionsgroupBox = new QGroupBox(tabGproxy);
         gpoptionsgroupBox->setObjectName(QStringLiteral("gpoptionsgroupBox"));
         gpoptionsgroupBox->setGeometry(QRect(40, 120, 241, 351));
         gpoptionsgroupBox->setStyleSheet(QStringLiteral(""));
@@ -511,19 +506,54 @@ public:
 
         verticalLayout_2->addWidget(checkBox_telemetry);
 
-        pushButton_w3path = new QPushButton(tab1);
+        pushButton_w3path = new QPushButton(tabGproxy);
         pushButton_w3path->setObjectName(QStringLiteral("pushButton_w3path"));
         pushButton_w3path->setGeometry(QRect(340, 80, 111, 23));
-        tabWidget->addTab(tab1, QString());
-        tab2 = new QWidget();
-        tab2->setObjectName(QStringLiteral("tab2"));
-        sizePolicy.setHeightForWidth(tab2->sizePolicy().hasHeightForWidth());
-        tab2->setSizePolicy(sizePolicy);
-        horizontalLayout_3 = new QHBoxLayout(tab2);
+        tabWidget->addTab(tabGproxy, QString());
+        tabW3 = new QWidget();
+        tabW3->setObjectName(QStringLiteral("tabW3"));
+        pushButtonClientLog = new QPushButton(tabW3);
+        pushButtonClientLog->setObjectName(QStringLiteral("pushButtonClientLog"));
+        pushButtonClientLog->setGeometry(QRect(20, 20, 120, 19));
+        pushButtonClientLog->setMaximumSize(QSize(120, 16777215));
+        widget = new QWidget(tabW3);
+        widget->setObjectName(QStringLiteral("widget"));
+        widget->setGeometry(QRect(20, 50, 188, 24));
+        horizontalLayout_2 = new QHBoxLayout(widget);
+        horizontalLayout_2->setSpacing(6);
+        horizontalLayout_2->setContentsMargins(11, 11, 11, 11);
+        horizontalLayout_2->setObjectName(QStringLiteral("horizontalLayout_2"));
+        horizontalLayout_2->setContentsMargins(0, 0, 0, 0);
+        label126 = new QLabel(widget);
+        label126->setObjectName(QStringLiteral("label126"));
+
+        horizontalLayout_2->addWidget(label126);
+
+        horizontalSliderW3Version = new QSlider(widget);
+        horizontalSliderW3Version->setObjectName(QStringLiteral("horizontalSliderW3Version"));
+        horizontalSliderW3Version->setMinimumSize(QSize(120, 0));
+        horizontalSliderW3Version->setMaximumSize(QSize(120, 16777215));
+        horizontalSliderW3Version->setMaximum(1);
+        horizontalSliderW3Version->setValue(1);
+        horizontalSliderW3Version->setOrientation(Qt::Horizontal);
+
+        horizontalLayout_2->addWidget(horizontalSliderW3Version);
+
+        labelLatest = new QLabel(widget);
+        labelLatest->setObjectName(QStringLiteral("labelLatest"));
+
+        horizontalLayout_2->addWidget(labelLatest);
+
+        tabWidget->addTab(tabW3, QString());
+        tabUpdate = new QWidget();
+        tabUpdate->setObjectName(QStringLiteral("tabUpdate"));
+        sizePolicy.setHeightForWidth(tabUpdate->sizePolicy().hasHeightForWidth());
+        tabUpdate->setSizePolicy(sizePolicy);
+        horizontalLayout_3 = new QHBoxLayout(tabUpdate);
         horizontalLayout_3->setSpacing(6);
         horizontalLayout_3->setContentsMargins(11, 11, 11, 11);
         horizontalLayout_3->setObjectName(QStringLiteral("horizontalLayout_3"));
-        splitter = new QSplitter(tab2);
+        splitter = new QSplitter(tabUpdate);
         splitter->setObjectName(QStringLiteral("splitter"));
         splitter->setOrientation(Qt::Vertical);
         textBrowserUpdate = new QTextBrowser(splitter);
@@ -564,12 +594,12 @@ public:
 
         horizontalLayout_3->addWidget(splitter);
 
-        tabWidget->addTab(tab2, QString());
-        tab3 = new QWidget();
-        tab3->setObjectName(QStringLiteral("tab3"));
-        sizePolicy.setHeightForWidth(tab3->sizePolicy().hasHeightForWidth());
-        tab3->setSizePolicy(sizePolicy);
-        layoutWidget2 = new QWidget(tab3);
+        tabWidget->addTab(tabUpdate, QString());
+        tabAbout = new QWidget();
+        tabAbout->setObjectName(QStringLiteral("tabAbout"));
+        sizePolicy.setHeightForWidth(tabAbout->sizePolicy().hasHeightForWidth());
+        tabAbout->setSizePolicy(sizePolicy);
+        layoutWidget2 = new QWidget(tabAbout);
         layoutWidget2->setObjectName(QStringLiteral("layoutWidget2"));
         layoutWidget2->setGeometry(QRect(20, 20, 391, 501));
         verticalLayout_3 = new QVBoxLayout(layoutWidget2);
@@ -597,9 +627,9 @@ public:
 
         verticalLayout_3->addWidget(labelW3Version);
 
-        tabWidget->addTab(tab3, QString());
+        tabWidget->addTab(tabAbout, QString());
 
-        gridLayoutMain->addWidget(tabWidget, 1, 0, 1, 3);
+        gridLayoutMain->addWidget(tabWidget, 0, 0, 1, 1);
 
 
         horizontalLayout->addLayout(gridLayoutMain);
@@ -611,7 +641,7 @@ public:
 
         retranslateUi(MainWindow);
 
-        tabWidget->setCurrentIndex(0);
+        tabWidget->setCurrentIndex(2);
 
 
         QMetaObject::connectSlotsByName(MainWindow);
@@ -639,8 +669,7 @@ public:
         checkBox_windowed->setText(QApplication::translate("MainWindow", "Windowed", 0));
         checkBox_fullscreen->setText(QApplication::translate("MainWindow", "Native fullscreen", 0));
         checkBox_opengl->setText(QApplication::translate("MainWindow", "OpenGL", 0));
-        pushButtonClientLog->setText(QApplication::translate("MainWindow", "Open Client log file", 0));
-        tabWidget->setTabText(tabWidget->indexOf(tab0), QApplication::translate("MainWindow", " LAUNCHER ", 0));
+        tabWidget->setTabText(tabWidget->indexOf(tabLauncher), QApplication::translate("MainWindow", " LAUNCHER ", 0));
         preloaderLabel1->setText(QString());
         labelGproxyout->setText(QApplication::translate("MainWindow", "GProxy output", 0));
         labelGproxywarnings->setText(QString());
@@ -663,14 +692,18 @@ public:
         checkBox_debug->setText(QApplication::translate("MainWindow", "Debugging", 0));
         checkBox_telemetry->setText(QApplication::translate("MainWindow", "Telemetry", 0));
         pushButton_w3path->setText(QApplication::translate("MainWindow", "Change W3 path", 0));
-        tabWidget->setTabText(tabWidget->indexOf(tab1), QApplication::translate("MainWindow", "  GPROXY  ", 0));
+        tabWidget->setTabText(tabWidget->indexOf(tabGproxy), QApplication::translate("MainWindow", "  GPROXY  ", 0));
+        pushButtonClientLog->setText(QApplication::translate("MainWindow", "Open Client log file", 0));
+        label126->setText(QApplication::translate("MainWindow", "1.26", 0));
+        labelLatest->setText(QApplication::translate("MainWindow", "1.28.4", 0));
+        tabWidget->setTabText(tabWidget->indexOf(tabW3), QApplication::translate("MainWindow", " Warcraft", 0));
         pushButtonBU->setText(QApplication::translate("MainWindow", "Get Beta patch", 0));
         checkBox_updates->setText(QApplication::translate("MainWindow", "Enable automatic updates", 0));
-        tabWidget->setTabText(tabWidget->indexOf(tab2), QApplication::translate("MainWindow", " UPDATE ", 0));
+        tabWidget->setTabText(tabWidget->indexOf(tabUpdate), QApplication::translate("MainWindow", " UPDATE ", 0));
         labelAbout->setText(QApplication::translate("MainWindow", "<html><head/><body><p>Eurobattle.net Client version 0.9 (July 2017), developed by cen</p><p><br/>We are searching for Qt/ C++ developers to further expand this client.</p><p><br/></p><p>TODO:</p><p>-bnet Chat client</p><p>-TS integration</p><p>-Displaying player's profile and league stats in the client</p><p>-and more...</p><p><br/></p><p>Special thanks to:</p><p><span style=\" font-weight:600;\">IStealSkills</span> - help with desig</p><p><span style=\" font-weight:600;\">Stefos007</span> - original GProxy implementation</p><p>BNETtdocs, Stormlib, PvPGN and GHost projects</p></body></html>", 0));
         labelW3Path->setText(QString());
         labelW3Version->setText(QString());
-        tabWidget->setTabText(tabWidget->indexOf(tab3), QApplication::translate("MainWindow", " ABOUT ", 0));
+        tabWidget->setTabText(tabWidget->indexOf(tabAbout), QApplication::translate("MainWindow", " ABOUT ", 0));
     } // retranslateUi
 
 };

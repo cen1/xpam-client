@@ -63,7 +63,9 @@ private slots:
     void on_pushButtonGPNOTEPAD_clicked();
     void on_pushButtonClientLog_clicked();
     void on_pushButton_w3path_clicked();
-
+    
+    void on_horizontalSliderW3Version_sliderReleased();
+    
 public slots:
     void gproxyReady();
     void gproxyExiting();

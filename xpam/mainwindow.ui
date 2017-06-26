@@ -126,22 +126,27 @@ QTabBar::tab:selected{
   background-color: rgba(180, 180, 180);
 }
 
-#tab0 {
+#tabLauncher {
   border-image: url(&quot;:/back.png&quot;) 0 0 0 0 stretch stretch;
   border-width: 0px;
 }
-#tab1 {
+#tabGproxy {
   border-image: url(&quot;:/back.png&quot;) 0 0 0 0 stretch stretch;
   border-width: 0px;
 }
-#tab2 {
+#tabW3 {
   border-image: url(&quot;:/back.png&quot;) 0 0 0 0 stretch stretch;
   border-width: 0px;
 }
-#tab3 {
+#tabUpdate {
   border-image: url(&quot;:/back.png&quot;) 0 0 0 0 stretch stretch;
   border-width: 0px;
 }
+#tabAbout {
+  border-image: url(&quot;:/back.png&quot;) 0 0 0 0 stretch stretch;
+  border-width: 0px;
+}
+
 
 QLabel {
 	color: white;
@@ -228,15 +233,15 @@ QCheckBox::indicator:checked {
       <property name="spacing">
        <number>0</number>
       </property>
-      <item row="1" column="0" colspan="3">
+      <item row="0" column="0">
        <widget class="QTabWidget" name="tabWidget">
         <property name="layoutDirection">
          <enum>Qt::LeftToRight</enum>
         </property>
         <property name="currentIndex">
-         <number>0</number>
+         <number>2</number>
         </property>
-        <widget class="QWidget" name="tab0">
+        <widget class="QWidget" name="tabLauncher">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
            <horstretch>0</horstretch>
@@ -371,41 +376,6 @@ YOU CAN'T PLAY PG OR MANUALLY HOST GAMES IN THIS MODE!</string>
                </widget>
               </item>
               <item>
-               <widget class="QPushButton" name="pushButtonClientLog">
-                <property name="maximumSize">
-                 <size>
-                  <width>120</width>
-                  <height>16777215</height>
-                 </size>
-                </property>
-                <property name="text">
-                 <string>Open Client log file</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QSlider" name="horizontalSlider">
-                <property name="minimumSize">
-                 <size>
-                  <width>120</width>
-                  <height>0</height>
-                 </size>
-                </property>
-                <property name="maximumSize">
-                 <size>
-                  <width>120</width>
-                  <height>16777215</height>
-                 </size>
-                </property>
-                <property name="maximum">
-                 <number>1</number>
-                </property>
-                <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
-                </property>
-               </widget>
-              </item>
-              <item>
                <spacer name="verticalSpacer">
                 <property name="orientation">
                  <enum>Qt::Vertical</enum>
@@ -437,7 +407,7 @@ YOU CAN'T PLAY PG OR MANUALLY HOST GAMES IN THIS MODE!</string>
           </item>
          </layout>
         </widget>
-        <widget class="QWidget" name="tab1">
+        <widget class="QWidget" name="tabGproxy">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
            <horstretch>0</horstretch>
@@ -707,7 +677,82 @@ YOU CAN'T PLAY PG OR MANUALLY HOST GAMES IN THIS MODE!</string>
           </property>
          </widget>
         </widget>
-        <widget class="QWidget" name="tab2">
+        <widget class="QWidget" name="tabW3">
+         <attribute name="title">
+          <string> Warcraft</string>
+         </attribute>
+         <widget class="QPushButton" name="pushButtonClientLog">
+          <property name="geometry">
+           <rect>
+            <x>20</x>
+            <y>20</y>
+            <width>120</width>
+            <height>19</height>
+           </rect>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>120</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>Open Client log file</string>
+          </property>
+         </widget>
+         <widget class="QWidget" name="">
+          <property name="geometry">
+           <rect>
+            <x>20</x>
+            <y>50</y>
+            <width>188</width>
+            <height>24</height>
+           </rect>
+          </property>
+          <layout class="QHBoxLayout" name="horizontalLayout_2">
+           <item>
+            <widget class="QLabel" name="label126">
+             <property name="text">
+              <string>1.26</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QSlider" name="horizontalSliderW3Version">
+             <property name="minimumSize">
+              <size>
+               <width>120</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>120</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="maximum">
+              <number>1</number>
+             </property>
+             <property name="value">
+              <number>1</number>
+             </property>
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="labelLatest">
+             <property name="text">
+              <string>1.28.4</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </widget>
+        <widget class="QWidget" name="tabUpdate">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
            <horstretch>0</horstretch>
@@ -777,7 +822,7 @@ YOU CAN'T PLAY PG OR MANUALLY HOST GAMES IN THIS MODE!</string>
           </item>
          </layout>
         </widget>
-        <widget class="QWidget" name="tab3">
+        <widget class="QWidget" name="tabAbout">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
            <horstretch>0</horstretch>

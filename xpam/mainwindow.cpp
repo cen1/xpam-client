@@ -616,3 +616,23 @@ void MainWindow::on_pushButton_w3path_clicked()
         status("Failed to set W3 path");
     }
 }
+
+void MainWindow::on_horizontalSliderW3Version_sliderReleased()
+{
+    ui->horizontalSliderW3Version->setEnabled(false);
+
+    bool r = false;
+    if (ui->horizontalSliderW3Version->value()==0) {
+        //126
+        r = W3::setVersion(W3::W3_126, config);
+    }
+    else {
+        //LATEST
+        r = W3::setVersion(W3::W3_126, config);
+    }
+    if (r) {
+        status("W3 version was changed");
+    }
+
+    ui->horizontalSliderW3Version->setEnabled(true);
+}

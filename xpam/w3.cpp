@@ -62,14 +62,33 @@ void W3::startW3() {
     return;
 }
 
-bool W3::sanityCheck() {
+QString W3::getActiveVersion(Config * config) {
 
-    return true;
-}
+    bool is126 = true;
+    bool isLatest = true;
+    QString w3path = config->W3PATH;
 
-QString W3::getActiveVersion() {
+    for (int i = 0; i < config->W3_COMMON_FILES.size(); ++i) {
+        QFile f(w3path + "/" + config->W3_COMMON_FILES.at(i) + "." + W3::W3_126);
+        QFile f2(w3path + "/" + config->W3_COMMON_FILES.at(i) + "." + W3::W3_LATEST);
+        if (!f.exists()) {
+            is126=false;
+        }
+        if (!f2.exists()) {
+            isLatest=false;
+        }
+    }
 
-    return "true";
+    if (is126) {
+        return W3::W3_126;
+    }
+    else if (isLatest) {
+        return W3::W3_LATEST;
+    }
+    else {
+        Logger::log("Unable to determine current W3 version. Something got messed up...", config);
+        return "ERROR";
+    }
 }
 
 bool W3::setVersion(QString version, Config * config) {
