@@ -10,7 +10,21 @@ QString Registry :: getInstallPath() {
         reg.Close();
         return s;
     }
-    else return Util::getLastErrorMsg();
+    else {
+        return "ERROR";
+    }
+}
+
+QString Registry :: getInstallPathX() {
+    CRegKey reg;
+    if (reg.Open(HKEY_CURRENT_USER, _T("Software\\Blizzard Entertainment\\Warcraft III"), KEY_READ | KEY_WOW64_64KEY)==ERROR_SUCCESS) {
+        QString s=Registry::getRegString(&reg, "InstallPathX");
+        reg.Close();
+        return s;
+    }
+    else {
+        return "ERROR";
+    }
 }
 
 QString Registry :: getW3dir() {
@@ -20,7 +34,9 @@ QString Registry :: getW3dir() {
         reg.Close();
         return s;
     }
-    else return Util::getLastErrorMsg();
+    else {
+        return "ERROR";
+    }
 }
 
 QString Registry :: getEuroPath() {
@@ -248,6 +264,16 @@ bool Registry::setInstallPath(QString w3dir) {
     CRegKey reg;
     if (reg.Open(HKEY_CURRENT_USER, _T("Software\\Blizzard Entertainment\\Warcraft III"), KEY_WRITE | KEY_WOW64_64KEY)==ERROR_SUCCESS) {
         bool r = this->setRegString(reg, "InstallPath", w3dir);
+        reg.Close();
+        return r;
+    }
+    return false;
+}
+
+bool Registry::setInstallPathX(QString w3dir) {
+    CRegKey reg;
+    if (reg.Open(HKEY_CURRENT_USER, _T("Software\\Blizzard Entertainment\\Warcraft III"), KEY_WRITE | KEY_WOW64_64KEY)==ERROR_SUCCESS) {
+        bool r = this->setRegString(reg, "InstallPathX", w3dir);
         reg.Close();
         return r;
     }

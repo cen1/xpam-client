@@ -39,6 +39,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 class Registry {
 public:
     static QString getInstallPath();
+    static QString getInstallPathX();
     static QString getW3dir();
     static QString getEuroPath();
     static int getPatchVersion();
@@ -56,6 +57,7 @@ public:
 
     bool setW3dir(QString w3dir);
     bool setInstallPath(QString w3dir);
+    bool setInstallPathX(QString w3dir);
 
     static bool delGM();
 

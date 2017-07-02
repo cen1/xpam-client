@@ -28,6 +28,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <QThread>
 #include "winutils.h"
 #include "logger.h"
+#include "registry.h"
 
 const QString W3::W3_126="126";
 const QString W3::W3_LATEST="LATEST";
@@ -71,10 +72,10 @@ QString W3::getActiveVersion(Config * config) {
     for (int i = 0; i < config->W3_COMMON_FILES.size(); ++i) {
         QFile f(w3path + "/" + config->W3_COMMON_FILES.at(i) + "." + W3::W3_126);
         QFile f2(w3path + "/" + config->W3_COMMON_FILES.at(i) + "." + W3::W3_LATEST);
-        if (!f.exists()) {
+        if (f.exists()) {
             is126=false;
         }
-        if (!f2.exists()) {
+        if (f2.exists()) {
             isLatest=false;
         }
     }
@@ -92,6 +93,17 @@ QString W3::getActiveVersion(Config * config) {
 }
 
 bool W3::setVersion(QString version, Config * config) {
+
+    QString currentV = W3::getActiveVersion(config);
+    if (currentV==version) {
+        Logger::log("W3 is already at version "+version, config);
+        return true;
+    }
+    else if (currentV=="ERROR"){
+        Logger::log("W3 dual versioning is in unstable state, aborting ", config);
+        return false;
+    }
+
     QString newExt = "";
     QString currentExt = version;
     if (version==W3::W3_126) {
@@ -116,4 +128,18 @@ bool W3::setVersion(QString version, Config * config) {
     }
 
     return true;
+}
+
+void W3::sanityCheck(Config * config) {
+
+    //Add old registries back if they do not exist
+    Registry reg;
+    QString installPath = reg.getInstallPath();
+    if (installPath=="ERROR" || installPath=="") {
+        reg.setInstallPath(config->W3PATH);
+    }
+    QString installPathX = reg.getInstallPathX();
+    if (installPathX=="ERROR" || installPathX=="") {
+        reg.setInstallPathX(config->W3PATH);
+    }
 }

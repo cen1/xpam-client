@@ -102,33 +102,19 @@ MainWindow::MainWindow(QWidget *parent) :
     log.open(QFile::WriteOnly | QFile::Truncate);
     log.close();
 
-    //Check w3 version
-    QString w3version = Winutils::getFileVersion(config->W3PATH+"\\war3.exe");
+    //Check latest w3 version
+    QString exename = config->W3_EXENAME_LATEST+"."+W3::W3_LATEST;
+    QString fullPath = config->W3PATH+"\\"+exename;
+    QFile f(fullPath);
+    if (!f.exists()) {
+        fullPath = config->W3PATH+"\\"+config->W3_EXENAME_LATEST;
+    }
+    Logger::log(fullPath, config);
+    QString w3version = Winutils::getFileVersion(fullPath);
     if (w3version != config->W3_VERSION_LATEST) {
         QMessageBox msgBox;
         msgBox.setText("You need to manually update your Warcraft 3 version. See forum for instructions. Found version: "+w3version+" but needs version "+config->W3_VERSION_LATEST);
-
         msgBox.exec();
-    }
-    else if (w3version==config->W3_VERSION_LATEST) {
-        /* Manual folder moving not necessary, it is done by w3
-        QDir doc(config->DOCMAPPATH);
-        if (!doc.exists()) {
-            QMessageBox msgBox;
-            msgBox.setText("Version 1.28.1 moves writable folders such as Maps and ScreenShots to user Documents folder. Would you like the client to move them for you? (BACKUP YOUR GAME FIRST!)");
-            QPushButton *yes = msgBox.addButton(tr("Yes, move the folders"), QMessageBox::ActionRole);
-            QPushButton *no = msgBox.addButton(QMessageBox::Abort);
-
-            msgBox.exec();
-
-            if (msgBox.clickedButton() == yes) {
-                QString result = Updater::moveToDocuments(config);
-                logUpdate(result);
-                QMessageBox msgBoxR;
-                msgBoxR.setText(result);
-                msgBoxR.exec();
-            }
-        }*/
     }
 
     //Add CD keys if needed
@@ -137,10 +123,10 @@ MainWindow::MainWindow(QWidget *parent) :
     //Display w3 info
     ui->labelW3Path->setText("W3 path: "+config->W3PATH);
     if (w3version==config->W3_VERSION_LATEST) {
-        ui->labelW3Version->setText("Detected W3 version: "+w3version+" (OK)");
+        ui->labelW3Version->setText("Detected latest W3 version: "+w3version+" (OK)");
     }
     else {
-        ui->labelW3Version->setText("Detected W3 version: "+w3version+" (ERROR, needed: "+config->W3_VERSION_LATEST+")");
+        ui->labelW3Version->setText("Detected latest W3 version: "+w3version+" (ERROR, needed: "+config->W3_VERSION_LATEST+")");
     }
 
     //Rename war3Patch.mpq to war3Mod.mpw as of 1.28.2
@@ -153,6 +139,22 @@ MainWindow::MainWindow(QWidget *parent) :
     else {
         ui->pushButtonGWD->setEnabled(false);
     }
+
+    //Set current w3 version on slider
+    QString currentV = W3::getActiveVersion(config);
+    if (currentV==W3::W3_126) {
+        ui->horizontalSliderW3Version->setValue(0);
+    }
+    else if (currentV==W3::W3_LATEST) {
+        ui->horizontalSliderW3Version->setValue(1);
+    }
+    else {
+        status("ERROR: unable to determine current W3 version, corrupt state");
+        ui->horizontalSliderW3Version->setEnabled(false);
+    }
+
+    //Sanity checks
+    W3::sanityCheck(config);
 }
 
 MainWindow::~MainWindow()
@@ -163,8 +165,16 @@ MainWindow::~MainWindow()
 //GProxy gateway, Start w3 and gproxy
 void MainWindow::on_pushButtonGWG_clicked()
 {
-    //hard WINAPI checks for w3 and gproxy running, all kind of problems if they are...
-    if (Util::isRunning("war3.exe")) {
+    if (config->USE_DUAL_VERSION) {
+        W3::setVersion(W3::W3_LATEST, config);
+    }
+    startW3AndGproxy(config->W3_EXENAME_LATEST);
+}
+
+void MainWindow::startW3AndGproxy(QString w3Exename, QString restrictedVersion) {
+
+    //Hard WINAPI checks for w3 and gproxy running, all kind of problems if they are...
+    if (Util::isRunning(w3Exename)) {
         status("Warcraft III is already running");
         return;
     }
@@ -175,12 +185,12 @@ void MainWindow::on_pushButtonGWG_clicked()
 
     ui->tabWidget->setCurrentIndex(1);
 
-    //preloader
+    //Preloader
     QMovie *movie = new QMovie(":/preloader.gif");
     ui->preloaderLabel1->setMovie(movie);
     ui->preloaderLabel1->movie()->start();
 
-    //set gproxy gateway as default
+    //Set gproxy gateway as default
     Registry::setGproxyGateways();
 
     QString gpdir=config->EUROPATH;
@@ -189,12 +199,12 @@ void MainWindow::on_pushButtonGWG_clicked()
     status("Launching GProxy...");
     ui->labelGproxyout->setText("Working directory: "+gpdir);
 
-    gproxy=new GProxy(gpdir, gpexe);
+    gproxy=new GProxy(gpdir, gpexe, w3Exename, restrictedVersion, config->W3PATH);
     gpt=new QThread();
     gproxy->moveToThread(gpt);
 
     QObject::connect(gpt, SIGNAL(started()), gproxy, SLOT(readStdout()));
-    QObject::connect(gproxy, SIGNAL(gproxyReady()), this, SLOT(gproxyReady()));
+    QObject::connect(gproxy, SIGNAL(gproxyReady(QString)), this, SLOT(gproxyReady(QString)));
     QObject::connect(gproxy, SIGNAL(gproxyExiting()), this, SLOT(gproxyExiting()));
     QObject::connect(gproxy, SIGNAL(sendLine(QString)), this, SLOT(receiveLine(QString)), Qt::QueuedConnection);
 
@@ -208,13 +218,17 @@ void MainWindow::on_pushButtonGWG_clicked()
 //Start w3 only, NORMAL gateway
 void MainWindow::on_pushButtonGWN_clicked()
 {    
-    //again, hard WINAPI check
-    if (Util::isRunning("war3.exe")) {
+    if (config->USE_DUAL_VERSION) {
+        W3::setVersion(W3::W3_LATEST, config);
+    }
+
+    //Again, hard WINAPI check
+    if (Util::isRunning(config->W3_EXENAME_LATEST)) {
         status("Warcraft III is already running");
         return;
     }
 
-    //set normal gateway as default
+    //Set normal gateway as default
     Registry::setGateways();
 
     QString w3dir=config->W3PATH;
@@ -249,14 +263,14 @@ void MainWindow::on_pushButtonGWD_clicked()
         W3::setVersion(W3::W3_126, config);
 
         //Start gproxy gateway
-        on_pushButtonGWG_clicked();
+        startW3AndGproxy(config->W3_EXENAME_126, config->W3_VERSION_126);
     }
 }
 
 //Start w3 when gproxy emits READY state
-void MainWindow::gproxyReady() {
+void MainWindow::gproxyReady(QString w3Exename) {
     ui->labelGproxyout->setText("EMITTED");
-    if (Util::isRunning("war3.exe")) {
+    if (Util::isRunning(w3Exename)) {
         status("Warcraft III is already running");
         return;
     }
@@ -620,6 +634,7 @@ void MainWindow::on_pushButton_w3path_clicked()
 void MainWindow::on_horizontalSliderW3Version_sliderReleased()
 {
     ui->horizontalSliderW3Version->setEnabled(false);
+    QString newVersion = config->W3_VERSION_126;
 
     bool r = false;
     if (ui->horizontalSliderW3Version->value()==0) {
@@ -628,10 +643,11 @@ void MainWindow::on_horizontalSliderW3Version_sliderReleased()
     }
     else {
         //LATEST
-        r = W3::setVersion(W3::W3_126, config);
+        r = W3::setVersion(W3::W3_LATEST, config);
+        newVersion = config->W3_VERSION_LATEST;
     }
     if (r) {
-        status("W3 version was changed");
+        status("W3 version was changed to "+newVersion);
     }
 
     ui->horizontalSliderW3Version->setEnabled(true);

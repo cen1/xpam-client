@@ -32,7 +32,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Config::Config()
 {
     VERSION_CLIENT = "0.9.0.0";
-    W3_VERSION_LATEST = "1.28.2.7395";
+    W3_VERSION_LATEST = "1.28.4.7608";
+    W3_VERSION_126 = "1.26.0.6401";
+    W3_EXENAME_LATEST="Warcraft III.exe";
+    W3_EXENAME_126="war3.exe";
     BETAPIN = "1377";
 
     EUROPATH    = Registry::getEuroPath();
@@ -66,6 +69,7 @@ Config::Config()
     W3_COMMON_FILES.append("war3xlocal.mpq");
     W3_COMMON_FILES.append("world editor.exe");
     W3_COMMON_FILES.append("worldedit.exe");
+    W3_COMMON_FILES.append("Warcraft III.exe");
 }
 
 bool Config::SetOption(QString file, QString option, QString value) {

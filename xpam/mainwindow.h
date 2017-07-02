@@ -67,7 +67,7 @@ private slots:
     void on_horizontalSliderW3Version_sliderReleased();
     
 public slots:
-    void gproxyReady();
+    void gproxyReady(QString w3Exename);
     void gproxyExiting();
     void receiveLine(QString line);
     void w3Exited();
@@ -95,6 +95,8 @@ private:
     bool ismax;
     QPoint normalpos;
     QSize normalsize;
+
+    void startW3AndGproxy(QString w3Exename, QString restrictedVersion="");
 
 protected:
     //void mousePressEvent(QMouseEvent *event);

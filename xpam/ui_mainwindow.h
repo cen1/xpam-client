@@ -80,29 +80,32 @@ public:
     QCheckBox *checkBox_chatbuffer;
     QCheckBox *checkBox_debug;
     QCheckBox *checkBox_telemetry;
-    QPushButton *pushButton_w3path;
     QWidget *tabW3;
+    QWidget *layoutWidget1;
+    QVBoxLayout *verticalLayout_4;
     QPushButton *pushButtonClientLog;
-    QWidget *widget;
+    QPushButton *pushButton_w3path;
+    QLabel *labelW3Path;
+    QLabel *labelW3Version;
+    QLabel *labelChangeVersion;
     QHBoxLayout *horizontalLayout_2;
     QLabel *label126;
     QSlider *horizontalSliderW3Version;
     QLabel *labelLatest;
+    QSpacerItem *horizontalSpacer;
     QWidget *tabUpdate;
     QHBoxLayout *horizontalLayout_3;
     QSplitter *splitter;
     QTextBrowser *textBrowserUpdate;
-    QWidget *layoutWidget1;
+    QWidget *layoutWidget2;
     QFormLayout *formLayoutBU;
     QLineEdit *betapinbox;
     QPushButton *pushButtonBU;
     QCheckBox *checkBox_updates;
     QWidget *tabAbout;
-    QWidget *layoutWidget2;
+    QWidget *layoutWidget3;
     QVBoxLayout *verticalLayout_3;
     QLabel *labelAbout;
-    QLabel *labelW3Path;
-    QLabel *labelW3Version;
     QStatusBar *statusBar;
 
     void setupUi(QMainWindow *MainWindow)
@@ -506,30 +509,54 @@ public:
 
         verticalLayout_2->addWidget(checkBox_telemetry);
 
-        pushButton_w3path = new QPushButton(tabGproxy);
-        pushButton_w3path->setObjectName(QStringLiteral("pushButton_w3path"));
-        pushButton_w3path->setGeometry(QRect(340, 80, 111, 23));
         tabWidget->addTab(tabGproxy, QString());
         tabW3 = new QWidget();
         tabW3->setObjectName(QStringLiteral("tabW3"));
-        pushButtonClientLog = new QPushButton(tabW3);
+        layoutWidget1 = new QWidget(tabW3);
+        layoutWidget1->setObjectName(QStringLiteral("layoutWidget1"));
+        layoutWidget1->setGeometry(QRect(20, 20, 871, 133));
+        verticalLayout_4 = new QVBoxLayout(layoutWidget1);
+        verticalLayout_4->setSpacing(6);
+        verticalLayout_4->setContentsMargins(11, 11, 11, 11);
+        verticalLayout_4->setObjectName(QStringLiteral("verticalLayout_4"));
+        verticalLayout_4->setContentsMargins(0, 0, 0, 0);
+        pushButtonClientLog = new QPushButton(layoutWidget1);
         pushButtonClientLog->setObjectName(QStringLiteral("pushButtonClientLog"));
-        pushButtonClientLog->setGeometry(QRect(20, 20, 120, 19));
-        pushButtonClientLog->setMaximumSize(QSize(120, 16777215));
-        widget = new QWidget(tabW3);
-        widget->setObjectName(QStringLiteral("widget"));
-        widget->setGeometry(QRect(20, 50, 188, 24));
-        horizontalLayout_2 = new QHBoxLayout(widget);
+        pushButtonClientLog->setMaximumSize(QSize(150, 16777215));
+
+        verticalLayout_4->addWidget(pushButtonClientLog);
+
+        pushButton_w3path = new QPushButton(layoutWidget1);
+        pushButton_w3path->setObjectName(QStringLiteral("pushButton_w3path"));
+        pushButton_w3path->setMaximumSize(QSize(150, 16777215));
+
+        verticalLayout_4->addWidget(pushButton_w3path);
+
+        labelW3Path = new QLabel(layoutWidget1);
+        labelW3Path->setObjectName(QStringLiteral("labelW3Path"));
+
+        verticalLayout_4->addWidget(labelW3Path);
+
+        labelW3Version = new QLabel(layoutWidget1);
+        labelW3Version->setObjectName(QStringLiteral("labelW3Version"));
+
+        verticalLayout_4->addWidget(labelW3Version);
+
+        labelChangeVersion = new QLabel(layoutWidget1);
+        labelChangeVersion->setObjectName(QStringLiteral("labelChangeVersion"));
+
+        verticalLayout_4->addWidget(labelChangeVersion);
+
+        horizontalLayout_2 = new QHBoxLayout();
         horizontalLayout_2->setSpacing(6);
-        horizontalLayout_2->setContentsMargins(11, 11, 11, 11);
         horizontalLayout_2->setObjectName(QStringLiteral("horizontalLayout_2"));
-        horizontalLayout_2->setContentsMargins(0, 0, 0, 0);
-        label126 = new QLabel(widget);
+        label126 = new QLabel(layoutWidget1);
         label126->setObjectName(QStringLiteral("label126"));
+        label126->setMaximumSize(QSize(30, 16777215));
 
         horizontalLayout_2->addWidget(label126);
 
-        horizontalSliderW3Version = new QSlider(widget);
+        horizontalSliderW3Version = new QSlider(layoutWidget1);
         horizontalSliderW3Version->setObjectName(QStringLiteral("horizontalSliderW3Version"));
         horizontalSliderW3Version->setMinimumSize(QSize(120, 0));
         horizontalSliderW3Version->setMaximumSize(QSize(120, 16777215));
@@ -539,10 +566,18 @@ public:
 
         horizontalLayout_2->addWidget(horizontalSliderW3Version);
 
-        labelLatest = new QLabel(widget);
+        labelLatest = new QLabel(layoutWidget1);
         labelLatest->setObjectName(QStringLiteral("labelLatest"));
+        labelLatest->setMaximumSize(QSize(35, 16777215));
 
         horizontalLayout_2->addWidget(labelLatest);
+
+        horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        horizontalLayout_2->addItem(horizontalSpacer);
+
+
+        verticalLayout_4->addLayout(horizontalLayout_2);
 
         tabWidget->addTab(tabW3, QString());
         tabUpdate = new QWidget();
@@ -559,14 +594,14 @@ public:
         textBrowserUpdate = new QTextBrowser(splitter);
         textBrowserUpdate->setObjectName(QStringLiteral("textBrowserUpdate"));
         splitter->addWidget(textBrowserUpdate);
-        layoutWidget1 = new QWidget(splitter);
-        layoutWidget1->setObjectName(QStringLiteral("layoutWidget1"));
-        formLayoutBU = new QFormLayout(layoutWidget1);
+        layoutWidget2 = new QWidget(splitter);
+        layoutWidget2->setObjectName(QStringLiteral("layoutWidget2"));
+        formLayoutBU = new QFormLayout(layoutWidget2);
         formLayoutBU->setSpacing(6);
         formLayoutBU->setContentsMargins(11, 11, 11, 11);
         formLayoutBU->setObjectName(QStringLiteral("formLayoutBU"));
         formLayoutBU->setContentsMargins(0, 5, 0, 0);
-        betapinbox = new QLineEdit(layoutWidget1);
+        betapinbox = new QLineEdit(layoutWidget2);
         betapinbox->setObjectName(QStringLiteral("betapinbox"));
         QSizePolicy sizePolicy3(QSizePolicy::Fixed, QSizePolicy::Fixed);
         sizePolicy3.setHorizontalStretch(0);
@@ -576,7 +611,7 @@ public:
 
         formLayoutBU->setWidget(0, QFormLayout::LabelRole, betapinbox);
 
-        pushButtonBU = new QPushButton(layoutWidget1);
+        pushButtonBU = new QPushButton(layoutWidget2);
         pushButtonBU->setObjectName(QStringLiteral("pushButtonBU"));
         sizePolicy1.setHeightForWidth(pushButtonBU->sizePolicy().hasHeightForWidth());
         pushButtonBU->setSizePolicy(sizePolicy1);
@@ -585,12 +620,12 @@ public:
 
         formLayoutBU->setWidget(0, QFormLayout::FieldRole, pushButtonBU);
 
-        checkBox_updates = new QCheckBox(layoutWidget1);
+        checkBox_updates = new QCheckBox(layoutWidget2);
         checkBox_updates->setObjectName(QStringLiteral("checkBox_updates"));
 
         formLayoutBU->setWidget(1, QFormLayout::LabelRole, checkBox_updates);
 
-        splitter->addWidget(layoutWidget1);
+        splitter->addWidget(layoutWidget2);
 
         horizontalLayout_3->addWidget(splitter);
 
@@ -599,16 +634,16 @@ public:
         tabAbout->setObjectName(QStringLiteral("tabAbout"));
         sizePolicy.setHeightForWidth(tabAbout->sizePolicy().hasHeightForWidth());
         tabAbout->setSizePolicy(sizePolicy);
-        layoutWidget2 = new QWidget(tabAbout);
-        layoutWidget2->setObjectName(QStringLiteral("layoutWidget2"));
-        layoutWidget2->setGeometry(QRect(20, 20, 391, 501));
-        verticalLayout_3 = new QVBoxLayout(layoutWidget2);
+        layoutWidget3 = new QWidget(tabAbout);
+        layoutWidget3->setObjectName(QStringLiteral("layoutWidget3"));
+        layoutWidget3->setGeometry(QRect(20, 20, 391, 501));
+        verticalLayout_3 = new QVBoxLayout(layoutWidget3);
         verticalLayout_3->setSpacing(10);
         verticalLayout_3->setContentsMargins(11, 11, 11, 11);
         verticalLayout_3->setObjectName(QStringLiteral("verticalLayout_3"));
         verticalLayout_3->setSizeConstraint(QLayout::SetDefaultConstraint);
         verticalLayout_3->setContentsMargins(0, 0, 0, 0);
-        labelAbout = new QLabel(layoutWidget2);
+        labelAbout = new QLabel(layoutWidget3);
         labelAbout->setObjectName(QStringLiteral("labelAbout"));
         sizePolicy.setHeightForWidth(labelAbout->sizePolicy().hasHeightForWidth());
         labelAbout->setSizePolicy(sizePolicy);
@@ -616,16 +651,6 @@ public:
         labelAbout->setOpenExternalLinks(true);
 
         verticalLayout_3->addWidget(labelAbout);
-
-        labelW3Path = new QLabel(layoutWidget2);
-        labelW3Path->setObjectName(QStringLiteral("labelW3Path"));
-
-        verticalLayout_3->addWidget(labelW3Path);
-
-        labelW3Version = new QLabel(layoutWidget2);
-        labelW3Version->setObjectName(QStringLiteral("labelW3Version"));
-
-        verticalLayout_3->addWidget(labelW3Version);
 
         tabWidget->addTab(tabAbout, QString());
 
@@ -641,7 +666,7 @@ public:
 
         retranslateUi(MainWindow);
 
-        tabWidget->setCurrentIndex(2);
+        tabWidget->setCurrentIndex(0);
 
 
         QMetaObject::connectSlotsByName(MainWindow);
@@ -691,9 +716,12 @@ public:
         checkBox_chatbuffer->setText(QApplication::translate("MainWindow", "Chat buffer (experimental)", 0));
         checkBox_debug->setText(QApplication::translate("MainWindow", "Debugging", 0));
         checkBox_telemetry->setText(QApplication::translate("MainWindow", "Telemetry", 0));
-        pushButton_w3path->setText(QApplication::translate("MainWindow", "Change W3 path", 0));
         tabWidget->setTabText(tabWidget->indexOf(tabGproxy), QApplication::translate("MainWindow", "  GPROXY  ", 0));
         pushButtonClientLog->setText(QApplication::translate("MainWindow", "Open Client log file", 0));
+        pushButton_w3path->setText(QApplication::translate("MainWindow", "Change W3 path", 0));
+        labelW3Path->setText(QString());
+        labelW3Version->setText(QString());
+        labelChangeVersion->setText(QApplication::translate("MainWindow", "Change W3 version:", 0));
         label126->setText(QApplication::translate("MainWindow", "1.26", 0));
         labelLatest->setText(QApplication::translate("MainWindow", "1.28.4", 0));
         tabWidget->setTabText(tabWidget->indexOf(tabW3), QApplication::translate("MainWindow", " Warcraft", 0));
@@ -701,8 +729,6 @@ public:
         checkBox_updates->setText(QApplication::translate("MainWindow", "Enable automatic updates", 0));
         tabWidget->setTabText(tabWidget->indexOf(tabUpdate), QApplication::translate("MainWindow", " UPDATE ", 0));
         labelAbout->setText(QApplication::translate("MainWindow", "<html><head/><body><p>Eurobattle.net Client version 0.9 (July 2017), developed by cen</p><p><br/>We are searching for Qt/ C++ developers to further expand this client.</p><p><br/></p><p>TODO:</p><p>-bnet Chat client</p><p>-TS integration</p><p>-Displaying player's profile and league stats in the client</p><p>-and more...</p><p><br/></p><p>Special thanks to:</p><p><span style=\" font-weight:600;\">IStealSkills</span> - help with desig</p><p><span style=\" font-weight:600;\">Stefos007</span> - original GProxy implementation</p><p>BNETtdocs, Stormlib, PvPGN and GHost projects</p></body></html>", 0));
-        labelW3Path->setText(QString());
-        labelW3Version->setText(QString());
         tabWidget->setTabText(tabWidget->indexOf(tabAbout), QApplication::translate("MainWindow", " ABOUT ", 0));
     } // retranslateUi
 

@@ -15,6 +15,8 @@ public:
     QString VERSION_CLIENT;
     QString W3_VERSION_LATEST;
     QString W3_VERSION_126;
+    QString W3_EXENAME_LATEST;
+    QString W3_EXENAME_126;
     int PATCH;
     QString W3PATH;
     QString DOCPATH;

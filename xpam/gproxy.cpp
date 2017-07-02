@@ -32,11 +32,14 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #endif
 #include "winutils.h"
 
-GProxy::GProxy(QString w, QString e)
+GProxy::GProxy(QString w, QString e, QString w3e, QString restrictedV, QString w3p)
 {
     abort=false;
     workdir=w;
     exedir=e;
+    w3Exename=w3e;
+    restrictedVersion=restrictedV;
+    w3Path = w3p;
 }
 
 GProxy::~GProxy() {
@@ -44,9 +47,15 @@ GProxy::~GProxy() {
 }
 
 void GProxy::readStdout() {
+
+    QStringList args;
+    if (restrictedVersion!="") {
+        args << restrictedVersion;
+        args << w3Path;
+    }
     QProcess p;
     p.setWorkingDirectory(workdir);
-    p.start(exedir);
+    p.start(exedir, args);
     if (!p.waitForStarted()) {
         emit sendLine("Could not start GProxy: "+p.errorString());
         emit gproxyExiting();
@@ -67,7 +76,7 @@ void GProxy::readStdout() {
             //if (tokens.count() >= 4) emit sendLine(tokens[1]+"---"+tokens[2]+"---"+tokens[3]);
             //general
             if (tokens.size() >= 4 && tokens[1] == "SYSTEM" && tokens[2] == "LOG_INFO" && tokens[3] == "GPROXY READY") {
-                emit gproxyReady();
+                emit gproxyReady(w3Exename);
             }
             else if (tokens.size() >= 4 && tokens[1] == "SYSTEM" && tokens[2] == "LOG_INFO" && tokens[3] == "GPROXY EXITING") {
                 emit sendLine("Received the EXIT signal");
