@@ -113,16 +113,6 @@ MainWindow::MainWindow(QWidget *parent) :
     //Add CD keys if needed
     Updater::replaceCDKeys(config);
 
-    //Display w3 info
-    QString w3version = Patcher::getCurrentW3Version(config);
-    ui->labelW3Path->setText("W3 path: "+config->W3PATH);
-    if (w3version==config->W3_VERSION_LATEST) {
-        ui->labelW3Version->setText("Detected latest W3 version: "+w3version+" (OK)");
-    }
-    else {
-        ui->labelW3Version->setText("Detected latest W3 version: "+w3version+" (ERROR, needed: "+config->W3_VERSION_LATEST+")");
-    }
-
     //Rename war3Patch.mpq to war3Mod.mpw as of 1.28.2
     Updater::renamePatchMpq(config);
 
@@ -367,6 +357,7 @@ void MainWindow::checkUpdates(){
 
     //disable beta button or all kind of hell will ensue
     ui->pushButtonBU->setDisabled(true);
+    ui->pushButton_updateW3->setDisabled(true);
 
     ui->tabWidget->setCurrentIndex(2);
     lockTabs(ui->tabWidget->currentIndex());
@@ -394,6 +385,8 @@ void MainWindow::on_pushButtonBU_clicked()
 {
     isStartupUpdate=false;
     ui->textBrowserUpdate->clear();
+
+    ui->pushButton_updateW3->setEnabled(false);
 
     if (config->BETAPIN!=ui->betapinbox->text()) return;
     lockTabs(ui->tabWidget->currentIndex());
@@ -427,6 +420,7 @@ void MainWindow::updateFinished(bool restartNeeded, bool ok, bool utd) {
         //if (isStartupUpdate) emit updateCheckFinished();
         unlockTabs();
         ui->pushButtonBU->setEnabled(true);
+        ui->pushButton_updateW3->setEnabled(true);
     }
     else {
         if (ok) {
@@ -619,12 +613,20 @@ void MainWindow::on_pushButton_w3path_clicked()
     p=p.replace(QChar('/'), QChar('\\'));
 
     if (p!="") { //On Cancel it returns empty
-        Registry reg;
-        if (reg.setInstallPath(p) && reg.setW3dir(p)) {
-            status("W3 path set to "+p);
+        QFile f(p+"\\"+config->W3_EXENAME_LATEST);
+        if (!f.exists()) {
+            status("Failed to set W3 path, "+config->W3_EXENAME_LATEST+" not present in that directory.");
         }
         else {
-            status("Failed to set W3 path");
+            Registry reg;
+            if (reg.setInstallPath(p) && reg.setW3dir(p)) {
+                status("W3 path set to "+p);
+                config->W3PATH=p;
+                displayW3Version();
+            }
+            else {
+                status("Failed to set W3 path");
+            }
         }
     }
 }
@@ -651,6 +653,7 @@ void MainWindow::on_horizontalSliderW3Version_sliderReleased()
     ui->horizontalSliderW3Version->setEnabled(true);
 }
 
+//Full W3 update
 void MainWindow::on_pushButton_updateW3_clicked()
 {
     QMessageBox patchW3;
@@ -663,6 +666,8 @@ void MainWindow::on_pushButton_updateW3_clicked()
 
         isStartupUpdate=false;
         ui->textBrowserUpdate->clear();
+
+        ui->pushButtonBU->setEnabled(false);
 
         lockTabs(ui->tabWidget->currentIndex());
 
@@ -681,5 +686,24 @@ void MainWindow::on_pushButton_updateW3_clicked()
         QObject::connect(upt, SIGNAL(finished()), upt, SLOT(deleteLater()));
 
         upt->start();
+    }
+}
+
+void MainWindow::displayW3Version() {
+    QString w3version = Patcher::getCurrentW3Version(config);
+    ui->labelW3Path->setText("W3 path: "+config->W3PATH);
+    if (w3version==config->W3_VERSION_LATEST) {
+        ui->labelW3Version->setText("Detected latest W3 version: "+w3version+" (OK)");
+    }
+    else {
+        ui->labelW3Version->setText("Detected latest W3 version: "+w3version+" (ERROR, needed: "+config->W3_VERSION_LATEST+")");
+    }
+}
+
+void MainWindow::on_tabWidget_currentChanged(int index)
+{
+    if (index==2) {
+        //Refresh detected w3 version
+        displayW3Version();
     }
 }

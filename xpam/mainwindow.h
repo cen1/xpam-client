@@ -68,6 +68,8 @@ private slots:
     
     void on_pushButton_updateW3_clicked();
 
+    void on_tabWidget_currentChanged(int index);
+
 public slots:
     void gproxyReady(QString w3Exename);
     void gproxyExiting();
@@ -99,6 +101,8 @@ private:
     QSize normalsize;
 
     void startW3AndGproxy(QString w3Exename, QString restrictedVersion="");
+
+    void displayW3Version();
 
 protected:
     //void mousePressEvent(QMouseEvent *event);

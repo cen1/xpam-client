@@ -15,7 +15,6 @@
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QCheckBox>
-#include <QtWidgets/QFormLayout>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QGroupBox>
 #include <QtWidgets/QHBoxLayout>
@@ -26,7 +25,6 @@
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QSlider>
 #include <QtWidgets/QSpacerItem>
-#include <QtWidgets/QSplitter>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QTabWidget>
 #include <QtWidgets/QTextBrowser>
@@ -94,17 +92,19 @@ public:
     QLabel *labelLatest;
     QSpacerItem *horizontalSpacer;
     QWidget *tabUpdate;
-    QHBoxLayout *horizontalLayout_3;
-    QSplitter *splitter;
+    QWidget *widget;
+    QVBoxLayout *verticalLayout_6;
     QTextBrowser *textBrowserUpdate;
-    QWidget *layoutWidget2;
-    QFormLayout *formLayoutBU;
+    QHBoxLayout *horizontalLayout_4;
+    QVBoxLayout *verticalLayout_5;
+    QHBoxLayout *horizontalLayout_3;
     QLineEdit *betapinbox;
+    QPushButton *pushButtonBU;
     QPushButton *pushButton_updateW3;
     QCheckBox *checkBox_updates;
-    QPushButton *pushButtonBU;
+    QSpacerItem *horizontalSpacer_2;
     QWidget *tabAbout;
-    QWidget *layoutWidget3;
+    QWidget *layoutWidget2;
     QVBoxLayout *verticalLayout_3;
     QLabel *labelAbout;
     QStatusBar *statusBar;
@@ -591,25 +591,29 @@ public:
         tabUpdate->setObjectName(QStringLiteral("tabUpdate"));
         sizePolicy.setHeightForWidth(tabUpdate->sizePolicy().hasHeightForWidth());
         tabUpdate->setSizePolicy(sizePolicy);
-        horizontalLayout_3 = new QHBoxLayout(tabUpdate);
-        horizontalLayout_3->setSpacing(6);
-        horizontalLayout_3->setContentsMargins(11, 11, 11, 11);
-        horizontalLayout_3->setObjectName(QStringLiteral("horizontalLayout_3"));
-        splitter = new QSplitter(tabUpdate);
-        splitter->setObjectName(QStringLiteral("splitter"));
-        splitter->setOrientation(Qt::Vertical);
-        textBrowserUpdate = new QTextBrowser(splitter);
+        widget = new QWidget(tabUpdate);
+        widget->setObjectName(QStringLiteral("widget"));
+        widget->setGeometry(QRect(8, 8, 881, 531));
+        verticalLayout_6 = new QVBoxLayout(widget);
+        verticalLayout_6->setSpacing(6);
+        verticalLayout_6->setContentsMargins(11, 11, 11, 11);
+        verticalLayout_6->setObjectName(QStringLiteral("verticalLayout_6"));
+        verticalLayout_6->setContentsMargins(0, 0, 0, 0);
+        textBrowserUpdate = new QTextBrowser(widget);
         textBrowserUpdate->setObjectName(QStringLiteral("textBrowserUpdate"));
-        splitter->addWidget(textBrowserUpdate);
-        layoutWidget2 = new QWidget(splitter);
-        layoutWidget2->setObjectName(QStringLiteral("layoutWidget2"));
-        formLayoutBU = new QFormLayout(layoutWidget2);
-        formLayoutBU->setSpacing(6);
-        formLayoutBU->setContentsMargins(11, 11, 11, 11);
-        formLayoutBU->setObjectName(QStringLiteral("formLayoutBU"));
-        formLayoutBU->setHorizontalSpacing(0);
-        formLayoutBU->setContentsMargins(0, 5, 0, 0);
-        betapinbox = new QLineEdit(layoutWidget2);
+
+        verticalLayout_6->addWidget(textBrowserUpdate);
+
+        horizontalLayout_4 = new QHBoxLayout();
+        horizontalLayout_4->setSpacing(6);
+        horizontalLayout_4->setObjectName(QStringLiteral("horizontalLayout_4"));
+        verticalLayout_5 = new QVBoxLayout();
+        verticalLayout_5->setSpacing(6);
+        verticalLayout_5->setObjectName(QStringLiteral("verticalLayout_5"));
+        horizontalLayout_3 = new QHBoxLayout();
+        horizontalLayout_3->setSpacing(6);
+        horizontalLayout_3->setObjectName(QStringLiteral("horizontalLayout_3"));
+        betapinbox = new QLineEdit(widget);
         betapinbox->setObjectName(QStringLiteral("betapinbox"));
         QSizePolicy sizePolicy4(QSizePolicy::Fixed, QSizePolicy::Fixed);
         sizePolicy4.setHorizontalStretch(0);
@@ -617,47 +621,61 @@ public:
         sizePolicy4.setHeightForWidth(betapinbox->sizePolicy().hasHeightForWidth());
         betapinbox->setSizePolicy(sizePolicy4);
 
-        formLayoutBU->setWidget(0, QFormLayout::LabelRole, betapinbox);
+        horizontalLayout_3->addWidget(betapinbox);
 
-        pushButton_updateW3 = new QPushButton(layoutWidget2);
-        pushButton_updateW3->setObjectName(QStringLiteral("pushButton_updateW3"));
-        pushButton_updateW3->setMaximumSize(QSize(200, 16777215));
-
-        formLayoutBU->setWidget(2, QFormLayout::SpanningRole, pushButton_updateW3);
-
-        checkBox_updates = new QCheckBox(layoutWidget2);
-        checkBox_updates->setObjectName(QStringLiteral("checkBox_updates"));
-
-        formLayoutBU->setWidget(3, QFormLayout::LabelRole, checkBox_updates);
-
-        pushButtonBU = new QPushButton(layoutWidget2);
+        pushButtonBU = new QPushButton(widget);
         pushButtonBU->setObjectName(QStringLiteral("pushButtonBU"));
         sizePolicy1.setHeightForWidth(pushButtonBU->sizePolicy().hasHeightForWidth());
         pushButtonBU->setSizePolicy(sizePolicy1);
         pushButtonBU->setMinimumSize(QSize(150, 20));
         pushButtonBU->setMaximumSize(QSize(150, 20));
 
-        formLayoutBU->setWidget(0, QFormLayout::FieldRole, pushButtonBU);
+        horizontalLayout_3->addWidget(pushButtonBU);
 
-        splitter->addWidget(layoutWidget2);
 
-        horizontalLayout_3->addWidget(splitter);
+        verticalLayout_5->addLayout(horizontalLayout_3);
+
+        pushButton_updateW3 = new QPushButton(widget);
+        pushButton_updateW3->setObjectName(QStringLiteral("pushButton_updateW3"));
+        QSizePolicy sizePolicy5(QSizePolicy::Preferred, QSizePolicy::Fixed);
+        sizePolicy5.setHorizontalStretch(0);
+        sizePolicy5.setVerticalStretch(0);
+        sizePolicy5.setHeightForWidth(pushButton_updateW3->sizePolicy().hasHeightForWidth());
+        pushButton_updateW3->setSizePolicy(sizePolicy5);
+        pushButton_updateW3->setMaximumSize(QSize(16777215, 16777215));
+
+        verticalLayout_5->addWidget(pushButton_updateW3);
+
+        checkBox_updates = new QCheckBox(widget);
+        checkBox_updates->setObjectName(QStringLiteral("checkBox_updates"));
+
+        verticalLayout_5->addWidget(checkBox_updates);
+
+
+        horizontalLayout_4->addLayout(verticalLayout_5);
+
+        horizontalSpacer_2 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        horizontalLayout_4->addItem(horizontalSpacer_2);
+
+
+        verticalLayout_6->addLayout(horizontalLayout_4);
 
         tabWidget->addTab(tabUpdate, QString());
         tabAbout = new QWidget();
         tabAbout->setObjectName(QStringLiteral("tabAbout"));
         sizePolicy.setHeightForWidth(tabAbout->sizePolicy().hasHeightForWidth());
         tabAbout->setSizePolicy(sizePolicy);
-        layoutWidget3 = new QWidget(tabAbout);
-        layoutWidget3->setObjectName(QStringLiteral("layoutWidget3"));
-        layoutWidget3->setGeometry(QRect(20, 20, 391, 501));
-        verticalLayout_3 = new QVBoxLayout(layoutWidget3);
+        layoutWidget2 = new QWidget(tabAbout);
+        layoutWidget2->setObjectName(QStringLiteral("layoutWidget2"));
+        layoutWidget2->setGeometry(QRect(20, 20, 391, 501));
+        verticalLayout_3 = new QVBoxLayout(layoutWidget2);
         verticalLayout_3->setSpacing(10);
         verticalLayout_3->setContentsMargins(11, 11, 11, 11);
         verticalLayout_3->setObjectName(QStringLiteral("verticalLayout_3"));
         verticalLayout_3->setSizeConstraint(QLayout::SetDefaultConstraint);
         verticalLayout_3->setContentsMargins(0, 0, 0, 0);
-        labelAbout = new QLabel(layoutWidget3);
+        labelAbout = new QLabel(layoutWidget2);
         labelAbout->setObjectName(QStringLiteral("labelAbout"));
         sizePolicy.setHeightForWidth(labelAbout->sizePolicy().hasHeightForWidth());
         labelAbout->setSizePolicy(sizePolicy);
@@ -739,9 +757,9 @@ public:
         label126->setText(QApplication::translate("MainWindow", "1.26", 0));
         labelLatest->setText(QApplication::translate("MainWindow", "1.28.5", 0));
         tabWidget->setTabText(tabWidget->indexOf(tabW3), QApplication::translate("MainWindow", " WARCRAFT", 0));
+        pushButtonBU->setText(QApplication::translate("MainWindow", "Get Beta patch", 0));
         pushButton_updateW3->setText(QApplication::translate("MainWindow", "Patch W3 to current supported version", 0));
         checkBox_updates->setText(QApplication::translate("MainWindow", "Enable automatic updates", 0));
-        pushButtonBU->setText(QApplication::translate("MainWindow", "Get Beta patch", 0));
         tabWidget->setTabText(tabWidget->indexOf(tabUpdate), QApplication::translate("MainWindow", " UPDATE ", 0));
         labelAbout->setText(QApplication::translate("MainWindow", "<html><head/><body><p>Eurobattle.net Client version 0.9 (July 2017), developed by cen</p><p><br/>We are searching for Qt/ C++ developers to further expand this client.</p><p><br/></p><p>TODO:</p><p>-bnet Chat client</p><p>-TS integration</p><p>-Displaying player's profile and league stats in the client</p><p>-and more...</p><p><br/></p><p>Special thanks to:</p><p><span style=\" font-weight:600;\">IStealSkills</span> - help with desig</p><p><span style=\" font-weight:600;\">Stefos007</span> - original GProxy implementation</p><p>BNETtdocs, Stormlib, PvPGN and GHost projects</p></body></html>", 0));
         tabWidget->setTabText(tabWidget->indexOf(tabAbout), QApplication::translate("MainWindow", " ABOUT ", 0));
