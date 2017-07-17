@@ -41,7 +41,7 @@ class Updater : public QObject
 {
     Q_OBJECT
 public:
-    Updater(Config * c, bool b);
+    Updater(Config * c, bool b, QString w="");
     ~Updater();
 
     static QString Updater::moveToDocuments(Config *config);
@@ -51,11 +51,12 @@ public:
 private:
     Config *        config;
     bool            beta;
+    QString            w3;
     QByteArray      archive;
     QThread *       dlthread;
     Downloader *    downloader;
-    int             mirrorno;
     QString         zippath;
+    int             mirrorno;
     QByteArray      jsonba;
     QJsonObject     real;
     QStringList     mirrors;
@@ -80,7 +81,7 @@ signals:
 public slots:
     void startUpdate();
     void receiveProgress(qint64 bytesReceived, qint64 bytesTotal);
-    void receiveFinishdl(QByteArray data);
+    void receiveFinishdl();
 };
 
 #endif // UPDATER_H

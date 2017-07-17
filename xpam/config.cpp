@@ -32,7 +32,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Config::Config()
 {
     VERSION_CLIENT = "0.9.0.0";
-    W3_VERSION_LATEST = "1.28.4.7608";
+    W3_VERSION_LATEST = "1.28.5.7680";
     W3_VERSION_126 = "1.26.0.6401";
     W3_EXENAME_LATEST="Warcraft III.exe";
     W3_EXENAME_126="war3.exe";
@@ -50,11 +50,17 @@ Config::Config()
     APPDATA     = Winutils::getAppData()+"\\Eurobattle.net";
     SYSTEM      = Winutils::getSystem32();
 
-    USE_DUAL_VERSION = true;
+    USE_DUAL_VERSION = false;
 
+#ifdef _DEVELOPMENT
+    json1 = "http://localhost:8080/update.json";
+    json2 = "http://localhost:8080/update.json";
+    json3 = "http://localhost:8080/update.json";
+#else
     json1 = "http://xpam.pl/update/update.json";
     json2 = "http://tools.eurobattle.net/update/update.json";
     json3 = "http://leaguebots.com/cen/update/update.json";
+#endif
 
     //Common files between 1.26 and LATEST which need to be renamed
     //Unique files ot each version ar eleft untouched

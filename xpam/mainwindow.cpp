@@ -36,6 +36,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "QDesktopServices"
 #include "gproxy.h"
 #include "w3.h"
+#include "patcher.h"
 #include "updater.h"
 #include "config.h"
 #include "QMovie"
@@ -102,18 +103,10 @@ MainWindow::MainWindow(QWidget *parent) :
     log.open(QFile::WriteOnly | QFile::Truncate);
     log.close();
 
-    //Check latest w3 version
-    QString exename = config->W3_EXENAME_LATEST+"."+W3::W3_LATEST;
-    QString fullPath = config->W3PATH+"\\"+exename;
-    QFile f(fullPath);
-    if (!f.exists()) {
-        fullPath = config->W3PATH+"\\"+config->W3_EXENAME_LATEST;
-    }
-    Logger::log(fullPath, config);
-    QString w3version = Winutils::getFileVersion(fullPath);
-    if (w3version != config->W3_VERSION_LATEST) {
+    bool patchResult = Patcher::patch(config);
+    if (!patchResult) {
         QMessageBox msgBox;
-        msgBox.setText("You need to manually update your Warcraft 3 version. See forum for instructions. Found version: "+w3version+" but needs version "+config->W3_VERSION_LATEST);
+        msgBox.setText("FAILURE: You need to manually update your Warcraft 3 version. See forum for instructions. Needs version "+config->W3_VERSION_LATEST);
         msgBox.exec();
     }
 
@@ -121,6 +114,7 @@ MainWindow::MainWindow(QWidget *parent) :
     Updater::replaceCDKeys(config);
 
     //Display w3 info
+    QString w3version = Patcher::getCurrentW3Version(config);
     ui->labelW3Path->setText("W3 path: "+config->W3PATH);
     if (w3version==config->W3_VERSION_LATEST) {
         ui->labelW3Version->setText("Detected latest W3 version: "+w3version+" (OK)");
@@ -618,16 +612,20 @@ void MainWindow::on_pushButtonClientLog_clicked()
 //Set new w3 path
 void MainWindow::on_pushButton_w3path_clicked()
 {
-    const QString path = QFileDialog::getExistingDirectory(this);
+    QFileDialog qfd;
+    qfd.setDirectory(config->W3PATH);
+    const QString path = qfd.getExistingDirectory(this);
     QString p = path;
     p=p.replace(QChar('/'), QChar('\\'));
 
-    Registry reg;
-    if (reg.setInstallPath(p) && reg.setW3dir(p)) {
-        status("W3 path set to "+p);
-    }
-    else {
-        status("Failed to set W3 path");
+    if (p!="") { //On Cancel it returns empty
+        Registry reg;
+        if (reg.setInstallPath(p) && reg.setW3dir(p)) {
+            status("W3 path set to "+p);
+        }
+        else {
+            status("Failed to set W3 path");
+        }
     }
 }
 
@@ -651,4 +649,37 @@ void MainWindow::on_horizontalSliderW3Version_sliderReleased()
     }
 
     ui->horizontalSliderW3Version->setEnabled(true);
+}
+
+void MainWindow::on_pushButton_updateW3_clicked()
+{
+    QMessageBox patchW3;
+    patchW3.setWindowTitle("Patch W3 to "+config->W3_VERSION_LATEST);
+    patchW3.setText("This will potentialy download big files and might take some time. Are you sure?");
+    patchW3.setStandardButtons(QMessageBox::Yes);
+    patchW3.addButton(QMessageBox::No);
+    patchW3.setDefaultButton(QMessageBox::No);
+    if(patchW3.exec() == QMessageBox::Yes){
+
+        isStartupUpdate=false;
+        ui->textBrowserUpdate->clear();
+
+        lockTabs(ui->tabWidget->currentIndex());
+
+        updater=new Updater(config, false, config->W3_VERSION_LATEST);
+        upt=new QThread();
+        updater->moveToThread(upt);
+
+        QObject::connect(upt, SIGNAL(started()), updater, SLOT(startUpdate()));
+        QObject::connect(updater, SIGNAL(updateFinished(bool, bool, bool)), this, SLOT(updateFinished(bool, bool, bool)));
+        QObject::connect(updater, SIGNAL(sendLine(QString)), this, SLOT(logUpdate(QString)));
+        QObject::connect(updater, SIGNAL(sendLine(QString)), ui->textBrowserUpdate, SLOT(append(QString)), Qt::QueuedConnection);
+        QObject::connect(updater, SIGNAL(modifyLastLine(QString)), this, SLOT(modifyLastLineSlot(QString)));
+
+        QObject::connect(updater, SIGNAL(updateFinished(bool,bool,bool)), upt, SLOT(quit()));
+        QObject::connect(updater, SIGNAL(updateFinished(bool,bool,bool)), updater, SLOT(deleteLater()));
+        QObject::connect(upt, SIGNAL(finished()), upt, SLOT(deleteLater()));
+
+        upt->start();
+    }
 }

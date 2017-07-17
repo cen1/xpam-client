@@ -31,12 +31,14 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "QByteArray"
 #include "QNetworkAccessManager"
 #include "QNetworkReply"
+#include "QFile"
+#include "config.h"
 
 class Downloader : public QObject
 {
     Q_OBJECT
 public:
-    Downloader(QUrl u);
+    Downloader(QUrl u, Config* c);
     ~Downloader();
 
 private:
@@ -44,14 +46,17 @@ private:
     QNetworkAccessManager nam;
     QNetworkReply * reply;
     bool erroremitted;              //if error() and finished() are both emitted with errors, we only emit one signal to updater thread
-
+    QByteArray tmpBuffer;
+    QFile* file;
+    Config* config;
 signals:
     void progress(qint64 bytesReceived, qint64 bytesTotal);
-    void finisheddl(QByteArray data);
+    void finisheddl();
     void sendInfo(QString info);
 
 public slots:
     void progressSlot(qint64 bytesReceived, qint64 bytesTotal);
+    void writeToFileSlot();
     void finishedSlot();
     void errorSlot(QNetworkReply::NetworkError code);
     void startDl();

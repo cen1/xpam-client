@@ -43,14 +43,16 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "updater.h"
 #include "registry.h"
 #include "mpq.h"
+#include "logger.h"
 
-Updater::Updater(Config * c, bool b) {
+Updater::Updater(Config * c, bool b, QString w) {
     config=c;
     beta=b;
+    w3=w;
     mirrorno=0;
-    zippath=config->APPDATA+"\\patch.zip";
     restartNeeded=false;
     downloader=nullptr;
+    zippath = config->APPDATA+"\\patch.zip";
 }
 
 Updater::~Updater() {
@@ -121,7 +123,9 @@ void Updater::startUpdate() {
         return;
     }
     latestVersion = qRound(real.value("version").toDouble());
-    emit sendLine("Local version: "+QString::number(config->PATCH)+" Incremental version: "+QString::number(latestVersion));
+    if (w3=="") {
+        emit sendLine("Local version: "+QString::number(config->PATCH)+" Incremental version: "+QString::number(latestVersion));
+    }
 
     //tell splash screen to hide, only taken into account if it is a startup update
     //this means that we have an update so it'd be nice to see the progress
@@ -135,17 +139,17 @@ void Updater::startUpdate() {
     emit sendLine("Downloading from: mirror "+(QString::number(mirrorno))+" ("+mirrors[mirrorno]+")");
     QUrl url(mirrors[mirrorno]);
 
-    downloader=new Downloader(url);
+    downloader=new Downloader(url, config);
     dlthread = new QThread();
     downloader->moveToThread(dlthread);
 
     QObject::connect(dlthread, SIGNAL(started()), downloader, SLOT(startDl()));
     QObject::connect(downloader, SIGNAL(progress(qint64,qint64)), this, SLOT(receiveProgress(qint64,qint64)));
     QObject::connect(downloader, SIGNAL(sendInfo(QString)), this, SIGNAL(sendLine(QString)));
-    QObject::connect(downloader, SIGNAL(finisheddl(QByteArray)), this, SLOT(receiveFinishdl(QByteArray)));
+    QObject::connect(downloader, SIGNAL(finisheddl()), this, SLOT(receiveFinishdl()));
 
-    QObject::connect(downloader, SIGNAL(finisheddl(QByteArray)), dlthread, SLOT(quit()));
-    QObject::connect(downloader, SIGNAL(finisheddl(QByteArray)), downloader, SLOT(deleteLater()));
+    QObject::connect(downloader, SIGNAL(finisheddl()), dlthread, SLOT(quit()));
+    QObject::connect(downloader, SIGNAL(finisheddl()), downloader, SLOT(deleteLater()));
     QObject::connect(dlthread, SIGNAL(finished()), dlthread, SLOT(deleteLater()));
 
     progressTime = QTime().currentTime();
@@ -159,6 +163,7 @@ void Updater::startUpdate() {
  */
 bool Updater::extractZip() {
 
+    Logger::log("1", config);
     emit sendLine("...");
     QuaZip zip(zippath);
     zip.open(QuaZip::mdUnzip);
@@ -362,15 +367,35 @@ void Updater::receiveProgress(qint64 bytesReceived, qint64 bytesTotal) {
     }
 }
 
-void Updater::receiveFinishdl(QByteArray data) {
+void Updater::receiveFinishdl() {
 
-    //check hash
-    QString sha1(QCryptographicHash::hash(data, QCryptographicHash::Sha1).toHex());
+    //Check hash
+    Logger::log("Checking file hash", config);
+
     bool hashok=false;
-    if (sha1==real.value("sha1").toString()) hashok=true;
+    QString sha1="unknown";
 
-    //data is empty in case of an error
-    if (data.isEmpty() || !hashok) {
+    QFile fz(zippath);
+    if (fz.exists() && fz.size()!=0) {
+
+        QCryptographicHash crypto(QCryptographicHash::Sha1);
+        fz.open(QFile::ReadOnly);
+        while(!fz.atEnd()){
+          crypto.addData(fz.read(8192));
+        }
+        QByteArray hash = crypto.result();
+        sha1 = QString(hash.toHex());
+        if (sha1==real.value("sha1").toString()) {
+            hashok=true;
+        }
+        fz.close();
+    }
+    else {
+        Logger::log("Error with download, could not open result file.", config);
+    }
+
+    //Data is empty or hash mismatch
+    if (!hashok) {
         if (mirrorno==3) {
             emit sendLine("All mirrors failed. Aborting the update");
             emit updateFinished(restartNeeded, false, false);
@@ -382,7 +407,7 @@ void Updater::receiveFinishdl(QByteArray data) {
 
         QUrl url(mirrors[mirrorno]);
 
-        downloader=new Downloader(url);
+        downloader=new Downloader(url, config);
         dlthread = new QThread();
         downloader->moveToThread(dlthread);
 
@@ -400,22 +425,8 @@ void Updater::receiveFinishdl(QByteArray data) {
         emit sendLine("Downloading from: mirror "+(QString::number(mirrorno))+" ("+mirrors[mirrorno]+")");
     }
     else {
-        //download was OK
-        if (!QDir(config->APPDATA).exists()) QDir().mkpath(config->APPDATA);
-
-        if (QFile::exists(zippath)) QFile::remove(zippath);
-
-        QFile fz(zippath);
-        fz.open(QFile::WriteOnly);
-        if (fz.isOpen() && fz.isWritable()){
-            fz.write(data);
-        }
-        else{
-            emit sendLine("Could not open patch.zip -- "+fz.errorString());
-            return;
-        }
-        fz.close();
-
+        //Download was OK
+        Logger::log("Extracting zip", config);
         if (!extractZip()){
             emit sendLine("Extraction process failed. Aborting update");
             return;
@@ -424,27 +435,30 @@ void Updater::receiveFinishdl(QByteArray data) {
             emit sendLine("Instruction process failed. Aborting update");
             return;
         }
-        //change registry version
-        if (!Registry::setPatchVersion(latestVersion)){
-            emit sendLine("Error changing current version in registry. Aborting update");
-            return;
-        }
-        //change config
-        config->PATCH=Registry::getPatchVersion();
+        //Change registry version
+        if (w3=="") {
+            if (!Registry::setPatchVersion(latestVersion)){
+                emit sendLine("Error changing current version in registry. Aborting update");
+                return;
+            }
+            //Change config
+            config->PATCH=Registry::getPatchVersion();
 
-        QFile f(config->EUROPATH+"\\changelog.txt");
-        f.open(QFile::ReadOnly);
-        if (f.isOpen()) {
-            QString changelog(f.readAll());
-            emit sendLine(changelog);
-        }
+            QFile f(config->EUROPATH+"\\changelog.txt");
+            f.open(QFile::ReadOnly);
+            if (f.isOpen()) {
+                QString changelog(f.readAll());
+                emit sendLine(changelog);
+                f.close();
+            }
 
-        emit sendLine("...");
+            emit sendLine("...");
 
-        //check if an even newer (incremental) update exists
-        emit sendLine("Checking if there is an even newer patch...");
-        if (setCurrentPlusOneJson()) { //if next patch exists
-            restartNeeded=true; //client will restart and then do the next incremental update
+            //Check if an even newer (incremental) update exists
+            emit sendLine("Checking if there is an even newer patch...");
+            if (setCurrentPlusOneJson()) { //if next patch exists
+                restartNeeded=true; //client will restart and then do the next incremental update
+            }
         }
 
         emit updateFinished(restartNeeded, true, false);
@@ -471,6 +485,19 @@ bool Updater::setCurrentPlusOneJson() {
             emit sendLine("Beta patch is current. Xpam is up to date");
             return false;
         }
+    }
+    else if (w3!="") {
+        //Full W3 update
+        emit sendLine("Requested patch: full W3 update");
+        QString key = w3;
+        QStringList keys = obj.keys();
+
+        if (!keys.contains(key)) {
+            emit sendLine("No W3 patch exists.");
+            return false;
+        }
+        value=obj.value(w3);
+        real=value.toObject();
     }
     else {
         emit sendLine("Requested patch: stable");

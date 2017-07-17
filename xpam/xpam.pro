@@ -10,7 +10,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 QMAKE_LFLAGS_WINDOWS = /SUBSYSTEM:WINDOWS,5.01
 DEFINES += _ATL_XP_TARGETING
-DEFINES += PSAPI_VERSION=1
+DEFINES += PSAPI_VERSION=1 _DEVELOPMENT
 
 TARGET = xpam
 TEMPLATE = app
@@ -26,7 +26,8 @@ SOURCES += main.cpp\
     updater.cpp \
     w3.cpp \
     test.cpp \
-    mpq.cpp
+    mpq.cpp \
+    patcher.cpp
 
 HEADERS  += mainwindow.h \
     registry.h \
@@ -39,7 +40,8 @@ HEADERS  += mainwindow.h \
     w3.h \
     test.h \
     mpq.h \
-    logger.h
+    logger.h \
+    patcher.h
 
 FORMS    += mainwindow.ui
 

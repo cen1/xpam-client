@@ -24,20 +24,33 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #include "downloader.h"
+#include "QDir"
 
-Downloader::Downloader(QUrl u) {
+Downloader::Downloader(QUrl u, Config* c) {
     url=u;
     reply=nullptr;
     erroremitted=false;
+    file = nullptr;
+    config = c;
 }
 
 Downloader::~Downloader(){
     delete reply;
+    if (file!=nullptr)
+        delete file;
 }
 
 // Slot to be triggered from the updater thread
 void Downloader::startDl() {
     if (reply==nullptr) {
+
+        //Prep appdata file
+        if (!QDir(config->APPDATA).exists()) {
+            QDir().mkpath(config->APPDATA);
+        }
+        file = new QFile(config->APPDATA+"\\patch.zip");
+        file->open(QFile::WriteOnly | QFile::Truncate);
+
         //nam.setNetworkAccessible(QNetworkAccessManager::Accessible);
         reply = nam.get(QNetworkRequest(url));
 
@@ -47,6 +60,7 @@ void Downloader::startDl() {
         QObject::connect(reply, SIGNAL(finished()), this, SLOT(finishedSlot()));
         QObject::connect(reply, SIGNAL(error(QNetworkReply::NetworkError)), this, SLOT(errorSlot(QNetworkReply::NetworkError)));
         QObject::connect(reply, SIGNAL(downloadProgress(qint64, qint64)), this, SLOT(progressSlot(qint64, qint64)));
+        QObject::connect(reply, SIGNAL(readyRead()), this, SLOT(writeToFileSlot()));
     }
     else {
         emit sendInfo("You can't start the same download several times!!!");
@@ -56,6 +70,16 @@ void Downloader::startDl() {
 //intermediate slot for sending progress info to updater thread
 void Downloader::progressSlot(qint64 bytesReceived, qint64 bytesTotal){
     emit progress(bytesReceived, bytesTotal);
+}
+
+void Downloader::writeToFileSlot(){
+    tmpBuffer.append(reply->read(1000000));
+    if (tmpBuffer.size()>1000000 && !reply->isFinished()) {
+        if (file->isOpen() && file->isWritable()){
+            file->write(tmpBuffer);
+            tmpBuffer.clear();
+        }
+    }
 }
 
 //reply finished
@@ -83,15 +107,20 @@ void Downloader::finishedSlot(){
         else {
             //all ok
             emit sendInfo("Downloader exiting with no errors");
-            emit finisheddl(reply->readAll());
+
+            //Read whatever is left
+            tmpBuffer.append(reply->readAll());
+            file->write(tmpBuffer);
+            file->close();
+
+            emit finisheddl();
         }
     }
     else {
         if (!erroremitted) {
             emit sendInfo("Network error: "+reply->errorString());
-            QByteArray ba;
             erroremitted=true;
-            emit finisheddl(ba);
+            emit finisheddl();
         }
     }
 }
@@ -99,8 +128,7 @@ void Downloader::finishedSlot(){
 void Downloader::errorSlot(QNetworkReply::NetworkError code) {
     if (!erroremitted) {
         emit sendInfo("Network error: "+QString::number(code));
-        QByteArray ba;
         erroremitted=true;
-        emit finisheddl(ba);
+        emit finisheddl();
     }
 }

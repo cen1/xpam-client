@@ -1,11 +1,19 @@
 {
     "beta" : {
-            "version" : 21,
-            "mirror1" : "http://files.eurobattle.net/updates/update21.zip",
-            "mirror2" : "http://files.eurobattle.net/updates/update21.zip",
-            "mirror3" : "http://files.eurobattle.net/updates/update21.zip",
-            "mirror4" : "http://files.eurobattle.net/updates/update21.zip",
-            "sha1" : "fef79753545bf55bf4385346fd63f6ae1394d31f"
+            "version" : 23,
+            "mirror1" : "http://files.eurobattle.net/updates/update23beta.zip",
+            "mirror2" : "http://files.eurobattle.net/updates/update23beta.zip",
+            "mirror3" : "http://files.eurobattle.net/updates/update23beta.zip",
+            "mirror4" : "http://files.eurobattle.net/updates/update23beta.zip",
+            "sha1" : "0951d475736b962fb06be1bd64d0f972613ca75d"
+    },
+    "1.28.5.7680" : {
+            "version" : 1,
+            "mirror1" : "http://xpam.pl/update/w31_28_5.zip",
+            "mirror2" : "http://xpam.pl/update/w31_28_5.zip",
+            "mirror3" : "http://xpam.pl/update/w31_28_5.zip",
+            "mirror4" : "http://xpam.pl/update/w31_28_5.zip",
+            "sha1" : "8671afe91789e15d1b9599457eacd5dc053cc223"
     },
     "22" : {
             "version" : 22,

@@ -100,8 +100,9 @@ public:
     QWidget *layoutWidget2;
     QFormLayout *formLayoutBU;
     QLineEdit *betapinbox;
-    QPushButton *pushButtonBU;
+    QPushButton *pushButton_updateW3;
     QCheckBox *checkBox_updates;
+    QPushButton *pushButtonBU;
     QWidget *tabAbout;
     QWidget *layoutWidget3;
     QVBoxLayout *verticalLayout_3;
@@ -514,7 +515,7 @@ public:
         tabW3->setObjectName(QStringLiteral("tabW3"));
         layoutWidget1 = new QWidget(tabW3);
         layoutWidget1->setObjectName(QStringLiteral("layoutWidget1"));
-        layoutWidget1->setGeometry(QRect(20, 20, 871, 133));
+        layoutWidget1->setGeometry(QRect(20, 20, 871, 141));
         verticalLayout_4 = new QVBoxLayout(layoutWidget1);
         verticalLayout_4->setSpacing(6);
         verticalLayout_4->setContentsMargins(11, 11, 11, 11);
@@ -528,6 +529,11 @@ public:
 
         pushButton_w3path = new QPushButton(layoutWidget1);
         pushButton_w3path->setObjectName(QStringLiteral("pushButton_w3path"));
+        QSizePolicy sizePolicy3(QSizePolicy::Minimum, QSizePolicy::Fixed);
+        sizePolicy3.setHorizontalStretch(0);
+        sizePolicy3.setVerticalStretch(0);
+        sizePolicy3.setHeightForWidth(pushButton_w3path->sizePolicy().hasHeightForWidth());
+        pushButton_w3path->setSizePolicy(sizePolicy3);
         pushButton_w3path->setMaximumSize(QSize(150, 16777215));
 
         verticalLayout_4->addWidget(pushButton_w3path);
@@ -558,6 +564,7 @@ public:
 
         horizontalSliderW3Version = new QSlider(layoutWidget1);
         horizontalSliderW3Version->setObjectName(QStringLiteral("horizontalSliderW3Version"));
+        horizontalSliderW3Version->setEnabled(false);
         horizontalSliderW3Version->setMinimumSize(QSize(120, 0));
         horizontalSliderW3Version->setMaximumSize(QSize(120, 16777215));
         horizontalSliderW3Version->setMaximum(1);
@@ -600,16 +607,28 @@ public:
         formLayoutBU->setSpacing(6);
         formLayoutBU->setContentsMargins(11, 11, 11, 11);
         formLayoutBU->setObjectName(QStringLiteral("formLayoutBU"));
+        formLayoutBU->setHorizontalSpacing(0);
         formLayoutBU->setContentsMargins(0, 5, 0, 0);
         betapinbox = new QLineEdit(layoutWidget2);
         betapinbox->setObjectName(QStringLiteral("betapinbox"));
-        QSizePolicy sizePolicy3(QSizePolicy::Fixed, QSizePolicy::Fixed);
-        sizePolicy3.setHorizontalStretch(0);
-        sizePolicy3.setVerticalStretch(0);
-        sizePolicy3.setHeightForWidth(betapinbox->sizePolicy().hasHeightForWidth());
-        betapinbox->setSizePolicy(sizePolicy3);
+        QSizePolicy sizePolicy4(QSizePolicy::Fixed, QSizePolicy::Fixed);
+        sizePolicy4.setHorizontalStretch(0);
+        sizePolicy4.setVerticalStretch(0);
+        sizePolicy4.setHeightForWidth(betapinbox->sizePolicy().hasHeightForWidth());
+        betapinbox->setSizePolicy(sizePolicy4);
 
         formLayoutBU->setWidget(0, QFormLayout::LabelRole, betapinbox);
+
+        pushButton_updateW3 = new QPushButton(layoutWidget2);
+        pushButton_updateW3->setObjectName(QStringLiteral("pushButton_updateW3"));
+        pushButton_updateW3->setMaximumSize(QSize(200, 16777215));
+
+        formLayoutBU->setWidget(2, QFormLayout::SpanningRole, pushButton_updateW3);
+
+        checkBox_updates = new QCheckBox(layoutWidget2);
+        checkBox_updates->setObjectName(QStringLiteral("checkBox_updates"));
+
+        formLayoutBU->setWidget(3, QFormLayout::LabelRole, checkBox_updates);
 
         pushButtonBU = new QPushButton(layoutWidget2);
         pushButtonBU->setObjectName(QStringLiteral("pushButtonBU"));
@@ -619,11 +638,6 @@ public:
         pushButtonBU->setMaximumSize(QSize(150, 20));
 
         formLayoutBU->setWidget(0, QFormLayout::FieldRole, pushButtonBU);
-
-        checkBox_updates = new QCheckBox(layoutWidget2);
-        checkBox_updates->setObjectName(QStringLiteral("checkBox_updates"));
-
-        formLayoutBU->setWidget(1, QFormLayout::LabelRole, checkBox_updates);
 
         splitter->addWidget(layoutWidget2);
 
@@ -666,7 +680,7 @@ public:
 
         retranslateUi(MainWindow);
 
-        tabWidget->setCurrentIndex(0);
+        tabWidget->setCurrentIndex(3);
 
 
         QMetaObject::connectSlotsByName(MainWindow);
@@ -723,10 +737,11 @@ public:
         labelW3Version->setText(QString());
         labelChangeVersion->setText(QApplication::translate("MainWindow", "Change W3 version:", 0));
         label126->setText(QApplication::translate("MainWindow", "1.26", 0));
-        labelLatest->setText(QApplication::translate("MainWindow", "1.28.4", 0));
-        tabWidget->setTabText(tabWidget->indexOf(tabW3), QApplication::translate("MainWindow", " Warcraft", 0));
-        pushButtonBU->setText(QApplication::translate("MainWindow", "Get Beta patch", 0));
+        labelLatest->setText(QApplication::translate("MainWindow", "1.28.5", 0));
+        tabWidget->setTabText(tabWidget->indexOf(tabW3), QApplication::translate("MainWindow", " WARCRAFT", 0));
+        pushButton_updateW3->setText(QApplication::translate("MainWindow", "Patch W3 to current supported version", 0));
         checkBox_updates->setText(QApplication::translate("MainWindow", "Enable automatic updates", 0));
+        pushButtonBU->setText(QApplication::translate("MainWindow", "Get Beta patch", 0));
         tabWidget->setTabText(tabWidget->indexOf(tabUpdate), QApplication::translate("MainWindow", " UPDATE ", 0));
         labelAbout->setText(QApplication::translate("MainWindow", "<html><head/><body><p>Eurobattle.net Client version 0.9 (July 2017), developed by cen</p><p><br/>We are searching for Qt/ C++ developers to further expand this client.</p><p><br/></p><p>TODO:</p><p>-bnet Chat client</p><p>-TS integration</p><p>-Displaying player's profile and league stats in the client</p><p>-and more...</p><p><br/></p><p>Special thanks to:</p><p><span style=\" font-weight:600;\">IStealSkills</span> - help with desig</p><p><span style=\" font-weight:600;\">Stefos007</span> - original GProxy implementation</p><p>BNETtdocs, Stormlib, PvPGN and GHost projects</p></body></html>", 0));
         tabWidget->setTabText(tabWidget->indexOf(tabAbout), QApplication::translate("MainWindow", " ABOUT ", 0));

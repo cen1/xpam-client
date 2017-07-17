@@ -66,6 +66,8 @@ private slots:
     
     void on_horizontalSliderW3Version_sliderReleased();
     
+    void on_pushButton_updateW3_clicked();
+
 public slots:
     void gproxyReady(QString w3Exename);
     void gproxyExiting();

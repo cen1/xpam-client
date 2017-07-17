@@ -239,7 +239,7 @@ QCheckBox::indicator:checked {
          <enum>Qt::LeftToRight</enum>
         </property>
         <property name="currentIndex">
-         <number>0</number>
+         <number>3</number>
         </property>
         <widget class="QWidget" name="tabLauncher">
          <property name="sizePolicy">
@@ -666,7 +666,7 @@ YOU CAN'T PLAY PG OR MANUALLY HOST GAMES IN THIS MODE!</string>
         </widget>
         <widget class="QWidget" name="tabW3">
          <attribute name="title">
-          <string> Warcraft</string>
+          <string> WARCRAFT</string>
          </attribute>
          <widget class="QWidget" name="layoutWidget">
           <property name="geometry">
@@ -674,7 +674,7 @@ YOU CAN'T PLAY PG OR MANUALLY HOST GAMES IN THIS MODE!</string>
             <x>20</x>
             <y>20</y>
             <width>871</width>
-            <height>133</height>
+            <height>141</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_4">
@@ -693,6 +693,12 @@ YOU CAN'T PLAY PG OR MANUALLY HOST GAMES IN THIS MODE!</string>
            </item>
            <item>
             <widget class="QPushButton" name="pushButton_w3path">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
              <property name="maximumSize">
               <size>
                <width>150</width>
@@ -742,6 +748,9 @@ YOU CAN'T PLAY PG OR MANUALLY HOST GAMES IN THIS MODE!</string>
              </item>
              <item>
               <widget class="QSlider" name="horizontalSliderW3Version">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
                <property name="minimumSize">
                 <size>
                  <width>120</width>
@@ -774,7 +783,7 @@ YOU CAN'T PLAY PG OR MANUALLY HOST GAMES IN THIS MODE!</string>
                 </size>
                </property>
                <property name="text">
-                <string>1.28.4</string>
+                <string>1.28.5</string>
                </property>
               </widget>
              </item>
@@ -815,6 +824,9 @@ YOU CAN'T PLAY PG OR MANUALLY HOST GAMES IN THIS MODE!</string>
             <widget class="QTextBrowser" name="textBrowserUpdate"/>
             <widget class="QWidget" name="layoutWidget">
              <layout class="QFormLayout" name="formLayoutBU">
+              <property name="horizontalSpacing">
+               <number>0</number>
+              </property>
               <property name="topMargin">
                <number>5</number>
               </property>
@@ -825,6 +837,26 @@ YOU CAN'T PLAY PG OR MANUALLY HOST GAMES IN THIS MODE!</string>
                   <horstretch>0</horstretch>
                   <verstretch>0</verstretch>
                  </sizepolicy>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="0" colspan="2">
+               <widget class="QPushButton" name="pushButton_updateW3">
+                <property name="maximumSize">
+                 <size>
+                  <width>200</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>Patch W3 to current supported version</string>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="0">
+               <widget class="QCheckBox" name="checkBox_updates">
+                <property name="text">
+                 <string>Enable automatic updates</string>
                 </property>
                </widget>
               </item>
@@ -850,13 +882,6 @@ YOU CAN'T PLAY PG OR MANUALLY HOST GAMES IN THIS MODE!</string>
                 </property>
                 <property name="text">
                  <string>Get Beta patch</string>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="0">
-               <widget class="QCheckBox" name="checkBox_updates">
-                <property name="text">
-                 <string>Enable automatic updates</string>
                 </property>
                </widget>
               </item>
