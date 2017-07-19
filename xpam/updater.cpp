@@ -89,7 +89,7 @@ void Updater::startUpdate() {
 
     if (downloader!=nullptr) {
         emit sendLine("FORBIDDEN RESTART");
-        emit updateFinished(restartNeeded, false, false);
+        emit updateFinished(restartNeeded, false, false, false);
         return;
     }
 
@@ -99,7 +99,7 @@ void Updater::startUpdate() {
 
     if ((j1.isEmpty() && j2.isEmpty()) || (j1.isEmpty() && j3.isEmpty()) || (j2.isEmpty() && j3.isEmpty())) {
         emit sendLine("Update info is empty. Update servers are down or there might be a problem with your internet connection");
-        emit updateFinished(restartNeeded, false, false);
+        emit updateFinished(restartNeeded, false, false, false);
         return;
     }
 
@@ -114,12 +114,12 @@ void Updater::startUpdate() {
     }
     else {
         emit sendLine("Update info mismatch.");
-        emit updateFinished(restartNeeded, false, false);
+        emit updateFinished(restartNeeded, false, false, false);
         return;
     }
 
     if (!setCurrentPlusOneJson()){ //if false it is up to date
-        emit updateFinished(restartNeeded, true, true);
+        emit updateFinished(restartNeeded, true, true, false);
         return;
     }
     latestVersion = qRound(real.value("version").toDouble());
@@ -235,6 +235,14 @@ bool Updater::instructions() {
                 else if (l.last()=="W3PATH") dstPath=config->W3PATH;
                 else if (l.last()=="MAPPATH") dstPath=config->DOCMAPPATHDL;
                 else if (l.last()=="SOUNDPATH") dstPath=config->SOUNDPATH;
+
+                //Skip cdkey files if they exist in destination
+                if (midParam=="roc.w3k" || midParam=="tft.w3k") {
+                    QFile cdkey(config->W3PATH+"/"+midParam);
+                    if (cdkey.exists()) {
+                        continue;
+                    }
+                }
 
                 QFile from(config->APPDATA+"\\"+midParam);
                 if (QFile::exists(dstPath+"\\"+midParam)) QFile::remove(dstPath+"\\"+midParam);
@@ -359,7 +367,7 @@ bool Updater::updateMPQ()
 //we use a timer so we don't waste cycles
 void Updater::receiveProgress(qint64 bytesReceived, qint64 bytesTotal) {
     //emit sendLine("Slot activated "+QString::number(bytesReceived));
-    if (progressTime.elapsed() > 100 && bytesTotal != -1) {
+    if (progressTime.elapsed() > 200 && bytesTotal != -1) {
         int percents = qRound((((float)bytesReceived/(float)bytesTotal)*100.0));
         emit modifyLastLine("("+QString::number(bytesReceived)+" Bytes / "+QString::number(bytesTotal)+" Bytes) -- "+QString::number(percents)+"%");
 
@@ -398,7 +406,7 @@ void Updater::receiveFinishdl() {
     if (!hashok) {
         if (mirrorno==3) {
             emit sendLine("All mirrors failed. Aborting the update");
-            emit updateFinished(restartNeeded, false, false);
+            emit updateFinished(restartNeeded, false, false, false);
             return;
         }
         emit sendLine("Remote checksum: "+real.value("sha1").toString()+"; Local checksum: "+sha1);
@@ -461,7 +469,7 @@ void Updater::receiveFinishdl() {
             }
         }
 
-        emit updateFinished(restartNeeded, true, false);
+        emit updateFinished(restartNeeded, true, false, false);
     }
 }
 
@@ -607,4 +615,11 @@ void Updater::renamePatchMpq(Config *config) {
             patchMpq.copy(config->W3PATH+"\\War3Mod.mpq");
         }
     }
+}
+
+void Updater::cancelUpdate() {
+    this->downloader->reply->abort();
+    this->downloader->deleteLater();
+    emit sendLine("Update ABORTED BY USER");
+    emit updateFinished(false, true, true, true);
 }

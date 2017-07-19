@@ -39,7 +39,8 @@ bool Patcher::patch(Config * config) {
         Logger::log(w3version, config);
 
         if (w3version == config->W3_VERSION_LATEST) {
-            return true; //new patch exists but w3 is already latest version, do nothing
+            Patcher::cleanMetadata(config);
+            return true; //New patch exists but w3 is already latest version, do nothing
         }
         if (obj.value("oldv").toString()!=w3version) {
             Logger::log("Client could not autopatch W3 because it is not the correct base version, needed is "+w3version, config);
@@ -50,9 +51,9 @@ bool Patcher::patch(Config * config) {
         QString newW3version = Winutils::getFileVersion(newFullPath);
         if (newW3version == obj.value("newv").toString()) {
             Logger::log("Executable appears to already be of desired version. Do nothing. ", config);
+            Patcher::cleanMetadata(config);
             return true;
         }
-
 
         QMessageBox patchW3;
         patchW3.setWindowTitle("Patch W3?");
@@ -206,4 +207,37 @@ QString Patcher::getCurrentW3Version(Config * config) {
     QString w3version = Winutils::getFileVersion(fullPath);
 
     return w3version;
+}
+
+void Patcher::cleanMetadata(Config * config) {
+
+    QDir w3dir(config->W3PATH);
+
+    //Remove .patch files
+    QStringList patchNameFilter("*.patch");
+    QStringList patchFiles = w3dir.entryList(patchNameFilter);
+
+    for (int i=0; i<patchFiles.size(); i++) {
+        QFile f(config->W3PATH+"/"+patchFiles.at(i));
+        if (f.exists()) {
+            f.remove();
+        }
+    }
+
+    //Remove .new files
+    QStringList newNameFilter("*.new");
+    QStringList newFiles = w3dir.entryList(newNameFilter);
+
+    for (int i=0; i<newFiles.size(); i++) {
+        QFile f(config->W3PATH+"/"+newFiles.at(i));
+        if (f.exists()) {
+            f.remove();
+        }
+    }
+
+    //Remove patch.meta
+    QFile pm(config->W3PATH+"/patch.meta");
+    if (pm.exists()) {
+        pm.remove();
+    }
 }

@@ -41,10 +41,11 @@ public:
     Downloader(QUrl u, Config* c);
     ~Downloader();
 
+    QNetworkReply * reply;
+
 private:
     QUrl url;
     QNetworkAccessManager nam;
-    QNetworkReply * reply;
     bool erroremitted;              //if error() and finished() are both emitted with errors, we only emit one signal to updater thread
     QByteArray tmpBuffer;
     QFile* file;

@@ -42,11 +42,13 @@ signals:
     void startW3();                 //starts w3
     void startUpdate();             //starts the update
     void updateCheckFinished();     //terminates the splash screen event loop
+    void cancelUpdate();
 
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
     void checkUpdates();
+    void checkW3Updates();
     bool updatesEnabled;
     
 private slots:
@@ -66,7 +68,7 @@ private slots:
     
     void on_horizontalSliderW3Version_sliderReleased();
     
-    void on_pushButton_updateW3_clicked();
+    void on_pushButton_updateW3_released();
 
     void on_tabWidget_currentChanged(int index);
 
@@ -76,7 +78,7 @@ public slots:
     void receiveLine(QString line);
     void w3Exited();
 
-    void updateFinished(bool restartNeeded, bool ok, bool utd); //utd: Up To Date
+    void updateFinished(bool restartNeeded, bool ok, bool utd, bool canceled); //utd: Up To Date
     void hideSplashScreen();
     void logUpdate(QString line);
     void modifyLastLineSlot(QString line);
@@ -103,6 +105,8 @@ private:
     void startW3AndGproxy(QString w3Exename, QString restrictedVersion="");
 
     void displayW3Version();
+
+    bool updateInProgress;
 
 protected:
     //void mousePressEvent(QMouseEvent *event);

@@ -72,7 +72,7 @@ private:
     bool setCurrentPlusOneJson();
 
 signals:
-    void updateFinished(bool restartNeeded, bool ok, bool utd);
+    void updateFinished(bool restartNeeded, bool ok, bool utd, bool canceled);
     void sendLine(QString line);
     void modifyLastLine(QString line);
     void startDl();
@@ -82,6 +82,7 @@ public slots:
     void startUpdate();
     void receiveProgress(qint64 bytesReceived, qint64 bytesTotal);
     void receiveFinishdl();
+    void cancelUpdate();
 };
 
 #endif // UPDATER_H
