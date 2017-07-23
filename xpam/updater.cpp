@@ -53,6 +53,13 @@ Updater::Updater(Config * c, bool b, QString w) {
     restartNeeded=false;
     downloader=nullptr;
     zippath = config->APPDATA+"\\patch.zip";
+
+    if (w3!="") {
+        isW3Update=true;
+    }
+    else {
+        isW3Update=false;
+    }
 }
 
 Updater::~Updater() {
@@ -89,7 +96,7 @@ void Updater::startUpdate() {
 
     if (downloader!=nullptr) {
         emit sendLine("FORBIDDEN RESTART");
-        emit updateFinished(restartNeeded, false, false, false);
+        emit updateFinished(restartNeeded, false, false, false, false, isW3Update);
         return;
     }
 
@@ -99,7 +106,7 @@ void Updater::startUpdate() {
 
     if ((j1.isEmpty() && j2.isEmpty()) || (j1.isEmpty() && j3.isEmpty()) || (j2.isEmpty() && j3.isEmpty())) {
         emit sendLine("Update info is empty. Update servers are down or there might be a problem with your internet connection");
-        emit updateFinished(restartNeeded, false, false, false);
+        emit updateFinished(restartNeeded, false, false, false, false, isW3Update);
         return;
     }
 
@@ -114,12 +121,12 @@ void Updater::startUpdate() {
     }
     else {
         emit sendLine("Update info mismatch.");
-        emit updateFinished(restartNeeded, false, false, false);
+        emit updateFinished(restartNeeded, false, false, false, false, isW3Update);
         return;
     }
 
     if (!setCurrentPlusOneJson()){ //if false it is up to date
-        emit updateFinished(restartNeeded, true, true, false);
+        emit updateFinished(restartNeeded, true, true, false, false, isW3Update);
         return;
     }
     latestVersion = qRound(real.value("version").toDouble());
@@ -406,7 +413,7 @@ void Updater::receiveFinishdl() {
     if (!hashok) {
         if (mirrorno==3) {
             emit sendLine("All mirrors failed. Aborting the update");
-            emit updateFinished(restartNeeded, false, false, false);
+            emit updateFinished(restartNeeded, false, false, false, false, isW3Update);
             return;
         }
         emit sendLine("Remote checksum: "+real.value("sha1").toString()+"; Local checksum: "+sha1);
@@ -469,7 +476,8 @@ void Updater::receiveFinishdl() {
             }
         }
 
-        emit updateFinished(restartNeeded, true, false, false);
+        //Seccessful update
+        emit updateFinished(restartNeeded, true, false, false, false, isW3Update);
     }
 }
 
@@ -495,8 +503,8 @@ bool Updater::setCurrentPlusOneJson() {
         }
     }
     else if (w3!="") {
-        //Full W3 update
-        emit sendLine("Requested patch: full W3 update");
+        //Full or partial W3 update
+        emit sendLine("Requested patch: full or quick W3 update");
         QString key = w3;
         QStringList keys = obj.keys();
 
@@ -621,5 +629,5 @@ void Updater::cancelUpdate() {
     this->downloader->reply->abort();
     this->downloader->deleteLater();
     emit sendLine("Update ABORTED BY USER");
-    emit updateFinished(false, true, true, true);
+    emit updateFinished(false, true, true, true, false);
 }

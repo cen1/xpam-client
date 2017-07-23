@@ -78,7 +78,7 @@ public slots:
     void receiveLine(QString line);
     void w3Exited();
 
-    void updateFinished(bool restartNeeded, bool ok, bool utd, bool canceled); //utd: Up To Date
+    void updateFinished(bool restartNeeded, bool ok, bool utd, bool canceled, bool isw3); //utd: Up To Date
     void hideSplashScreen();
     void logUpdate(QString line);
     void modifyLastLineSlot(QString line);
@@ -105,6 +105,7 @@ private:
     void startW3AndGproxy(QString w3Exename, QString restrictedVersion="");
 
     void displayW3Version();
+    void diffW3Update(QString version);
 
     bool updateInProgress;
 

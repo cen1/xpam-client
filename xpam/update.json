@@ -7,7 +7,39 @@
             "mirror4" : "http://files.eurobattle.net/updates/update23beta.zip",
             "sha1" : "02f3c133a35364420cbb7e223c10474c78cf4139"
     },
-    "1.28.5.7680" : {
+    "1.28.4" : {
+            "version" : 1,
+            "mirror1" : "http://xpam.pl/update/1284_to_1285.zip",
+            "mirror2" : "http://xpam.pl/update/1284_to_1285.zip",
+            "mirror3" : "http://xpam.pl/update/1284_to_1285.zip",
+            "mirror4" : "http://xpam.pl/update/1284_to_1285.zip",
+            "sha1" : "dd0a62dea1fbfa594efea145d188bebcb89df363"
+    },
+    "1.28.2" : {
+            "version" : 1,
+            "mirror1" : "http://xpam.pl/update/1282_to_1284.zip",
+            "mirror2" : "http://xpam.pl/update/1282_to_1284.zip",
+            "mirror3" : "http://xpam.pl/update/1282_to_1284.zip",
+            "mirror4" : "http://xpam.pl/update/1282_to_1284.zip",
+            "sha1" : "4935eff00dc05b81ba04b345dc0083dea15b6f6f"
+    },
+    "1.28.1" : {
+            "version" : 1,
+            "mirror1" : "http://xpam.pl/update/1281_to_1282.zip",
+            "mirror2" : "http://xpam.pl/update/1281_to_1282.zip",
+            "mirror3" : "http://xpam.pl/update/1281_to_1282.zip",
+            "mirror4" : "http://xpam.pl/update/1281_to_1282.zip",
+            "sha1" : "5139006e6656ee14b179118e93aa9cf05198a0f7"
+    },
+    "1.28.0" : {
+            "version" : 1,
+            "mirror1" : "http://xpam.pl/update/1280_to_1281.zip",
+            "mirror2" : "http://xpam.pl/update/1280_to_1281.zip",
+            "mirror3" : "http://xpam.pl/update/1280_to_1281.zip",
+            "mirror4" : "http://xpam.pl/update/1280_to_1281.zip",
+            "sha1" : "388daebd7ffdb33fba3bec1da37f08c830a684a6"
+    },
+    "1.28.5.7680.FULL" : {
             "version" : 1,
             "mirror1" : "http://xpam.pl/update/w31_28_5.zip",
             "mirror2" : "http://xpam.pl/update/w31_28_5.zip",

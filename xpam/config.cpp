@@ -27,6 +27,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "config.h"
 #include "registry.h"
 #include "winutils.h"
+#include "patcher.h"
 #include <QStandardPaths>
 
 Config::Config()
@@ -34,6 +35,7 @@ Config::Config()
     VERSION_CLIENT = "0.9.0.0";
     W3_VERSION_LATEST = "1.28.5.7680";
     W3_VERSION_126 = "1.26.0.6401";
+    W3_VERSION_DETECTED = Patcher::getCurrentW3Version();
     W3_EXENAME_LATEST="Warcraft III.exe";
     W3_EXENAME_126="war3.exe";
     BETAPIN = "1377";
@@ -76,6 +78,13 @@ Config::Config()
     W3_COMMON_FILES.append("world editor.exe");
     W3_COMMON_FILES.append("worldedit.exe");
     W3_COMMON_FILES.append("Warcraft III.exe");
+
+    //Quickpatch w3 versions
+    W3_VERSIONS.append("1.28.0");
+    W3_VERSIONS.append("1.28.1");
+    W3_VERSIONS.append("1.28.2");
+    W3_VERSIONS.append("1.28.4");
+    W3_VERSIONS.append("1.28.5");
 }
 
 bool Config::SetOption(QString file, QString option, QString value) {

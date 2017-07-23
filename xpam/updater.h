@@ -63,6 +63,7 @@ private:
     QTime           progressTime;
     int             latestVersion;
     bool            restartNeeded;
+    bool            isW3Update;
 
     bool extractZip();
     bool instructions();

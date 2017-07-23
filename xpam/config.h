@@ -17,6 +17,7 @@ public:
     QString W3_VERSION_126;
     QString W3_EXENAME_LATEST;
     QString W3_EXENAME_126;
+    QString W3_VERSION_DETECTED;
     int PATCH;
     QString W3PATH;
     QString DOCPATH;
@@ -31,6 +32,7 @@ public:
     bool USE_DUAL_VERSION;
 
     QVector<QString> W3_COMMON_FILES;
+    QVector<QString> W3_VERSIONS;
 
     QUrl json1;
     QUrl json2;
