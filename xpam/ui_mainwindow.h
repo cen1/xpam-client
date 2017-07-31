@@ -92,7 +92,7 @@ public:
     QLabel *labelLatest;
     QSpacerItem *horizontalSpacer;
     QWidget *tabUpdate;
-    QWidget *widget;
+    QWidget *layoutWidget2;
     QVBoxLayout *verticalLayout_6;
     QTextBrowser *textBrowserUpdate;
     QHBoxLayout *horizontalLayout_4;
@@ -104,7 +104,7 @@ public:
     QCheckBox *checkBox_updates;
     QSpacerItem *horizontalSpacer_2;
     QWidget *tabAbout;
-    QWidget *layoutWidget2;
+    QWidget *layoutWidget3;
     QVBoxLayout *verticalLayout_3;
     QLabel *labelAbout;
     QStatusBar *statusBar;
@@ -286,9 +286,7 @@ public:
 "}\n"
 "#pushButtonGWD:hover {\n"
 "  border-color: #007dc1;\n"
-"}\n"
-"\n"
-""));
+"}"));
         horizontalLayout = new QHBoxLayout(centralWidget);
         horizontalLayout->setSpacing(0);
         horizontalLayout->setContentsMargins(11, 11, 11, 11);
@@ -591,15 +589,15 @@ public:
         tabUpdate->setObjectName(QStringLiteral("tabUpdate"));
         sizePolicy.setHeightForWidth(tabUpdate->sizePolicy().hasHeightForWidth());
         tabUpdate->setSizePolicy(sizePolicy);
-        widget = new QWidget(tabUpdate);
-        widget->setObjectName(QStringLiteral("widget"));
-        widget->setGeometry(QRect(8, 8, 881, 531));
-        verticalLayout_6 = new QVBoxLayout(widget);
+        layoutWidget2 = new QWidget(tabUpdate);
+        layoutWidget2->setObjectName(QStringLiteral("layoutWidget2"));
+        layoutWidget2->setGeometry(QRect(8, 8, 881, 531));
+        verticalLayout_6 = new QVBoxLayout(layoutWidget2);
         verticalLayout_6->setSpacing(6);
         verticalLayout_6->setContentsMargins(11, 11, 11, 11);
         verticalLayout_6->setObjectName(QStringLiteral("verticalLayout_6"));
         verticalLayout_6->setContentsMargins(0, 0, 0, 0);
-        textBrowserUpdate = new QTextBrowser(widget);
+        textBrowserUpdate = new QTextBrowser(layoutWidget2);
         textBrowserUpdate->setObjectName(QStringLiteral("textBrowserUpdate"));
 
         verticalLayout_6->addWidget(textBrowserUpdate);
@@ -613,7 +611,7 @@ public:
         horizontalLayout_3 = new QHBoxLayout();
         horizontalLayout_3->setSpacing(6);
         horizontalLayout_3->setObjectName(QStringLiteral("horizontalLayout_3"));
-        betapinbox = new QLineEdit(widget);
+        betapinbox = new QLineEdit(layoutWidget2);
         betapinbox->setObjectName(QStringLiteral("betapinbox"));
         QSizePolicy sizePolicy4(QSizePolicy::Fixed, QSizePolicy::Fixed);
         sizePolicy4.setHorizontalStretch(0);
@@ -623,7 +621,7 @@ public:
 
         horizontalLayout_3->addWidget(betapinbox);
 
-        pushButtonBU = new QPushButton(widget);
+        pushButtonBU = new QPushButton(layoutWidget2);
         pushButtonBU->setObjectName(QStringLiteral("pushButtonBU"));
         sizePolicy1.setHeightForWidth(pushButtonBU->sizePolicy().hasHeightForWidth());
         pushButtonBU->setSizePolicy(sizePolicy1);
@@ -635,7 +633,7 @@ public:
 
         verticalLayout_5->addLayout(horizontalLayout_3);
 
-        pushButton_updateW3 = new QPushButton(widget);
+        pushButton_updateW3 = new QPushButton(layoutWidget2);
         pushButton_updateW3->setObjectName(QStringLiteral("pushButton_updateW3"));
         QSizePolicy sizePolicy5(QSizePolicy::Preferred, QSizePolicy::Fixed);
         sizePolicy5.setHorizontalStretch(0);
@@ -646,7 +644,7 @@ public:
 
         verticalLayout_5->addWidget(pushButton_updateW3);
 
-        checkBox_updates = new QCheckBox(widget);
+        checkBox_updates = new QCheckBox(layoutWidget2);
         checkBox_updates->setObjectName(QStringLiteral("checkBox_updates"));
 
         verticalLayout_5->addWidget(checkBox_updates);
@@ -666,16 +664,16 @@ public:
         tabAbout->setObjectName(QStringLiteral("tabAbout"));
         sizePolicy.setHeightForWidth(tabAbout->sizePolicy().hasHeightForWidth());
         tabAbout->setSizePolicy(sizePolicy);
-        layoutWidget2 = new QWidget(tabAbout);
-        layoutWidget2->setObjectName(QStringLiteral("layoutWidget2"));
-        layoutWidget2->setGeometry(QRect(20, 20, 391, 501));
-        verticalLayout_3 = new QVBoxLayout(layoutWidget2);
+        layoutWidget3 = new QWidget(tabAbout);
+        layoutWidget3->setObjectName(QStringLiteral("layoutWidget3"));
+        layoutWidget3->setGeometry(QRect(20, 20, 391, 501));
+        verticalLayout_3 = new QVBoxLayout(layoutWidget3);
         verticalLayout_3->setSpacing(10);
         verticalLayout_3->setContentsMargins(11, 11, 11, 11);
         verticalLayout_3->setObjectName(QStringLiteral("verticalLayout_3"));
         verticalLayout_3->setSizeConstraint(QLayout::SetDefaultConstraint);
         verticalLayout_3->setContentsMargins(0, 0, 0, 0);
-        labelAbout = new QLabel(layoutWidget2);
+        labelAbout = new QLabel(layoutWidget3);
         labelAbout->setObjectName(QStringLiteral("labelAbout"));
         sizePolicy.setHeightForWidth(labelAbout->sizePolicy().hasHeightForWidth());
         labelAbout->setSizePolicy(sizePolicy);
@@ -698,7 +696,7 @@ public:
 
         retranslateUi(MainWindow);
 
-        tabWidget->setCurrentIndex(3);
+        tabWidget->setCurrentIndex(2);
 
 
         QMetaObject::connectSlotsByName(MainWindow);
@@ -758,7 +756,7 @@ public:
         labelLatest->setText(QApplication::translate("MainWindow", "1.28.5", 0));
         tabWidget->setTabText(tabWidget->indexOf(tabW3), QApplication::translate("MainWindow", " WARCRAFT", 0));
         pushButtonBU->setText(QApplication::translate("MainWindow", "Get Beta patch", 0));
-        pushButton_updateW3->setText(QApplication::translate("MainWindow", "Patch W3 to current supported version", 0));
+        pushButton_updateW3->setText(QApplication::translate("MainWindow", "Perform full W3 update (1GB download)", 0));
         checkBox_updates->setText(QApplication::translate("MainWindow", "Enable automatic updates", 0));
         tabWidget->setTabText(tabWidget->indexOf(tabUpdate), QApplication::translate("MainWindow", " UPDATE ", 0));
         labelAbout->setText(QApplication::translate("MainWindow", "<html><head/><body><p>Eurobattle.net Client version 0.9 (July 2017), developed by cen</p><p><br/>We are searching for Qt/ C++ developers to further expand this client.</p><p><br/></p><p>TODO:</p><p>-bnet Chat client</p><p>-TS integration</p><p>-Displaying player's profile and league stats in the client</p><p>-and more...</p><p><br/></p><p>Special thanks to:</p><p><span style=\" font-weight:600;\">IStealSkills</span> - help with desig</p><p><span style=\" font-weight:600;\">Stefos007</span> - original GProxy implementation</p><p>BNETtdocs, Stormlib, PvPGN and GHost projects</p></body></html>", 0));

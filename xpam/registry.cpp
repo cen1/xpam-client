@@ -279,3 +279,13 @@ bool Registry::setInstallPathX(QString w3dir) {
     }
     return false;
 }
+
+bool Registry::setDefaultTFT() {
+    CRegKey reg;
+    if (reg.Open(HKEY_CURRENT_USER, _T("Software\\Blizzard Entertainment\\Warcraft III"), KEY_WRITE | KEY_WOW64_64KEY)==ERROR_SUCCESS) {
+        bool r = this->setRegDWORD(reg, "Preferred Game Version", 1);
+        reg.Close();
+        return r;
+    }
+    return false;
+}

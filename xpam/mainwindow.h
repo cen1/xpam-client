@@ -48,7 +48,7 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
     void checkUpdates();
-    void checkW3Updates();
+    bool checkW3Updates();
     bool updatesEnabled;
     
 private slots:
@@ -78,7 +78,7 @@ public slots:
     void receiveLine(QString line);
     void w3Exited();
 
-    void updateFinished(bool restartNeeded, bool ok, bool utd, bool canceled, bool isw3); //utd: Up To Date
+    void updateFinished(bool restartNeeded, bool ok, bool isUpToDate, bool retry, int type);
     void hideSplashScreen();
     void logUpdate(QString line);
     void modifyLastLineSlot(QString line);

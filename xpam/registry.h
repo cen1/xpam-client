@@ -59,6 +59,8 @@ public:
     bool setInstallPath(QString w3dir);
     bool setInstallPathX(QString w3dir);
 
+    bool setDefaultTFT();
+
     static bool delGM();
 
     Registry();

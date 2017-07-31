@@ -41,7 +41,7 @@ class Updater : public QObject
 {
     Q_OBJECT
 public:
-    Updater(Config * c, bool b, QString w="");
+    Updater(Config * c, int t, QString w="");
     ~Updater();
 
     static QString Updater::moveToDocuments(Config *config);
@@ -50,8 +50,8 @@ public:
     
 private:
     Config *        config;
-    bool            beta;
-    QString            w3;
+    int             type;
+    QString         w3;
     QByteArray      archive;
     QThread *       dlthread;
     Downloader *    downloader;
@@ -70,10 +70,10 @@ private:
     bool updateMPQ();
 
     QByteArray simpleDl(QUrl url);
-    bool setCurrentPlusOneJson();
+    int setCurrentPlusOneJson();
 
 signals:
-    void updateFinished(bool restartNeeded, bool ok, bool utd, bool canceled);
+    void updateFinished(bool restartNeeded, bool ok, bool isUpToDate, bool canceled, int type);
     void sendLine(QString line);
     void modifyLastLine(QString line);
     void startDl();

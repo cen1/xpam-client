@@ -10,112 +10,147 @@
 #include "w3.h"
 #include "QProgressDialog"
 #include "QThread"
+#include "QCryptographicHash"
 
 bool Patcher::patch(Config * config) {
 
-    QMessageBox patchW3;
-    patchW3.setWindowTitle("Patch W3?");
-    patchW3.setText("Client can automatically update your W3 to the latest required patch. Accept or do it manually.");
-    patchW3.setStandardButtons(QMessageBox::Yes);
-    patchW3.addButton(QMessageBox::No);
-    patchW3.setDefaultButton(QMessageBox::No);
-    if(patchW3.exec() == QMessageBox::Yes){
+    //Progress dialog
+    QProgressDialog progress("Patching W3", "Cancel", 0, 100);
+    progress.setWindowModality(Qt::WindowModal);
+    progress.setCancelButton(0);
+    progress.show();
 
-        //Progress dialog
-        QProgressDialog progress("Patching W3", "Cancel", 0, 100);
-        progress.setWindowModality(Qt::WindowModal);
-        progress.setCancelButton(0);
-        progress.show();
+    //User agreed, patch W3
+    QString xdelta3 = config->EUROPATH+"\\xdelta3.exe";
+    QStringList patchNameFilter("*.patch");
+    QDir w3dir(config->W3PATH);
+    QStringList patchFiles = w3dir.entryList(patchNameFilter);
 
-        //User agreed, patch W3
-        QString xdelta3 = config->EUROPATH+"\\xdelta3.exe";
-        QStringList patchNameFilter("*.patch");
-        QDir w3dir(config->W3PATH);
-        QStringList patchFiles = w3dir.entryList(patchNameFilter);
-        for (int i=0; i<patchFiles.size(); i++) {
-            // xdelta3 -d -s SOURCE OUT TARGET
-            QFileInfo qf(patchFiles.at(i));
-            QString fileToPatch = qf.completeBaseName();
-            QStringList args;
-            args << "-d";
-            args << "-f";
-            args << "-s";
-            args << fileToPatch;
-            args << patchFiles[i];
-            args << fileToPatch+".new";
+    QFile hashes(config->APPDATA+"/hashes");
+    if (!hashes.exists()) {
+        Logger::log("Missing hash file, unable to continue the patching.", config);
+        return false;
+    }
+    hashes.open(QIODevice::ReadOnly);
 
-            QProcess p;
-            p.setWorkingDirectory(config->W3PATH);
-            p.start(xdelta3, args);
+    QJsonDocument json = QJsonDocument::fromJson(hashes.readAll());
+    QJsonObject obj=json.object();
 
-            //Log full arguments
-            QString arguments="";
-            for (int i=0; i<p.arguments().size(); i++) {
-                arguments += p.arguments().at(i)+" ";
-            }
-            Logger::log(p.program(), config);
-            Logger::log(arguments, config);
+    hashes.close();
 
-            p.waitForFinished();
-            int exitCode = p.exitCode();
-            QString exitCodeStr = QString::number(exitCode);
+    //Check hashes
+    for (int i=0; i<patchFiles.size(); i++) {
+        QFileInfo qf(patchFiles.at(i));
+        QString fileToPatch = qf.completeBaseName();
 
-            QString out(p.readAllStandardOutput());
-            QString err(p.readAllStandardError());
-            Logger::log(out, config);
-            Logger::log(err, config);
-            Logger::log("Exit status: "+exitCodeStr, config);
+        QCryptographicHash crypto(QCryptographicHash::Sha1);
+        QFile fz(config->W3PATH+"/"+fileToPatch);
+        fz.open(QFile::ReadOnly);
+        while(!fz.atEnd()){
+          crypto.addData(fz.read(8192));
+        }
+        QByteArray hash = crypto.result();
+        QString sha1 = QString(hash.toHex());
 
-            if (exitCode==0) {
-                Logger::log("Successfully patched "+fileToPatch, config);
-                //Delete .patch file
-                QFile ftp(config->W3PATH+"/"+patchFiles[i]);
-                if (ftp.exists()) {
-                    ftp.remove();
-                }
-            }
-            else {
-                Logger::log("Failed to patch "+fileToPatch, config);
+        QJsonValue val = obj.value(fileToPatch);
+        if (val!=QJsonValue::Undefined) {
+            if (val!=sha1) {
+                Logger::log("Hash mismatch for "+fileToPatch, config);
                 return false;
             }
-
-            progress.setValue(progress.value()+1);
-        }
-
-        //Replace .new files
-        QStringList newNameFilter("*.new");
-        QStringList newFiles = w3dir.entryList(newNameFilter);
-
-        for (int i=0; i<newFiles.size(); i++) {
-            QFileInfo qf(newFiles.at(i));
-            QString fileToReplace = qf.completeBaseName();
-            QFile f(config->W3PATH+"/"+newFiles.at(i));
-            if (f.exists()) {
-                QFile existing(config->W3PATH+"/"+fileToReplace);
-                if (existing.exists()) {
-                    existing.remove();
-                }
-                if (!f.rename(config->W3PATH+"/"+fileToReplace)) {
-                    Logger::log("Failed to add new W3 file "+newFiles.at(i)+" to "+fileToReplace, config);
-                    Logger::log(Winutils::getLastErrorMsg(), config);
-                    return false;
-                }
-                else {
-                    Logger::log("Successfully replaced "+fileToReplace, config);
-                }
+            else {
+                Logger::log("Hash matches for "+fileToPatch, config);
+                continue;
             }
+        }
+        else {
+            Logger::log("Could not hash check file "+fileToPatch, config);
+            return false;
+        }
+    }
 
-            progress.setValue(progress.value()+1);
+    for (int i=0; i<patchFiles.size(); i++) {
+        // xdelta3 -d -s SOURCE OUT TARGET
+        QFileInfo qf(patchFiles.at(i));
+        QString fileToPatch = qf.completeBaseName();
+        QStringList args;
+        args << "-d";
+        args << "-f";
+        args << "-s";
+        args << fileToPatch;
+        args << patchFiles[i];
+        args << fileToPatch+".new";
+
+        QProcess p;
+        p.setWorkingDirectory(config->W3PATH);
+        p.start(xdelta3, args);
+
+        //Log full arguments
+        QString arguments="";
+        for (int i=0; i<p.arguments().size(); i++) {
+            arguments += p.arguments().at(i)+" ";
+        }
+        Logger::log(p.program(), config);
+        Logger::log(arguments, config);
+
+        p.waitForFinished();
+        int exitCode = p.exitCode();
+        QString exitCodeStr = QString::number(exitCode);
+
+        QString out(p.readAllStandardOutput());
+        QString err(p.readAllStandardError());
+        Logger::log(out, config);
+        Logger::log(err, config);
+        Logger::log("Exit status: "+exitCodeStr, config);
+
+        if (exitCode==0) {
+            Logger::log("Successfully patched "+fileToPatch, config);
+            //Delete .patch file
+            QFile ftp(config->W3PATH+"/"+patchFiles[i]);
+            if (ftp.exists()) {
+                ftp.remove();
+            }
+        }
+        else {
+            Logger::log("Failed to patch "+fileToPatch, config);
+            return false;
         }
 
-        progress.setValue(100);
-        progress.close();
+        progress.setValue(progress.value()+1);
+    }
 
-        return true;
+    //Replace .new files
+    QStringList newNameFilter("*.new");
+    QStringList newFiles = w3dir.entryList(newNameFilter);
+
+    for (int i=0; i<newFiles.size(); i++) {
+        QFileInfo qf(newFiles.at(i));
+        QString fileToReplace = qf.completeBaseName();
+        QFile f(config->W3PATH+"/"+newFiles.at(i));
+        if (f.exists()) {
+            QFile existing(config->W3PATH+"/"+fileToReplace);
+            if (existing.exists()) {
+                existing.remove();
+            }
+            if (!f.rename(config->W3PATH+"/"+fileToReplace)) {
+                Logger::log("Failed to add new W3 file "+newFiles.at(i)+" to "+fileToReplace, config);
+                Logger::log(Winutils::getLastErrorMsg(), config);
+                return false;
+            }
+            else {
+                Logger::log("Successfully replaced "+fileToReplace, config);
+            }
+        }
+
+        progress.setValue(progress.value()+1);
     }
-    else {
-      return false;
-    }
+
+    progress.setValue(100);
+    progress.close();
+
+    config->ASK_FOR_W3_FAST_UPDATE=false;
+
+    return true;
 }
 
 QString Patcher::getCurrentW3Version(Config * config) {

@@ -45,21 +45,20 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "mpq.h"
 #include "logger.h"
 
-Updater::Updater(Config * c, bool b, QString w) {
+/* Types
+ * 0 = client
+ * 1 = diff w3 patch
+ * 2 = full w3 upate
+ * 3 = beta
+ */
+Updater::Updater(Config * c, int t, QString w) {
     config=c;
-    beta=b;
+    type=t;
     w3=w;
     mirrorno=0;
     restartNeeded=false;
     downloader=nullptr;
     zippath = config->APPDATA+"\\patch.zip";
-
-    if (w3!="") {
-        isW3Update=true;
-    }
-    else {
-        isW3Update=false;
-    }
 }
 
 Updater::~Updater() {
@@ -96,7 +95,7 @@ void Updater::startUpdate() {
 
     if (downloader!=nullptr) {
         emit sendLine("FORBIDDEN RESTART");
-        emit updateFinished(restartNeeded, false, false, false, false, isW3Update);
+        emit updateFinished(restartNeeded, false, false, false, type);
         return;
     }
 
@@ -106,7 +105,7 @@ void Updater::startUpdate() {
 
     if ((j1.isEmpty() && j2.isEmpty()) || (j1.isEmpty() && j3.isEmpty()) || (j2.isEmpty() && j3.isEmpty())) {
         emit sendLine("Update info is empty. Update servers are down or there might be a problem with your internet connection");
-        emit updateFinished(restartNeeded, false, false, false, false, isW3Update);
+        emit updateFinished(restartNeeded, false, false, false, type);
         return;
     }
 
@@ -121,22 +120,32 @@ void Updater::startUpdate() {
     }
     else {
         emit sendLine("Update info mismatch.");
-        emit updateFinished(restartNeeded, false, false, false, false, isW3Update);
+        emit updateFinished(restartNeeded, false, false, false, type);
         return;
     }
 
-    if (!setCurrentPlusOneJson()){ //if false it is up to date
-        emit updateFinished(restartNeeded, true, true, false, false, isW3Update);
+    int setResult = setCurrentPlusOneJson();
+    if (setResult==0){
+        //Up to date client
+        Logger::log("Client is up to date", config);
+        emit updateFinished(restartNeeded, true, true, false, type);
         return;
     }
+    else if (setResult==2){
+        //No W3 patch found
+        Logger::log("No W3 patch found to dl", config);
+        emit updateFinished(restartNeeded, false, false, false, type);
+        return;
+    }
+
     latestVersion = qRound(real.value("version").toDouble());
-    if (w3=="") {
+    if (type==0 || type==3) {
         emit sendLine("Local version: "+QString::number(config->PATCH)+" Incremental version: "+QString::number(latestVersion));
     }
 
     //tell splash screen to hide, only taken into account if it is a startup update
     //this means that we have an update so it'd be nice to see the progress
-    if (!beta) emit hideSplashScreen();
+    if (type==3) emit hideSplashScreen();
 
     mirrors << real.value("mirror1").toString();
     mirrors << real.value("mirror2").toString();
@@ -413,7 +422,7 @@ void Updater::receiveFinishdl() {
     if (!hashok) {
         if (mirrorno==3) {
             emit sendLine("All mirrors failed. Aborting the update");
-            emit updateFinished(restartNeeded, false, false, false, false, isW3Update);
+            emit updateFinished(restartNeeded, false, false, false, type);
             return;
         }
         emit sendLine("Remote checksum: "+real.value("sha1").toString()+"; Local checksum: "+sha1);
@@ -451,7 +460,7 @@ void Updater::receiveFinishdl() {
             return;
         }
         //Change registry version
-        if (w3=="") {
+        if (type==0 || type==3) {
             if (!Registry::setPatchVersion(latestVersion)){
                 emit sendLine("Error changing current version in registry. Aborting update");
                 return;
@@ -471,38 +480,38 @@ void Updater::receiveFinishdl() {
 
             //Check if an even newer (incremental) update exists
             emit sendLine("Checking if there is an even newer patch...");
-            if (setCurrentPlusOneJson()) { //if next patch exists
+            if (setCurrentPlusOneJson()==1) { //if next patch exists
                 restartNeeded=true; //client will restart and then do the next incremental update
             }
         }
 
-        //Seccessful update
-        emit updateFinished(restartNeeded, true, false, false, false, isW3Update);
+        //Successful update
+        emit updateFinished(restartNeeded, true, false, false, type);
     }
 }
 
-bool Updater::setCurrentPlusOneJson() {
+int Updater::setCurrentPlusOneJson() {
     QJsonDocument json = QJsonDocument::fromJson(jsonba);
     QJsonObject obj=json.object();
     QJsonValue value;
 
-    if (beta) {
+    if (type==3) {
         emit sendLine("Requested patch: beta");
         QString key = "beta";
         QStringList keys = obj.keys();
 
         if (!keys.contains(key)) {
             emit sendLine("No beta patch exists. Xpam is up to date");
-            return false;
+            return 0;
         }
         value=obj.value("beta");
         real=value.toObject();
         if (qRound(real.value("version").toDouble()) <= config->PATCH) {
             emit sendLine("Beta patch is current. Xpam is up to date");
-            return false;
+            return 0;
         }
     }
-    else if (w3!="") {
+    else if (type==1 || type==2) {
         //Full or partial W3 update
         emit sendLine("Requested patch: full or quick W3 update");
         QString key = w3;
@@ -510,7 +519,7 @@ bool Updater::setCurrentPlusOneJson() {
 
         if (!keys.contains(key)) {
             emit sendLine("No W3 patch exists.");
-            return false;
+            return 2;
         }
         value=obj.value(w3);
         real=value.toObject();
@@ -523,12 +532,12 @@ bool Updater::setCurrentPlusOneJson() {
 
         if (!keys.contains(key)) {
             emit sendLine("No newer patch exists. Xpam is up to date");
-            return false;
+            return 0;
         }
         value=obj.value(key);
         real=value.toObject();
     }
-    return true;
+    return 1;
 }
 
 /*
@@ -629,5 +638,5 @@ void Updater::cancelUpdate() {
     this->downloader->reply->abort();
     this->downloader->deleteLater();
     emit sendLine("Update ABORTED BY USER");
-    emit updateFinished(false, true, true, true, false);
+    emit updateFinished(false, true, true, true, type);
 }

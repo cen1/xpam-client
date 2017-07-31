@@ -132,6 +132,16 @@ MainWindow::MainWindow(QWidget *parent) :
 
     //Sanity checks
     W3::sanityCheck(config);
+
+    //Set TFT as default client
+    Registry r;
+    r.setDefaultTFT();
+
+    //Hide slider for now
+    ui->horizontalSliderW3Version->hide();
+    ui->labelChangeVersion->hide();
+    ui->label126->hide();
+    ui->labelLatest->hide();
 }
 
 MainWindow::~MainWindow()
@@ -344,10 +354,10 @@ void MainWindow::w3Exited() {
 }
 
 //Update W3 on startup
-void MainWindow::checkW3Updates(){
+bool MainWindow::checkW3Updates(){
 
     //Either autopatch fails or there is no autopatch and W3 version is incorrect
-    QString w3version = Patcher::getCurrentW3Version();
+    QString w3version = Patcher::getCurrentW3Version(config);
     if (w3version!=config->W3_VERSION_LATEST) {
         Logger::log("Warcraft needs to be updated, detected version "+w3version+", needed version "+config->W3_VERSION_LATEST, config);
 
@@ -357,11 +367,33 @@ void MainWindow::checkW3Updates(){
         if (query.size()<2) {
             status("Could not parse w3 version");
             Logger::log("Could not parse w3 version", config);
-            return;
+            return false;
         }
         QString baseVersion = query.at(0)+"."+query.at(1)+"."+query.at(2);
-        this->diffW3Update(baseVersion);
+
+        bool goAhead=false;
+
+        if (config->ASK_FOR_W3_FAST_UPDATE) {
+            QMessageBox patchW3;
+            patchW3.setWindowTitle("Patch W3?");
+            patchW3.setText("Client can automatically update your W3 to the latest required patch. Accept or update manually. Please wait until all partial updates finish.");
+            patchW3.setStandardButtons(QMessageBox::Yes);
+            patchW3.addButton(QMessageBox::No);
+            patchW3.setDefaultButton(QMessageBox::No);
+            if (patchW3.exec() == QMessageBox::Yes) {
+                goAhead=true;
+            }
+        }
+        else {
+            goAhead=true;
+        }
+
+        if (goAhead) {
+            this->diffW3Update(baseVersion);
+            return true;
+        }
     }
+    return false;
 }
 
 //Update client at startup
@@ -376,19 +408,19 @@ void MainWindow::checkUpdates(){
     ui->tabWidget->setCurrentIndex(3);
     lockTabs(ui->tabWidget->currentIndex());
 
-    updater=new Updater(config, false);
+    updater=new Updater(config, 0);
     upt=new QThread();
     updater->moveToThread(upt);
 
     QObject::connect(upt, SIGNAL(started()), updater, SLOT(startUpdate()));
-    QObject::connect(updater, SIGNAL(updateFinished(bool, bool, bool, bool, bool)), this, SLOT(updateFinished(bool, bool, bool, bool, bool)));
+    QObject::connect(updater, SIGNAL(updateFinished(bool, bool, bool, bool, int)), this, SLOT(updateFinished(bool, bool, bool, bool, int)));
     QObject::connect(updater, SIGNAL(sendLine(QString)), this, SLOT(logUpdate(QString)));
     QObject::connect(updater, SIGNAL(sendLine(QString)), ui->textBrowserUpdate, SLOT(append(QString)), Qt::QueuedConnection);
     QObject::connect(updater, SIGNAL(modifyLastLine(QString)), this, SLOT(modifyLastLineSlot(QString)));
     QObject::connect(updater, SIGNAL(hideSplashScreen()), this, SLOT(hideSplashScreen()));
 
-    QObject::connect(updater, SIGNAL(updateFinished(bool, bool, bool, bool, bool)), upt, SLOT(quit()));
-    QObject::connect(updater, SIGNAL(updateFinished(bool ,bool ,bool, bool, bool)), updater, SLOT(deleteLater()));
+    QObject::connect(updater, SIGNAL(updateFinished(bool, bool, bool, bool, int)), upt, SLOT(quit()));
+    QObject::connect(updater, SIGNAL(updateFinished(bool ,bool ,bool, bool, int)), updater, SLOT(deleteLater()));
     QObject::connect(upt, SIGNAL(finished()), upt, SLOT(deleteLater()));
 
     updateInProgress=true;
@@ -405,18 +437,18 @@ void MainWindow::on_pushButtonBU_clicked()
     if (config->BETAPIN!=ui->betapinbox->text()) return;
     lockTabs(ui->tabWidget->currentIndex());
 
-    updater=new Updater(config, true);
+    updater=new Updater(config, 3);
     upt=new QThread();
     updater->moveToThread(upt);
 
     QObject::connect(upt, SIGNAL(started()), updater, SLOT(startUpdate()));
-    QObject::connect(updater, SIGNAL(updateFinished(bool, bool, bool, bool, bool)), this, SLOT(updateFinished(bool, bool, bool, bool, bool)));
+    QObject::connect(updater, SIGNAL(updateFinished(bool, bool, bool, bool, int)), this, SLOT(updateFinished(bool, bool, bool, bool, int)));
     QObject::connect(updater, SIGNAL(sendLine(QString)), this, SLOT(logUpdate(QString)));
     QObject::connect(updater, SIGNAL(sendLine(QString)), ui->textBrowserUpdate, SLOT(append(QString)), Qt::QueuedConnection);
     QObject::connect(updater, SIGNAL(modifyLastLine(QString)), this, SLOT(modifyLastLineSlot(QString)));
 
-    QObject::connect(updater, SIGNAL(updateFinished(bool, bool, bool, bool, bool)), upt, SLOT(quit()));
-    QObject::connect(updater, SIGNAL(updateFinished(bool, bool, bool, bool, bool)), updater, SLOT(deleteLater()));
+    QObject::connect(updater, SIGNAL(updateFinished(bool, bool, bool, bool, int)), upt, SLOT(quit()));
+    QObject::connect(updater, SIGNAL(updateFinished(bool, bool, bool, bool, int)), updater, SLOT(deleteLater()));
     QObject::connect(upt, SIGNAL(finished()), upt, SLOT(deleteLater()));
 
     updateInProgress=true;
@@ -426,18 +458,18 @@ void MainWindow::on_pushButtonBU_clicked()
     upt->start();
 }
 
-//Ok tells us if there was a critical error
-//Utd tells us if client is up to date
-void MainWindow::updateFinished(bool restartNeeded, bool ok, bool utd, bool canceled, bool isw3) {
+void MainWindow::updateFinished(bool restartNeeded, bool ok, bool isUpToDate, bool canceled, int type) {
 
+    Logger::log("Update finished", config);
     updateInProgress=false;
+    bool enableButtons=true;
 
     ui->textBrowserUpdate->append("Updater finished");
     if (isStartupUpdate) hideSplashScreen();
 
-    //Check for new w3 update
-    if (isw3 && ok) {
-
+    //Do a diff W3 update
+    if (type==1 && ok) {
+        Logger::log("Diff update successful", config);
         bool patchResult = Patcher::patch(config);
 
         if (!patchResult) {
@@ -454,28 +486,56 @@ void MainWindow::updateFinished(bool restartNeeded, bool ok, bool utd, bool canc
         }
         else {
             ui->tabWidget->setCurrentIndex(0);
-            checkW3Updates();
+            if (checkW3Updates()) {
+                enableButtons=false;
+            }
         }
     }
-    else if (isw3 && !ok) {
-        status("W3 update failed, you will have to update manually.");
-        Logger::log("W3 update failed, you will have to update manually.", config);
+    else if (type==1 && !ok) {
+        status("Could not find an incremental W3 patch, full upgrade needed.");
+        Logger::log("Could not find an incremental W3 patch, full upgrade needed.", config);
+        QMessageBox msgBox;
+        msgBox.setText("Unable to do fast incremental update to W3 "+config->W3_VERSION_LATEST+". Would you like to do a full game update instead? This could take a while.");
+        msgBox.setStandardButtons(QMessageBox::Yes);
+        msgBox.addButton(QMessageBox::No);
+        msgBox.setDefaultButton(QMessageBox::No);
+        if(msgBox.exec() == QMessageBox::Yes){
+            //Execute manual update
+            on_pushButton_updateW3_released();
+        }
+    }
+    else if (type==2 && !ok) {
+        status("Full W3 update failed, you will have to update manually.");
+        Logger::log("Full W3 update failed, you will have to update manually.", config);
+        ui->pushButton_updateW3->setText("Perform full W3 update (1GB download)");
+    }
+    else if (type==2 && canceled) {
+        status("Full W3 update was canceled.");
+        Logger::log("Full W3 update was canceled.", config);
     }
     else {
-        if (utd) {
+        Logger::log("Client update finished", config);
+
+        //Client updates
+        if (isUpToDate) {
             status("Client is up to date");
-            //if (isStartupUpdate) emit updateCheckFinished();
-            unlockTabs();
-            ui->pushButtonBU->setEnabled(true);
-            ui->pushButton_updateW3->setEnabled(true);
+            Logger::log("Client is up to date", config);
 
             //No new patch, now check if W3 needs updating
-            if (!canceled) {
-                checkW3Updates();
+            if (checkW3Updates()) {
+                Logger::log("W3 needs to be updated", config);
+                enableButtons=false;
+            }
+            else {
+                //No W3 updates needed
+                Logger::log("W3 is up to date", config);
+                ui->tabWidget->setCurrentIndex(0);
             }
         }
         else {
+            //Client needed updating
             if (ok) {
+                Logger::log("Client was updated", config);
                 ui->textBrowserUpdate->append("Client was updated");
 
                 ui->pushButtonBU->setEnabled(true);
@@ -487,11 +547,10 @@ void MainWindow::updateFinished(bool restartNeeded, bool ok, bool utd, bool canc
                     QApplication::quit();
                 }
                 else {
-                    unlockTabs();
                 }
             }
             else {
-                unlockTabs();
+                Logger::log("Client update failed", config);
                 ui->textBrowserUpdate->append("Update failed. Check the log or update tab to find out the reason.");
                 status("Update failed due to critical error");
                 ui->pushButtonBU->setEnabled(true);
@@ -499,8 +558,11 @@ void MainWindow::updateFinished(bool restartNeeded, bool ok, bool utd, bool canc
         }
     }
 
-    ui->pushButton_updateW3->setEnabled(true);
-    ui->pushButtonBU->setEnabled(true);
+    if (enableButtons) {
+        ui->pushButton_updateW3->setEnabled(true);
+        ui->pushButtonBU->setEnabled(true);
+        unlockTabs();
+    }
 }
 
 //Handle gproxy options
@@ -717,14 +779,16 @@ void MainWindow::on_pushButton_updateW3_released()
         Logger::log("Update is in progress, cancelling", config);
         //User wants to cancel
         emit cancelUpdate();
-        ui->pushButton_updateW3->setText("Patch W3 to current supported version");
+        ui->pushButton_updateW3->setText("Perform full W3 update (1GB download)");
         return;
     }
     Logger::log("Starting W3 update", config);
 
     QMessageBox patchW3;
     patchW3.setWindowTitle("Patch W3 to "+config->W3_VERSION_LATEST);
-    patchW3.setText("This will potentialy download big files and might take some time. Are you sure?");
+    QString text = "This will download 1GB of files and replace your W3 with version"+config->W3_VERSION_LATEST+". You should only do this if quick update failed or you think your files might be corrupted. Proceed anyway?";
+
+    patchW3.setText(text);
     patchW3.setStandardButtons(QMessageBox::Yes);
     patchW3.addButton(QMessageBox::No);
     patchW3.setDefaultButton(QMessageBox::No);
@@ -738,20 +802,20 @@ void MainWindow::on_pushButton_updateW3_released()
         ui->tabWidget->setCurrentIndex(3);
         lockTabs(ui->tabWidget->currentIndex());
 
-        updater=new Updater(config, false, config->W3_VERSION_LATEST);
+        updater=new Updater(config, 2, config->W3_VERSION_LATEST+".FULL");
         upt=new QThread();
         updater->moveToThread(upt);
 
         QObject::connect(upt, SIGNAL(started()), updater, SLOT(startUpdate()));
-        QObject::connect(updater, SIGNAL(updateFinished(bool, bool, bool, bool, bool)), this, SLOT(updateFinished(bool, bool, bool, bool, bool)));
+        QObject::connect(updater, SIGNAL(updateFinished(bool, bool, bool, bool, int)), this, SLOT(updateFinished(bool, bool, bool, bool, int)));
         QObject::connect(updater, SIGNAL(sendLine(QString)), this, SLOT(logUpdate(QString)));
         QObject::connect(updater, SIGNAL(sendLine(QString)), ui->textBrowserUpdate, SLOT(append(QString)), Qt::QueuedConnection);
         QObject::connect(updater, SIGNAL(modifyLastLine(QString)), this, SLOT(modifyLastLineSlot(QString)));
 
         QObject::connect(this, SIGNAL(cancelUpdate()), updater, SLOT(cancelUpdate()));
 
-        QObject::connect(updater, SIGNAL(updateFinished(bool, bool, bool, bool, bool)), upt, SLOT(quit()));
-        QObject::connect(updater, SIGNAL(updateFinished(bool, bool, bool ,bool, bool)), updater, SLOT(deleteLater()));
+        QObject::connect(updater, SIGNAL(updateFinished(bool, bool, bool, bool, int)), upt, SLOT(quit()));
+        QObject::connect(updater, SIGNAL(updateFinished(bool, bool, bool ,bool, int)), updater, SLOT(deleteLater()));
         QObject::connect(upt, SIGNAL(finished()), upt, SLOT(deleteLater()));
 
         updateInProgress=true;
@@ -769,25 +833,25 @@ void MainWindow::diffW3Update(QString version) {
     ui->textBrowserUpdate->clear();
 
     ui->pushButtonBU->setEnabled(false);
-     ui->pushButton_updateW3->setEnabled(false);
+    ui->pushButton_updateW3->setEnabled(false);
 
     ui->tabWidget->setCurrentIndex(3);
     lockTabs(ui->tabWidget->currentIndex());
 
-    updater=new Updater(config, false, version);
+    updater=new Updater(config, 1, version);
     upt=new QThread();
     updater->moveToThread(upt);
 
     QObject::connect(upt, SIGNAL(started()), updater, SLOT(startUpdate()));
-    QObject::connect(updater, SIGNAL(updateFinished(bool, bool, bool, bool, bool)), this, SLOT(updateFinished(bool, bool, bool, bool, bool)));
+    QObject::connect(updater, SIGNAL(updateFinished(bool, bool, bool, bool, int)), this, SLOT(updateFinished(bool, bool, bool, bool, int)));
     QObject::connect(updater, SIGNAL(sendLine(QString)), this, SLOT(logUpdate(QString)));
     QObject::connect(updater, SIGNAL(sendLine(QString)), ui->textBrowserUpdate, SLOT(append(QString)), Qt::QueuedConnection);
     QObject::connect(updater, SIGNAL(modifyLastLine(QString)), this, SLOT(modifyLastLineSlot(QString)));
 
     QObject::connect(this, SIGNAL(cancelUpdate()), updater, SLOT(cancelUpdate()));
 
-    QObject::connect(updater, SIGNAL(updateFinished(bool, bool, bool, bool, bool)), upt, SLOT(quit()));
-    QObject::connect(updater, SIGNAL(updateFinished(bool, bool, bool, bool, bool)), updater, SLOT(deleteLater()));
+    QObject::connect(updater, SIGNAL(updateFinished(bool, bool, bool, bool, int)), upt, SLOT(quit()));
+    QObject::connect(updater, SIGNAL(updateFinished(bool, bool, bool, bool, int)), updater, SLOT(deleteLater()));
     QObject::connect(upt, SIGNAL(finished()), upt, SLOT(deleteLater()));
 
     updateInProgress=true;
@@ -797,11 +861,12 @@ void MainWindow::diffW3Update(QString version) {
 
 void MainWindow::displayW3Version() {
     ui->labelW3Path->setText("W3 path: "+config->W3PATH);
-    if (config->W3_VERSION_DETECTED==config->W3_VERSION_LATEST) {
-        ui->labelW3Version->setText("Detected latest W3 version: "+config->W3_VERSION_DETECTED+" (OK)");
+    QString w3versionDetected = Patcher::getCurrentW3Version(config);
+    if (w3versionDetected==config->W3_VERSION_LATEST) {
+        ui->labelW3Version->setText("Detected latest W3 version: "+w3versionDetected+" (OK)");
     }
     else {
-        ui->labelW3Version->setText("Detected latest W3 version: "+config->W3_VERSION_DETECTED+" (ERROR, needed: "+config->W3_VERSION_LATEST+")");
+        ui->labelW3Version->setText("Detected latest W3 version: "+w3versionDetected+" (ERROR, needed: "+config->W3_VERSION_LATEST+")");
     }
 }
 

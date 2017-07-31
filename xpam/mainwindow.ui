@@ -208,9 +208,7 @@ QCheckBox::indicator:checked {
 }
 #pushButtonGWD:hover {
   border-color: #007dc1;
-}
-
-</string>
+}</string>
    </property>
    <layout class="QHBoxLayout" name="horizontalLayout">
     <property name="spacing">
@@ -239,7 +237,7 @@ QCheckBox::indicator:checked {
          <enum>Qt::LeftToRight</enum>
         </property>
         <property name="currentIndex">
-         <number>3</number>
+         <number>2</number>
         </property>
         <widget class="QWidget" name="tabLauncher">
          <property name="sizePolicy">
