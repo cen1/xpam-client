@@ -6,4 +6,5 @@ build*/
 build*/
 xpam/debug/
 xpam/release/
-xpam/updates/
+xpam/updates/update*
+xpam/updates/zip_archives/

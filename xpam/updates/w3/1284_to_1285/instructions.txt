@@ -1,0 +1,16 @@
+MOVE game.dll.patch W3PATH
+MOVE storm.dll.patch W3PATH
+MOVE war3.mpq.patch W3PATH
+MOVE war3local.mpq.patch W3PATH
+MOVE war3x.mpq.patch W3PATH
+MOVE war3xlocal.mpq.patch W3PATH
+MOVE worldedit.exe.new W3PATH
+MOVE World Editor.exe.new W3PATH
+MOVE war3patch.mpq.new W3PATH
+MOVE Warcraft III Launcher.exe.new W3PATH
+MOVE Warcraft III.exe.new W3PATH
+MOVE w3l.exe.new W3PATH
+MOVE w3lh.dll.new W3PATH
+MOVE wl27.dll.new W3PATH
+MOVE roc.w3k W3PATH
+MOVE tft.w3k W3PATH

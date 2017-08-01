@@ -1,0 +1,8 @@
+MOVE game.dll.patch W3PATH
+MOVE storm.dll.patch W3PATH
+MOVE war3.exe.patch W3PATH
+MOVE war3.mpq.patch W3PATH
+MOVE war3local.mpq.patch W3PATH
+MOVE war3x.mpq.patch W3PATH
+MOVE war3xlocal.mpq.patch W3PATH
+MOVE worldedit.exe.patch W3PATH

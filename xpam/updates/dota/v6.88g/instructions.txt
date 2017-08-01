@@ -1,0 +1,1 @@
+MOVE DotA v6.88g Allstars.w3x MAPPATH
