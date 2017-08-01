@@ -458,6 +458,54 @@ void MainWindow::on_pushButtonBU_clicked()
     upt->start();
 }
 
+//Iterates over dota map vector and downloads missing maps. Returns false when no updates exist.
+int MainWindow::checkDotaUpdates() {
+    if (config->DOTA_MAPS.size()>0 && this->lastCheckedDota<config->DOTA_MAPS.size()) {
+
+        QString mapName = config->DOTA_MAPS.at(this->lastCheckedDota);
+        Logger::log("Checking if DotA map exist: "+mapName, config);
+        QFile map(config->DOCMAPPATHDL+"/"+mapName);
+        if (map.exists()) {
+            Logger::log(mapName+" exists.", config);
+            this->lastCheckedDota++;
+            return checkDotaUpdates();
+        }
+
+        isStartupUpdate=false;
+        ui->textBrowserUpdate->clear();
+
+        lockTabs(ui->tabWidget->currentIndex());
+
+        updater=new Updater(config, 4, mapName);
+        upt=new QThread();
+        updater->moveToThread(upt);
+
+        QObject::connect(upt, SIGNAL(started()), updater, SLOT(startUpdate()));
+        QObject::connect(updater, SIGNAL(updateFinished(bool, bool, bool, bool, int)), this, SLOT(updateFinished(bool, bool, bool, bool, int)));
+        QObject::connect(updater, SIGNAL(sendLine(QString)), this, SLOT(logUpdate(QString)));
+        QObject::connect(updater, SIGNAL(sendLine(QString)), ui->textBrowserUpdate, SLOT(append(QString)), Qt::QueuedConnection);
+        QObject::connect(updater, SIGNAL(modifyLastLine(QString)), this, SLOT(modifyLastLineSlot(QString)));
+
+        QObject::connect(updater, SIGNAL(updateFinished(bool, bool, bool, bool, int)), upt, SLOT(quit()));
+        QObject::connect(updater, SIGNAL(updateFinished(bool, bool, bool, bool, int)), updater, SLOT(deleteLater()));
+        QObject::connect(upt, SIGNAL(finished()), upt, SLOT(deleteLater()));
+
+        updateInProgress=true;
+        ui->pushButton_updateW3->setEnabled(false);
+        ui->pushButtonBU->setEnabled(false);
+
+        //Increment
+        this->lastCheckedDota++;
+
+        Logger::log(mapName+" does not exist, downloading.", config);
+
+        upt->start();
+
+        return 1;
+    }
+    return 0;
+}
+
 void MainWindow::updateFinished(bool restartNeeded, bool ok, bool isUpToDate, bool canceled, int type) {
 
     Logger::log("Update finished", config);
@@ -513,6 +561,12 @@ void MainWindow::updateFinished(bool restartNeeded, bool ok, bool isUpToDate, bo
         status("Full W3 update was canceled.");
         Logger::log("Full W3 update was canceled.", config);
     }
+    else if (type==4 && ok) {
+        Logger::log("Dota map download successful", config);
+        if (checkDotaUpdates()==0) {
+            ui->tabWidget->setCurrentIndex(0);
+        }
+    }
     else {
         Logger::log("Client update finished", config);
 
@@ -529,7 +583,11 @@ void MainWindow::updateFinished(bool restartNeeded, bool ok, bool isUpToDate, bo
             else {
                 //No W3 updates needed
                 Logger::log("W3 is up to date", config);
-                ui->tabWidget->setCurrentIndex(0);
+
+                //Return 0 means no updates are needed (anymore), go to initial tab
+                if (checkDotaUpdates()==0) {
+                    ui->tabWidget->setCurrentIndex(0);
+                }
             }
         }
         else {

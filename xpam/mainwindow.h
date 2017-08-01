@@ -101,11 +101,13 @@ private:
     bool ismax;
     QPoint normalpos;
     QSize normalsize;
+    int lastCheckedDota=0;
 
     void startW3AndGproxy(QString w3Exename, QString restrictedVersion="");
 
     void displayW3Version();
     void diffW3Update(QString version);
+    int checkDotaUpdates();
 
     bool updateInProgress;
 

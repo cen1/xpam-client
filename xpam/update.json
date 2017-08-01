@@ -47,6 +47,22 @@
             "mirror4" : "http://xpam.pl/update/w31_28_5.zip",
             "sha1" : "cc504a374291f783f5817f2eb14d1998e1dade13"
     },
+    "DotA v6.88g Allstars.w3x": {
+        "version" : 1,
+        "mirror1" : "http://localhost:8080/v6.88g.zip",
+        "mirror2" : "http://xpam.pl/update/w31_28_5.zip",
+        "mirror3" : "http://files.eurobattle.net/updates/w3/w31_28_5.zip",
+        "mirror4" : "http://xpam.pl/update/w31_28_5.zip",
+        "sha1" : "29e274ead3221507550f8a90a393425f37602d77"
+    },
+    "DotA v6.85k Allstars.w3x": {
+        "version" : 1,
+        "mirror1" : "http://localhost:8080/v6.85k.zip",
+        "mirror2" : "http://xpam.pl/update/w31_28_5.zip",
+        "mirror3" : "http://files.eurobattle.net/updates/w3/w31_28_5.zip",
+        "mirror4" : "http://xpam.pl/update/w31_28_5.zip",
+        "sha1" : "6028885e7332f51e013d1fdb76faf53ccb7ede79"
+    },
     "22" : {
             "version" : 22,
             "mirror1" : "https://drive.google.com/uc?id=0B6cPcpH1ZToaX1I3M2xHdWtKWFk",

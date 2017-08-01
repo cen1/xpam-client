@@ -50,6 +50,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * 1 = diff w3 patch
  * 2 = full w3 upate
  * 3 = beta
+ * 4 = dota
  */
 Updater::Updater(Config * c, int t, QString w) {
     config=c;
@@ -143,8 +144,8 @@ void Updater::startUpdate() {
         emit sendLine("Local version: "+QString::number(config->PATCH)+" Incremental version: "+QString::number(latestVersion));
     }
 
-    //tell splash screen to hide, only taken into account if it is a startup update
-    //this means that we have an update so it'd be nice to see the progress
+    //Tell splash screen to hide, only taken into account if it is a startup update
+    //This means that we have an update so it'd be nice to see the progress
     if (type==3) emit hideSplashScreen();
 
     mirrors << real.value("mirror1").toString();
@@ -519,6 +520,19 @@ int Updater::setCurrentPlusOneJson() {
 
         if (!keys.contains(key)) {
             emit sendLine("No W3 patch exists.");
+            return 2;
+        }
+        value=obj.value(w3);
+        real=value.toObject();
+    }
+    else if (type==4) {
+        //DotA map download
+        emit sendLine("Requested patch: DotA map download");
+        QString key = w3;
+        QStringList keys = obj.keys();
+
+        if (!keys.contains(key)) {
+            emit sendLine("No DotA map exists on download server.");
             return 2;
         }
         value=obj.value(w3);

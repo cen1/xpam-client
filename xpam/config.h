@@ -34,6 +34,7 @@ public:
 
     QVector<QString> W3_COMMON_FILES;
     QVector<QString> W3_VERSIONS;
+    QVector<QString> DOTA_MAPS;
 
     QUrl json1;
     QUrl json2;

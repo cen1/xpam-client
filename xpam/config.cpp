@@ -86,6 +86,10 @@ Config::Config()
     W3_VERSIONS.append("1.28.2");
     W3_VERSIONS.append("1.28.4");
     W3_VERSIONS.append("1.28.5");
+
+    //DotA maps
+    DOTA_MAPS.append("DotA v6.85k Allstars.w3x");
+    //DOTA_MAPS.append("DotA v6.88g Allstars.w3x");
 }
 
 bool Config::SetOption(QString file, QString option, QString value) {
