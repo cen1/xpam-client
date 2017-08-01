@@ -93,6 +93,8 @@ void Updater::startUpdate() {
      * -SkyDrive: ID from public link
      * -Ubuntu ONE: More->Publish
      */
+    QTime now = QTime::currentTime();
+    qsrand(now.msec());
 
     if (downloader!=nullptr) {
         emit sendLine("FORBIDDEN RESTART");
@@ -153,8 +155,17 @@ void Updater::startUpdate() {
     mirrors << real.value("mirror3").toString();
     mirrors << real.value("mirror4").toString();
 
-    emit sendLine("Downloading from: mirror "+(QString::number(mirrorno))+" ("+mirrors[mirrorno]+")");
-    QUrl url(mirrors[mirrorno]);
+    QString mirrorUrl = mirrors[mirrorno];
+    if (type==2) {
+        int mn = getRandomMirror();
+        mirrorUrl = mirrors.at(mn);
+        emit sendLine("Downloading from random: mirror "+(QString::number(mn))+" ("+mirrorUrl+")");
+    }
+    else {
+        emit sendLine("Downloading from: mirror "+(QString::number(mirrorno))+" ("+mirrorUrl+")");
+    }
+
+    QUrl url(mirrorUrl);
 
     downloader=new Downloader(url, config);
     dlthread = new QThread();
@@ -430,7 +441,17 @@ void Updater::receiveFinishdl() {
         emit sendLine("There was an error downloading the update files. Trying another mirror");
         mirrorno++;
 
-        QUrl url(mirrors[mirrorno]);
+        QString mirrorUrl = mirrors[mirrorno];
+        if (type==2) {
+            int mn = getRandomMirror();
+            mirrorUrl = mirrors.at(mn);
+            emit sendLine("Downloading from random: mirror "+(QString::number(mn))+" ("+mirrorUrl+")");
+        }
+        else {
+            emit sendLine("Downloading from: mirror "+(QString::number(mirrorno))+" ("+mirrorUrl+")");
+        }
+
+        QUrl url(mirrorUrl);
 
         downloader=new Downloader(url, config);
         dlthread = new QThread();
@@ -439,15 +460,13 @@ void Updater::receiveFinishdl() {
         QObject::connect(dlthread, SIGNAL(started()), downloader, SLOT(startDl()));
         QObject::connect(downloader, SIGNAL(progress(qint64,qint64)), this, SLOT(receiveProgress(qint64,qint64)));
         QObject::connect(downloader, SIGNAL(sendInfo(QString)), this, SIGNAL(sendLine(QString)));
-        QObject::connect(downloader, SIGNAL(finisheddl(QByteArray)), this, SLOT(receiveFinishdl(QByteArray)));
+        QObject::connect(downloader, SIGNAL(finisheddl()), this, SLOT(receiveFinishdl()));
 
         QObject::connect(downloader, SIGNAL(finisheddl(QByteArray)), dlthread, SLOT(quit()));
         QObject::connect(downloader, SIGNAL(finisheddl(QByteArray)), downloader, SLOT(deleteLater()));
         QObject::connect(dlthread, SIGNAL(finished()), dlthread, SLOT(deleteLater()));
 
         dlthread->start();
-
-        emit sendLine("Downloading from: mirror "+(QString::number(mirrorno))+" ("+mirrors[mirrorno]+")");
     }
     else {
         //Download was OK
@@ -653,4 +672,30 @@ void Updater::cancelUpdate() {
     this->downloader->deleteLater();
     emit sendLine("Update ABORTED BY USER");
     emit updateFinished(false, true, true, true, type);
+}
+
+int Updater::getRandomMirror() {
+
+    QString mirrorsTried="";
+    for (int i=0; i<this->usedMirrors.size(); i++) {
+        mirrorsTried+=QString::number(this->usedMirrors.at(i))+"..";
+    }
+    if (mirrorsTried=="") {
+        emit sendLine("Mirrors tried so far: none");
+    }
+    else {
+        emit sendLine("Mirrors tried so far: "+mirrorsTried);
+    }
+
+    int high=3;
+    int low=0;
+    int mirrorNo = qrand() % ((high + 1) - low) + low;
+    while (this->usedMirrors.contains(mirrorNo)) {
+        mirrorNo = qrand() % ((high + 1) - low) + low;
+    }
+    //Does not contain
+    this->usedMirrors.append(mirrorNo);
+
+    emit sendLine("Picked random mirror: "+QString::number(mirrorNo));
+    return mirrorNo;
 }

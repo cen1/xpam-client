@@ -113,12 +113,13 @@ void Downloader::finishedSlot(){
             file->write(tmpBuffer);
             file->close();
 
+            emit sendInfo("Handing off work to updater");
             emit finisheddl();
         }
     }
     else {
         if (!erroremitted) {
-            emit sendInfo("Network error: "+reply->errorString());
+            emit sendInfo("Network err code: "+reply->errorString());
             erroremitted=true;
             emit finisheddl();
         }

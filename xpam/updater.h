@@ -60,6 +60,7 @@ private:
     QByteArray      jsonba;
     QJsonObject     real;
     QStringList     mirrors;
+    QVector<int>    usedMirrors;
     QTime           progressTime;
     int             latestVersion;
     bool            restartNeeded;
@@ -71,6 +72,7 @@ private:
 
     QByteArray simpleDl(QUrl url);
     int setCurrentPlusOneJson();
+    int getRandomMirror();
 
 signals:
     void updateFinished(bool restartNeeded, bool ok, bool isUpToDate, bool canceled, int type);
