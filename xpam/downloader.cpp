@@ -98,6 +98,8 @@ void Downloader::finishedSlot(){
 
             emit sendInfo("Redirecting...");
             emit sendInfo("");
+            tmpBuffer.clear(); //CLEAR THE GODDAMN BUFFER!!!!
+            file->resize(0);
 
             //reconnect since deleting reply disconnects all slots
             QObject::connect(reply, SIGNAL(finished()), this, SLOT(finishedSlot()));

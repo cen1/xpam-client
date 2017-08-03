@@ -425,6 +425,7 @@ void Updater::receiveFinishdl() {
             hashok=true;
         }
         fz.close();
+        QThread::sleep(20);
     }
     else {
         Logger::log("Error with download, could not open result file.", config);

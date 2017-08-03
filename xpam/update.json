@@ -5,7 +5,7 @@
             "mirror2" : "http://files.eurobattle.net/updates/update23beta.zip",
             "mirror3" : "http://files.eurobattle.net/updates/update23beta.zip",
             "mirror4" : "http://files.eurobattle.net/updates/update23beta.zip",
-            "sha1" : "bdb74dbfcc7bc3d4c9317e3e318f16551d99ddac"
+            "sha1" : "7e6938c4e0da7f0bd89ab3293523bd8de5a2304e"
     },
     "1.28.4" : {
             "version" : 1,
@@ -21,7 +21,7 @@
             "mirror2" : "http://files.eurobattle.net/updates/w3/1282_to_1284.zip",
             "mirror3" : "http://xpam.pl/update/1282_to_1284.zip",
             "mirror4" : "http://xpam.pl/update/1282_to_1284.zip",
-            "sha1" : "48143c789fcbda18f0cd67f999b00b93eabf4c2c"
+            "sha1" : "986a14e15aa26d99f494ddd3150da9bbf1857947"
     },
     "1.28.1" : {
             "version" : 1,
@@ -29,7 +29,7 @@
             "mirror2" : "http://files.eurobattle.net/updates/w3/1281_to_1282.zip",
             "mirror3" : "http://xpam.pl/update/1281_to_1282.zip",
             "mirror4" : "http://xpam.pl/update/1281_to_1282.zip",
-            "sha1" : "67c390cba8842a0549e5a527eca9443c207fdfbc"
+            "sha1" : "b27d84fc2496c7581fbe1055509b97f03384517a"
     },
     "1.28.0" : {
             "version" : 1,
@@ -37,31 +37,31 @@
             "mirror2" : "http://files.eurobattle.net/updates/w3/1280_to_1281.zip",
             "mirror3" : "http://xpam.pl/update/1280_to_1281.zip",
             "mirror4" : "http://xpam.pl/update/1280_to_1281.zip",
-            "sha1" : "c27aa3e40ef16e53cdb3ef8c934d0bf2b607d4f0"
+            "sha1" : "284a25e33eb787952654a963cc290dc45db647dc"
     },
     "1.28.5.7680.FULL" : {
             "version" : 1,
-            "mirror1" : "https://goo.gl/EVJJ6B",
+            "mirror1" : "https://goo.gl/CJWwNp",
             "mirror2" : "http://xpam.pl/update/w31_28_5.zip",
             "mirror3" : "http://files.eurobattle.net/updates/w3/w31_28_5.zip",
-            "mirror4" : "http://xpam.pl/update/w31_28_5.zip",
-            "sha1" : "cc504a374291f783f5817f2eb14d1998e1dade13"
+            "mirror4" : "https://goo.gl/rzjixw",
+            "sha1" : "53ad53375a9ef77beed4424652cc7f2cd7a5c5cc"
     },
     "DotA v6.88g Allstars.w3x": {
         "version" : 1,
-        "mirror1" : "http://localhost:8080/v6.88g.zip",
-        "mirror2" : "http://xpam.pl/update/w31_28_5.zip",
-        "mirror3" : "http://files.eurobattle.net/updates/w3/w31_28_5.zip",
-        "mirror4" : "http://xpam.pl/update/w31_28_5.zip",
+        "mirror1" : "http://xpam.pl/update/v6.88g.zip",
+        "mirror2" : "http://files.eurobattle.net/updates/dota/v6.88g.zip",
+        "mirror3" : "http://xpam.pl/update/v6.88g.zip",
+        "mirror4" : "http://xpam.pl/update/v6.88g.zip",
         "sha1" : "29e274ead3221507550f8a90a393425f37602d77"
     },
     "DotA v6.85k Allstars.w3x": {
         "version" : 1,
-        "mirror1" : "http://localhost:8080/v6.85k.zip",
-        "mirror2" : "http://xpam.pl/update/w31_28_5.zip",
-        "mirror3" : "http://files.eurobattle.net/updates/w3/w31_28_5.zip",
-        "mirror4" : "http://xpam.pl/update/w31_28_5.zip",
-        "sha1" : "6028885e7332f51e013d1fdb76faf53ccb7ede79"
+        "mirror1" : "http://xpam.pl/update/v6.85k.zip",
+        "mirror2" : "http://files.eurobattle.net/updates/dota/v6.85k.zip",
+        "mirror3" : "http://xpam.pl/update/v6.85k.zip",
+        "mirror4" : "http://xpam.pl/update/v6.85k.zip",
+        "sha1" : "035b8be69fc0549083a6ce06df873c3d5eef0a9a"
     },
     "22" : {
             "version" : 22,

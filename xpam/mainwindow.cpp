@@ -537,6 +537,16 @@ void MainWindow::updateFinished(bool restartNeeded, bool ok, bool isUpToDate, bo
             if (checkW3Updates()) {
                 enableButtons=false;
             }
+            else {
+                //Return 0 means no updates are needed (anymore), go to initial tab
+                int dotaret = checkDotaUpdates();
+                if (dotaret==0) {
+                    ui->tabWidget->setCurrentIndex(0);
+                }
+                else if (dotaret==1) {
+                    enableButtons=false;
+                }
+            }
         }
     }
     else if (type==1 && !ok) {
@@ -585,8 +595,12 @@ void MainWindow::updateFinished(bool restartNeeded, bool ok, bool isUpToDate, bo
                 Logger::log("W3 is up to date", config);
 
                 //Return 0 means no updates are needed (anymore), go to initial tab
-                if (checkDotaUpdates()==0) {
+                int dotaret = checkDotaUpdates();
+                if (dotaret==0) {
                     ui->tabWidget->setCurrentIndex(0);
+                }
+                else if (dotaret==1) {
+                    enableButtons=false;
                 }
             }
         }
