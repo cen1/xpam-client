@@ -43,13 +43,15 @@ int main(int argc, char *argv[])
     splash.show();
     splash.showMessage("Checking for updates...", Qt::AlignLeft, Qt::white);
 
-    if (w.updatesEnabled) {
-        w.checkUpdates();
+    if (w.checkW3PathUnicode()) {
+        if (w.updatesEnabled) {
+            w.checkUpdates();
 
-        //wait for update check to finish
-        QEventLoop loop;
-        QObject::connect(&w, SIGNAL(updateCheckFinished()), &loop, SLOT(quit()));
-        loop.exec();
+            //wait for update check to finish
+            QEventLoop loop;
+            QObject::connect(&w, SIGNAL(updateCheckFinished()), &loop, SLOT(quit()));
+            loop.exec();
+        }
     }
 
     //Uncomment for frameless window

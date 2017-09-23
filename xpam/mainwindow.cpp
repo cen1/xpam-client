@@ -42,6 +42,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "QMovie"
 #include "QObjectList"
 #include "QFileDialog"
+#include "QTimer"
 
 #ifndef WINUTILS_H
     #include "winutils.h"
@@ -170,6 +171,24 @@ void MainWindow::startW3AndGproxy(QString w3Exename, QString restrictedVersion) 
         return;
     }
 
+    //Check if gproxy.exe exists and was not deleted by AV
+    QFile gproxyFile(config->EUROPATH+"/gproxy.exe");
+    if (!gproxyFile.exists()) {
+        QMessageBox mb(QMessageBox::Critical, "GProxy missing",
+           "GProxy.exe is missing from Eurobattle.net folder. Maybe your AV deleted it?", QMessageBox::Ok);
+         mb.exec();
+         return;
+    }
+    //Check if w3l.exe exists and was not deleted by AV
+    QString w3exe = config->W3PATH+"\\w3l.exe";
+    QFile w3lFile(w3exe);
+    if (!w3lFile.exists()) {
+        QMessageBox mb(QMessageBox::Critical, "W3l missing",
+           "w3l.exe is missing from Warcraft III folder. Maybe your AV deleted it?", QMessageBox::Ok);
+         mb.exec();
+         return;
+    }
+
     ui->tabWidget->setCurrentIndex(1);
 
     //Preloader
@@ -209,37 +228,10 @@ void MainWindow::on_pushButtonGWN_clicked()
         W3::setVersion(W3::W3_LATEST, config);
     }
 
-    //Again, hard WINAPI check
-    if (Util::isRunning(config->W3_EXENAME_LATEST)) {
-        status("Warcraft III is already running");
-        return;
-    }
-
     //Set normal gateway as default
     Registry::setGateways();
 
-    QString w3dir=config->W3PATH;
-    QString w3exe=w3dir+"\\w3l.exe";
-
-    status("Launching Warcraft III...");
-
-    QStringList list;
-    if (ui->checkBox_windowed->isChecked()) list << "-windowed";
-    if (ui->checkBox_fullscreen->isChecked()) list << "-nativefullscr";
-    if (ui->checkBox_opengl->isChecked()) list << "-opengl";
-
-    w3=new W3(w3dir, w3exe, list, config);
-    w3t=new QThread();
-    w3->moveToThread(w3t);
-
-    QObject::connect(w3t, SIGNAL(started()), w3, SLOT(startW3()));
-    QObject::connect(w3, SIGNAL(w3Exited()), this, SLOT(w3Exited()));
-
-    QObject::connect(w3, SIGNAL(w3Exited()), w3t, SLOT(quit()));
-    QObject::connect(w3, SIGNAL(w3Exited()), w3, SLOT(deleteLater()));
-    QObject::connect(w3t, SIGNAL(finished()), w3t, SLOT(deleteLater()));
-
-    w3t->start();
+    runW3();
 }
 
 //Dota gateway, Start w3 and gproxy, switch version as needed
@@ -254,16 +246,25 @@ void MainWindow::on_pushButtonGWD_clicked()
     }
 }
 
-//Start w3 when gproxy emits READY state
-void MainWindow::gproxyReady(QString w3Exename) {
-    ui->labelGproxyout->setText("EMITTED");
-    if (Util::isRunning(w3Exename)) {
+void MainWindow::runW3() {
+
+    //Again, hard WINAPI check
+    if (Util::isRunning(config->W3_EXENAME_LATEST)) {
         status("Warcraft III is already running");
         return;
     }
 
     QString w3dir=config->W3PATH;
     QString w3exe=w3dir+"\\w3l.exe";
+
+    //Check if w3l.exe exists and was not deleted by AV
+    QFile w3lFile(w3exe);
+    if (!w3lFile.exists()) {
+        QMessageBox mb(QMessageBox::Critical, "W3l missing",
+           "w3l.exe is missing from Warcraft III folder. Maybe your AV deleted it?", QMessageBox::Ok);
+         mb.exec();
+         return;
+    }
 
     status("Launching Warcraft III...");
 
@@ -284,6 +285,14 @@ void MainWindow::gproxyReady(QString w3Exename) {
     QObject::connect(w3t, SIGNAL(finished()), w3t, SLOT(deleteLater()));
 
     w3t->start();
+}
+
+//Start w3 when gproxy emits READY state
+void MainWindow::gproxyReady(QString w3Exename) {
+    ui->labelGproxyout->setText("EMITTED");
+    Logger::log("GProxy is ready", config);
+
+    runW3();
 
     ui->preloaderLabel1->movie()->stop();
 }
@@ -616,9 +625,9 @@ void MainWindow::updateFinished(bool restartNeeded, bool ok, bool isUpToDate, bo
                     args << "/c";
                     args << "update.bat";
                     QProcess::startDetached(config->SYSTEM+"\\cmd.exe", args);
-                    QApplication::quit();
-                }
-                else {
+
+                    //We might not be in event loop yet
+                    QTimer::singleShot(1000, this, SLOT(quit()));
                 }
             }
             else {
@@ -949,3 +958,43 @@ void MainWindow::on_tabWidget_currentChanged(int index)
         displayW3Version();
     }
 }
+
+bool MainWindow::checkW3PathUnicode() {
+    bool isUnicode = false;
+    QString w3path = config->W3PATH;
+
+    for(int i = 0; i < w3path.size(); i++) {
+        if(w3path.at(i).unicode() > 127) {
+            isUnicode = true;
+            break;
+        }
+    }
+
+    //Check if w3 path contains .exe
+    QFile f(config->W3PATH+"/Warcraft III.exe");
+    if (!f.exists()) {
+        QMessageBox mb(QMessageBox::Critical, "W3 path alert",
+           "Your W3 path is missing 'Warcraft III.exe' which probably means the path is incorrect.",
+           QMessageBox::Ok);
+         mb.exec();
+         return false;
+    }
+
+    Logger::log("W3 path sanity check: "+w3path, config);
+    if (isUnicode) {
+        Logger::log("W3 path is unicode", config);
+        QMessageBox mb(QMessageBox::Critical, "Unicode alert",
+           "It appears your W3 is installed in  path that contains non-ASCII characters. Please move it to path that conains only ASCII characters or you will have a lot of problems.",
+           QMessageBox::Ok);
+         mb.exec();
+         return false;
+    }
+
+    return true;
+}
+
+void MainWindow::quit() {
+    Logger::log("Quitting due to restart", config);
+    QApplication::quit();
+}
+

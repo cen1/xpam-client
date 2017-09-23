@@ -406,7 +406,8 @@ void Updater::receiveProgress(qint64 bytesReceived, qint64 bytesTotal) {
 void Updater::receiveFinishdl() {
 
     //Check hash
-    Logger::log("Checking file hash", config);
+    Logger::log("Checking file hash...", config);
+    emit sendLine("Checking file hash...");
 
     bool hashok=false;
     QString sha1="unknown";
@@ -425,9 +426,9 @@ void Updater::receiveFinishdl() {
             hashok=true;
         }
         fz.close();
-        QThread::sleep(20);
     }
     else {
+        emit sendLine("Error with download, could not open result file.");
         Logger::log("Error with download, could not open result file.", config);
     }
 
@@ -472,6 +473,8 @@ void Updater::receiveFinishdl() {
     else {
         //Download was OK
         Logger::log("Extracting zip", config);
+        emit sendLine("File hash OK. Extracting update ZIP...");
+
         if (!extractZip()){
             emit sendLine("Extraction process failed. Aborting update");
             return;

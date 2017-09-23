@@ -67,7 +67,7 @@ void GProxy::readStdout() {
     while(!abort) {
         p.waitForReadyRead(100);
 
-        if (p.canReadLine()) {
+        while (p.canReadLine()) {
             QString line(p.readLine());
             line=line.simplified(); //mostly for removing newline
             QStringList tokens = parseTokens(line);

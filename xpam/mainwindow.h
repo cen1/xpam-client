@@ -50,6 +50,7 @@ public:
     void checkUpdates();
     bool checkW3Updates();
     bool updatesEnabled;
+    bool checkW3PathUnicode();
     
 private slots:
     void on_pushButtonGWG_clicked();
@@ -71,6 +72,8 @@ private slots:
     void on_pushButton_updateW3_released();
 
     void on_tabWidget_currentChanged(int index);
+
+    void quit();
 
 public slots:
     void gproxyReady(QString w3Exename);
@@ -108,6 +111,7 @@ private:
     void displayW3Version();
     void diffW3Update(QString version);
     int checkDotaUpdates();
+    void runW3();
 
     bool updateInProgress;
 
