@@ -63,6 +63,14 @@
         "mirror4" : "http://xpam.pl/update/v6.85k.zip",
         "sha1" : "035b8be69fc0549083a6ce06df873c3d5eef0a9a"
     },
+    "24" : {
+            "version" : 24,
+            "mirror1" : "https://drive.google.com/uc?id=0B6cPcpH1ZToaUk1zbDZVN210LXM",
+            "mirror2" : "https://drive.google.com/uc?id=0B3Yu5IASRCBPZFlqeGh1ZlU2TmM",
+            "mirror3" : "http://files.eurobattle.net/updates/update24.zip",
+            "mirror4" : "http://xpam.pl/update/update24.zip",
+            "sha1" : "3d66973e3e658094b39a8ace3786faa5be8ba7d2"
+    },
     "23" : {
             "version" : 23,
             "mirror1" : "https://drive.google.com/uc?id=0B6cPcpH1ZToadS1vVWdTTUVMc1k",

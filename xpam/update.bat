@@ -1,5 +1,6 @@
 @echo Off
 
+Taskkill /im xpam.exe /f
 ping 127.0.0.1 -n 3 > nul
 IF EXIST newxpam.exe (
 	del xpam.exe
