@@ -91,9 +91,6 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->checkBox_fullscreen, SIGNAL(clicked(bool)), this, SLOT(handleCheckboxClient(bool)));
     connect(ui->checkBox_updates, SIGNAL(clicked(bool)), this, SLOT(handleCheckboxClient(bool)));
 
-    //load w3 options
-    this->initClientOptions();
-
     //initiate gproxy options
     this->initGproxyOptions();
 
@@ -103,6 +100,20 @@ MainWindow::MainWindow(QWidget *parent) :
     QFile log(config->EUROPATH+"\\xpam.log");
     log.open(QFile::WriteOnly | QFile::Truncate);
     log.close();
+
+    QSettings settings(config->CONFIG_PATH, QSettings::IniFormat);
+    config->ACTIVE_MODE_KEY = settings.value("ActiveMode", config->W3_KEY_LATEST).toString();
+    if (config->ACTIVE_MODE_KEY != config->W3_KEY_LATEST && config->ACTIVE_MODE_KEY != config->W3_KEY_126) {
+        // active_mode always should be valid, because we are using W3_KEY_* as a ini group
+        config->ACTIVE_MODE_KEY = config->W3_KEY_LATEST;
+        settings.setValue("ActiveMode", config->ACTIVE_MODE_KEY);
+    }
+    config->W3PATH_126 = settings.value(config->W3_KEY_126 + "/path", "").toString();
+    config->W3PATH_LATEST = settings.value(config->W3_KEY_LATEST + "/path", "").toString();
+    ui->label_War126Path->setText(config->W3PATH_126);
+    ui->label_WarLatestPath->setText(config->W3PATH_LATEST);
+
+    changeActiveMode(config->ACTIVE_MODE_KEY);
 
     //Add CD keys if needed
     Updater::replaceCDKeys(config);
@@ -118,31 +129,33 @@ MainWindow::MainWindow(QWidget *parent) :
         ui->pushButtonGWD->setEnabled(false);
     }
 
-    //Set current w3 version on slider
-    QString currentV = W3::getActiveVersion(config);
-    if (currentV==W3::W3_126) {
-        ui->horizontalSliderW3Version->setValue(0);
-    }
-    else if (currentV==W3::W3_LATEST) {
-        ui->horizontalSliderW3Version->setValue(1);
-    }
-    else {
-        status("ERROR: unable to determine current W3 version, corrupt state");
-        ui->horizontalSliderW3Version->setEnabled(false);
-    }
-
     //Sanity checks
     W3::sanityCheck(config);
 
     //Set TFT as default client
     Registry r;
     r.setDefaultTFT();
+}
 
-    //Hide slider for now
-    ui->horizontalSliderW3Version->hide();
-    ui->labelChangeVersion->hide();
-    ui->label126->hide();
-    ui->labelLatest->hide();
+void MainWindow::changeActiveMode(QString activeMode) {
+    ui->horizontalSlider_ActiveMode->setEnabled(false);
+    if (activeMode == config->W3_KEY_126 && config->W3PATH_126 == "") {
+        status("You must specify Warcraft 1.26a path first");
+        activeMode = config->W3_KEY_LATEST;
+    }
+    config->ACTIVE_MODE_KEY = activeMode;
+    ui->label_ActiveMode->setText(config->ACTIVE_MODE_KEY);
+    //load w3 options
+    this->initClientOptions();
+    QSettings settings(config->CONFIG_PATH, QSettings::IniFormat);
+    settings.setValue("ActiveMode", config->ACTIVE_MODE_KEY);
+    ui->horizontalSlider_ActiveMode->setValue(config->ACTIVE_MODE_KEY == config->W3_KEY_LATEST ? 1 : 0);
+    ui->horizontalSlider_ActiveMode->setEnabled(true);
+}
+
+void MainWindow::on_horizontalSlider_ActiveMode_sliderReleased()
+{
+    changeActiveMode(ui->horizontalSlider_ActiveMode->value()==1 ? config->W3_KEY_LATEST : config->W3_KEY_126);
 }
 
 MainWindow::~MainWindow()
@@ -154,21 +167,37 @@ MainWindow::~MainWindow()
 void MainWindow::on_pushButtonGWG_clicked()
 {
     if (config->USE_DUAL_VERSION) {
-        W3::setVersion(W3::W3_LATEST, config);
+        changeActiveMode(config->W3_KEY_LATEST);
     }
-    startW3AndGproxy(config->W3_EXENAME_LATEST);
+    startW3AndGproxy();
 }
 
-void MainWindow::startW3AndGproxy(QString w3Exename, QString restrictedVersion) {
+void MainWindow::startW3AndGproxy() {
+    QString w3Path;
+    QString w3Exename;
+    QString restrictedVersion;
 
+    //QString w3Exename, QString restrictedVersion
+    if (config->ACTIVE_MODE_KEY == config->W3_KEY_LATEST) {
+        // Latest
+        w3Path = config->W3PATH_LATEST;
+        w3Exename = config->W3_EXENAME_LATEST;
+        restrictedVersion = config->W3_VERSION_LATEST;
+    } else {
+        // 1.26
+        w3Path = config->W3PATH_126;
+        w3Exename = config->W3_EXENAME_126;
+        restrictedVersion = config->W3_VERSION_126;
+    }
     //Hard WINAPI checks for w3 and gproxy running, all kind of problems if they are...
     if (Util::isRunning(w3Exename)) {
         status("Warcraft III is already running");
         return;
     }
     if (Util::isRunning("gproxy.exe")) {
-        status("GProxy is already running");
-        return;
+        // @todo some correct solution about this
+        system("pkill gproxy");
+        status("GProxy is already running. But we can just kill it (so dumb lol)");
     }
 
     //Check if gproxy.exe exists and was not deleted by AV
@@ -180,7 +209,7 @@ void MainWindow::startW3AndGproxy(QString w3Exename, QString restrictedVersion) 
          return;
     }
     //Check if w3l.exe exists and was not deleted by AV
-    QString w3exe = config->W3PATH+"\\w3l.exe";
+    QString w3exe = w3Path+"\\w3l.exe";
     QFile w3lFile(w3exe);
     if (!w3lFile.exists()) {
         QMessageBox mb(QMessageBox::Critical, "W3l missing",
@@ -205,7 +234,7 @@ void MainWindow::startW3AndGproxy(QString w3Exename, QString restrictedVersion) 
     status("Launching GProxy...");
     ui->labelGproxyout->setText("Working directory: "+gpdir);
 
-    gproxy=new GProxy(gpdir, gpexe, w3Exename, restrictedVersion, config->W3PATH);
+    gproxy=new GProxy(gpdir, gpexe, w3Exename, restrictedVersion, w3Path);
     gpt=new QThread();
     gproxy->moveToThread(gpt);
 
@@ -225,7 +254,7 @@ void MainWindow::startW3AndGproxy(QString w3Exename, QString restrictedVersion) 
 void MainWindow::on_pushButtonGWN_clicked()
 {    
     if (config->USE_DUAL_VERSION) {
-        W3::setVersion(W3::W3_LATEST, config);
+        changeActiveMode(config->W3_KEY_LATEST);
     }
 
     //Set normal gateway as default
@@ -239,10 +268,10 @@ void MainWindow::on_pushButtonGWD_clicked()
 {
     if (config->USE_DUAL_VERSION) {
         //Switch version
-        W3::setVersion(W3::W3_126, config);
+        changeActiveMode(config->W3_KEY_126);
 
         //Start gproxy gateway
-        startW3AndGproxy(config->W3_EXENAME_126, config->W3_VERSION_126);
+        startW3AndGproxy();
     }
 }
 
@@ -254,7 +283,7 @@ void MainWindow::runW3() {
         return;
     }
 
-    QString w3dir=config->W3PATH;
+    QString w3dir=config->ACTIVE_MODE_KEY == config->W3_KEY_LATEST ? config->W3PATH_LATEST : config->W3PATH_126;
     QString w3exe=w3dir+"\\w3l.exe";
 
     //Check if w3l.exe exists and was not deleted by AV
@@ -652,14 +681,17 @@ void MainWindow::handleCheckbox(bool checked)
     QString option = QObject::sender()->objectName().remove("checkBox_");
     QString value = "0";
     if (checked) value="1";
+    QSettings settings(config->CONFIG_PATH, QSettings::IniFormat);
+    settings.setValue(option, value);
+    settings.sync();
 
-    bool r=config->SetOption(config->EUROPATH+"\\gproxy.cfg", option, value);
-    if (!r) ui->statusBar->showMessage("Could not change gproxy config", 10000);
+    //if (!r) ui->statusBar->showMessage("Could not change gproxy config", 10000);
 }
 
 //Handle client options
 void MainWindow::handleCheckboxClient(bool checked)
 {
+    QSettings settings(config->CONFIG_PATH, QSettings::IniFormat);
     QString option = QObject::sender()->objectName().remove("checkBox_");
     QString value = "0";
     if (checked) value="1";
@@ -667,24 +699,22 @@ void MainWindow::handleCheckboxClient(bool checked)
     if (QObject::sender()==ui->checkBox_fullscreen) {
         if (ui->checkBox_windowed->isChecked()) {
             ui->checkBox_windowed->setChecked(false);
-            config->SetOption(config->EUROPATH+"\\xpam.cfg", "windowed", "0");
+            settings.setValue(config->ACTIVE_MODE_KEY + "/windowed", "0");
         }
     }
     if (QObject::sender()==ui->checkBox_windowed) {
         if (ui->checkBox_fullscreen->isChecked()) {
             ui->checkBox_fullscreen->setChecked(false);
-            config->SetOption(config->EUROPATH+"\\xpam.cfg", "fullscreen", "0");
+            settings.setValue(config->ACTIVE_MODE_KEY + "/fullscreen", "0");
         }
     }
-
-    bool r=config->SetOption(config->EUROPATH+"\\xpam.cfg", option, value);
-    if (!r) ui->statusBar->showMessage("Could not change client config", 10000);
+    settings.setValue(config->ACTIVE_MODE_KEY + "/" + option, value);
 }
 
 //Init checkboxes according to cfg file
 void MainWindow::initGproxyOptions() {
     QFile conf(config->EUROPATH+"\\gproxy.cfg");
-    if (conf.open(QFile::ReadOnly))
+    if (!conf.open(QFile::ReadOnly))
         ui->statusBar->showMessage("Unable to load gproxy options", 10000);
 
     QStringList lines;
@@ -703,32 +733,21 @@ void MainWindow::initGproxyOptions() {
     }
 }
 
-//Init checkboxes according to cfg
+//Init checkboxes according to ini
 void MainWindow::initClientOptions() {
-    QFile conf(config->EUROPATH+"\\xpam.cfg");
-    if (conf.open(QFile::ReadOnly))
-        ui->statusBar->showMessage("Unable to load client options", 10000);
-
-    QStringList lines;
-    while(!conf.atEnd())
-        lines.append(conf.readLine());
-
-    conf.close();
-    for (auto i = lines.begin(); i!=lines.end(); i++) {
-        if ((*i).startsWith("#")) continue;
-        QStringList l = (*i).split("=");
-        QCheckBox * find = this->findChild<QCheckBox *>("checkBox_"+l[0].simplified());
-        if (find!=0) {
-            if (l[1].simplified()=="1") find->setChecked(true);
-            else if (l[1].simplified()=="0") find->setChecked(false);
-        }
+    QSettings settings(config->CONFIG_PATH, QSettings::IniFormat);
+    foreach (const QString &option_name, config->W3_OPTIONS) {
+        QCheckBox * find = this->findChild<QCheckBox *>("checkBox_"+option_name);
+        if (find != 0) {
+            find->setChecked(settings.value(config->ACTIVE_MODE_KEY + "/" + option_name, "0") == "1" ? true : false);
+        } // @todo: else throw the error? because it is config's fault
     }
 
-    if (ui->checkBox_fullscreen->isChecked() && ui->checkBox_windowed->isChecked()) {
-        ui->checkBox_fullscreen->setChecked(true);
-        ui->checkBox_windowed->setChecked(false);
-       config->SetOption(config->EUROPATH+"\\xpam.cfg", "windowed", "0");
-    }
+   if (ui->checkBox_fullscreen->isChecked() && ui->checkBox_windowed->isChecked()) {
+       ui->checkBox_fullscreen->setChecked(true);
+       ui->checkBox_windowed->setChecked(false);
+       settings.setValue(config->ACTIVE_MODE_KEY + "/windowed", "0");
+   }
 }
 
 //This slot is only connected for startup update check
@@ -803,54 +822,46 @@ void MainWindow::on_pushButtonClientLog_clicked()
 }
 
 //Set new w3 path
-void MainWindow::on_pushButton_w3path_clicked()
+void MainWindow::on_pushButton_warLatestPath_clicked()
 {
+    QSettings settings(config->CONFIG_PATH, QSettings::IniFormat);
     QFileDialog qfd;
-    qfd.setDirectory(config->W3PATH);
+    qfd.setDirectory(settings.value(config->W3_KEY_LATEST + "/path", "").toString());
     const QString path = qfd.getExistingDirectory(this);
     QString p = path;
     p=p.replace(QChar('/'), QChar('\\'));
-
-    if (p!="") { //On Cancel it returns empty
+    if (p!="") {  //On Cancel it returns empty
         QFile f(p+"\\"+config->W3_EXENAME_LATEST);
         if (!f.exists()) {
             status("Failed to set W3 path, "+config->W3_EXENAME_LATEST+" not present in that directory.");
-        }
-        else {
-            Registry reg;
-            if (reg.setInstallPath(p) && reg.setW3dir(p)) {
-                status("W3 path set to "+p);
-                config->W3PATH=p;
-                displayW3Version();
-            }
-            else {
-                status("Failed to set W3 path");
-            }
+        } else {
+            settings.setValue(config->W3_KEY_LATEST + "/path", p);
+            ui->label_WarLatestPath->setText(p);
         }
     }
 }
 
-void MainWindow::on_horizontalSliderW3Version_sliderReleased()
+// @todo: refactor? kinda same method as above, with different strings
+void MainWindow::on_pushButton_war126Path_clicked()
 {
-    ui->horizontalSliderW3Version->setEnabled(false);
-    QString newVersion = config->W3_VERSION_126;
-
-    bool r = false;
-    if (ui->horizontalSliderW3Version->value()==0) {
-        //126
-        r = W3::setVersion(W3::W3_126, config);
+    QSettings settings(config->CONFIG_PATH, QSettings::IniFormat);
+    QFileDialog qfd;
+    qfd.setDirectory(settings.value(config->W3_KEY_126 + "/path", "").toString());
+    const QString path = qfd.getExistingDirectory(this);
+    QString p = path;
+    p=p.replace(QChar('/'), QChar('\\'));
+    if (p!="") {  //On Cancel it returns empty
+        QFile f(p+"\\"+config->W3_EXENAME_126);
+        if (!f.exists()) {
+            status("Failed to set W3 path, "+config->W3_EXENAME_126+" not present in that directory.");
+        } else {
+            settings.setValue(config->W3_KEY_126 + "/path", p);
+            ui->label_War126Path->setText(p);
+        }
     }
-    else {
-        //LATEST
-        r = W3::setVersion(W3::W3_LATEST, config);
-        newVersion = config->W3_VERSION_LATEST;
-    }
-    if (r) {
-        status("W3 version was changed to "+newVersion);
-    }
-
-    ui->horizontalSliderW3Version->setEnabled(true);
 }
+
+
 
 //Full W3 update
 void MainWindow::on_pushButton_updateW3_released()
@@ -941,14 +952,14 @@ void MainWindow::diffW3Update(QString version) {
 }
 
 void MainWindow::displayW3Version() {
-    ui->labelW3Path->setText("W3 path: "+config->W3PATH);
+    /*ui->labelW3Path->setText("W3 path: "+config->W3PATH);
     QString w3versionDetected = Patcher::getCurrentW3Version(config);
     if (w3versionDetected==config->W3_VERSION_LATEST) {
         ui->labelW3Version->setText("Detected latest W3 version: "+w3versionDetected+" (OK)");
     }
     else {
         ui->labelW3Version->setText("Detected latest W3 version: "+w3versionDetected+" (ERROR, needed: "+config->W3_VERSION_LATEST+")");
-    }
+    }*/
 }
 
 void MainWindow::on_tabWidget_currentChanged(int index)
@@ -997,4 +1008,3 @@ void MainWindow::quit() {
     Logger::log("Quitting due to restart", config);
     QApplication::quit();
 }
-

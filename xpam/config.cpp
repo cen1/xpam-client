@@ -34,12 +34,16 @@ Config::Config()
 {
     VERSION_CLIENT = "0.9.0.0";
     W3_VERSION_LATEST = "1.28.5.7680";
+    W3_KEY_126 = "WAR3_126";
+    W3_KEY_LATEST = "WAR3_LATEST";
+    ACTIVE_MODE_KEY = "WAR3_LATEST";
     W3_VERSION_126 = "1.26.0.6401";
     W3_EXENAME_LATEST="Warcraft III.exe";
     W3_EXENAME_126="war3.exe";
     BETAPIN = "1377";
 
     EUROPATH    = Registry::getEuroPath();
+    CONFIG_PATH = EUROPATH+"\\xpam.ini";
     SOUNDPATH   = EUROPATH+"\\sounds";
     W3PATH      = Registry::getW3dir();
     DOCPATH     = QStandardPaths::locate(QStandardPaths::DocumentsLocation, QString(), QStandardPaths::LocateDirectory)+"Warcraft III";
@@ -51,7 +55,7 @@ Config::Config()
     APPDATA     = Winutils::getAppData()+"\\Eurobattle.net";
     SYSTEM      = Winutils::getSystem32();
 
-    USE_DUAL_VERSION = false;
+    USE_DUAL_VERSION = true;
     ASK_FOR_W3_FAST_UPDATE = true;
     HAS_QUICK_PATCH=true;
 
@@ -64,6 +68,11 @@ Config::Config()
     json2 = "http://tools.eurobattle.net/update/update.json";
     json3 = "http://leaguebots.com/cen/update/update.json";
 #endif
+
+    // List of checkboxes which are standing for Warcraft 3 arguments
+    W3_OPTIONS.append("windowed");
+    W3_OPTIONS.append("fullscreen");
+    W3_OPTIONS.append("opengl");
 
     //Common files between 1.26 and LATEST which need to be renamed
     //Unique files ot each version ar eleft untouched
@@ -90,41 +99,4 @@ Config::Config()
     //DotA maps
     DOTA_MAPS.append("DotA v6.85k Allstars.w3x");
     //DOTA_MAPS.append("DotA v6.88g Allstars.w3x");
-}
-
-bool Config::SetOption(QString file, QString option, QString value) {
-    QFile conf(file);
-    if (!conf.open(QFile::ReadOnly)) return false;
-
-    QStringList lines;
-    while(!conf.atEnd())
-        lines.append(conf.readLine());
-
-    bool optionWasUpdated=false;
-
-    conf.close();
-    for (auto i = lines.begin(); i!=lines.end(); i++) {
-        if ((*i).startsWith("#")) continue;
-        QStringList l = (*i).split("=");
-        if (l[0].simplified()==option) {
-            l[1]=" "+value+"\r\n";
-            (*i)=l[0]+"="+l[1];
-            optionWasUpdated=true;
-        }
-    }
-    QFile conf2(file);
-    if (!conf2.open(QFile::WriteOnly)) {
-        return false;
-    }
-
-    if (!optionWasUpdated) {
-        lines.append(option+"="+value);
-    }
-
-    for (auto i = lines.begin(); i!=lines.end(); i++) {
-        QByteArray ba = (*i).toLocal8Bit();
-        conf2.write(ba.data());
-    }
-    conf2.close();
-    return true;
 }

@@ -65,15 +65,24 @@ private slots:
     void on_pushButtonGPCL_clicked();
     void on_pushButtonGPNOTEPAD_clicked();
     void on_pushButtonClientLog_clicked();
-    void on_pushButton_w3path_clicked();
+    //void on_pushButton_w3path_clicked();
     
-    void on_horizontalSliderW3Version_sliderReleased();
+    void changeActiveMode(QString activeMode);
+    //void on_horizontalSliderW3Version_sliderReleased();
     
     void on_pushButton_updateW3_released();
 
     void on_tabWidget_currentChanged(int index);
 
     void quit();
+
+    //void on_pushButton_updateW3_clicked();
+
+    void on_pushButton_warLatestPath_clicked();
+
+    void on_pushButton_war126Path_clicked();
+
+    void on_horizontalSlider_ActiveMode_sliderReleased();
 
 public slots:
     void gproxyReady(QString w3Exename);
@@ -106,7 +115,7 @@ private:
     QSize normalsize;
     int lastCheckedDota=0;
 
-    void startW3AndGproxy(QString w3Exename, QString restrictedVersion="");
+    void startW3AndGproxy();
 
     void displayW3Version();
     void diffW3Update(QString version);

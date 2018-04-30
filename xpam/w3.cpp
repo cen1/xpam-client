@@ -64,8 +64,9 @@ void W3::startW3() {
 }
 
 QString W3::getActiveVersion(Config * config) {
-
-    bool is126 = true;
+    // @stub
+    return W3::W3_LATEST;
+    /*bool is126 = true;
     bool isLatest = true;
     QString w3path = config->W3PATH;
 
@@ -89,11 +90,12 @@ QString W3::getActiveVersion(Config * config) {
     else {
         Logger::log("Unable to determine current W3 version. Something got messed up...", config);
         return "ERROR";
-    }
+    }*/
 }
 
 bool W3::setVersion(QString version, Config * config) {
-
+    // @stub; won`t be needed
+    return false;
     QString currentV = W3::getActiveVersion(config);
     if (currentV==version) {
         Logger::log("W3 is already at version "+version, config);

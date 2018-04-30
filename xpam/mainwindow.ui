@@ -296,6 +296,9 @@ or manually host your games.</string>
                  </widget>
                 </item>
                 <item>
+                 <layout class="QFormLayout" name="formLayout"/>
+                </item>
+                <item>
                  <widget class="QPushButton" name="pushButtonGWG">
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -666,141 +669,203 @@ YOU CAN'T PLAY PG OR MANUALLY HOST GAMES IN THIS MODE!</string>
          <attribute name="title">
           <string> WARCRAFT</string>
          </attribute>
-         <widget class="QWidget" name="layoutWidget">
+         <widget class="QPushButton" name="pushButtonClientLog">
           <property name="geometry">
            <rect>
-            <x>20</x>
-            <y>20</y>
-            <width>871</width>
-            <height>141</height>
+            <x>30</x>
+            <y>30</y>
+            <width>150</width>
+            <height>19</height>
            </rect>
           </property>
-          <layout class="QVBoxLayout" name="verticalLayout_4">
-           <item>
-            <widget class="QPushButton" name="pushButtonClientLog">
-             <property name="maximumSize">
-              <size>
-               <width>150</width>
-               <height>16777215</height>
-              </size>
-             </property>
-             <property name="text">
-              <string>Open Client log file</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QPushButton" name="pushButton_w3path">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>150</width>
-               <height>16777215</height>
-              </size>
-             </property>
-             <property name="text">
-              <string>Change W3 path</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLabel" name="labelW3Path">
-             <property name="text">
-              <string/>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLabel" name="labelW3Version">
-             <property name="text">
-              <string/>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLabel" name="labelChangeVersion">
-             <property name="text">
-              <string>Change W3 version:</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_2">
-             <item>
-              <widget class="QLabel" name="label126">
-               <property name="maximumSize">
-                <size>
-                 <width>30</width>
-                 <height>16777215</height>
-                </size>
-               </property>
-               <property name="text">
-                <string>1.26</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QSlider" name="horizontalSliderW3Version">
-               <property name="enabled">
-                <bool>false</bool>
-               </property>
-               <property name="minimumSize">
-                <size>
-                 <width>120</width>
-                 <height>0</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>120</width>
-                 <height>16777215</height>
-                </size>
-               </property>
-               <property name="maximum">
-                <number>1</number>
-               </property>
-               <property name="value">
-                <number>1</number>
-               </property>
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QLabel" name="labelLatest">
-               <property name="maximumSize">
-                <size>
-                 <width>35</width>
-                 <height>16777215</height>
-                </size>
-               </property>
-               <property name="text">
-                <string>1.28.5</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <spacer name="horizontalSpacer">
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>40</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-            </layout>
-           </item>
-          </layout>
+          <property name="maximumSize">
+           <size>
+            <width>150</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>Open Client log file</string>
+          </property>
+         </widget>
+         <widget class="QGroupBox" name="war_latest_groupbox">
+          <property name="geometry">
+           <rect>
+            <x>30</x>
+            <y>90</y>
+            <width>391</width>
+            <height>331</height>
+           </rect>
+          </property>
+          <property name="title">
+           <string>Latest warcraft gateway</string>
+          </property>
+          <widget class="QLabel" name="war_latest_label_2">
+           <property name="geometry">
+            <rect>
+             <x>10</x>
+             <y>20</y>
+             <width>131</width>
+             <height>16</height>
+            </rect>
+           </property>
+           <property name="text">
+            <string>Warcraft location</string>
+           </property>
+           <property name="textFormat">
+            <enum>Qt::AutoText</enum>
+           </property>
+          </widget>
+          <widget class="QLabel" name="label_WarLatestPath">
+           <property name="geometry">
+            <rect>
+             <x>130</x>
+             <y>20</y>
+             <width>251</width>
+             <height>20</height>
+            </rect>
+           </property>
+           <property name="text">
+            <string>Loading...</string>
+           </property>
+          </widget>
+          <widget class="QPushButton" name="pushButton_warLatestPath">
+           <property name="geometry">
+            <rect>
+             <x>10</x>
+             <y>40</y>
+             <width>150</width>
+             <height>19</height>
+            </rect>
+           </property>
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>150</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>Change</string>
+           </property>
+          </widget>
+         </widget>
+         <widget class="QGroupBox" name="war_latest_groupbox_2">
+          <property name="geometry">
+           <rect>
+            <x>440</x>
+            <y>90</y>
+            <width>391</width>
+            <height>331</height>
+           </rect>
+          </property>
+          <property name="title">
+           <string>Warcraft 1.26a gateway</string>
+          </property>
+          <widget class="QLabel" name="label_War126Path">
+           <property name="geometry">
+            <rect>
+             <x>160</x>
+             <y>20</y>
+             <width>151</width>
+             <height>16</height>
+            </rect>
+           </property>
+           <property name="text">
+            <string>Loading...</string>
+           </property>
+          </widget>
+          <widget class="QLabel" name="label">
+           <property name="geometry">
+            <rect>
+             <x>10</x>
+             <y>20</y>
+             <width>131</width>
+             <height>16</height>
+            </rect>
+           </property>
+           <property name="text">
+            <string>Warcraft 1.26a location</string>
+           </property>
+           <property name="textFormat">
+            <enum>Qt::AutoText</enum>
+           </property>
+          </widget>
+          <widget class="QPushButton" name="pushButton_war126Path">
+           <property name="geometry">
+            <rect>
+             <x>10</x>
+             <y>40</y>
+             <width>150</width>
+             <height>19</height>
+            </rect>
+           </property>
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>150</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>Change</string>
+           </property>
+          </widget>
+          <widget class="QLabel" name="label_2">
+           <property name="geometry">
+            <rect>
+             <x>10</x>
+             <y>100</y>
+             <width>241</width>
+             <height>16</height>
+            </rect>
+           </property>
+           <property name="text">
+            <string>Do not have Warcraft 1.26a? Download it [here]</string>
+           </property>
+          </widget>
+         </widget>
+         <widget class="QSlider" name="horizontalSlider_ActiveMode">
+          <property name="geometry">
+           <rect>
+            <x>300</x>
+            <y>450</y>
+            <width>160</width>
+            <height>19</height>
+           </rect>
+          </property>
+          <property name="minimum">
+           <number>0</number>
+          </property>
+          <property name="maximum">
+           <number>1</number>
+          </property>
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+         </widget>
+         <widget class="QLabel" name="label_ActiveMode">
+          <property name="geometry">
+           <rect>
+            <x>150</x>
+            <y>450</y>
+            <width>141</width>
+            <height>16</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Loading...</string>
+          </property>
          </widget>
         </widget>
         <widget class="QWidget" name="tabUpdate">
