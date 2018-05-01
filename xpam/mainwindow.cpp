@@ -93,28 +93,16 @@ MainWindow::MainWindow(QWidget *parent) :
 
     //initiate gproxy options
     this->initGproxyOptions();
-
-    updatesEnabled = ui->checkBox_updates->isChecked();
-
     //Clean the update log on every startup
     QFile log(config->EUROPATH+"\\xpam.log");
     log.open(QFile::WriteOnly | QFile::Truncate);
     log.close();
 
-    QSettings settings(config->CONFIG_PATH, QSettings::IniFormat);
-    config->ACTIVE_MODE_KEY = settings.value("ActiveMode", config->W3_KEY_LATEST).toString();
-    if (config->ACTIVE_MODE_KEY != config->W3_KEY_LATEST && config->ACTIVE_MODE_KEY != config->W3_KEY_126) {
-        // active_mode always should be valid, because we are using W3_KEY_* as a ini group
-        config->ACTIVE_MODE_KEY = config->W3_KEY_LATEST;
-        settings.setValue("ActiveMode", config->ACTIVE_MODE_KEY);
-    }
-    config->W3PATH_126 = settings.value(config->W3_KEY_126 + "/path", "").toString();
-    config->W3PATH_LATEST = settings.value(config->W3_KEY_LATEST + "/path", "").toString();
     ui->label_War126Path->setText(config->W3PATH_126);
     ui->label_WarLatestPath->setText(config->W3PATH_LATEST);
 
     changeActiveMode(config->ACTIVE_MODE_KEY);
-
+    updatesEnabled = ui->checkBox_updates->isChecked();
     //Add CD keys if needed
     Updater::replaceCDKeys(config);
 
@@ -147,7 +135,7 @@ void MainWindow::changeActiveMode(QString activeMode) {
     ui->label_ActiveMode->setText(config->ACTIVE_MODE_KEY);
     //load w3 options
     this->initClientOptions();
-    QSettings settings(config->CONFIG_PATH, QSettings::IniFormat);
+    QSettings settings(config->XPAM_CONFIG_PATH, QSettings::IniFormat);
     settings.setValue("ActiveMode", config->ACTIVE_MODE_KEY);
     ui->horizontalSlider_ActiveMode->setValue(config->ACTIVE_MODE_KEY == config->W3_KEY_LATEST ? 1 : 0);
     ui->horizontalSlider_ActiveMode->setEnabled(true);
@@ -177,18 +165,10 @@ void MainWindow::startW3AndGproxy() {
     QString w3Exename;
     QString restrictedVersion;
 
-    //QString w3Exename, QString restrictedVersion
-    if (config->ACTIVE_MODE_KEY == config->W3_KEY_LATEST) {
-        // Latest
-        w3Path = config->W3PATH_LATEST;
-        w3Exename = config->W3_EXENAME_LATEST;
-        restrictedVersion = config->W3_VERSION_LATEST;
-    } else {
-        // 1.26
-        w3Path = config->W3PATH_126;
-        w3Exename = config->W3_EXENAME_126;
-        restrictedVersion = config->W3_VERSION_126;
-    }
+
+    w3Path = config->getCurrentW3Path();
+    w3Exename = config->getCurrentW3Exename();
+    restrictedVersion = config->getCurrentW3Version();
     //Hard WINAPI checks for w3 and gproxy running, all kind of problems if they are...
     if (Util::isRunning(w3Exename)) {
         status("Warcraft III is already running");
@@ -269,7 +249,15 @@ void MainWindow::on_pushButtonGWD_clicked()
     if (config->USE_DUAL_VERSION) {
         //Switch version
         changeActiveMode(config->W3_KEY_126);
-
+        if (config->ACTIVE_MODE_KEY != config->W3_KEY_126) {
+            QMessageBox mb(QMessageBox::Critical, "Warcraft 1.26a is not set",
+               "You should set up the XPAM to work with Warcraft 3 1.26a.", QMessageBox::Ok);
+            // @todo is setting the 2nd index enough?
+            ui->tabWidget->setCurrentIndex(2);
+            ui->pushButton_war126Path->setFocus();
+            status("Please, select the Warcraft 1.26a path in order to use 1.26a gateway");
+            return;
+        }
         //Start gproxy gateway
         startW3AndGproxy();
     }
@@ -282,8 +270,7 @@ void MainWindow::runW3() {
         status("Warcraft III is already running");
         return;
     }
-
-    QString w3dir=config->ACTIVE_MODE_KEY == config->W3_KEY_LATEST ? config->W3PATH_LATEST : config->W3PATH_126;
+    QString w3dir=config->getCurrentW3Path();
     QString w3exe=w3dir+"\\w3l.exe";
 
     //Check if w3l.exe exists and was not deleted by AV
@@ -681,17 +668,14 @@ void MainWindow::handleCheckbox(bool checked)
     QString option = QObject::sender()->objectName().remove("checkBox_");
     QString value = "0";
     if (checked) value="1";
-    QSettings settings(config->CONFIG_PATH, QSettings::IniFormat);
+    QSettings settings(config->GPROXY_CONFIG_PATH, QSettings::IniFormat);
     settings.setValue(option, value);
-    settings.sync();
-
-    //if (!r) ui->statusBar->showMessage("Could not change gproxy config", 10000);
 }
 
 //Handle client options
 void MainWindow::handleCheckboxClient(bool checked)
 {
-    QSettings settings(config->CONFIG_PATH, QSettings::IniFormat);
+    QSettings settings(config->XPAM_CONFIG_PATH, QSettings::IniFormat);
     QString option = QObject::sender()->objectName().remove("checkBox_");
     QString value = "0";
     if (checked) value="1";
@@ -708,38 +692,32 @@ void MainWindow::handleCheckboxClient(bool checked)
             settings.setValue(config->ACTIVE_MODE_KEY + "/fullscreen", "0");
         }
     }
-    settings.setValue(config->ACTIVE_MODE_KEY + "/" + option, value);
+    // @todo fix this crutch; (updates - is XPAM client option, is not related to Warcraft3 client)
+    // for now it saves to the root of ini file in case this is "updates" checkbox
+    QString prefix = option != "updates" ? config->ACTIVE_MODE_KEY + "/" : "";
+    settings.setValue(prefix + option, value);
 }
 
-//Init checkboxes according to cfg file
+//Init gproxy checkboxes according to ini file
 void MainWindow::initGproxyOptions() {
-    QFile conf(config->EUROPATH+"\\gproxy.cfg");
-    if (!conf.open(QFile::ReadOnly))
-        ui->statusBar->showMessage("Unable to load gproxy options", 10000);
-
-    QStringList lines;
-    while(!conf.atEnd())
-        lines.append(conf.readLine());
-
-    conf.close();
-    for (auto i = lines.begin(); i!=lines.end(); i++) {
-        if ((*i).startsWith("#")) continue;
-        QStringList l = (*i).split("=");
-        QCheckBox * find = this->findChild<QCheckBox *>("checkBox_"+l[0].simplified());
-        if (find!=0) {
-            if (l[1].simplified()=="1") find->setChecked(true);
-            else if (l[1].simplified()=="0") find->setChecked(false);
-        }
+    QSettings settings(config->GPROXY_CONFIG_PATH, QSettings::IniFormat);
+    foreach (const QString &option_name, config->GPROXY_OPTIONS) {
+        QCheckBox * find = this->findChild<QCheckBox *>("checkBox_"+option_name);
+        if (find != 0) {
+            find->setChecked(settings.value(option_name, "0") == "1" ? true : false);
+        } // @todo: else throw the error? because it is config's fault
     }
 }
 
-//Init checkboxes according to ini
+//Init client checkboxes according to ini file
 void MainWindow::initClientOptions() {
-    QSettings settings(config->CONFIG_PATH, QSettings::IniFormat);
+    QSettings settings(config->XPAM_CONFIG_PATH, QSettings::IniFormat);
     foreach (const QString &option_name, config->W3_OPTIONS) {
         QCheckBox * find = this->findChild<QCheckBox *>("checkBox_"+option_name);
         if (find != 0) {
-            find->setChecked(settings.value(config->ACTIVE_MODE_KEY + "/" + option_name, "0") == "1" ? true : false);
+            // @todo fix this crutch; see same comment above about "updates" checkbox
+            QString prefix = option_name != "updates" ? config->ACTIVE_MODE_KEY + "/" : "";
+            find->setChecked(settings.value(prefix + option_name, "0") == "1" ? true : false);
         } // @todo: else throw the error? because it is config's fault
     }
 
@@ -824,7 +802,7 @@ void MainWindow::on_pushButtonClientLog_clicked()
 //Set new w3 path
 void MainWindow::on_pushButton_warLatestPath_clicked()
 {
-    QSettings settings(config->CONFIG_PATH, QSettings::IniFormat);
+    QSettings settings(config->XPAM_CONFIG_PATH, QSettings::IniFormat);
     QFileDialog qfd;
     qfd.setDirectory(settings.value(config->W3_KEY_LATEST + "/path", "").toString());
     const QString path = qfd.getExistingDirectory(this);
@@ -844,7 +822,7 @@ void MainWindow::on_pushButton_warLatestPath_clicked()
 // @todo: refactor? kinda same method as above, with different strings
 void MainWindow::on_pushButton_war126Path_clicked()
 {
-    QSettings settings(config->CONFIG_PATH, QSettings::IniFormat);
+    QSettings settings(config->XPAM_CONFIG_PATH, QSettings::IniFormat);
     QFileDialog qfd;
     qfd.setDirectory(settings.value(config->W3_KEY_126 + "/path", "").toString());
     const QString path = qfd.getExistingDirectory(this);
@@ -951,28 +929,9 @@ void MainWindow::diffW3Update(QString version) {
     upt->start();
 }
 
-void MainWindow::displayW3Version() {
-    /*ui->labelW3Path->setText("W3 path: "+config->W3PATH);
-    QString w3versionDetected = Patcher::getCurrentW3Version(config);
-    if (w3versionDetected==config->W3_VERSION_LATEST) {
-        ui->labelW3Version->setText("Detected latest W3 version: "+w3versionDetected+" (OK)");
-    }
-    else {
-        ui->labelW3Version->setText("Detected latest W3 version: "+w3versionDetected+" (ERROR, needed: "+config->W3_VERSION_LATEST+")");
-    }*/
-}
-
-void MainWindow::on_tabWidget_currentChanged(int index)
-{
-    if (index==2) {
-        //Refresh detected w3 version
-        displayW3Version();
-    }
-}
-
 bool MainWindow::checkW3PathUnicode() {
     bool isUnicode = false;
-    QString w3path = config->W3PATH;
+    QString w3path = config->W3PATH_LATEST;
 
     for(int i = 0; i < w3path.size(); i++) {
         if(w3path.at(i).unicode() > 127) {
@@ -982,7 +941,7 @@ bool MainWindow::checkW3PathUnicode() {
     }
 
     //Check if w3 path contains .exe
-    QFile f(config->W3PATH+"/Warcraft III.exe");
+    QFile f(config->W3PATH_LATEST+"\\"+config->W3_EXENAME_LATEST);
     if (!f.exists()) {
         QMessageBox mb(QMessageBox::Critical, "W3 path alert",
            "Your W3 path is missing 'Warcraft III.exe' which probably means the path is incorrect.",

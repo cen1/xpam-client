@@ -260,13 +260,13 @@ bool Updater::instructions() {
 
                 QString dstPath;
                 if      (l.last()=="EUROPATH") dstPath=config->EUROPATH;
-                else if (l.last()=="W3PATH") dstPath=config->W3PATH;
+                else if (l.last()=="W3PATH") dstPath=config->W3PATH_LATEST;
                 else if (l.last()=="MAPPATH") dstPath=config->DOCMAPPATHDL;
                 else if (l.last()=="SOUNDPATH") dstPath=config->SOUNDPATH;
 
                 //Skip cdkey files if they exist in destination
                 if (midParam=="roc.w3k" || midParam=="tft.w3k") {
-                    QFile cdkey(config->W3PATH+"/"+midParam);
+                    QFile cdkey(config->W3PATH_LATEST+"/"+midParam);
                     if (cdkey.exists()) {
                         continue;
                     }
@@ -293,7 +293,7 @@ bool Updater::instructions() {
                 emit sendLine("Deleting "+midParam);
 
                 if     (l.last()=="EUROPATH") QFile::remove(config->EUROPATH+"\\"+midParam);
-                else if(l.last()=="W3PATH")   QFile::remove(config->W3PATH+"\\"+midParam);
+                else if(l.last()=="W3PATH")   QFile::remove(config->W3PATH_LATEST+"\\"+midParam);
                 else if(l.last()=="MAPPATH")  QFile::remove(config->DOCMAPPATHDL+"\\"+midParam);
                 else if(l.last()=="SOUNDPATH")  QFile::remove(config->SOUNDPATH+"\\"+midParam);
             }
@@ -337,8 +337,8 @@ bool Updater::updateMPQ()
             QStringList l = line.split(" ");
 
             if (l[0]=="O") {
-                if (mpq.open(config->W3PATH+"\\"+l[1])==false) {
-                    emit sendLine(Util::getLastErrorMsg()+config->W3PATH+"\\"+l[1]);
+                if (mpq.open(config->W3PATH_LATEST+"\\"+l[1])==false) {
+                    emit sendLine(Util::getLastErrorMsg()+config->W3PATH_LATEST+"\\"+l[1]);
                     return false;
                 }
             }
@@ -625,9 +625,9 @@ QString Updater::moveToDocuments(Config *config) {
     QDir dir;
 
     for (int i = 0; i < folders.size(); ++i) {
-        boolean moved = dir.rename(config->W3PATH+"\\"+folders.at(i), config->DOCPATH+"/"+folders.at(i));
+        boolean moved = dir.rename(config->W3PATH_LATEST+"\\"+folders.at(i), config->DOCPATH+"/"+folders.at(i));
 
-        log+="<br />"+config->W3PATH+"\\"+folders.at(i)+" -> "+config->DOCPATH+"/"+folders.at(i);
+        log+="<br />"+config->W3PATH_LATEST+"\\"+folders.at(i)+" -> "+config->DOCPATH+"/"+folders.at(i);
         if (moved) {
             log+=" (MOVED)";
         }
@@ -644,29 +644,29 @@ QString Updater::moveToDocuments(Config *config) {
 }
 
 void Updater::replaceCDKeys(Config *config) {
-       QFile roc(config->W3PATH+"\\roc.w3k");
+       QFile roc(config->W3PATH_LATEST+"\\roc.w3k");
        if (!roc.exists()) {
-           QFile rocNew(config->W3PATH+"\\roc.w3k.new");
+           QFile rocNew(config->W3PATH_LATEST+"\\roc.w3k.new");
            if (rocNew.exists()) {
-               rocNew.rename(config->W3PATH+"\\roc.w3k");
+               rocNew.rename(config->W3PATH_LATEST+"\\roc.w3k");
            }
        }
 
-       QFile tft(config->W3PATH+"\\tft.w3k");
+       QFile tft(config->W3PATH_LATEST+"\\tft.w3k");
        if (!tft.exists()) {
-           QFile tftnew(config->W3PATH+"\\tft.w3k.new");
+           QFile tftnew(config->W3PATH_LATEST+"\\tft.w3k.new");
            if (tftnew.exists()) {
-               tftnew.rename(config->W3PATH+"\\tft.w3k");
+               tftnew.rename(config->W3PATH_LATEST+"\\tft.w3k");
            }
        }
 }
 
 void Updater::renamePatchMpq(Config *config) {
-    QFile modMpq(config->W3PATH+"\\War3Mod.mpq");
+    QFile modMpq(config->W3PATH_LATEST+"\\War3Mod.mpq");
     if (!modMpq.exists()) {
-        QFile patchMpq(config->W3PATH+"\\War3Patch.mpq");
+        QFile patchMpq(config->W3PATH_LATEST+"\\War3Patch.mpq");
         if (patchMpq.exists()) {
-            patchMpq.copy(config->W3PATH+"\\War3Mod.mpq");
+            patchMpq.copy(config->W3PATH_LATEST+"\\War3Mod.mpq");
         }
     }
 }

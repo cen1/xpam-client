@@ -65,18 +65,12 @@ private slots:
     void on_pushButtonGPCL_clicked();
     void on_pushButtonGPNOTEPAD_clicked();
     void on_pushButtonClientLog_clicked();
-    //void on_pushButton_w3path_clicked();
     
     void changeActiveMode(QString activeMode);
-    //void on_horizontalSliderW3Version_sliderReleased();
     
     void on_pushButton_updateW3_released();
 
-    void on_tabWidget_currentChanged(int index);
-
     void quit();
-
-    //void on_pushButton_updateW3_clicked();
 
     void on_pushButton_warLatestPath_clicked();
 
@@ -117,7 +111,6 @@ private:
 
     void startW3AndGproxy();
 
-    void displayW3Version();
     void diffW3Update(QString version);
     int checkDotaUpdates();
     void runW3();

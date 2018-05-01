@@ -32,7 +32,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 Config::Config()
 {
-    VERSION_CLIENT = "0.9.0.0";
+    VERSION_CLIENT = "0.9.1.0";
     W3_VERSION_LATEST = "1.28.5.7680";
     W3_KEY_126 = "WAR3_126";
     W3_KEY_LATEST = "WAR3_LATEST";
@@ -43,14 +43,25 @@ Config::Config()
     BETAPIN = "1377";
 
     EUROPATH    = Registry::getEuroPath();
-    CONFIG_PATH = EUROPATH+"\\xpam.ini";
+    XPAM_CONFIG_PATH = EUROPATH+"\\xpam.ini";
+    GPROXY_CONFIG_PATH = EUROPATH+"\\gproxy.cfg";
     SOUNDPATH   = EUROPATH+"\\sounds";
-    W3PATH      = Registry::getW3dir();
+    //
+    QSettings settings(XPAM_CONFIG_PATH, QSettings::IniFormat);
+    ACTIVE_MODE_KEY = settings.value("ActiveMode", W3_KEY_LATEST).toString();
+    if (ACTIVE_MODE_KEY != W3_KEY_LATEST && ACTIVE_MODE_KEY != W3_KEY_126) {
+        // active_mode always should be valid, because we are using W3_KEY_* as a ini group
+        ACTIVE_MODE_KEY = W3_KEY_LATEST;
+        settings.setValue("ActiveMode", ACTIVE_MODE_KEY);
+    }
+    W3PATH_126 = settings.value(W3_KEY_126 + "/path", "").toString();
+    W3PATH_LATEST = settings.value(W3_KEY_LATEST + "/path", Registry::getW3dir()).toString();
+
     DOCPATH     = QStandardPaths::locate(QStandardPaths::DocumentsLocation, QString(), QStandardPaths::LocateDirectory)+"Warcraft III";
     DOCMAPPATH  = QStandardPaths::locate(QStandardPaths::DocumentsLocation, QString(), QStandardPaths::LocateDirectory)+"Warcraft III/Maps";
     DOCMAPPATHDL= QStandardPaths::locate(QStandardPaths::DocumentsLocation, QString(), QStandardPaths::LocateDirectory)+"Warcraft III/Maps/Download";
-    OLDMAPPATH  = W3PATH+"/Maps";
-    OLDMAPPATHDL= W3PATH+"/Maps/Download";
+    //OLDMAPPATH  = W3PATH_126+"/Maps";
+    //OLDMAPPATHDL= W3PATH_126+"/Maps/Download";
     PATCH       = Registry::getPatchVersion();
     APPDATA     = Winutils::getAppData()+"\\Eurobattle.net";
     SYSTEM      = Winutils::getSystem32();
@@ -73,21 +84,24 @@ Config::Config()
     W3_OPTIONS.append("windowed");
     W3_OPTIONS.append("fullscreen");
     W3_OPTIONS.append("opengl");
+    W3_OPTIONS.append("updates"); // should not be here ffs
 
-    //Common files between 1.26 and LATEST which need to be renamed
-    //Unique files ot each version ar eleft untouched
-    W3_COMMON_FILES.append("bnupdate.exe");
-    W3_COMMON_FILES.append("game.dll");
-    W3_COMMON_FILES.append("icons-war3.bni");
-    W3_COMMON_FILES.append("storm.dll");
-    W3_COMMON_FILES.append("war3.exe");
-    W3_COMMON_FILES.append("war3.mpq");
-    W3_COMMON_FILES.append("war3patch.mpq");
-    W3_COMMON_FILES.append("war3x.mpq");
-    W3_COMMON_FILES.append("war3xlocal.mpq");
-    W3_COMMON_FILES.append("world editor.exe");
-    W3_COMMON_FILES.append("worldedit.exe");
-    W3_COMMON_FILES.append("Warcraft III.exe");
+    // I do not care. Things should be safe.
+    GPROXY_OPTIONS.append("debug");
+    GPROXY_OPTIONS.append("chatbuffer");
+    GPROXY_OPTIONS.append("console");
+    GPROXY_OPTIONS.append("option_sounds");
+    GPROXY_OPTIONS.append("sound_1");
+    GPROXY_OPTIONS.append("sound_10");
+    GPROXY_OPTIONS.append("sound_2");
+    GPROXY_OPTIONS.append("sound_3");
+    GPROXY_OPTIONS.append("sound_4");
+    GPROXY_OPTIONS.append("sound_5");
+    GPROXY_OPTIONS.append("sound_6");
+    GPROXY_OPTIONS.append("sound_7");
+    GPROXY_OPTIONS.append("sound_8");
+    GPROXY_OPTIONS.append("sound_9");
+    GPROXY_OPTIONS.append("telemetry");
 
     //Quickpatch w3 versions
     W3_VERSIONS.append("1.28.0");
@@ -100,3 +114,20 @@ Config::Config()
     DOTA_MAPS.append("DotA v6.85k Allstars.w3x");
     //DOTA_MAPS.append("DotA v6.88g Allstars.w3x");
 }
+
+QString Config::getCurrentW3Path() {
+    return ACTIVE_MODE_KEY == W3_KEY_126 ? W3PATH_126 : W3PATH_LATEST;
+}
+
+QString Config::getCurrentW3Exename() {
+    return ACTIVE_MODE_KEY == W3_KEY_126 ? W3_EXENAME_126 : W3_EXENAME_LATEST;
+}
+
+QString Config::getCurrentW3Version() {
+    return ACTIVE_MODE_KEY == W3_KEY_126 ? W3_VERSION_126 : W3_VERSION_LATEST;
+}
+
+QString Config::getCurrentW3ExePath() {
+    return getCurrentW3Path() + "\\" + getCurrentW3Exename();
+}
+

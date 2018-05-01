@@ -23,7 +23,7 @@ bool Patcher::patch(Config * config) {
     //User agreed, patch W3
     QString xdelta3 = config->EUROPATH+"\\xdelta3.exe";
     QStringList patchNameFilter("*.patch");
-    QDir w3dir(config->W3PATH);
+    QDir w3dir(config->W3PATH_LATEST);
     QStringList patchFiles = w3dir.entryList(patchNameFilter);
 
     QFile hashes(config->APPDATA+"/hashes");
@@ -44,7 +44,7 @@ bool Patcher::patch(Config * config) {
         QString fileToPatch = qf.completeBaseName();
 
         QCryptographicHash crypto(QCryptographicHash::Sha1);
-        QFile fz(config->W3PATH+"/"+fileToPatch);
+        QFile fz(config->W3PATH_LATEST+"/"+fileToPatch);
         fz.open(QFile::ReadOnly);
         while(!fz.atEnd()){
           crypto.addData(fz.read(8192));
@@ -82,7 +82,7 @@ bool Patcher::patch(Config * config) {
         args << fileToPatch+".new";
 
         QProcess p;
-        p.setWorkingDirectory(config->W3PATH);
+        p.setWorkingDirectory(config->W3PATH_LATEST);
         p.start(xdelta3, args);
 
         //Log full arguments
@@ -106,7 +106,7 @@ bool Patcher::patch(Config * config) {
         if (exitCode==0) {
             Logger::log("Successfully patched "+fileToPatch, config);
             //Delete .patch file
-            QFile ftp(config->W3PATH+"/"+patchFiles[i]);
+            QFile ftp(config->W3PATH_LATEST+"/"+patchFiles[i]);
             if (ftp.exists()) {
                 ftp.remove();
             }
@@ -126,13 +126,13 @@ bool Patcher::patch(Config * config) {
     for (int i=0; i<newFiles.size(); i++) {
         QFileInfo qf(newFiles.at(i));
         QString fileToReplace = qf.completeBaseName();
-        QFile f(config->W3PATH+"/"+newFiles.at(i));
+        QFile f(config->W3PATH_LATEST+"/"+newFiles.at(i));
         if (f.exists()) {
-            QFile existing(config->W3PATH+"/"+fileToReplace);
+            QFile existing(config->W3PATH_LATEST+"/"+fileToReplace);
             if (existing.exists()) {
                 existing.remove();
             }
-            if (!f.rename(config->W3PATH+"/"+fileToReplace)) {
+            if (!f.rename(config->W3PATH_LATEST+"/"+fileToReplace)) {
                 Logger::log("Failed to add new W3 file "+newFiles.at(i)+" to "+fileToReplace, config);
                 Logger::log(Winutils::getLastErrorMsg(), config);
                 return false;
@@ -155,16 +155,16 @@ bool Patcher::patch(Config * config) {
 
 QString Patcher::getCurrentW3Version(Config * config) {
     QString exename = config->W3_EXENAME_LATEST+"."+W3::W3_LATEST;
-    QString fullPath = config->W3PATH+"\\"+exename;
+    QString fullPath = config->W3PATH_LATEST+"\\"+exename;
     QFile f(fullPath);
     if (!f.exists()) {
-        fullPath = config->W3PATH+"\\"+config->W3_EXENAME_LATEST;
+        fullPath = config->W3PATH_LATEST+"\\"+config->W3_EXENAME_LATEST;
     }
     Logger::log(fullPath, config);
     QString w3version = Winutils::getFileVersion(fullPath);
     if (w3version=="1.0.0.1") {
         //Pre 1.28.4
-        fullPath = config->W3PATH+"\\war3.exe";
+        fullPath = config->W3PATH_LATEST+"\\war3.exe";
         w3version = Winutils::getFileVersion(fullPath);
     }
 
@@ -173,14 +173,14 @@ QString Patcher::getCurrentW3Version(Config * config) {
 
 void Patcher::cleanMetadata(Config * config) {
 
-    QDir w3dir(config->W3PATH);
+    QDir w3dir(config->W3PATH_LATEST);
 
     //Remove .patch files
     QStringList patchNameFilter("*.patch");
     QStringList patchFiles = w3dir.entryList(patchNameFilter);
 
     for (int i=0; i<patchFiles.size(); i++) {
-        QFile f(config->W3PATH+"/"+patchFiles.at(i));
+        QFile f(config->W3PATH_LATEST+"/"+patchFiles.at(i));
         if (f.exists()) {
             f.remove();
         }
@@ -191,14 +191,14 @@ void Patcher::cleanMetadata(Config * config) {
     QStringList newFiles = w3dir.entryList(newNameFilter);
 
     for (int i=0; i<newFiles.size(); i++) {
-        QFile f(config->W3PATH+"/"+newFiles.at(i));
+        QFile f(config->W3PATH_LATEST+"/"+newFiles.at(i));
         if (f.exists()) {
             f.remove();
         }
     }
 
     //Remove patch.meta
-    QFile pm(config->W3PATH+"/patch.meta");
+    QFile pm(config->W3PATH_LATEST+"/patch.meta");
     if (pm.exists()) {
         pm.remove();
     }

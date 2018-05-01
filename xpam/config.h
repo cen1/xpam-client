@@ -19,11 +19,11 @@ public:
     QString W3_EXENAME_LATEST;
     QString W3_EXENAME_126;
     int PATCH;
-    QString CONFIG_PATH;
+    QString XPAM_CONFIG_PATH;
+    QString GPROXY_CONFIG_PATH;
     QString ACTIVE_MODE_KEY;
     QString W3_KEY_126;
     QString W3_KEY_LATEST;
-    QString W3PATH;
     QString W3PATH_126;
     QString W3PATH_LATEST;
     QString DOCPATH;
@@ -40,7 +40,7 @@ public:
     bool HAS_QUICK_PATCH;
 
     QVector<QString> W3_OPTIONS;
-    QVector<QString> W3_COMMON_FILES;
+    QVector<QString> GPROXY_OPTIONS;
     QVector<QString> W3_VERSIONS;
     QVector<QString> DOTA_MAPS;
 
@@ -52,6 +52,13 @@ public:
 
     Config();
     QSettings settings();
+    QString getCurrentW3Path();
+
+    QString getCurrentW3Exename();
+
+    QString getCurrentW3Version();
+
+    QString getCurrentW3ExePath();
 };
 
 
