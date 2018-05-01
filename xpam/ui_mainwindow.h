@@ -24,7 +24,6 @@
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QPushButton>
-#include <QtWidgets/QSlider>
 #include <QtWidgets/QSpacerItem>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QTabWidget>
@@ -51,9 +50,6 @@ public:
     QFormLayout *formLayout;
     QPushButton *pushButtonGWG;
     QPushButton *pushButtonGWD;
-    QCheckBox *checkBox_windowed;
-    QCheckBox *checkBox_fullscreen;
-    QCheckBox *checkBox_opengl;
     QSpacerItem *verticalSpacer;
     QSpacerItem *hs2;
     QWidget *tabGproxy;
@@ -86,13 +82,18 @@ public:
     QLabel *war_latest_label_2;
     QLabel *label_WarLatestPath;
     QPushButton *pushButton_warLatestPath;
+    QGroupBox *groupBox;
+    QCheckBox *checkBox_opengl_latest;
+    QCheckBox *checkBox_windowed_latest;
+    QCheckBox *checkBox_fullscreen_latest;
     QGroupBox *war_latest_groupbox_2;
     QLabel *label_War126Path;
     QLabel *label;
     QPushButton *pushButton_war126Path;
     QLabel *label_2;
-    QSlider *horizontalSlider_ActiveMode;
-    QLabel *label_ActiveMode;
+    QGroupBox *groupBox_2;
+    QCheckBox *checkBox_opengl_126;
+    QCheckBox *checkBox_windowed_126;
     QWidget *tabUpdate;
     QWidget *layoutWidget1;
     QVBoxLayout *verticalLayout_6;
@@ -359,26 +360,6 @@ public:
 
         verticalLayout->addLayout(horizontalLayoutLauncher);
 
-        checkBox_windowed = new QCheckBox(tabLauncher);
-        checkBox_windowed->setObjectName(QStringLiteral("checkBox_windowed"));
-        QSizePolicy sizePolicy2(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
-        sizePolicy2.setHorizontalStretch(0);
-        sizePolicy2.setVerticalStretch(0);
-        sizePolicy2.setHeightForWidth(checkBox_windowed->sizePolicy().hasHeightForWidth());
-        checkBox_windowed->setSizePolicy(sizePolicy2);
-
-        verticalLayout->addWidget(checkBox_windowed);
-
-        checkBox_fullscreen = new QCheckBox(tabLauncher);
-        checkBox_fullscreen->setObjectName(QStringLiteral("checkBox_fullscreen"));
-
-        verticalLayout->addWidget(checkBox_fullscreen);
-
-        checkBox_opengl = new QCheckBox(tabLauncher);
-        checkBox_opengl->setObjectName(QStringLiteral("checkBox_opengl"));
-
-        verticalLayout->addWidget(checkBox_opengl);
-
         verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
         verticalLayout->addItem(verticalSpacer);
@@ -536,12 +517,29 @@ public:
         pushButton_warLatestPath = new QPushButton(war_latest_groupbox);
         pushButton_warLatestPath->setObjectName(QStringLiteral("pushButton_warLatestPath"));
         pushButton_warLatestPath->setGeometry(QRect(10, 40, 150, 19));
-        QSizePolicy sizePolicy3(QSizePolicy::Minimum, QSizePolicy::Fixed);
+        QSizePolicy sizePolicy2(QSizePolicy::Minimum, QSizePolicy::Fixed);
+        sizePolicy2.setHorizontalStretch(0);
+        sizePolicy2.setVerticalStretch(0);
+        sizePolicy2.setHeightForWidth(pushButton_warLatestPath->sizePolicy().hasHeightForWidth());
+        pushButton_warLatestPath->setSizePolicy(sizePolicy2);
+        pushButton_warLatestPath->setMaximumSize(QSize(150, 16777215));
+        groupBox = new QGroupBox(war_latest_groupbox);
+        groupBox->setObjectName(QStringLiteral("groupBox"));
+        groupBox->setGeometry(QRect(9, 139, 371, 91));
+        checkBox_opengl_latest = new QCheckBox(groupBox);
+        checkBox_opengl_latest->setObjectName(QStringLiteral("checkBox_opengl_latest"));
+        checkBox_opengl_latest->setGeometry(QRect(10, 60, 341, 16));
+        checkBox_windowed_latest = new QCheckBox(groupBox);
+        checkBox_windowed_latest->setObjectName(QStringLiteral("checkBox_windowed_latest"));
+        checkBox_windowed_latest->setGeometry(QRect(10, 18, 341, 16));
+        QSizePolicy sizePolicy3(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
         sizePolicy3.setHorizontalStretch(0);
         sizePolicy3.setVerticalStretch(0);
-        sizePolicy3.setHeightForWidth(pushButton_warLatestPath->sizePolicy().hasHeightForWidth());
-        pushButton_warLatestPath->setSizePolicy(sizePolicy3);
-        pushButton_warLatestPath->setMaximumSize(QSize(150, 16777215));
+        sizePolicy3.setHeightForWidth(checkBox_windowed_latest->sizePolicy().hasHeightForWidth());
+        checkBox_windowed_latest->setSizePolicy(sizePolicy3);
+        checkBox_fullscreen_latest = new QCheckBox(groupBox);
+        checkBox_fullscreen_latest->setObjectName(QStringLiteral("checkBox_fullscreen_latest"));
+        checkBox_fullscreen_latest->setGeometry(QRect(10, 39, 341, 16));
         war_latest_groupbox_2 = new QGroupBox(tabW3);
         war_latest_groupbox_2->setObjectName(QStringLiteral("war_latest_groupbox_2"));
         war_latest_groupbox_2->setGeometry(QRect(440, 90, 391, 331));
@@ -555,21 +553,23 @@ public:
         pushButton_war126Path = new QPushButton(war_latest_groupbox_2);
         pushButton_war126Path->setObjectName(QStringLiteral("pushButton_war126Path"));
         pushButton_war126Path->setGeometry(QRect(10, 40, 150, 19));
-        sizePolicy3.setHeightForWidth(pushButton_war126Path->sizePolicy().hasHeightForWidth());
-        pushButton_war126Path->setSizePolicy(sizePolicy3);
+        sizePolicy2.setHeightForWidth(pushButton_war126Path->sizePolicy().hasHeightForWidth());
+        pushButton_war126Path->setSizePolicy(sizePolicy2);
         pushButton_war126Path->setMaximumSize(QSize(150, 16777215));
         label_2 = new QLabel(war_latest_groupbox_2);
         label_2->setObjectName(QStringLiteral("label_2"));
-        label_2->setGeometry(QRect(10, 100, 241, 16));
-        horizontalSlider_ActiveMode = new QSlider(tabW3);
-        horizontalSlider_ActiveMode->setObjectName(QStringLiteral("horizontalSlider_ActiveMode"));
-        horizontalSlider_ActiveMode->setGeometry(QRect(300, 450, 160, 19));
-        horizontalSlider_ActiveMode->setMinimum(0);
-        horizontalSlider_ActiveMode->setMaximum(1);
-        horizontalSlider_ActiveMode->setOrientation(Qt::Horizontal);
-        label_ActiveMode = new QLabel(tabW3);
-        label_ActiveMode->setObjectName(QStringLiteral("label_ActiveMode"));
-        label_ActiveMode->setGeometry(QRect(150, 450, 141, 16));
+        label_2->setGeometry(QRect(10, 70, 241, 16));
+        groupBox_2 = new QGroupBox(war_latest_groupbox_2);
+        groupBox_2->setObjectName(QStringLiteral("groupBox_2"));
+        groupBox_2->setGeometry(QRect(10, 140, 371, 91));
+        checkBox_opengl_126 = new QCheckBox(groupBox_2);
+        checkBox_opengl_126->setObjectName(QStringLiteral("checkBox_opengl_126"));
+        checkBox_opengl_126->setGeometry(QRect(10, 40, 341, 16));
+        checkBox_windowed_126 = new QCheckBox(groupBox_2);
+        checkBox_windowed_126->setObjectName(QStringLiteral("checkBox_windowed_126"));
+        checkBox_windowed_126->setGeometry(QRect(10, 18, 341, 16));
+        sizePolicy3.setHeightForWidth(checkBox_windowed_126->sizePolicy().hasHeightForWidth());
+        checkBox_windowed_126->setSizePolicy(sizePolicy3);
         tabWidget->addTab(tabW3, QString());
         tabUpdate = new QWidget();
         tabUpdate->setObjectName(QStringLiteral("tabUpdate"));
@@ -682,7 +682,7 @@ public:
 
         retranslateUi(MainWindow);
 
-        tabWidget->setCurrentIndex(4);
+        tabWidget->setCurrentIndex(2);
 
 
         QMetaObject::connectSlotsByName(MainWindow);
@@ -707,9 +707,6 @@ public:
         pushButtonGWD->setToolTip(QApplication::translate("MainWindow", "COMING SOON", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
         pushButtonGWD->setText(QString());
-        checkBox_windowed->setText(QApplication::translate("MainWindow", "Windowed", Q_NULLPTR));
-        checkBox_fullscreen->setText(QApplication::translate("MainWindow", "Native fullscreen", Q_NULLPTR));
-        checkBox_opengl->setText(QApplication::translate("MainWindow", "OpenGL", Q_NULLPTR));
         tabWidget->setTabText(tabWidget->indexOf(tabLauncher), QApplication::translate("MainWindow", " LAUNCHER ", Q_NULLPTR));
         preloaderLabel1->setText(QString());
         labelGproxyout->setText(QApplication::translate("MainWindow", "GProxy output", Q_NULLPTR));
@@ -738,12 +735,18 @@ public:
         war_latest_label_2->setText(QApplication::translate("MainWindow", "Warcraft location", Q_NULLPTR));
         label_WarLatestPath->setText(QApplication::translate("MainWindow", "Loading...", Q_NULLPTR));
         pushButton_warLatestPath->setText(QApplication::translate("MainWindow", "Change", Q_NULLPTR));
+        groupBox->setTitle(QApplication::translate("MainWindow", "Options", Q_NULLPTR));
+        checkBox_opengl_latest->setText(QApplication::translate("MainWindow", "OpenGL", Q_NULLPTR));
+        checkBox_windowed_latest->setText(QApplication::translate("MainWindow", "Windowed", Q_NULLPTR));
+        checkBox_fullscreen_latest->setText(QApplication::translate("MainWindow", "Native fullscreen", Q_NULLPTR));
         war_latest_groupbox_2->setTitle(QApplication::translate("MainWindow", "Warcraft 1.26a gateway", Q_NULLPTR));
         label_War126Path->setText(QApplication::translate("MainWindow", "Loading...", Q_NULLPTR));
         label->setText(QApplication::translate("MainWindow", "Warcraft 1.26a location", Q_NULLPTR));
         pushButton_war126Path->setText(QApplication::translate("MainWindow", "Change", Q_NULLPTR));
         label_2->setText(QApplication::translate("MainWindow", "Do not have Warcraft 1.26a? Download it [here]", Q_NULLPTR));
-        label_ActiveMode->setText(QApplication::translate("MainWindow", "Loading...", Q_NULLPTR));
+        groupBox_2->setTitle(QApplication::translate("MainWindow", "Options", Q_NULLPTR));
+        checkBox_opengl_126->setText(QApplication::translate("MainWindow", "OpenGL", Q_NULLPTR));
+        checkBox_windowed_126->setText(QApplication::translate("MainWindow", "Windowed", Q_NULLPTR));
         tabWidget->setTabText(tabWidget->indexOf(tabW3), QApplication::translate("MainWindow", " WARCRAFT", Q_NULLPTR));
         pushButtonBU->setText(QApplication::translate("MainWindow", "Get Beta patch", Q_NULLPTR));
         pushButton_updateW3->setText(QApplication::translate("MainWindow", "Perform full W3 update (1GB download)", Q_NULLPTR));

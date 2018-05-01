@@ -39,6 +39,7 @@ public:
     bool ASK_FOR_W3_FAST_UPDATE;
     bool HAS_QUICK_PATCH;
 
+    QVector<QString> XPAM_OPTIONS;
     QVector<QString> W3_OPTIONS;
     QVector<QString> GPROXY_OPTIONS;
     QVector<QString> W3_VERSIONS;

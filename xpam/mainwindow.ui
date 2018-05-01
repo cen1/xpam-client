@@ -237,7 +237,7 @@ QCheckBox::indicator:checked {
          <enum>Qt::LeftToRight</enum>
         </property>
         <property name="currentIndex">
-         <number>4</number>
+         <number>2</number>
         </property>
         <widget class="QWidget" name="tabLauncher">
          <property name="sizePolicy">
@@ -348,33 +348,6 @@ YOU CAN'T PLAY PG OR MANUALLY HOST GAMES IN THIS MODE!</string>
                  </widget>
                 </item>
                </layout>
-              </item>
-              <item>
-               <widget class="QCheckBox" name="checkBox_windowed">
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
-                <property name="text">
-                 <string>Windowed</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QCheckBox" name="checkBox_fullscreen">
-                <property name="text">
-                 <string>Native fullscreen</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QCheckBox" name="checkBox_opengl">
-                <property name="text">
-                 <string>OpenGL</string>
-                </property>
-               </widget>
               </item>
               <item>
                <spacer name="verticalSpacer">
@@ -754,6 +727,64 @@ YOU CAN'T PLAY PG OR MANUALLY HOST GAMES IN THIS MODE!</string>
             <string>Change</string>
            </property>
           </widget>
+          <widget class="QGroupBox" name="groupBox">
+           <property name="geometry">
+            <rect>
+             <x>9</x>
+             <y>139</y>
+             <width>371</width>
+             <height>91</height>
+            </rect>
+           </property>
+           <property name="title">
+            <string>Options</string>
+           </property>
+           <widget class="QCheckBox" name="checkBox_opengl_latest">
+            <property name="geometry">
+             <rect>
+              <x>10</x>
+              <y>60</y>
+              <width>341</width>
+              <height>16</height>
+             </rect>
+            </property>
+            <property name="text">
+             <string>OpenGL</string>
+            </property>
+           </widget>
+           <widget class="QCheckBox" name="checkBox_windowed_latest">
+            <property name="geometry">
+             <rect>
+              <x>10</x>
+              <y>18</y>
+              <width>341</width>
+              <height>16</height>
+             </rect>
+            </property>
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>Windowed</string>
+            </property>
+           </widget>
+           <widget class="QCheckBox" name="checkBox_fullscreen_latest">
+            <property name="geometry">
+             <rect>
+              <x>10</x>
+              <y>39</y>
+              <width>341</width>
+              <height>16</height>
+             </rect>
+            </property>
+            <property name="text">
+             <string>Native fullscreen</string>
+            </property>
+           </widget>
+          </widget>
          </widget>
          <widget class="QGroupBox" name="war_latest_groupbox_2">
           <property name="geometry">
@@ -825,7 +856,7 @@ YOU CAN'T PLAY PG OR MANUALLY HOST GAMES IN THIS MODE!</string>
            <property name="geometry">
             <rect>
              <x>10</x>
-             <y>100</y>
+             <y>70</y>
              <width>241</width>
              <height>16</height>
             </rect>
@@ -834,38 +865,51 @@ YOU CAN'T PLAY PG OR MANUALLY HOST GAMES IN THIS MODE!</string>
             <string>Do not have Warcraft 1.26a? Download it [here]</string>
            </property>
           </widget>
-         </widget>
-         <widget class="QSlider" name="horizontalSlider_ActiveMode">
-          <property name="geometry">
-           <rect>
-            <x>300</x>
-            <y>450</y>
-            <width>160</width>
-            <height>19</height>
-           </rect>
-          </property>
-          <property name="minimum">
-           <number>0</number>
-          </property>
-          <property name="maximum">
-           <number>1</number>
-          </property>
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-         </widget>
-         <widget class="QLabel" name="label_ActiveMode">
-          <property name="geometry">
-           <rect>
-            <x>150</x>
-            <y>450</y>
-            <width>141</width>
-            <height>16</height>
-           </rect>
-          </property>
-          <property name="text">
-           <string>Loading...</string>
-          </property>
+          <widget class="QGroupBox" name="groupBox_2">
+           <property name="geometry">
+            <rect>
+             <x>10</x>
+             <y>140</y>
+             <width>371</width>
+             <height>91</height>
+            </rect>
+           </property>
+           <property name="title">
+            <string>Options</string>
+           </property>
+           <widget class="QCheckBox" name="checkBox_opengl_126">
+            <property name="geometry">
+             <rect>
+              <x>10</x>
+              <y>40</y>
+              <width>341</width>
+              <height>16</height>
+             </rect>
+            </property>
+            <property name="text">
+             <string>OpenGL</string>
+            </property>
+           </widget>
+           <widget class="QCheckBox" name="checkBox_windowed_126">
+            <property name="geometry">
+             <rect>
+              <x>10</x>
+              <y>18</y>
+              <width>341</width>
+              <height>16</height>
+             </rect>
+            </property>
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>Windowed</string>
+            </property>
+           </widget>
+          </widget>
          </widget>
         </widget>
         <widget class="QWidget" name="tabUpdate">

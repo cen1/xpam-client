@@ -86,11 +86,19 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->checkBox_telemetry, SIGNAL(clicked(bool)), this, SLOT(handleCheckbox(bool)));
 
     //w3 options
-    connect(ui->checkBox_windowed, SIGNAL(clicked(bool)), this, SLOT(handleCheckboxClient(bool)));
-    connect(ui->checkBox_opengl, SIGNAL(clicked(bool)), this, SLOT(handleCheckboxClient(bool)));
-    connect(ui->checkBox_fullscreen, SIGNAL(clicked(bool)), this, SLOT(handleCheckboxClient(bool)));
-    connect(ui->checkBox_updates, SIGNAL(clicked(bool)), this, SLOT(handleCheckboxClient(bool)));
+    connect(ui->checkBox_windowed_latest, SIGNAL(clicked(bool)), this, SLOT(handleCheckboxClient(bool)));
+    connect(ui->checkBox_opengl_latest, SIGNAL(clicked(bool)), this, SLOT(handleCheckboxClient(bool)));
+    connect(ui->checkBox_fullscreen_latest, SIGNAL(clicked(bool)), this, SLOT(handleCheckboxClient(bool)));
+    connect(ui->checkBox_windowed_126, SIGNAL(clicked(bool)), this, SLOT(handleCheckboxClient(bool)));
+    connect(ui->checkBox_opengl_126, SIGNAL(clicked(bool)), this, SLOT(handleCheckboxClient(bool)));
 
+    // XPAM options
+    connect(ui->checkBox_updates, SIGNAL(clicked(bool)), this, SLOT(handleCheckboxXpam(bool)));
+
+    // load XPAM options
+    this->initXpamOptions();
+    //load w3 options
+    this->initClientOptions();
     //initiate gproxy options
     this->initGproxyOptions();
     //Clean the update log on every startup
@@ -102,6 +110,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->label_WarLatestPath->setText(config->W3PATH_LATEST);
 
     changeActiveMode(config->ACTIVE_MODE_KEY);
+
     updatesEnabled = ui->checkBox_updates->isChecked();
     //Add CD keys if needed
     Updater::replaceCDKeys(config);
@@ -126,24 +135,15 @@ MainWindow::MainWindow(QWidget *parent) :
 }
 
 void MainWindow::changeActiveMode(QString activeMode) {
-    ui->horizontalSlider_ActiveMode->setEnabled(false);
+
     if (activeMode == config->W3_KEY_126 && config->W3PATH_126 == "") {
         status("You must specify Warcraft 1.26a path first");
         activeMode = config->W3_KEY_LATEST;
     }
     config->ACTIVE_MODE_KEY = activeMode;
-    ui->label_ActiveMode->setText(config->ACTIVE_MODE_KEY);
-    //load w3 options
-    this->initClientOptions();
     QSettings settings(config->XPAM_CONFIG_PATH, QSettings::IniFormat);
-    settings.setValue("ActiveMode", config->ACTIVE_MODE_KEY);
-    ui->horizontalSlider_ActiveMode->setValue(config->ACTIVE_MODE_KEY == config->W3_KEY_LATEST ? 1 : 0);
-    ui->horizontalSlider_ActiveMode->setEnabled(true);
-}
+    settings.setValue("active_mode", config->ACTIVE_MODE_KEY);
 
-void MainWindow::on_horizontalSlider_ActiveMode_sliderReleased()
-{
-    changeActiveMode(ui->horizontalSlider_ActiveMode->value()==1 ? config->W3_KEY_LATEST : config->W3_KEY_126);
 }
 
 MainWindow::~MainWindow()
@@ -285,9 +285,14 @@ void MainWindow::runW3() {
     status("Launching Warcraft III...");
 
     QStringList list;
-    if (ui->checkBox_windowed->isChecked()) list << "-windowed";
-    if (ui->checkBox_fullscreen->isChecked()) list << "-nativefullscr";
-    if (ui->checkBox_opengl->isChecked()) list << "-opengl";
+    if (config->ACTIVE_MODE_KEY == config->W3_KEY_126) {
+        if (ui->checkBox_windowed_126->isChecked()) list << "-windowed";
+        if (ui->checkBox_opengl_126->isChecked()) list << "-opengl";
+    } else {
+        if (ui->checkBox_windowed_latest->isChecked()) list << "-windowed";
+        if (ui->checkBox_fullscreen_latest->isChecked()) list << "-nativefullscr";
+        if (ui->checkBox_opengl_latest->isChecked()) list << "-opengl";
+    }
 
     w3=new W3(w3dir, w3exe, list, config);
     w3t=new QThread();
@@ -662,6 +667,16 @@ void MainWindow::updateFinished(bool restartNeeded, bool ok, bool isUpToDate, bo
     }
 }
 
+//Handle XPAM options
+void MainWindow::handleCheckboxXpam(bool checked)
+{
+    QString option = QObject::sender()->objectName().remove("checkBox_");
+    QString value = "0";
+    if (checked) value="1";
+    QSettings settings(config->XPAM_CONFIG_PATH, QSettings::IniFormat);
+    settings.setValue(option, value);
+}
+
 //Handle gproxy options
 void MainWindow::handleCheckbox(bool checked)
 {
@@ -676,26 +691,36 @@ void MainWindow::handleCheckbox(bool checked)
 void MainWindow::handleCheckboxClient(bool checked)
 {
     QSettings settings(config->XPAM_CONFIG_PATH, QSettings::IniFormat);
-    QString option = QObject::sender()->objectName().remove("checkBox_");
-    QString value = "0";
-    if (checked) value="1";
+    QStringList tokens = QObject::sender()->objectName().split("_");
+    if (tokens.size() != 3) {
+        return;
+    }
+    // checkBox_[option_name]_[126/latest]
+    QString option = tokens[1];
+    QString mode_key = tokens[2] == "126" ? config->W3_KEY_126 : config->W3_KEY_LATEST;
+    if (mode_key == config->W3_KEY_LATEST) {
+        // fullscreen/windowed handling for LATEST version
+        if (QObject::sender()==ui->checkBox_fullscreen_latest && ui->checkBox_windowed_latest->isChecked()) {
+            ui->checkBox_windowed_latest->setChecked(false);
+            settings.setValue(config->W3_KEY_LATEST + "/windowed", "0");
+        }
+        if (QObject::sender()==ui->checkBox_windowed_latest && ui->checkBox_fullscreen_latest->isChecked()) {
+            ui->checkBox_fullscreen_latest->setChecked(false);
+            settings.setValue(config->W3_KEY_LATEST + "/fullscreen", "0");
+        }
+    }
+    settings.setValue(mode_key + "/" + option, checked ? "1" : "0");
+}
 
-    if (QObject::sender()==ui->checkBox_fullscreen) {
-        if (ui->checkBox_windowed->isChecked()) {
-            ui->checkBox_windowed->setChecked(false);
-            settings.setValue(config->ACTIVE_MODE_KEY + "/windowed", "0");
-        }
+//Init XPAM checkboxes according to ini file
+void MainWindow::initXpamOptions() {
+    QSettings settings(config->XPAM_CONFIG_PATH, QSettings::IniFormat);
+    foreach (const QString &option_name, config->XPAM_OPTIONS) {
+        QCheckBox * find = this->findChild<QCheckBox *>("checkBox_"+option_name);
+        if (find != 0) {
+            find->setChecked(settings.value(option_name, "0") == "1" ? true : false);
+        } // @todo: else throw the error? because it is config's fault
     }
-    if (QObject::sender()==ui->checkBox_windowed) {
-        if (ui->checkBox_fullscreen->isChecked()) {
-            ui->checkBox_fullscreen->setChecked(false);
-            settings.setValue(config->ACTIVE_MODE_KEY + "/fullscreen", "0");
-        }
-    }
-    // @todo fix this crutch; (updates - is XPAM client option, is not related to Warcraft3 client)
-    // for now it saves to the root of ini file in case this is "updates" checkbox
-    QString prefix = option != "updates" ? config->ACTIVE_MODE_KEY + "/" : "";
-    settings.setValue(prefix + option, value);
 }
 
 //Init gproxy checkboxes according to ini file
@@ -712,19 +737,22 @@ void MainWindow::initGproxyOptions() {
 //Init client checkboxes according to ini file
 void MainWindow::initClientOptions() {
     QSettings settings(config->XPAM_CONFIG_PATH, QSettings::IniFormat);
-    foreach (const QString &option_name, config->W3_OPTIONS) {
-        QCheckBox * find = this->findChild<QCheckBox *>("checkBox_"+option_name);
-        if (find != 0) {
-            // @todo fix this crutch; see same comment above about "updates" checkbox
-            QString prefix = option_name != "updates" ? config->ACTIVE_MODE_KEY + "/" : "";
-            find->setChecked(settings.value(prefix + option_name, "0") == "1" ? true : false);
-        } // @todo: else throw the error? because it is config's fault
+    QVector<QString> checkbox_postfixes = {"126", "latest"};
+    foreach (const QString &postfix, checkbox_postfixes) {
+        foreach (const QString &option_name, config->W3_OPTIONS) {
+            QCheckBox * find = this->findChild<QCheckBox *>("checkBox_"+option_name + "_" + postfix);
+            if (find != 0) {
+                QString mode_key = postfix == "126" ? config->W3_KEY_126 : config->W3_KEY_LATEST;
+                // @todo fix this crutch; see same comment above about "updates" checkbox
+                find->setChecked(settings.value(mode_key + "/" + option_name, "0") == "1" ? true : false);
+            }
+        }
     }
 
-   if (ui->checkBox_fullscreen->isChecked() && ui->checkBox_windowed->isChecked()) {
-       ui->checkBox_fullscreen->setChecked(true);
-       ui->checkBox_windowed->setChecked(false);
-       settings.setValue(config->ACTIVE_MODE_KEY + "/windowed", "0");
+   if (ui->checkBox_fullscreen_latest->isChecked() && ui->checkBox_windowed_latest->isChecked()) {
+       ui->checkBox_fullscreen_latest->setChecked(true);
+       ui->checkBox_windowed_latest->setChecked(false);
+       settings.setValue(config->W3_KEY_LATEST + "/windowed", "0");
    }
 }
 

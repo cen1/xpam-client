@@ -36,7 +36,6 @@ Config::Config()
     W3_VERSION_LATEST = "1.28.5.7680";
     W3_KEY_126 = "WAR3_126";
     W3_KEY_LATEST = "WAR3_LATEST";
-    ACTIVE_MODE_KEY = "WAR3_LATEST";
     W3_VERSION_126 = "1.26.0.6401";
     W3_EXENAME_LATEST="Warcraft III.exe";
     W3_EXENAME_126="war3.exe";
@@ -48,11 +47,11 @@ Config::Config()
     SOUNDPATH   = EUROPATH+"\\sounds";
     //
     QSettings settings(XPAM_CONFIG_PATH, QSettings::IniFormat);
-    ACTIVE_MODE_KEY = settings.value("ActiveMode", W3_KEY_LATEST).toString();
+    ACTIVE_MODE_KEY = settings.value("active_mode", W3_KEY_LATEST).toString();
     if (ACTIVE_MODE_KEY != W3_KEY_LATEST && ACTIVE_MODE_KEY != W3_KEY_126) {
         // active_mode always should be valid, because we are using W3_KEY_* as a ini group
         ACTIVE_MODE_KEY = W3_KEY_LATEST;
-        settings.setValue("ActiveMode", ACTIVE_MODE_KEY);
+        settings.setValue("active_mode", ACTIVE_MODE_KEY);
     }
     W3PATH_126 = settings.value(W3_KEY_126 + "/path", "").toString();
     W3PATH_LATEST = settings.value(W3_KEY_LATEST + "/path", Registry::getW3dir()).toString();
@@ -78,15 +77,16 @@ Config::Config()
     json1 = "http://xpam.pl/update/update.json";
     json2 = "http://tools.eurobattle.net/update/update.json";
     json3 = "http://leaguebots.com/cen/update/update.json";
-#endif
-
+#endif    
     // List of checkboxes which are standing for Warcraft 3 arguments
     W3_OPTIONS.append("windowed");
     W3_OPTIONS.append("fullscreen");
     W3_OPTIONS.append("opengl");
-    W3_OPTIONS.append("updates"); // should not be here ffs
 
-    // I do not care. Things should be safe.
+    // List of XPAM options
+    XPAM_OPTIONS.append("updates");
+
+    // List of gproxy options
     GPROXY_OPTIONS.append("debug");
     GPROXY_OPTIONS.append("chatbuffer");
     GPROXY_OPTIONS.append("console");

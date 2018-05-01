@@ -58,8 +58,11 @@ private slots:
     void on_pushButtonGWD_clicked();
     void on_pushButtonBU_clicked();
     void handleCheckbox(bool checked);
+    void handleCheckboxXpam(bool checked);
     void handleCheckboxClient(bool checked);
+
     void initGproxyOptions();
+    void initXpamOptions();
     void initClientOptions();
 
     void on_pushButtonGPCL_clicked();
@@ -75,8 +78,6 @@ private slots:
     void on_pushButton_warLatestPath_clicked();
 
     void on_pushButton_war126Path_clicked();
-
-    void on_horizontalSlider_ActiveMode_sliderReleased();
 
 public slots:
     void gproxyReady(QString w3Exename);
