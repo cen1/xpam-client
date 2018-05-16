@@ -142,4 +142,7 @@ void W3::sanityCheck(Config * config) {
     if (installPathX=="ERROR" || installPathX=="") {
         reg.setInstallPathX(config->W3PATH);
     }
+
+    Logger::log("EUROPATH="+config->EUROPATH, config);
+    Logger::log("W3PATH="+config->W3PATH, config);
 }

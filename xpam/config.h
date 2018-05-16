@@ -31,6 +31,7 @@ public:
     bool USE_DUAL_VERSION;
     bool ASK_FOR_W3_FAST_UPDATE;
     bool HAS_QUICK_PATCH;
+    bool IS_PORTABLE;
 
     QVector<QString> W3_COMMON_FILES;
     QVector<QString> W3_VERSIONS;

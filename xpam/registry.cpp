@@ -289,3 +289,27 @@ bool Registry::setDefaultTFT() {
     }
     return false;
 }
+
+bool Registry::createEuroKey() {
+    CRegKey reg;
+    if (reg.Create(HKEY_CURRENT_USER, _T("Software\\Eurobattle.net"), REG_NONE, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS | KEY_WOW64_64KEY, NULL, NULL) == ERROR_SUCCESS) {
+        reg.Close();
+        return true;
+    }
+    else {
+        reg.Close();
+        return false;
+    }
+}
+
+bool Registry::createBlizzKey() {
+    CRegKey reg;
+    if (reg.Create(HKEY_CURRENT_USER, _T("Software\\Blizzard Entertainment\\Warcraft III"), REG_NONE, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS | KEY_WOW64_64KEY, NULL, NULL) == ERROR_SUCCESS) {
+        reg.Close();
+        return true;
+    }
+    else {
+        reg.Close();
+        return false;
+    }
+}

@@ -29,6 +29,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "winutils.h"
 #include "patcher.h"
 #include <QStandardPaths>
+#include <QDir>
 
 Config::Config()
 {
@@ -39,9 +40,16 @@ Config::Config()
     W3_EXENAME_126="war3.exe";
     BETAPIN = "1377";
 
+#ifdef PORTABLE
+    EUROPATH    = QDir::currentPath();
+    W3PATH      = QDir::currentPath()+"/../Warcraft III";
+    IS_PORTABLE = true;
+#else
     EUROPATH    = Registry::getEuroPath();
-    SOUNDPATH   = EUROPATH+"\\sounds";
     W3PATH      = Registry::getW3dir();
+    IS_PORTABLE = false;
+#endif
+    SOUNDPATH   = EUROPATH+"\\sounds";
     DOCPATH     = QStandardPaths::locate(QStandardPaths::DocumentsLocation, QString(), QStandardPaths::LocateDirectory)+"Warcraft III";
     DOCMAPPATH  = QStandardPaths::locate(QStandardPaths::DocumentsLocation, QString(), QStandardPaths::LocateDirectory)+"Warcraft III/Maps";
     DOCMAPPATHDL= QStandardPaths::locate(QStandardPaths::DocumentsLocation, QString(), QStandardPaths::LocateDirectory)+"Warcraft III/Maps/Download";

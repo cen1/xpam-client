@@ -97,7 +97,12 @@ MainWindow::MainWindow(QWidget *parent) :
     //initiate gproxy options
     this->initGproxyOptions();
 
-    updatesEnabled = ui->checkBox_updates->isChecked();
+    if (config->IS_PORTABLE) {
+        updatesEnabled = false;
+    }
+    else {
+        updatesEnabled = ui->checkBox_updates->isChecked();
+    }
 
     //Clean the update log on every startup
     QFile log(config->EUROPATH+"\\xpam.log");
@@ -136,6 +141,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     //Set TFT as default client
     Registry r;
+    r.createEuroKey();
+    r.createBlizzKey();
     r.setDefaultTFT();
 
     //Hide slider for now
@@ -364,6 +371,10 @@ void MainWindow::w3Exited() {
 
 //Update W3 on startup
 bool MainWindow::checkW3Updates(){
+
+    if (config->IS_PORTABLE) {
+        return true;
+    }
 
     //Either autopatch fails or there is no autopatch and W3 version is incorrect
     QString w3version = Patcher::getCurrentW3Version(config);
@@ -684,8 +695,10 @@ void MainWindow::handleCheckboxClient(bool checked)
 //Init checkboxes according to cfg file
 void MainWindow::initGproxyOptions() {
     QFile conf(config->EUROPATH+"\\gproxy.cfg");
-    if (conf.open(QFile::ReadOnly))
-        ui->statusBar->showMessage("Unable to load gproxy options", 10000);
+    if (!conf.open(QFile::ReadOnly)) {
+        ui->statusBar->showMessage("Unable to load gproxy options from ", 10000);
+        return;
+    }
 
     QStringList lines;
     while(!conf.atEnd())
@@ -705,9 +718,12 @@ void MainWindow::initGproxyOptions() {
 
 //Init checkboxes according to cfg
 void MainWindow::initClientOptions() {
+
     QFile conf(config->EUROPATH+"\\xpam.cfg");
-    if (conf.open(QFile::ReadOnly))
+    if (!conf.open(QFile::ReadOnly)) {
         ui->statusBar->showMessage("Unable to load client options", 10000);
+        return;
+    }
 
     QStringList lines;
     while(!conf.atEnd())
@@ -805,6 +821,10 @@ void MainWindow::on_pushButtonClientLog_clicked()
 //Set new w3 path
 void MainWindow::on_pushButton_w3path_clicked()
 {
+    if (config->IS_PORTABLE) {
+        return;
+    }
+
     QFileDialog qfd;
     qfd.setDirectory(config->W3PATH);
     const QString path = qfd.getExistingDirectory(this);
@@ -974,7 +994,7 @@ bool MainWindow::checkW3PathUnicode() {
     QFile f(config->W3PATH+"/Warcraft III.exe");
     if (!f.exists()) {
         QMessageBox mb(QMessageBox::Critical, "W3 path alert",
-           "Your W3 path is missing 'Warcraft III.exe' which probably means the path is incorrect.",
+           "Your W3 path is missing 'Warcraft III.exe' which probably means the path is incorrect. "+config->W3PATH,
            QMessageBox::Ok);
          mb.exec();
          return false;

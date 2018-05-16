@@ -59,6 +59,9 @@ public:
     bool setInstallPath(QString w3dir);
     bool setInstallPathX(QString w3dir);
 
+    bool createEuroKey();
+    bool createBlizzKey();
+
     bool setDefaultTFT();
 
     static bool delGM();

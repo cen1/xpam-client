@@ -53,6 +53,9 @@ void GProxy::readStdout() {
         args << restrictedVersion;
         args << w3Path;
     }
+    else {
+        args << w3Path;
+    }
     QProcess p;
     p.setWorkingDirectory(workdir);
     p.start(exedir, args);
