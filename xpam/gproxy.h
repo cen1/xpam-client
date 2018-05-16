@@ -40,15 +40,17 @@ signals:
 private:
     QStringList parseTokens(QString s);
 public:
-    GProxy(QString w, QString e, QString w3e, QString restrictedV, QString w3path);
+    GProxy(QString gpDir, QString gpExe, QString gpMode, QString gpServer, QString w3exe, QString w3p);
     ~GProxy();
 
     bool abort;
     QString workdir;
     QString exedir;
     QString w3Exename;
-    QString restrictedVersion;
+    QString mode;
     QString w3Path;
+    QString server;
+    QProcess process;
 public slots:
     void readStdout();
 };

@@ -55,6 +55,7 @@ Config::Config()
     }
     W3PATH_126 = settings.value(W3_KEY_126 + "/path", "").toString();
     W3PATH_LATEST = settings.value(W3_KEY_LATEST + "/path", Registry::getW3dir()).toString();
+    GPROXY_SERVER = settings.value("server", "xpam.pl").toString();
 
     DOCPATH     = QStandardPaths::locate(QStandardPaths::DocumentsLocation, QString(), QStandardPaths::LocateDirectory)+"Warcraft III";
     DOCMAPPATH  = QStandardPaths::locate(QStandardPaths::DocumentsLocation, QString(), QStandardPaths::LocateDirectory)+"Warcraft III/Maps";
@@ -65,7 +66,6 @@ Config::Config()
     APPDATA     = Winutils::getAppData()+"\\Eurobattle.net";
     SYSTEM      = Winutils::getSystem32();
 
-    USE_DUAL_VERSION = true;
     ASK_FOR_W3_FAST_UPDATE = true;
     HAS_QUICK_PATCH=true;
 

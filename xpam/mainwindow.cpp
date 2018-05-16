@@ -118,14 +118,6 @@ MainWindow::MainWindow(QWidget *parent) :
     //Rename war3Patch.mpq to war3Mod.mpw as of 1.28.2
     Updater::renamePatchMpq(config);
 
-    //Enable or disable DotA gateway
-    if (config->USE_DUAL_VERSION) {
-        ui->pushButtonGWD->setEnabled(true);
-    }
-    else {
-        ui->pushButtonGWD->setEnabled(false);
-    }
-
     //Sanity checks
     W3::sanityCheck(config);
 
@@ -135,7 +127,7 @@ MainWindow::MainWindow(QWidget *parent) :
 }
 
 void MainWindow::changeActiveMode(QString activeMode) {
-
+    // @todo optimize someday
     if (activeMode == config->W3_KEY_126 && config->W3PATH_126 == "") {
         status("You must specify Warcraft 1.26a path first");
         activeMode = config->W3_KEY_LATEST;
@@ -154,30 +146,29 @@ MainWindow::~MainWindow()
 //GProxy gateway, Start w3 and gproxy
 void MainWindow::on_pushButtonGWG_clicked()
 {
-    if (config->USE_DUAL_VERSION) {
-        changeActiveMode(config->W3_KEY_LATEST);
-    }
+    changeActiveMode(config->W3_KEY_LATEST);
     startW3AndGproxy();
 }
 
 void MainWindow::startW3AndGproxy() {
     QString w3Path;
     QString w3Exename;
-    QString restrictedVersion;
-
 
     w3Path = config->getCurrentW3Path();
     w3Exename = config->getCurrentW3Exename();
-    restrictedVersion = config->getCurrentW3Version();
     //Hard WINAPI checks for w3 and gproxy running, all kind of problems if they are...
     if (Util::isRunning(w3Exename)) {
         status("Warcraft III is already running");
         return;
     }
     if (Util::isRunning("gproxy.exe")) {
-        // @todo some correct solution about this
-        system("pkill gproxy");
-        status("GProxy is already running. But we can just kill it (so dumb lol)");
+        if (gproxy != nullptr && gproxy->process.isOpen()) {
+            // it is the process attached to Gproxy object, we can kill it
+            // @todo or better close() and wait? eh, who cares.
+            gproxy->process.kill();
+        } else { // some random gproxy.exe is running, which is know known by Gproxy object
+            status("GProxy is already running.");
+        }
     }
 
     //Check if gproxy.exe exists and was not deleted by AV
@@ -210,11 +201,10 @@ void MainWindow::startW3AndGproxy() {
 
     QString gpdir=config->EUROPATH;
     QString gpexe="\""+gpdir+"\\gproxy.exe\"";
-
+    QString gpmode=(config->ACTIVE_MODE_KEY == config->W3_KEY_126) ? "restricted" : "normal";
     status("Launching GProxy...");
     ui->labelGproxyout->setText("Working directory: "+gpdir);
-
-    gproxy=new GProxy(gpdir, gpexe, w3Exename, restrictedVersion, w3Path);
+    gproxy=new GProxy(gpdir, gpexe, gpmode, config->GPROXY_SERVER, w3Exename, w3Path);
     gpt=new QThread();
     gproxy->moveToThread(gpt);
 
@@ -233,10 +223,7 @@ void MainWindow::startW3AndGproxy() {
 //Start w3 only, NORMAL gateway
 void MainWindow::on_pushButtonGWN_clicked()
 {    
-    if (config->USE_DUAL_VERSION) {
-        changeActiveMode(config->W3_KEY_LATEST);
-    }
-
+    changeActiveMode(config->W3_KEY_LATEST);
     //Set normal gateway as default
     Registry::setGateways();
 
@@ -246,21 +233,19 @@ void MainWindow::on_pushButtonGWN_clicked()
 //Dota gateway, Start w3 and gproxy, switch version as needed
 void MainWindow::on_pushButtonGWD_clicked()
 {
-    if (config->USE_DUAL_VERSION) {
-        //Switch version
-        changeActiveMode(config->W3_KEY_126);
-        if (config->ACTIVE_MODE_KEY != config->W3_KEY_126) {
-            QMessageBox mb(QMessageBox::Critical, "Warcraft 1.26a is not set",
-               "You should set up the XPAM to work with Warcraft 3 1.26a.", QMessageBox::Ok);
-            // @todo is setting the 2nd index enough?
-            ui->tabWidget->setCurrentIndex(2);
-            ui->pushButton_war126Path->setFocus();
-            status("Please, select the Warcraft 1.26a path in order to use 1.26a gateway");
-            return;
-        }
-        //Start gproxy gateway
-        startW3AndGproxy();
+    //Switch version
+    changeActiveMode(config->W3_KEY_126);
+    if (config->ACTIVE_MODE_KEY != config->W3_KEY_126) {
+        QMessageBox mb(QMessageBox::Critical, "Warcraft 1.26a is not set",
+           "You should set up the XPAM to work with Warcraft 3 1.26a.", QMessageBox::Ok);
+        // @todo is setting the 2nd index enough?
+        ui->tabWidget->setCurrentIndex(2);
+        ui->pushButton_war126Path->setFocus();
+        status("Please, select the Warcraft 1.26a path in order to use 1.26a gateway");
+        return;
     }
+    //Start gproxy gateway
+    startW3AndGproxy();
 }
 
 void MainWindow::runW3() {
@@ -866,8 +851,6 @@ void MainWindow::on_pushButton_war126Path_clicked()
         }
     }
 }
-
-
 
 //Full W3 update
 void MainWindow::on_pushButton_updateW3_released()

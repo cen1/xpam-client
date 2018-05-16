@@ -24,6 +24,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #include "gproxy.h"
+#include <QDir>
 #ifndef QTHREAD_H
     #include "QThread"
 #endif
@@ -32,14 +33,15 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #endif
 #include "winutils.h"
 
-GProxy::GProxy(QString w, QString e, QString w3e, QString restrictedV, QString w3p)
+GProxy::GProxy(QString gpDir, QString gpExe, QString gpMode, QString gpServer, QString w3exe, QString w3p)
 {
     abort=false;
-    workdir=w;
-    exedir=e;
-    w3Exename=w3e;
-    restrictedVersion=restrictedV;
-    w3Path = w3p;
+    workdir=gpDir;
+    exedir=gpExe;
+    mode=gpMode;
+    server=gpServer;
+    w3Exename=w3exe;
+    w3Path=w3p;
 }
 
 GProxy::~GProxy() {
@@ -49,27 +51,29 @@ GProxy::~GProxy() {
 void GProxy::readStdout() {
 
     QStringList args;
-    if (restrictedVersion!="") {
-        args << restrictedVersion;
-        args << w3Path;
-    }
-    QProcess p;
-    p.setWorkingDirectory(workdir);
-    p.start(exedir, args);
-    if (!p.waitForStarted()) {
-        emit sendLine("Could not start GProxy: "+p.errorString());
+    // @todo add more clean and flexible way to provide arguments
+    args << exedir;
+    args << "--w3exe=\"" + QDir::toNativeSeparators(w3Path + "/" + w3Exename) + "\"";
+    args << "--mode=" + mode;
+    args << "--server=" + server;
+    process.setWorkingDirectory(workdir);
+    process.start(args.join(" "));
+
+    if (!process.waitForStarted()) {
+        emit sendLine("Could not start GProxy: "+process.errorString());
         emit gproxyExiting();
         return;
     }
-    if (!p.isOpen()) emit sendLine("Console stream is not open");
-    if (!p.isReadable()) emit sendLine("Console stream is not readable");
+    if (!process.isOpen()) emit sendLine("Console stream is not open");
+    if (!process.isReadable()) emit sendLine("Console stream is not readable");
 
     while(!abort) {
-        p.waitForReadyRead(100);
+        process.waitForReadyRead(100);
 
-        while (p.canReadLine()) {
-            QString line(p.readLine());
+        while (process.canReadLine()) {
+            QString line(process.readLine());
             line=line.simplified(); //mostly for removing newline
+
             QStringList tokens = parseTokens(line);
 
             emit sendLine(line);
@@ -86,7 +90,7 @@ void GProxy::readStdout() {
                 abort=true;
             }
 
-            if (p.state() != QProcess::Running) {
+            if (process.state() != QProcess::Running) {
                 emit sendLine("GProxy process exited");
                 abort=true;
             }

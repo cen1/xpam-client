@@ -1,8 +1,6 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-
-
 #include <QObject>
 #include <QMap>
 #include <QUrl>
@@ -35,7 +33,7 @@ public:
     QString SOUNDPATH;
     QString APPDATA;
     QString SYSTEM;
-    bool USE_DUAL_VERSION;
+    QString GPROXY_SERVER;
     bool ASK_FOR_W3_FAST_UPDATE;
     bool HAS_QUICK_PATCH;
 
