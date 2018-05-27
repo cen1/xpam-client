@@ -68,11 +68,11 @@ void W3::sanityCheck(Config * config) {
     //Add old registries back if they do not exist
     Registry reg;
     QString installPath = reg.getInstallPath();
-    if (installPath=="ERROR" || installPath=="") {
+    if (installPath=="") {
         reg.setInstallPath(config->W3PATH_LATEST);
     }
     QString installPathX = reg.getInstallPathX();
-    if (installPathX=="ERROR" || installPathX=="") {
+    if (installPathX=="") {
         reg.setInstallPathX(config->W3PATH_LATEST);
     }
 }

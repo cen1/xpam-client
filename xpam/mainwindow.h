@@ -68,12 +68,15 @@ private slots:
     void on_pushButtonGPCL_clicked();
     void on_pushButtonGPNOTEPAD_clicked();
     void on_pushButtonClientLog_clicked();
-    
-    void changeActiveMode(QString activeMode);
+
+    bool checkModeAvailability(QString modeKey, bool shouldWarnUser=false);
+    bool changeActiveMode(QString modeKey, bool shouldWarnUser=false);
     
     void on_pushButton_updateW3_released();
 
     void quit();
+
+    bool showW3PathDialog(QString modeKey);
 
     void on_pushButton_warLatestPath_clicked();
 

@@ -704,7 +704,7 @@ public:
 #endif // QT_NO_TOOLTIP
         pushButtonGWG->setText(QString());
 #ifndef QT_NO_TOOLTIP
-        pushButtonGWD->setToolTip(QApplication::translate("MainWindow", "COMING SOON", Q_NULLPTR));
+        pushButtonGWD->setToolTip(QApplication::translate("MainWindow", "Warcraft 1.26a gateway", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
         pushButtonGWD->setText(QString());
         tabWidget->setTabText(tabWidget->indexOf(tabLauncher), QApplication::translate("MainWindow", " LAUNCHER ", Q_NULLPTR));

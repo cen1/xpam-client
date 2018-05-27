@@ -33,12 +33,16 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Config::Config()
 {
     VERSION_CLIENT = "0.9.1.0";
+
     W3_VERSION_LATEST = "1.28.5.7680";
+    W3_VERSION_126 = "1.26.0.6401";
+
     W3_KEY_126 = "WAR3_126";
     W3_KEY_LATEST = "WAR3_LATEST";
-    W3_VERSION_126 = "1.26.0.6401";
-    W3_EXENAME_LATEST="Warcraft III.exe";
+
     W3_EXENAME_126="war3.exe";
+    W3_EXENAME_LATEST="Warcraft III.exe";
+
     BETAPIN = "1377";
 
     EUROPATH    = Registry::getEuroPath();
@@ -115,19 +119,40 @@ Config::Config()
     //DOTA_MAPS.append("DotA v6.88g Allstars.w3x");
 }
 
+QString Config::getCorrectW3Key(QString modeKey) {
+    return modeKey == W3_KEY_126 ? W3_KEY_126 : W3_KEY_LATEST;
+}
+
+QString Config::getW3Path(QString modeKey) {
+    return getCorrectW3Key(modeKey) == W3_KEY_126 ? W3PATH_126 : W3PATH_LATEST;
+}
+
 QString Config::getCurrentW3Path() {
-    return ACTIVE_MODE_KEY == W3_KEY_126 ? W3PATH_126 : W3PATH_LATEST;
+    return getW3Path(ACTIVE_MODE_KEY);
+}
+
+QString Config::getW3Exename(QString modeKey) {
+    return getCorrectW3Key(modeKey) == W3_KEY_126 ? W3_EXENAME_126 : W3_EXENAME_LATEST;
 }
 
 QString Config::getCurrentW3Exename() {
-    return ACTIVE_MODE_KEY == W3_KEY_126 ? W3_EXENAME_126 : W3_EXENAME_LATEST;
+    return getW3Exename(ACTIVE_MODE_KEY);
 }
 
-QString Config::getCurrentW3Version() {
-    return ACTIVE_MODE_KEY == W3_KEY_126 ? W3_VERSION_126 : W3_VERSION_LATEST;
+QString Config::getW3ExePath(QString modeKey) {
+    modeKey = getCorrectW3Key(modeKey);
+    return getW3Path(modeKey) + "\\" + getW3Exename(modeKey);
 }
 
 QString Config::getCurrentW3ExePath() {
-    return getCurrentW3Path() + "\\" + getCurrentW3Exename();
+    return getW3ExePath(ACTIVE_MODE_KEY);
+}
+
+QString Config::getW3Version(QString modeKey) {
+    return getCorrectW3Key(modeKey) == W3_KEY_126 ? W3_VERSION_126 : W3_VERSION_LATEST;
+}
+
+QString Config::getCurrentW3Version() {
+    return getW3Exename(ACTIVE_MODE_KEY);
 }
 

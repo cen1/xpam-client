@@ -126,16 +126,42 @@ MainWindow::MainWindow(QWidget *parent) :
     r.setDefaultTFT();
 }
 
-void MainWindow::changeActiveMode(QString activeMode) {
-    // @todo optimize someday
-    if (activeMode == config->W3_KEY_126 && config->W3PATH_126 == "") {
-        status("You must specify Warcraft 1.26a path first");
-        activeMode = config->W3_KEY_LATEST;
+/**
+ * @brief MainWindow::checkModeAvailability
+ *
+ * @param mode_key The mode key to check
+ * @param should_warn_user Will redirect user to Warcraft page and show the alert
+ * @return
+ */
+bool MainWindow::checkModeAvailability(QString modeKey, bool shouldWarnUser) {
+    // @todo refactor it someone lul
+    if ((modeKey == config->W3_KEY_126 && config->W3PATH_126 != "") ||
+        (modeKey == config->W3_KEY_LATEST && config->W3PATH_LATEST != "")) {
+        return true;
     }
-    config->ACTIVE_MODE_KEY = activeMode;
+    if (shouldWarnUser) {
+        QString version = config->getW3Version(modeKey);
+        status("Please, select the Warcraft " + version + " path in order to use 1.26a gateway");
+        QMessageBox mb(QMessageBox::Critical, "Warcraft " + version + " is not set",
+           "You should set up the XPAM to work with Warcraft 3 " + version + ".", QMessageBox::Ok);
+        ui->tabWidget->setCurrentIndex(2);
+        if (modeKey == config->W3_KEY_126) {
+            ui->pushButton_war126Path->setFocus();
+        } else {
+            ui->pushButton_warLatestPath->setFocus();
+        }
+    }
+    return false;
+}
+
+bool MainWindow::changeActiveMode(QString modeKey, bool shouldWarnUser) {
+    if (!checkModeAvailability(modeKey, shouldWarnUser)) {
+        return false;
+    }
+    config->ACTIVE_MODE_KEY = modeKey;
     QSettings settings(config->XPAM_CONFIG_PATH, QSettings::IniFormat);
     settings.setValue("active_mode", config->ACTIVE_MODE_KEY);
-
+    return true;
 }
 
 MainWindow::~MainWindow()
@@ -143,11 +169,32 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-//GProxy gateway, Start w3 and gproxy
+
+//Start w3 only, NORMAL gateway
+void MainWindow::on_pushButtonGWN_clicked()
+{
+    if (changeActiveMode(config->W3_KEY_LATEST, true)) {
+        //Set normal gateway as default
+        Registry::setGateways();
+        runW3();
+    }
+}
+
+//Dota gateway, Start w3 and gproxy, switch version as needed
+void MainWindow::on_pushButtonGWD_clicked()
+{
+    if (changeActiveMode(config->W3_KEY_126, true)) {
+        //Start gproxy gateway
+        startW3AndGproxy();
+    }
+}
+
+//GProxy gateway (WAR3_LATEST), Start w3 and gproxy
 void MainWindow::on_pushButtonGWG_clicked()
 {
-    changeActiveMode(config->W3_KEY_LATEST);
-    startW3AndGproxy();
+    if (changeActiveMode(config->W3_KEY_LATEST, true)) {
+        startW3AndGproxy();
+    }
 }
 
 void MainWindow::startW3AndGproxy() {
@@ -218,34 +265,6 @@ void MainWindow::startW3AndGproxy() {
     QObject::connect(gpt, SIGNAL(finished()), gpt, SLOT(deleteLater()));
 
     gpt->start();
-}
-
-//Start w3 only, NORMAL gateway
-void MainWindow::on_pushButtonGWN_clicked()
-{    
-    changeActiveMode(config->W3_KEY_LATEST);
-    //Set normal gateway as default
-    Registry::setGateways();
-
-    runW3();
-}
-
-//Dota gateway, Start w3 and gproxy, switch version as needed
-void MainWindow::on_pushButtonGWD_clicked()
-{
-    //Switch version
-    changeActiveMode(config->W3_KEY_126);
-    if (config->ACTIVE_MODE_KEY != config->W3_KEY_126) {
-        QMessageBox mb(QMessageBox::Critical, "Warcraft 1.26a is not set",
-           "You should set up the XPAM to work with Warcraft 3 1.26a.", QMessageBox::Ok);
-        // @todo is setting the 2nd index enough?
-        ui->tabWidget->setCurrentIndex(2);
-        ui->pushButton_war126Path->setFocus();
-        status("Please, select the Warcraft 1.26a path in order to use 1.26a gateway");
-        return;
-    }
-    //Start gproxy gateway
-    startW3AndGproxy();
 }
 
 void MainWindow::runW3() {
@@ -812,50 +831,56 @@ void MainWindow::on_pushButtonClientLog_clicked()
     QDesktopServices::openUrl(QUrl("file:///"+config->EUROPATH+"/xpam.log"));
 }
 
+bool MainWindow::showW3PathDialog(QString modeKey) {
+    modeKey = config->getCorrectW3Key(modeKey);
+    QString exename = config->getW3Exename(modeKey);
+    QSettings settings(config->XPAM_CONFIG_PATH, QSettings::IniFormat);
+
+    QFileDialog qfd;
+    qfd.setDirectory(settings.value(modeKey + "/path", "").toString());
+    const QString path = qfd.getExistingDirectory(this);
+    QString p = path;
+    p = p.replace(QChar('/'), QChar('\\'));
+
+    if (p=="") {  //On Cancel it returns empty
+        return false;
+    }
+    QString w3_path = p+"\\"+exename;
+    QFile f(w3_path);
+    if (!f.exists()) {
+        status("Failed to set W3 path, " + exename + " not present in that directory.");
+        return false;
+    }
+    QString w3version = Winutils::getFileVersion(w3_path);
+    QString expectedW3Version = config->getW3Version(modeKey);
+    if (w3version != expectedW3Version) {
+        status("Failed to set W3 path, " + exename + " has the wrong version. Expected: " + expectedW3Version + ", got: " + w3version);
+        return false;
+    }
+    settings.setValue(modeKey + "/path", p);
+    if (modeKey == config->W3_KEY_126) {
+        ui->label_War126Path->setText(p);
+    } else {
+        ui->label_WarLatestPath->setText(p);
+    }
+    return true;
+}
+
 //Set new w3 path
 void MainWindow::on_pushButton_warLatestPath_clicked()
 {
-    QSettings settings(config->XPAM_CONFIG_PATH, QSettings::IniFormat);
-    QFileDialog qfd;
-    qfd.setDirectory(settings.value(config->W3_KEY_LATEST + "/path", "").toString());
-    const QString path = qfd.getExistingDirectory(this);
-    QString p = path;
-    p=p.replace(QChar('/'), QChar('\\'));
-    if (p!="") {  //On Cancel it returns empty
-        QFile f(p+"\\"+config->W3_EXENAME_LATEST);
-        if (!f.exists()) {
-            status("Failed to set W3 path, "+config->W3_EXENAME_LATEST+" not present in that directory.");
-        } else {
-            settings.setValue(config->W3_KEY_LATEST + "/path", p);
-            ui->label_WarLatestPath->setText(p);
-        }
-    }
+    showW3PathDialog(config->W3_KEY_LATEST);
 }
 
 // @todo: refactor? kinda same method as above, with different strings
 void MainWindow::on_pushButton_war126Path_clicked()
 {
-    QSettings settings(config->XPAM_CONFIG_PATH, QSettings::IniFormat);
-    QFileDialog qfd;
-    qfd.setDirectory(settings.value(config->W3_KEY_126 + "/path", "").toString());
-    const QString path = qfd.getExistingDirectory(this);
-    QString p = path;
-    p=p.replace(QChar('/'), QChar('\\'));
-    if (p!="") {  //On Cancel it returns empty
-        QFile f(p+"\\"+config->W3_EXENAME_126);
-        if (!f.exists()) {
-            status("Failed to set W3 path, "+config->W3_EXENAME_126+" not present in that directory.");
-        } else {
-            settings.setValue(config->W3_KEY_126 + "/path", p);
-            ui->label_War126Path->setText(p);
-        }
-    }
+    showW3PathDialog(config->W3_KEY_126);
 }
 
 //Full W3 update
 void MainWindow::on_pushButton_updateW3_released()
 {
-
     if (updateInProgress) {
         Logger::log("Update is in progress, cancelling", config);
         //User wants to cancel

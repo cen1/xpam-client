@@ -51,14 +51,20 @@ public:
 
     Config();
     QSettings settings();
+
+    QString getCorrectW3Key(QString modeKey);
+
+    QString getW3Path(QString modeKey);
     QString getCurrentW3Path();
 
+    QString getW3Exename(QString modeKey);
     QString getCurrentW3Exename();
 
+    QString getW3Version(QString modeKey);
     QString getCurrentW3Version();
 
+    QString getW3ExePath(QString modeKey);
     QString getCurrentW3ExePath();
 };
-
 
 #endif //CONFIG_H
