@@ -437,7 +437,6 @@ void MainWindow::checkUpdates(){
 
     //disable beta button or all kind of hell will ensue
     ui->pushButtonBU->setDisabled(true);
-    ui->pushButton_updateW3->setDisabled(true);
 
     ui->tabWidget->setCurrentIndex(3);
     lockTabs(ui->tabWidget->currentIndex());
@@ -486,7 +485,6 @@ void MainWindow::on_pushButtonBU_clicked()
     QObject::connect(upt, SIGNAL(finished()), upt, SLOT(deleteLater()));
 
     updateInProgress=true;
-    ui->pushButton_updateW3->setEnabled(false);
     ui->pushButtonBU->setEnabled(false);
 
     upt->start();
@@ -525,7 +523,6 @@ int MainWindow::checkDotaUpdates() {
         QObject::connect(upt, SIGNAL(finished()), upt, SLOT(deleteLater()));
 
         updateInProgress=true;
-        ui->pushButton_updateW3->setEnabled(false);
         ui->pushButtonBU->setEnabled(false);
 
         //Increment
@@ -557,13 +554,11 @@ void MainWindow::updateFinished(bool restartNeeded, bool ok, bool isUpToDate, bo
         if (!patchResult) {
             Patcher::cleanMetadata(config);
             QMessageBox msgBox;
-            msgBox.setText("Unable to do fast incremental update to W3 "+config->W3_VERSION_LATEST+". Would you like to do a full game update instead? This could take a while.");
+            msgBox.setText("Unable to do fast incremental update to W3 "+config->W3_VERSION_LATEST+".");
             msgBox.setStandardButtons(QMessageBox::Yes);
-            msgBox.addButton(QMessageBox::No);
-            msgBox.setDefaultButton(QMessageBox::No);
             if(msgBox.exec() == QMessageBox::Yes){
                 //Execute manual update
-                on_pushButton_updateW3_released();
+                //on_pushButton_updateW3_released();
             }
         }
         else {
@@ -587,20 +582,18 @@ void MainWindow::updateFinished(bool restartNeeded, bool ok, bool isUpToDate, bo
         status("Could not find an incremental W3 patch, full upgrade needed.");
         Logger::log("Could not find an incremental W3 patch, full upgrade needed.", config);
         QMessageBox msgBox;
-        msgBox.setText("Unable to do fast incremental update to W3 "+config->W3_VERSION_LATEST+". Would you like to do a full game update instead? This could take a while.");
+        msgBox.setText("Unable to do fast incremental update to W3 "+config->W3_VERSION_LATEST+".");
         msgBox.setStandardButtons(QMessageBox::Yes);
-        msgBox.addButton(QMessageBox::No);
-        msgBox.setDefaultButton(QMessageBox::No);
         if(msgBox.exec() == QMessageBox::Yes){
             //Execute manual update
-            on_pushButton_updateW3_released();
+            //on_pushButton_updateW3_released();
         }
     }
-    else if (type==2 && !ok) {
+    /*else if (type==2 && !ok) {
         status("Full W3 update failed, you will have to update manually.");
         Logger::log("Full W3 update failed, you will have to update manually.", config);
         ui->pushButton_updateW3->setText("Perform full W3 update (1GB download)");
-    }
+    }*/
     else if (type==2 && canceled) {
         status("Full W3 update was canceled.");
         Logger::log("Full W3 update was canceled.", config);
@@ -665,7 +658,6 @@ void MainWindow::updateFinished(bool restartNeeded, bool ok, bool isUpToDate, bo
     }
 
     if (enableButtons) {
-        ui->pushButton_updateW3->setEnabled(true);
         ui->pushButtonBU->setEnabled(true);
         unlockTabs();
     }
@@ -742,21 +734,27 @@ void MainWindow::initGproxyOptions() {
 void MainWindow::initClientOptions() {
     QSettings settings(config->XPAM_CONFIG_PATH, QSettings::IniFormat);
     QVector<QString> checkbox_postfixes = {"126", "latest"};
+
     foreach (const QString &postfix, checkbox_postfixes) {
         foreach (const QString &option_name, config->W3_OPTIONS) {
             QCheckBox * find = this->findChild<QCheckBox *>("checkBox_"+option_name + "_" + postfix);
             if (find != 0) {
                 QString mode_key = postfix == "126" ? config->W3_KEY_126 : config->W3_KEY_LATEST;
-                // @todo fix this crutch; see same comment above about "updates" checkbox
                 find->setChecked(settings.value(mode_key + "/" + option_name, "0") == "1" ? true : false);
             }
         }
     }
 
+   //Can't have windowed and fullscreen at the same time
    if (ui->checkBox_fullscreen_latest->isChecked() && ui->checkBox_windowed_latest->isChecked()) {
        ui->checkBox_fullscreen_latest->setChecked(true);
        ui->checkBox_windowed_latest->setChecked(false);
        settings.setValue(config->W3_KEY_LATEST + "/windowed", "0");
+   }
+
+   //126 gateway always uses gproxy
+   if (!ui->checkBox_useGproxy_126->isChecked()) {
+       ui->checkBox_useGproxy_126->setChecked(true);
    }
 }
 
@@ -879,7 +877,7 @@ void MainWindow::on_pushButton_war126Path_clicked()
 }
 
 //Full W3 update
-void MainWindow::on_pushButton_updateW3_released()
+/*void MainWindow::on_pushButton_updateW3_released()
 {
     if (updateInProgress) {
         Logger::log("Update is in progress, cancelling", config);
@@ -929,7 +927,7 @@ void MainWindow::on_pushButton_updateW3_released()
 
         upt->start();
     }
-}
+}*/
 
 //Diff W3 update
 void MainWindow::diffW3Update(QString version) {
@@ -939,7 +937,6 @@ void MainWindow::diffW3Update(QString version) {
     ui->textBrowserUpdate->clear();
 
     ui->pushButtonBU->setEnabled(false);
-    ui->pushButton_updateW3->setEnabled(false);
 
     ui->tabWidget->setCurrentIndex(3);
     lockTabs(ui->tabWidget->currentIndex());
@@ -1002,4 +999,9 @@ bool MainWindow::checkW3PathUnicode() {
 void MainWindow::quit() {
     Logger::log("Quitting due to restart", config);
     QApplication::quit();
+}
+
+void MainWindow::on_checkBox_useGproxy_126_toggled(bool checked)
+{
+    ui->checkBox_useGproxy_126->setChecked(true);
 }

@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'mainwindow.ui'
 **
-** Created by: Qt User Interface Compiler version 5.7.1
+** Created by: Qt User Interface Compiler version 5.6.0
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -50,6 +50,7 @@ public:
     QFormLayout *formLayout;
     QPushButton *pushButtonGWG;
     QPushButton *pushButtonGWD;
+    QHBoxLayout *horizontalLayoutOptions;
     QSpacerItem *verticalSpacer;
     QSpacerItem *hs2;
     QWidget *tabGproxy;
@@ -82,18 +83,24 @@ public:
     QLabel *war_latest_label_2;
     QLabel *label_WarLatestPath;
     QPushButton *pushButton_warLatestPath;
-    QGroupBox *groupBox;
+    QGroupBox *groupBox_latest;
+    QWidget *verticalLayoutWidget;
+    QVBoxLayout *verticalLayout_gb_latest;
+    QCheckBox *checkBox_fullscreen_latest;
     QCheckBox *checkBox_opengl_latest;
     QCheckBox *checkBox_windowed_latest;
-    QCheckBox *checkBox_fullscreen_latest;
+    QCheckBox *check_useGproxy_latest;
     QGroupBox *war_latest_groupbox_2;
     QLabel *label_War126Path;
     QLabel *label;
     QPushButton *pushButton_war126Path;
     QLabel *label_2;
-    QGroupBox *groupBox_2;
+    QGroupBox *groupBox_126;
+    QWidget *verticalLayoutWidget_2;
+    QVBoxLayout *verticalLayout__gb_126;
     QCheckBox *checkBox_opengl_126;
     QCheckBox *checkBox_windowed_126;
+    QCheckBox *checkBox_useGproxy_126;
     QWidget *tabUpdate;
     QWidget *layoutWidget1;
     QVBoxLayout *verticalLayout_6;
@@ -103,7 +110,6 @@ public:
     QHBoxLayout *horizontalLayout_3;
     QLineEdit *betapinbox;
     QPushButton *pushButtonBU;
-    QPushButton *pushButton_updateW3;
     QCheckBox *checkBox_updates;
     QSpacerItem *horizontalSpacer_2;
     QWidget *tabAbout;
@@ -179,7 +185,11 @@ public:
 "}\n"
 "\n"
 "a {\n"
-" color: #007dc1;\n"
+" color: #85c3e5;\n"
+"}\n"
+"\n"
+"a span {\n"
+" color: #85c3e5;\n"
 "}\n"
 "\n"
 "#tabWidget {\n"
@@ -192,10 +202,10 @@ public:
 "\n"
 "QTabBar::tab {\n"
 "  background-color: rgba(150, 150, 150);\n"
-"  color:#ffffff;\n"
+"  c"
+                        "olor:#ffffff;\n"
 "  height: 30px;\n"
-"  font-"
-                        "family: \"Lucida Sans Unicode\";\n"
+"  font-family: \"Lucida Sans Unicode\";\n"
 "\n"
 "}\n"
 "QTabBar::tab:hover{  \n"
@@ -242,11 +252,11 @@ public:
 "\n"
 "QCheckBox {\n"
 "  color:white;\n"
-"  font-family: \"Lucida Sans Unicode\";\n"
+"  font-family: \"Lucida San"
+                        "s Unicode\";\n"
 "}\n"
 "\n"
-"QCheckBox::indica"
-                        "tor {\n"
+"QCheckBox::indicator {\n"
 "  border: 1px solid grey;\n"
 "  border-radius: 2px;\n"
 "  padding: 1px 1px 1px 1px;\n"
@@ -289,6 +299,11 @@ public:
 "}\n"
 "#pushButtonGWD:hover {\n"
 "  border-color: #007dc1;\n"
+"}\n"
+"\n"
+"#checkBoxNoG"
+                        "p {\n"
+"  margin-left: 6px;	\n"
 "}"));
         horizontalLayout = new QHBoxLayout(centralWidget);
         horizontalLayout->setSpacing(0);
@@ -324,12 +339,14 @@ public:
         horizontalLayoutLauncher->setObjectName(QStringLiteral("horizontalLayoutLauncher"));
         pushButtonGWN = new QPushButton(tabLauncher);
         pushButtonGWN->setObjectName(QStringLiteral("pushButtonGWN"));
+        pushButtonGWN->setEnabled(false);
         QSizePolicy sizePolicy1(QSizePolicy::Preferred, QSizePolicy::Preferred);
         sizePolicy1.setHorizontalStretch(0);
         sizePolicy1.setVerticalStretch(0);
         sizePolicy1.setHeightForWidth(pushButtonGWN->sizePolicy().hasHeightForWidth());
         pushButtonGWN->setSizePolicy(sizePolicy1);
-        pushButtonGWN->setMinimumSize(QSize(266, 370));
+        pushButtonGWN->setMinimumSize(QSize(0, 370));
+        pushButtonGWN->setMaximumSize(QSize(0, 0));
 
         horizontalLayoutLauncher->addWidget(pushButtonGWN);
 
@@ -343,22 +360,32 @@ public:
         pushButtonGWG->setObjectName(QStringLiteral("pushButtonGWG"));
         sizePolicy1.setHeightForWidth(pushButtonGWG->sizePolicy().hasHeightForWidth());
         pushButtonGWG->setSizePolicy(sizePolicy1);
-        pushButtonGWG->setMinimumSize(QSize(266, 370));
+        pushButtonGWG->setMinimumSize(QSize(400, 350));
+        pushButtonGWG->setMaximumSize(QSize(400, 350));
         QFont font1;
         font1.setFamily(QStringLiteral("Lucida Sans Unicode"));
         pushButtonGWG->setFont(font1);
+        pushButtonGWG->setCursor(QCursor(Qt::PointingHandCursor));
 
         horizontalLayoutLauncher->addWidget(pushButtonGWG);
 
         pushButtonGWD = new QPushButton(tabLauncher);
         pushButtonGWD->setObjectName(QStringLiteral("pushButtonGWD"));
         pushButtonGWD->setEnabled(true);
-        pushButtonGWD->setMinimumSize(QSize(266, 370));
+        pushButtonGWD->setMinimumSize(QSize(400, 350));
+        pushButtonGWD->setMaximumSize(QSize(400, 350));
+        pushButtonGWD->setCursor(QCursor(Qt::PointingHandCursor));
 
         horizontalLayoutLauncher->addWidget(pushButtonGWD);
 
 
         verticalLayout->addLayout(horizontalLayoutLauncher);
+
+        horizontalLayoutOptions = new QHBoxLayout();
+        horizontalLayoutOptions->setSpacing(6);
+        horizontalLayoutOptions->setObjectName(QStringLiteral("horizontalLayoutOptions"));
+
+        verticalLayout->addLayout(horizontalLayoutOptions);
 
         verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
@@ -523,23 +550,42 @@ public:
         sizePolicy2.setHeightForWidth(pushButton_warLatestPath->sizePolicy().hasHeightForWidth());
         pushButton_warLatestPath->setSizePolicy(sizePolicy2);
         pushButton_warLatestPath->setMaximumSize(QSize(150, 16777215));
-        groupBox = new QGroupBox(war_latest_groupbox);
-        groupBox->setObjectName(QStringLiteral("groupBox"));
-        groupBox->setGeometry(QRect(9, 139, 371, 91));
-        checkBox_opengl_latest = new QCheckBox(groupBox);
+        groupBox_latest = new QGroupBox(war_latest_groupbox);
+        groupBox_latest->setObjectName(QStringLiteral("groupBox_latest"));
+        groupBox_latest->setGeometry(QRect(9, 139, 371, 101));
+        verticalLayoutWidget = new QWidget(groupBox_latest);
+        verticalLayoutWidget->setObjectName(QStringLiteral("verticalLayoutWidget"));
+        verticalLayoutWidget->setGeometry(QRect(10, 20, 92, 77));
+        verticalLayout_gb_latest = new QVBoxLayout(verticalLayoutWidget);
+        verticalLayout_gb_latest->setSpacing(6);
+        verticalLayout_gb_latest->setContentsMargins(11, 11, 11, 11);
+        verticalLayout_gb_latest->setObjectName(QStringLiteral("verticalLayout_gb_latest"));
+        verticalLayout_gb_latest->setContentsMargins(0, 0, 0, 0);
+        checkBox_fullscreen_latest = new QCheckBox(verticalLayoutWidget);
+        checkBox_fullscreen_latest->setObjectName(QStringLiteral("checkBox_fullscreen_latest"));
+
+        verticalLayout_gb_latest->addWidget(checkBox_fullscreen_latest);
+
+        checkBox_opengl_latest = new QCheckBox(verticalLayoutWidget);
         checkBox_opengl_latest->setObjectName(QStringLiteral("checkBox_opengl_latest"));
-        checkBox_opengl_latest->setGeometry(QRect(10, 60, 341, 16));
-        checkBox_windowed_latest = new QCheckBox(groupBox);
+
+        verticalLayout_gb_latest->addWidget(checkBox_opengl_latest);
+
+        checkBox_windowed_latest = new QCheckBox(verticalLayoutWidget);
         checkBox_windowed_latest->setObjectName(QStringLiteral("checkBox_windowed_latest"));
-        checkBox_windowed_latest->setGeometry(QRect(10, 18, 341, 16));
         QSizePolicy sizePolicy3(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
         sizePolicy3.setHorizontalStretch(0);
         sizePolicy3.setVerticalStretch(0);
         sizePolicy3.setHeightForWidth(checkBox_windowed_latest->sizePolicy().hasHeightForWidth());
         checkBox_windowed_latest->setSizePolicy(sizePolicy3);
-        checkBox_fullscreen_latest = new QCheckBox(groupBox);
-        checkBox_fullscreen_latest->setObjectName(QStringLiteral("checkBox_fullscreen_latest"));
-        checkBox_fullscreen_latest->setGeometry(QRect(10, 39, 341, 16));
+
+        verticalLayout_gb_latest->addWidget(checkBox_windowed_latest);
+
+        check_useGproxy_latest = new QCheckBox(verticalLayoutWidget);
+        check_useGproxy_latest->setObjectName(QStringLiteral("check_useGproxy_latest"));
+
+        verticalLayout_gb_latest->addWidget(check_useGproxy_latest);
+
         war_latest_groupbox_2 = new QGroupBox(tabW3);
         war_latest_groupbox_2->setObjectName(QStringLiteral("war_latest_groupbox_2"));
         war_latest_groupbox_2->setGeometry(QRect(440, 90, 391, 331));
@@ -559,17 +605,38 @@ public:
         label_2 = new QLabel(war_latest_groupbox_2);
         label_2->setObjectName(QStringLiteral("label_2"));
         label_2->setGeometry(QRect(10, 70, 241, 16));
-        groupBox_2 = new QGroupBox(war_latest_groupbox_2);
-        groupBox_2->setObjectName(QStringLiteral("groupBox_2"));
-        groupBox_2->setGeometry(QRect(10, 140, 371, 91));
-        checkBox_opengl_126 = new QCheckBox(groupBox_2);
+        label_2->setOpenExternalLinks(true);
+        groupBox_126 = new QGroupBox(war_latest_groupbox_2);
+        groupBox_126->setObjectName(QStringLiteral("groupBox_126"));
+        groupBox_126->setGeometry(QRect(10, 140, 371, 101));
+        verticalLayoutWidget_2 = new QWidget(groupBox_126);
+        verticalLayoutWidget_2->setObjectName(QStringLiteral("verticalLayoutWidget_2"));
+        verticalLayoutWidget_2->setGeometry(QRect(10, 20, 69, 57));
+        verticalLayout__gb_126 = new QVBoxLayout(verticalLayoutWidget_2);
+        verticalLayout__gb_126->setSpacing(6);
+        verticalLayout__gb_126->setContentsMargins(11, 11, 11, 11);
+        verticalLayout__gb_126->setObjectName(QStringLiteral("verticalLayout__gb_126"));
+        verticalLayout__gb_126->setContentsMargins(0, 0, 0, 0);
+        checkBox_opengl_126 = new QCheckBox(verticalLayoutWidget_2);
         checkBox_opengl_126->setObjectName(QStringLiteral("checkBox_opengl_126"));
-        checkBox_opengl_126->setGeometry(QRect(10, 40, 341, 16));
-        checkBox_windowed_126 = new QCheckBox(groupBox_2);
+
+        verticalLayout__gb_126->addWidget(checkBox_opengl_126);
+
+        checkBox_windowed_126 = new QCheckBox(verticalLayoutWidget_2);
         checkBox_windowed_126->setObjectName(QStringLiteral("checkBox_windowed_126"));
-        checkBox_windowed_126->setGeometry(QRect(10, 18, 341, 16));
         sizePolicy3.setHeightForWidth(checkBox_windowed_126->sizePolicy().hasHeightForWidth());
         checkBox_windowed_126->setSizePolicy(sizePolicy3);
+
+        verticalLayout__gb_126->addWidget(checkBox_windowed_126);
+
+        checkBox_useGproxy_126 = new QCheckBox(verticalLayoutWidget_2);
+        checkBox_useGproxy_126->setObjectName(QStringLiteral("checkBox_useGproxy_126"));
+        checkBox_useGproxy_126->setEnabled(true);
+        checkBox_useGproxy_126->setCheckable(true);
+        checkBox_useGproxy_126->setChecked(true);
+
+        verticalLayout__gb_126->addWidget(checkBox_useGproxy_126);
+
         tabWidget->addTab(tabW3, QString());
         tabUpdate = new QWidget();
         tabUpdate->setObjectName(QStringLiteral("tabUpdate"));
@@ -619,17 +686,6 @@ public:
 
         verticalLayout_5->addLayout(horizontalLayout_3);
 
-        pushButton_updateW3 = new QPushButton(layoutWidget1);
-        pushButton_updateW3->setObjectName(QStringLiteral("pushButton_updateW3"));
-        QSizePolicy sizePolicy5(QSizePolicy::Preferred, QSizePolicy::Fixed);
-        sizePolicy5.setHorizontalStretch(0);
-        sizePolicy5.setVerticalStretch(0);
-        sizePolicy5.setHeightForWidth(pushButton_updateW3->sizePolicy().hasHeightForWidth());
-        pushButton_updateW3->setSizePolicy(sizePolicy5);
-        pushButton_updateW3->setMaximumSize(QSize(16777215, 16777215));
-
-        verticalLayout_5->addWidget(pushButton_updateW3);
-
         checkBox_updates = new QCheckBox(layoutWidget1);
         checkBox_updates->setObjectName(QStringLiteral("checkBox_updates"));
 
@@ -652,7 +708,7 @@ public:
         tabAbout->setSizePolicy(sizePolicy);
         layoutWidget2 = new QWidget(tabAbout);
         layoutWidget2->setObjectName(QStringLiteral("layoutWidget2"));
-        layoutWidget2->setGeometry(QRect(20, 20, 391, 501));
+        layoutWidget2->setGeometry(QRect(20, 20, 395, 501));
         verticalLayout_3 = new QVBoxLayout(layoutWidget2);
         verticalLayout_3->setSpacing(10);
         verticalLayout_3->setContentsMargins(11, 11, 11, 11);
@@ -690,70 +746,71 @@ public:
 
     void retranslateUi(QMainWindow *MainWindow)
     {
-        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "Eurobattle.net Client", Q_NULLPTR));
+        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "Eurobattle.net Client", 0));
 #ifndef QT_NO_TOOLTIP
         pushButtonGWN->setToolTip(QApplication::translate("MainWindow", "Start without GProxy to play PG<br />\n"
-"or manually host your games.", Q_NULLPTR));
+"or manually host your games.", 0));
 #endif // QT_NO_TOOLTIP
         pushButtonGWN->setText(QString());
 #ifndef QT_NO_TOOLTIP
         pushButtonGWG->setToolTip(QApplication::translate("MainWindow", "Starting with GProxy is required for some DotA leagues<br />\n"
 "to be able to join their games. It also provides reconnection<br />\n"
 "in case you drop in the middle of the game.<br />\n"
-"YOU CAN'T PLAY PG OR MANUALLY HOST GAMES IN THIS MODE!", Q_NULLPTR));
+"YOU CAN'T PLAY PG OR MANUALLY HOST GAMES IN THIS MODE!", 0));
 #endif // QT_NO_TOOLTIP
         pushButtonGWG->setText(QString());
 #ifndef QT_NO_TOOLTIP
-        pushButtonGWD->setToolTip(QApplication::translate("MainWindow", "Warcraft 1.26a gateway", Q_NULLPTR));
+        pushButtonGWD->setToolTip(QApplication::translate("MainWindow", "Warcraft 1.26a gateway", 0));
 #endif // QT_NO_TOOLTIP
         pushButtonGWD->setText(QString());
-        tabWidget->setTabText(tabWidget->indexOf(tabLauncher), QApplication::translate("MainWindow", " LAUNCHER ", Q_NULLPTR));
+        tabWidget->setTabText(tabWidget->indexOf(tabLauncher), QApplication::translate("MainWindow", " LAUNCHER ", 0));
         preloaderLabel1->setText(QString());
-        labelGproxyout->setText(QApplication::translate("MainWindow", "GProxy output", Q_NULLPTR));
+        labelGproxyout->setText(QApplication::translate("MainWindow", "GProxy output", 0));
         labelGproxywarnings->setText(QString());
-        pushButtonGPCL->setText(QApplication::translate("MainWindow", "Copy GProxy log to clipboard", Q_NULLPTR));
-        pushButtonGPNOTEPAD->setText(QApplication::translate("MainWindow", "Open log file", Q_NULLPTR));
-        gpoptionsgroupBox->setTitle(QApplication::translate("MainWindow", "GProxy Options", Q_NULLPTR));
-        checkBox_console->setText(QApplication::translate("MainWindow", "Visible console (must start manually)", Q_NULLPTR));
-        checkBox_option_sounds->setText(QApplication::translate("MainWindow", "Enable sounds", Q_NULLPTR));
-        checkBox_sound_1->setText(QApplication::translate("MainWindow", "\"Game started\" sound", Q_NULLPTR));
-        checkBox_sound_2->setText(QApplication::translate("MainWindow", "\"Join the game\" sound", Q_NULLPTR));
-        checkBox_sound_3->setText(QApplication::translate("MainWindow", "\"Slap\" sound", Q_NULLPTR));
-        checkBox_sound_4->setText(QApplication::translate("MainWindow", "\"Channel moderated\" sound", Q_NULLPTR));
-        checkBox_sound_5->setText(QApplication::translate("MainWindow", "\"Channel unmoderated\" sound", Q_NULLPTR));
-        checkBox_sound_6->setText(QApplication::translate("MainWindow", "\"Challenge started\" sound", Q_NULLPTR));
-        checkBox_sound_7->setText(QApplication::translate("MainWindow", "\"Challenge completed\" sound", Q_NULLPTR));
-        checkBox_sound_8->setText(QApplication::translate("MainWindow", "\"Friend joined game\" sound", Q_NULLPTR));
-        checkBox_sound_9->setText(QApplication::translate("MainWindow", "\"Whisper\" sound", Q_NULLPTR));
-        checkBox_sound_10->setText(QApplication::translate("MainWindow", "\"You were kicked\" sound", Q_NULLPTR));
-        checkBox_chatbuffer->setText(QApplication::translate("MainWindow", "Chat buffer (experimental)", Q_NULLPTR));
-        checkBox_debug->setText(QApplication::translate("MainWindow", "Debugging", Q_NULLPTR));
-        checkBox_telemetry->setText(QApplication::translate("MainWindow", "Telemetry", Q_NULLPTR));
-        tabWidget->setTabText(tabWidget->indexOf(tabGproxy), QApplication::translate("MainWindow", "  GPROXY  ", Q_NULLPTR));
-        pushButtonClientLog->setText(QApplication::translate("MainWindow", "Open Client log file", Q_NULLPTR));
-        war_latest_groupbox->setTitle(QApplication::translate("MainWindow", "Latest warcraft gateway", Q_NULLPTR));
-        war_latest_label_2->setText(QApplication::translate("MainWindow", "Warcraft location", Q_NULLPTR));
-        label_WarLatestPath->setText(QApplication::translate("MainWindow", "Loading...", Q_NULLPTR));
-        pushButton_warLatestPath->setText(QApplication::translate("MainWindow", "Change", Q_NULLPTR));
-        groupBox->setTitle(QApplication::translate("MainWindow", "Options", Q_NULLPTR));
-        checkBox_opengl_latest->setText(QApplication::translate("MainWindow", "OpenGL", Q_NULLPTR));
-        checkBox_windowed_latest->setText(QApplication::translate("MainWindow", "Windowed", Q_NULLPTR));
-        checkBox_fullscreen_latest->setText(QApplication::translate("MainWindow", "Native fullscreen", Q_NULLPTR));
-        war_latest_groupbox_2->setTitle(QApplication::translate("MainWindow", "Warcraft 1.26a gateway", Q_NULLPTR));
-        label_War126Path->setText(QApplication::translate("MainWindow", "Loading...", Q_NULLPTR));
-        label->setText(QApplication::translate("MainWindow", "Warcraft 1.26a location", Q_NULLPTR));
-        pushButton_war126Path->setText(QApplication::translate("MainWindow", "Change", Q_NULLPTR));
-        label_2->setText(QApplication::translate("MainWindow", "Do not have Warcraft 1.26a? Download it [here]", Q_NULLPTR));
-        groupBox_2->setTitle(QApplication::translate("MainWindow", "Options", Q_NULLPTR));
-        checkBox_opengl_126->setText(QApplication::translate("MainWindow", "OpenGL", Q_NULLPTR));
-        checkBox_windowed_126->setText(QApplication::translate("MainWindow", "Windowed", Q_NULLPTR));
-        tabWidget->setTabText(tabWidget->indexOf(tabW3), QApplication::translate("MainWindow", " WARCRAFT", Q_NULLPTR));
-        pushButtonBU->setText(QApplication::translate("MainWindow", "Get Beta patch", Q_NULLPTR));
-        pushButton_updateW3->setText(QApplication::translate("MainWindow", "Perform full W3 update (1GB download)", Q_NULLPTR));
-        checkBox_updates->setText(QApplication::translate("MainWindow", "Enable automatic updates", Q_NULLPTR));
-        tabWidget->setTabText(tabWidget->indexOf(tabUpdate), QApplication::translate("MainWindow", " UPDATE ", Q_NULLPTR));
-        labelAbout->setText(QApplication::translate("MainWindow", "<html><head/><body><p>Eurobattle.net Client version 1.0 (September 2017), developed by cen</p><p><br/>We are searching for Qt/ C++ developers to further expand this client.</p><p><br/></p><p>TODO:</p><p>-bnet Chat client</p><p>-TS integration</p><p>-Displaying player's profile and league stats in the client</p><p>-and more...</p><p><br/></p><p>Special thanks to:</p><p><span style=\" font-weight:600;\">IStealSkills</span> - help with desig</p><p><span style=\" font-weight:600;\">Stefos007</span> - original GProxy implementation</p><p>BNETtdocs, Stormlib, PvPGN and GHost projects</p></body></html>", Q_NULLPTR));
-        tabWidget->setTabText(tabWidget->indexOf(tabAbout), QApplication::translate("MainWindow", " ABOUT ", Q_NULLPTR));
+        pushButtonGPCL->setText(QApplication::translate("MainWindow", "Copy GProxy log to clipboard", 0));
+        pushButtonGPNOTEPAD->setText(QApplication::translate("MainWindow", "Open log file", 0));
+        gpoptionsgroupBox->setTitle(QApplication::translate("MainWindow", "GProxy Options", 0));
+        checkBox_console->setText(QApplication::translate("MainWindow", "Visible console (must start manually)", 0));
+        checkBox_option_sounds->setText(QApplication::translate("MainWindow", "Enable sounds", 0));
+        checkBox_sound_1->setText(QApplication::translate("MainWindow", "\"Game started\" sound", 0));
+        checkBox_sound_2->setText(QApplication::translate("MainWindow", "\"Join the game\" sound", 0));
+        checkBox_sound_3->setText(QApplication::translate("MainWindow", "\"Slap\" sound", 0));
+        checkBox_sound_4->setText(QApplication::translate("MainWindow", "\"Channel moderated\" sound", 0));
+        checkBox_sound_5->setText(QApplication::translate("MainWindow", "\"Channel unmoderated\" sound", 0));
+        checkBox_sound_6->setText(QApplication::translate("MainWindow", "\"Challenge started\" sound", 0));
+        checkBox_sound_7->setText(QApplication::translate("MainWindow", "\"Challenge completed\" sound", 0));
+        checkBox_sound_8->setText(QApplication::translate("MainWindow", "\"Friend joined game\" sound", 0));
+        checkBox_sound_9->setText(QApplication::translate("MainWindow", "\"Whisper\" sound", 0));
+        checkBox_sound_10->setText(QApplication::translate("MainWindow", "\"You were kicked\" sound", 0));
+        checkBox_chatbuffer->setText(QApplication::translate("MainWindow", "Chat buffer (experimental)", 0));
+        checkBox_debug->setText(QApplication::translate("MainWindow", "Debugging", 0));
+        checkBox_telemetry->setText(QApplication::translate("MainWindow", "Telemetry", 0));
+        tabWidget->setTabText(tabWidget->indexOf(tabGproxy), QApplication::translate("MainWindow", "  GPROXY  ", 0));
+        pushButtonClientLog->setText(QApplication::translate("MainWindow", "Open Client log file", 0));
+        war_latest_groupbox->setTitle(QApplication::translate("MainWindow", "Latest Warcraft gateway (1.28.5)", 0));
+        war_latest_label_2->setText(QApplication::translate("MainWindow", "Warcraft location", 0));
+        label_WarLatestPath->setText(QApplication::translate("MainWindow", "Loading...", 0));
+        pushButton_warLatestPath->setText(QApplication::translate("MainWindow", "Change", 0));
+        groupBox_latest->setTitle(QApplication::translate("MainWindow", "Options", 0));
+        checkBox_fullscreen_latest->setText(QApplication::translate("MainWindow", "Native fullscreen", 0));
+        checkBox_opengl_latest->setText(QApplication::translate("MainWindow", "OpenGL", 0));
+        checkBox_windowed_latest->setText(QApplication::translate("MainWindow", "Windowed", 0));
+        check_useGproxy_latest->setText(QApplication::translate("MainWindow", "Use GProxy", 0));
+        war_latest_groupbox_2->setTitle(QApplication::translate("MainWindow", "Warcraft 1.26a gateway", 0));
+        label_War126Path->setText(QApplication::translate("MainWindow", "Loading...", 0));
+        label->setText(QApplication::translate("MainWindow", "Warcraft 1.26a location", 0));
+        pushButton_war126Path->setText(QApplication::translate("MainWindow", "Change", 0));
+        label_2->setText(QApplication::translate("MainWindow", "<html><head/><body><p>Do not have Warcraft 1.26a? Download it <a href=\"http://wiki.eurobattle.net/index.php?title=Warcraft_III_1.26\"><span style=\" text-decoration: underline; color: #85c3e5;\">here</span></a>.</p></body></html>", 0));
+        groupBox_126->setTitle(QApplication::translate("MainWindow", "Options", 0));
+        checkBox_opengl_126->setText(QApplication::translate("MainWindow", "OpenGL", 0));
+        checkBox_windowed_126->setText(QApplication::translate("MainWindow", "Windowed", 0));
+        checkBox_useGproxy_126->setText(QApplication::translate("MainWindow", "Use GProxy", 0));
+        tabWidget->setTabText(tabWidget->indexOf(tabW3), QApplication::translate("MainWindow", " WARCRAFT", 0));
+        pushButtonBU->setText(QApplication::translate("MainWindow", "Get Beta patch", 0));
+        checkBox_updates->setText(QApplication::translate("MainWindow", "Automatic updates enabled", 0));
+        tabWidget->setTabText(tabWidget->indexOf(tabUpdate), QApplication::translate("MainWindow", " UPDATE ", 0));
+        labelAbout->setText(QApplication::translate("MainWindow", "<html><head/><body><p>Eurobattle.net Client version 1.1 (August 2018), developed by cen, additional contributions by deer</p><p><br/>We are searching for Qt/ C++ developers to further expand this client.</p><p><br/></p><p>TODO:</p><p>-bnet Chat client</p><p>-TS integration</p><p>-Displaying player's profile and league stats in the client</p><p>- Native Warkeys?</p><p>-and more...</p><p><br/></p><p>Special thanks to:</p><p><span style=\" font-weight:600;\">IStealSkills</span> - help with desig</p><p><span style=\" font-weight:600;\">Stefos007</span> - original GProxy implementation</p><p>BNETtdocs, Stormlib, PvPGN and GHost projects</p></body></html>", 0));
+        tabWidget->setTabText(tabWidget->indexOf(tabAbout), QApplication::translate("MainWindow", " ABOUT ", 0));
     } // retranslateUi
 
 };

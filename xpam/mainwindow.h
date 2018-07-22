@@ -71,8 +71,6 @@ private slots:
 
     bool checkModeAvailability(QString modeKey, bool shouldWarnUser=false);
     bool changeActiveMode(QString modeKey, bool shouldWarnUser=false);
-    
-    void on_pushButton_updateW3_released();
 
     void quit();
 
@@ -81,6 +79,12 @@ private slots:
     void on_pushButton_warLatestPath_clicked();
 
     void on_pushButton_war126Path_clicked();
+
+    void on_checkBox_useGproxy_126_toggled(bool checked);
+
+    //void on_pushButton_updateW3_released();
+
+    //void on_pushButton_updateW3_clicked();
 
 public slots:
     void gproxyReady(QString w3Exename);
