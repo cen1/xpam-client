@@ -29,6 +29,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <QMainWindow>
 #include "QString"
 #include "QMouseEvent"
+#include "QSettings"
 
 namespace Ui {
 class MainWindow;
@@ -43,6 +44,7 @@ signals:
     void startUpdate();             //starts the update
     void updateCheckFinished();     //terminates the splash screen event loop
     void cancelUpdate();
+    void terminateCurrentGproxyInstance();
 
 public:
     explicit MainWindow(QWidget *parent = 0);
@@ -51,6 +53,7 @@ public:
     bool checkW3Updates();
     bool updatesEnabled;
     bool checkW3PathUnicode();
+    void setNewW3PathSetting(QString modeKey, QSettings *settings, QString newPath);
     
 private slots:
     void on_pushButtonGWG_clicked();
@@ -88,7 +91,7 @@ private slots:
 
 public slots:
     void gproxyReady(QString w3Exename);
-    void gproxyExiting();
+    void gproxyExiting(bool killedForcefully);
     void receiveLine(QString line);
     void w3Exited();
 

@@ -42,36 +42,39 @@ GProxy::GProxy(QString gpDir, QString gpExe, QString gpMode, QString gpServer, Q
     server=gpServer;
     w3Exename=w3exe;
     w3Path=w3p;
+
+    this->killedForcefully = false;
 }
 
 GProxy::~GProxy() {
-    //emit sendLine("Destructing gproxy object");
+    qDebug("Destructing gproxy object");
+    process->deleteLater();
 }
 
 void GProxy::readStdout() {
 
     QStringList args;
-    // @todo add more clean and flexible way to provide arguments
     args << exedir;
-    args << "--w3exe=\"" + QDir::toNativeSeparators(w3Path + "/" + w3Exename) + "\"";
+    args << "--w3exe=\"" + w3Path + "/" + w3Exename + "\"";
     args << "--mode=" + mode;
     args << "--server=" + server;
-    process.setWorkingDirectory(workdir);
-    process.start(args.join(" "));
+    process = new QProcess();
+    process->setWorkingDirectory(workdir);
+    process->start(args.join(" "));
 
-    if (!process.waitForStarted()) {
-        emit sendLine("Could not start GProxy: "+process.errorString());
-        emit gproxyExiting();
+    if (!process->waitForStarted()) {
+        emit sendLine("Could not start GProxy: "+process->errorString());
+        emit gproxyExiting(false);
         return;
     }
-    if (!process.isOpen()) emit sendLine("Console stream is not open");
-    if (!process.isReadable()) emit sendLine("Console stream is not readable");
+    if (!process->isOpen()) emit sendLine("Console stream is not open");
+    if (!process->isReadable()) emit sendLine("Console stream is not readable");
 
     while(!abort) {
-        process.waitForReadyRead(100);
+        process->waitForReadyRead(100);
 
-        while (process.canReadLine()) {
-            QString line(process.readLine());
+        while (process->canReadLine()) {
+            QString line(process->readLine());
             line=line.simplified(); //mostly for removing newline
 
             QStringList tokens = parseTokens(line);
@@ -90,13 +93,14 @@ void GProxy::readStdout() {
                 abort=true;
             }
 
-            if (process.state() != QProcess::Running) {
+            if (process->state() != QProcess::Running) {
                 emit sendLine("GProxy process exited");
                 abort=true;
             }
         }
     }
-    emit gproxyExiting();
+    process->waitForFinished();
+    emit gproxyExiting(this->killedForcefully);
 }
 
 QStringList GProxy::parseTokens(QString s) {
@@ -107,4 +111,10 @@ QStringList GProxy::parseTokens(QString s) {
         tokens[i] = tokens[i].simplified();
     }
     return tokens;
+}
+
+void GProxy::kill() {
+    qDebug("GProxy received signal to forcefully shutdown");
+    this->killedForcefully = true;
+    this->process->kill();
 }

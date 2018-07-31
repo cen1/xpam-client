@@ -36,9 +36,10 @@ class GProxy : public QObject
 signals:
     void sendLine(QString line);
     void gproxyReady(QString w3Exename);
-    void gproxyExiting();
+    void gproxyExiting(bool killedForcefully);
 private:
     QStringList parseTokens(QString s);
+    bool killedForcefully;
 public:
     GProxy(QString gpDir, QString gpExe, QString gpMode, QString gpServer, QString w3exe, QString w3p);
     ~GProxy();
@@ -50,9 +51,10 @@ public:
     QString mode;
     QString w3Path;
     QString server;
-    QProcess process;
+    QProcess *process;
 public slots:
     void readStdout();
+    void kill();
 };
 
 #endif // GPROXY_H

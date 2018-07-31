@@ -244,7 +244,7 @@ bool Updater::instructions() {
     /*
      * MOVE, DELETE or ICONS
      * Filename
-     * EUROPATH, SOUNDPATH, W3PATH or MAPPATH
+     * EUROPATH, SOUNDPATH, W3PATH, W3PATH_126 or MAPPATH
     */
     QFile inst(config->APPDATA+"\\instructions.txt");
     if (inst.open(QIODevice::ReadOnly)) {
@@ -256,17 +256,18 @@ bool Updater::instructions() {
 
             //emit sendLine("Instruction: <"+l.first()+"> <"+midParam+"> <"+l.last()+">");
 
-            if (l[0]=="MOVE") {
+            QString dstPath;
+            if      (l.last()=="EUROPATH") dstPath=config->EUROPATH;
+            else if (l.last()=="W3PATH") dstPath=config->W3PATH_LATEST;
+            else if (l.last()=="W3PATH_126") dstPath=config->W3PATH_126;
+            else if (l.last()=="MAPPATH") dstPath=config->DOCMAPPATHDL;
+            else if (l.last()=="SOUNDPATH") dstPath=config->SOUNDPATH;
 
-                QString dstPath;
-                if      (l.last()=="EUROPATH") dstPath=config->EUROPATH;
-                else if (l.last()=="W3PATH") dstPath=config->W3PATH_LATEST;
-                else if (l.last()=="MAPPATH") dstPath=config->DOCMAPPATHDL;
-                else if (l.last()=="SOUNDPATH") dstPath=config->SOUNDPATH;
+            if (l[0]=="MOVE") {
 
                 //Skip cdkey files if they exist in destination
                 if (midParam=="roc.w3k" || midParam=="tft.w3k") {
-                    QFile cdkey(config->W3PATH_LATEST+"/"+midParam);
+                    QFile cdkey(dstPath+"/"+midParam);
                     if (cdkey.exists()) {
                         continue;
                     }
@@ -292,13 +293,10 @@ bool Updater::instructions() {
             else if (l[0]=="DELETE") {
                 emit sendLine("Deleting "+midParam);
 
-                if     (l.last()=="EUROPATH") QFile::remove(config->EUROPATH+"\\"+midParam);
-                else if(l.last()=="W3PATH")   QFile::remove(config->W3PATH_LATEST+"\\"+midParam);
-                else if(l.last()=="MAPPATH")  QFile::remove(config->DOCMAPPATHDL+"\\"+midParam);
-                else if(l.last()=="SOUNDPATH")  QFile::remove(config->SOUNDPATH+"\\"+midParam);
+                QFile::remove(dstPath+"\\"+midParam);
             }
             else if (l[0]=="ICONS") {
-                if (!updateMPQ()) {
+                if (!updateMPQ(dstPath)) {
                     emit sendLine("Failed to update icons. Please contact Technical Support");
                     return false;
                 }
@@ -319,7 +317,7 @@ bool Updater::instructions() {
     return true;
 }
 
-bool Updater::updateMPQ()
+bool Updater::updateMPQ(QString w3path)
 {
     emit sendLine("Updating MPQ with custom icons");
     //O = open
@@ -337,7 +335,7 @@ bool Updater::updateMPQ()
             QStringList l = line.split(" ");
 
             if (l[0]=="O") {
-                if (mpq.open(config->W3PATH_LATEST+"\\"+l[1])==false) {
+                if (mpq.open(w3path+"\\"+l[1])==false) {
                     emit sendLine(Util::getLastErrorMsg()+config->W3PATH_LATEST+"\\"+l[1]);
                     return false;
                 }
@@ -391,8 +389,8 @@ bool Updater::updateMPQ()
     return false;
 }
 
-//receives download progress from downloader
-//we use a timer so we don't waste cycles
+// Receives download progress from downloader
+// We use a timer so we don't waste cycles
 void Updater::receiveProgress(qint64 bytesReceived, qint64 bytesTotal) {
     //emit sendLine("Slot activated "+QString::number(bytesReceived));
     if (progressTime.elapsed() > 200 && bytesTotal != -1) {
@@ -661,7 +659,7 @@ void Updater::replaceCDKeys(Config *config) {
        }
 }
 
-void Updater::renamePatchMpq(Config *config) {
+void Updater::renamePatchMpqForLatestW3(Config *config) {
     QFile modMpq(config->W3PATH_LATEST+"\\War3Mod.mpq");
     if (!modMpq.exists()) {
         QFile patchMpq(config->W3PATH_LATEST+"\\War3Patch.mpq");

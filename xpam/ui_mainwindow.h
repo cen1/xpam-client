@@ -80,6 +80,9 @@ public:
     QWidget *tabW3;
     QPushButton *pushButtonClientLog;
     QGroupBox *war_latest_groupbox;
+    QWidget *verticalLayoutWidget_3;
+    QVBoxLayout *verticalLayout_4;
+    QHBoxLayout *horizontalLayout_2;
     QLabel *war_latest_label_2;
     QLabel *label_WarLatestPath;
     QPushButton *pushButton_warLatestPath;
@@ -91,8 +94,11 @@ public:
     QCheckBox *checkBox_windowed_latest;
     QCheckBox *check_useGproxy_latest;
     QGroupBox *war_latest_groupbox_2;
-    QLabel *label_War126Path;
+    QWidget *verticalLayoutWidget_4;
+    QVBoxLayout *verticalLayout_7;
+    QHBoxLayout *horizontalLayout_7;
     QLabel *label;
+    QLabel *label_War126Path;
     QPushButton *pushButton_war126Path;
     QLabel *label_2;
     QGroupBox *groupBox_126;
@@ -533,29 +539,49 @@ public:
         pushButtonClientLog->setMaximumSize(QSize(150, 16777215));
         war_latest_groupbox = new QGroupBox(tabW3);
         war_latest_groupbox->setObjectName(QStringLiteral("war_latest_groupbox"));
-        war_latest_groupbox->setGeometry(QRect(30, 90, 391, 331));
-        war_latest_label_2 = new QLabel(war_latest_groupbox);
+        war_latest_groupbox->setGeometry(QRect(30, 90, 391, 181));
+        verticalLayoutWidget_3 = new QWidget(war_latest_groupbox);
+        verticalLayoutWidget_3->setObjectName(QStringLiteral("verticalLayoutWidget_3"));
+        verticalLayoutWidget_3->setGeometry(QRect(10, 20, 371, 151));
+        verticalLayout_4 = new QVBoxLayout(verticalLayoutWidget_3);
+        verticalLayout_4->setSpacing(6);
+        verticalLayout_4->setContentsMargins(11, 11, 11, 11);
+        verticalLayout_4->setObjectName(QStringLiteral("verticalLayout_4"));
+        verticalLayout_4->setContentsMargins(0, 0, 0, 0);
+        horizontalLayout_2 = new QHBoxLayout();
+        horizontalLayout_2->setSpacing(6);
+        horizontalLayout_2->setObjectName(QStringLiteral("horizontalLayout_2"));
+        war_latest_label_2 = new QLabel(verticalLayoutWidget_3);
         war_latest_label_2->setObjectName(QStringLiteral("war_latest_label_2"));
-        war_latest_label_2->setGeometry(QRect(10, 20, 131, 16));
         war_latest_label_2->setTextFormat(Qt::AutoText);
-        label_WarLatestPath = new QLabel(war_latest_groupbox);
+
+        horizontalLayout_2->addWidget(war_latest_label_2);
+
+        label_WarLatestPath = new QLabel(verticalLayoutWidget_3);
         label_WarLatestPath->setObjectName(QStringLiteral("label_WarLatestPath"));
-        label_WarLatestPath->setGeometry(QRect(130, 20, 251, 20));
-        pushButton_warLatestPath = new QPushButton(war_latest_groupbox);
+
+        horizontalLayout_2->addWidget(label_WarLatestPath);
+
+
+        verticalLayout_4->addLayout(horizontalLayout_2);
+
+        pushButton_warLatestPath = new QPushButton(verticalLayoutWidget_3);
         pushButton_warLatestPath->setObjectName(QStringLiteral("pushButton_warLatestPath"));
-        pushButton_warLatestPath->setGeometry(QRect(10, 40, 150, 19));
         QSizePolicy sizePolicy2(QSizePolicy::Minimum, QSizePolicy::Fixed);
         sizePolicy2.setHorizontalStretch(0);
         sizePolicy2.setVerticalStretch(0);
         sizePolicy2.setHeightForWidth(pushButton_warLatestPath->sizePolicy().hasHeightForWidth());
         pushButton_warLatestPath->setSizePolicy(sizePolicy2);
         pushButton_warLatestPath->setMaximumSize(QSize(150, 16777215));
-        groupBox_latest = new QGroupBox(war_latest_groupbox);
+
+        verticalLayout_4->addWidget(pushButton_warLatestPath);
+
+        groupBox_latest = new QGroupBox(verticalLayoutWidget_3);
         groupBox_latest->setObjectName(QStringLiteral("groupBox_latest"));
-        groupBox_latest->setGeometry(QRect(9, 139, 371, 101));
+        groupBox_latest->setMinimumSize(QSize(0, 100));
         verticalLayoutWidget = new QWidget(groupBox_latest);
         verticalLayoutWidget->setObjectName(QStringLiteral("verticalLayoutWidget"));
-        verticalLayoutWidget->setGeometry(QRect(10, 20, 92, 77));
+        verticalLayoutWidget->setGeometry(QRect(10, 20, 141, 77));
         verticalLayout_gb_latest = new QVBoxLayout(verticalLayoutWidget);
         verticalLayout_gb_latest->setSpacing(6);
         verticalLayout_gb_latest->setContentsMargins(11, 11, 11, 11);
@@ -586,32 +612,57 @@ public:
 
         verticalLayout_gb_latest->addWidget(check_useGproxy_latest);
 
+
+        verticalLayout_4->addWidget(groupBox_latest);
+
         war_latest_groupbox_2 = new QGroupBox(tabW3);
         war_latest_groupbox_2->setObjectName(QStringLiteral("war_latest_groupbox_2"));
-        war_latest_groupbox_2->setGeometry(QRect(440, 90, 391, 331));
-        label_War126Path = new QLabel(war_latest_groupbox_2);
-        label_War126Path->setObjectName(QStringLiteral("label_War126Path"));
-        label_War126Path->setGeometry(QRect(160, 20, 151, 16));
-        label = new QLabel(war_latest_groupbox_2);
+        war_latest_groupbox_2->setGeometry(QRect(440, 90, 391, 191));
+        verticalLayoutWidget_4 = new QWidget(war_latest_groupbox_2);
+        verticalLayoutWidget_4->setObjectName(QStringLiteral("verticalLayoutWidget_4"));
+        verticalLayoutWidget_4->setGeometry(QRect(9, 19, 371, 161));
+        verticalLayout_7 = new QVBoxLayout(verticalLayoutWidget_4);
+        verticalLayout_7->setSpacing(6);
+        verticalLayout_7->setContentsMargins(11, 11, 11, 11);
+        verticalLayout_7->setObjectName(QStringLiteral("verticalLayout_7"));
+        verticalLayout_7->setContentsMargins(0, 0, 0, 0);
+        horizontalLayout_7 = new QHBoxLayout();
+        horizontalLayout_7->setSpacing(6);
+        horizontalLayout_7->setObjectName(QStringLiteral("horizontalLayout_7"));
+        label = new QLabel(verticalLayoutWidget_4);
         label->setObjectName(QStringLiteral("label"));
-        label->setGeometry(QRect(10, 20, 131, 16));
         label->setTextFormat(Qt::AutoText);
-        pushButton_war126Path = new QPushButton(war_latest_groupbox_2);
+
+        horizontalLayout_7->addWidget(label);
+
+        label_War126Path = new QLabel(verticalLayoutWidget_4);
+        label_War126Path->setObjectName(QStringLiteral("label_War126Path"));
+
+        horizontalLayout_7->addWidget(label_War126Path);
+
+
+        verticalLayout_7->addLayout(horizontalLayout_7);
+
+        pushButton_war126Path = new QPushButton(verticalLayoutWidget_4);
         pushButton_war126Path->setObjectName(QStringLiteral("pushButton_war126Path"));
-        pushButton_war126Path->setGeometry(QRect(10, 40, 150, 19));
         sizePolicy2.setHeightForWidth(pushButton_war126Path->sizePolicy().hasHeightForWidth());
         pushButton_war126Path->setSizePolicy(sizePolicy2);
         pushButton_war126Path->setMaximumSize(QSize(150, 16777215));
-        label_2 = new QLabel(war_latest_groupbox_2);
+
+        verticalLayout_7->addWidget(pushButton_war126Path);
+
+        label_2 = new QLabel(verticalLayoutWidget_4);
         label_2->setObjectName(QStringLiteral("label_2"));
-        label_2->setGeometry(QRect(10, 70, 241, 16));
         label_2->setOpenExternalLinks(true);
-        groupBox_126 = new QGroupBox(war_latest_groupbox_2);
+
+        verticalLayout_7->addWidget(label_2);
+
+        groupBox_126 = new QGroupBox(verticalLayoutWidget_4);
         groupBox_126->setObjectName(QStringLiteral("groupBox_126"));
-        groupBox_126->setGeometry(QRect(10, 140, 371, 101));
+        groupBox_126->setMinimumSize(QSize(0, 80));
         verticalLayoutWidget_2 = new QWidget(groupBox_126);
         verticalLayoutWidget_2->setObjectName(QStringLiteral("verticalLayoutWidget_2"));
-        verticalLayoutWidget_2->setGeometry(QRect(10, 20, 69, 57));
+        verticalLayoutWidget_2->setGeometry(QRect(10, 20, 121, 57));
         verticalLayout__gb_126 = new QVBoxLayout(verticalLayoutWidget_2);
         verticalLayout__gb_126->setSpacing(6);
         verticalLayout__gb_126->setContentsMargins(11, 11, 11, 11);
@@ -636,6 +687,9 @@ public:
         checkBox_useGproxy_126->setChecked(true);
 
         verticalLayout__gb_126->addWidget(checkBox_useGproxy_126);
+
+
+        verticalLayout_7->addWidget(groupBox_126);
 
         tabWidget->addTab(tabW3, QString());
         tabUpdate = new QWidget();
@@ -738,7 +792,7 @@ public:
 
         retranslateUi(MainWindow);
 
-        tabWidget->setCurrentIndex(2);
+        tabWidget->setCurrentIndex(0);
 
 
         QMetaObject::connectSlotsByName(MainWindow);
@@ -797,8 +851,8 @@ public:
         checkBox_windowed_latest->setText(QApplication::translate("MainWindow", "Windowed", 0));
         check_useGproxy_latest->setText(QApplication::translate("MainWindow", "Use GProxy", 0));
         war_latest_groupbox_2->setTitle(QApplication::translate("MainWindow", "Warcraft 1.26a gateway", 0));
-        label_War126Path->setText(QApplication::translate("MainWindow", "Loading...", 0));
         label->setText(QApplication::translate("MainWindow", "Warcraft 1.26a location", 0));
+        label_War126Path->setText(QApplication::translate("MainWindow", "Loading...", 0));
         pushButton_war126Path->setText(QApplication::translate("MainWindow", "Change", 0));
         label_2->setText(QApplication::translate("MainWindow", "<html><head/><body><p>Do not have Warcraft 1.26a? Download it <a href=\"http://wiki.eurobattle.net/index.php?title=Warcraft_III_1.26\"><span style=\" text-decoration: underline; color: #85c3e5;\">here</span></a>.</p></body></html>", 0));
         groupBox_126->setTitle(QApplication::translate("MainWindow", "Options", 0));

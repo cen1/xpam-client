@@ -59,7 +59,7 @@ Config::Config()
     }
     W3PATH_126 = settings.value(W3_KEY_126 + "/path", "").toString();
     W3PATH_LATEST = settings.value(W3_KEY_LATEST + "/path", Registry::getW3dir()).toString();
-    GPROXY_SERVER = settings.value("server", "xpam.pl").toString();
+    GPROXY_SERVER = settings.value("server", "server.eurobattle.net").toString();
 
     DOCPATH     = QStandardPaths::locate(QStandardPaths::DocumentsLocation, QString(), QStandardPaths::LocateDirectory)+"Warcraft III";
     DOCMAPPATH  = QStandardPaths::locate(QStandardPaths::DocumentsLocation, QString(), QStandardPaths::LocateDirectory)+"Warcraft III/Maps";

@@ -245,7 +245,7 @@ QCheckBox::indicator:checked {
          <enum>Qt::LeftToRight</enum>
         </property>
         <property name="currentIndex">
-         <number>2</number>
+         <number>0</number>
         </property>
         <widget class="QWidget" name="tabLauncher">
          <property name="sizePolicy">
@@ -705,124 +705,122 @@ YOU CAN'T PLAY PG OR MANUALLY HOST GAMES IN THIS MODE!</string>
             <x>30</x>
             <y>90</y>
             <width>391</width>
-            <height>331</height>
+            <height>181</height>
            </rect>
           </property>
           <property name="title">
            <string>Latest Warcraft gateway (1.28.5)</string>
           </property>
-          <widget class="QLabel" name="war_latest_label_2">
+          <widget class="QWidget" name="verticalLayoutWidget_3">
            <property name="geometry">
             <rect>
              <x>10</x>
              <y>20</y>
-             <width>131</width>
-             <height>16</height>
-            </rect>
-           </property>
-           <property name="text">
-            <string>Warcraft location</string>
-           </property>
-           <property name="textFormat">
-            <enum>Qt::AutoText</enum>
-           </property>
-          </widget>
-          <widget class="QLabel" name="label_WarLatestPath">
-           <property name="geometry">
-            <rect>
-             <x>130</x>
-             <y>20</y>
-             <width>251</width>
-             <height>20</height>
-            </rect>
-           </property>
-           <property name="text">
-            <string>Loading...</string>
-           </property>
-          </widget>
-          <widget class="QPushButton" name="pushButton_warLatestPath">
-           <property name="geometry">
-            <rect>
-             <x>10</x>
-             <y>40</y>
-             <width>150</width>
-             <height>19</height>
-            </rect>
-           </property>
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>150</width>
-             <height>16777215</height>
-            </size>
-           </property>
-           <property name="text">
-            <string>Change</string>
-           </property>
-          </widget>
-          <widget class="QGroupBox" name="groupBox_latest">
-           <property name="geometry">
-            <rect>
-             <x>9</x>
-             <y>139</y>
              <width>371</width>
-             <height>101</height>
+             <height>151</height>
             </rect>
            </property>
-           <property name="title">
-            <string>Options</string>
-           </property>
-           <widget class="QWidget" name="verticalLayoutWidget">
-            <property name="geometry">
-             <rect>
-              <x>10</x>
-              <y>20</y>
-              <width>92</width>
-              <height>77</height>
-             </rect>
-            </property>
-            <layout class="QVBoxLayout" name="verticalLayout_gb_latest">
-             <item>
-              <widget class="QCheckBox" name="checkBox_fullscreen_latest">
-               <property name="text">
-                <string>Native fullscreen</string>
+           <layout class="QVBoxLayout" name="verticalLayout_4">
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_2">
+              <item>
+               <widget class="QLabel" name="war_latest_label_2">
+                <property name="text">
+                 <string>Warcraft location</string>
+                </property>
+                <property name="textFormat">
+                 <enum>Qt::AutoText</enum>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="label_WarLatestPath">
+                <property name="text">
+                 <string>Loading...</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <widget class="QPushButton" name="pushButton_warLatestPath">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>150</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>Change</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QGroupBox" name="groupBox_latest">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>100</height>
+               </size>
+              </property>
+              <property name="title">
+               <string>Options</string>
+              </property>
+              <widget class="QWidget" name="verticalLayoutWidget">
+               <property name="geometry">
+                <rect>
+                 <x>10</x>
+                 <y>20</y>
+                 <width>141</width>
+                 <height>77</height>
+                </rect>
                </property>
+               <layout class="QVBoxLayout" name="verticalLayout_gb_latest">
+                <item>
+                 <widget class="QCheckBox" name="checkBox_fullscreen_latest">
+                  <property name="text">
+                   <string>Native fullscreen</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="checkBox_opengl_latest">
+                  <property name="text">
+                   <string>OpenGL</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="checkBox_windowed_latest">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="text">
+                   <string>Windowed</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="check_useGproxy_latest">
+                  <property name="text">
+                   <string>Use GProxy</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
               </widget>
-             </item>
-             <item>
-              <widget class="QCheckBox" name="checkBox_opengl_latest">
-               <property name="text">
-                <string>OpenGL</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QCheckBox" name="checkBox_windowed_latest">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="text">
-                <string>Windowed</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QCheckBox" name="check_useGproxy_latest">
-               <property name="text">
-                <string>Use GProxy</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </widget>
+             </widget>
+            </item>
+           </layout>
           </widget>
          </widget>
          <widget class="QGroupBox" name="war_latest_groupbox_2">
@@ -831,142 +829,134 @@ YOU CAN'T PLAY PG OR MANUALLY HOST GAMES IN THIS MODE!</string>
             <x>440</x>
             <y>90</y>
             <width>391</width>
-            <height>331</height>
+            <height>191</height>
            </rect>
           </property>
           <property name="title">
            <string>Warcraft 1.26a gateway</string>
           </property>
-          <widget class="QLabel" name="label_War126Path">
+          <widget class="QWidget" name="verticalLayoutWidget_4">
            <property name="geometry">
             <rect>
-             <x>160</x>
-             <y>20</y>
-             <width>151</width>
-             <height>16</height>
-            </rect>
-           </property>
-           <property name="text">
-            <string>Loading...</string>
-           </property>
-          </widget>
-          <widget class="QLabel" name="label">
-           <property name="geometry">
-            <rect>
-             <x>10</x>
-             <y>20</y>
-             <width>131</width>
-             <height>16</height>
-            </rect>
-           </property>
-           <property name="text">
-            <string>Warcraft 1.26a location</string>
-           </property>
-           <property name="textFormat">
-            <enum>Qt::AutoText</enum>
-           </property>
-          </widget>
-          <widget class="QPushButton" name="pushButton_war126Path">
-           <property name="geometry">
-            <rect>
-             <x>10</x>
-             <y>40</y>
-             <width>150</width>
-             <height>19</height>
-            </rect>
-           </property>
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>150</width>
-             <height>16777215</height>
-            </size>
-           </property>
-           <property name="text">
-            <string>Change</string>
-           </property>
-          </widget>
-          <widget class="QLabel" name="label_2">
-           <property name="geometry">
-            <rect>
-             <x>10</x>
-             <y>70</y>
-             <width>241</width>
-             <height>16</height>
-            </rect>
-           </property>
-           <property name="text">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Do not have Warcraft 1.26a? Download it &lt;a href=&quot;http://wiki.eurobattle.net/index.php?title=Warcraft_III_1.26&quot;&gt;&lt;span style=&quot; text-decoration: underline; color: #85c3e5;&quot;&gt;here&lt;/span&gt;&lt;/a&gt;.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-           </property>
-           <property name="openExternalLinks">
-            <bool>true</bool>
-           </property>
-          </widget>
-          <widget class="QGroupBox" name="groupBox_126">
-           <property name="geometry">
-            <rect>
-             <x>10</x>
-             <y>140</y>
+             <x>9</x>
+             <y>19</y>
              <width>371</width>
-             <height>101</height>
+             <height>161</height>
             </rect>
            </property>
-           <property name="title">
-            <string>Options</string>
-           </property>
-           <widget class="QWidget" name="verticalLayoutWidget_2">
-            <property name="geometry">
-             <rect>
-              <x>10</x>
-              <y>20</y>
-              <width>69</width>
-              <height>57</height>
-             </rect>
-            </property>
-            <layout class="QVBoxLayout" name="verticalLayout__gb_126">
-             <item>
-              <widget class="QCheckBox" name="checkBox_opengl_126">
-               <property name="text">
-                <string>OpenGL</string>
+           <layout class="QVBoxLayout" name="verticalLayout_7">
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_7">
+              <item>
+               <widget class="QLabel" name="label">
+                <property name="text">
+                 <string>Warcraft 1.26a location</string>
+                </property>
+                <property name="textFormat">
+                 <enum>Qt::AutoText</enum>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="label_War126Path">
+                <property name="text">
+                 <string>Loading...</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <widget class="QPushButton" name="pushButton_war126Path">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>150</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>Change</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_2">
+              <property name="text">
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Do not have Warcraft 1.26a? Download it &lt;a href=&quot;http://wiki.eurobattle.net/index.php?title=Warcraft_III_1.26&quot;&gt;&lt;span style=&quot; text-decoration: underline; color: #85c3e5;&quot;&gt;here&lt;/span&gt;&lt;/a&gt;.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
+              <property name="openExternalLinks">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QGroupBox" name="groupBox_126">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>80</height>
+               </size>
+              </property>
+              <property name="title">
+               <string>Options</string>
+              </property>
+              <widget class="QWidget" name="verticalLayoutWidget_2">
+               <property name="geometry">
+                <rect>
+                 <x>10</x>
+                 <y>20</y>
+                 <width>121</width>
+                 <height>57</height>
+                </rect>
                </property>
+               <layout class="QVBoxLayout" name="verticalLayout__gb_126">
+                <item>
+                 <widget class="QCheckBox" name="checkBox_opengl_126">
+                  <property name="text">
+                   <string>OpenGL</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="checkBox_windowed_126">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="text">
+                   <string>Windowed</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="checkBox_useGproxy_126">
+                  <property name="enabled">
+                   <bool>true</bool>
+                  </property>
+                  <property name="text">
+                   <string>Use GProxy</string>
+                  </property>
+                  <property name="checkable">
+                   <bool>true</bool>
+                  </property>
+                  <property name="checked">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
               </widget>
-             </item>
-             <item>
-              <widget class="QCheckBox" name="checkBox_windowed_126">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="text">
-                <string>Windowed</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QCheckBox" name="checkBox_useGproxy_126">
-               <property name="enabled">
-                <bool>true</bool>
-               </property>
-               <property name="text">
-                <string>Use GProxy</string>
-               </property>
-               <property name="checkable">
-                <bool>true</bool>
-               </property>
-               <property name="checked">
-                <bool>true</bool>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </widget>
+             </widget>
+            </item>
+           </layout>
           </widget>
          </widget>
         </widget>

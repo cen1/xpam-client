@@ -68,7 +68,7 @@ MainWindow::MainWindow(QWidget *parent) :
     isStartupUpdate=true;
     ismax=false;
 
-    //gproxy options
+    // GProxy options
     connect(ui->checkBox_console, SIGNAL(clicked(bool)), this, SLOT(handleCheckbox(bool)));
     connect(ui->checkBox_option_sounds, SIGNAL(clicked(bool)), this, SLOT(handleCheckbox(bool)));
     connect(ui->checkBox_sound_1, SIGNAL(clicked(bool)), this, SLOT(handleCheckbox(bool)));
@@ -85,7 +85,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->checkBox_debug, SIGNAL(clicked(bool)), this, SLOT(handleCheckbox(bool)));
     connect(ui->checkBox_telemetry, SIGNAL(clicked(bool)), this, SLOT(handleCheckbox(bool)));
 
-    //w3 options
+    // W3 options
     connect(ui->checkBox_windowed_latest, SIGNAL(clicked(bool)), this, SLOT(handleCheckboxClient(bool)));
     connect(ui->checkBox_opengl_latest, SIGNAL(clicked(bool)), this, SLOT(handleCheckboxClient(bool)));
     connect(ui->checkBox_fullscreen_latest, SIGNAL(clicked(bool)), this, SLOT(handleCheckboxClient(bool)));
@@ -95,28 +95,43 @@ MainWindow::MainWindow(QWidget *parent) :
     // XPAM options
     connect(ui->checkBox_updates, SIGNAL(clicked(bool)), this, SLOT(handleCheckboxXpam(bool)));
 
-    // load XPAM options
+    // Load XPAM options
     this->initXpamOptions();
-    //load w3 options
+
+    // Load W3 options
     this->initClientOptions();
-    //initiate gproxy options
+
+    // Initiate GProxy options
     this->initGproxyOptions();
-    //Clean the update log on every startup
-    QFile log(config->EUROPATH+"\\xpam.log");
+
+    // Clear the update log on every startup
+    QFile log(config->EUROPATH+"/xpam.log");
     log.open(QFile::WriteOnly | QFile::Truncate);
     log.close();
 
-    ui->label_War126Path->setText(config->W3PATH_126);
-    ui->label_WarLatestPath->setText(config->W3PATH_LATEST);
+    // Set W3 path labels
+    if (config->W3PATH_126!="") {
+        ui->label_War126Path->setText(config->W3PATH_126);
+    }
+    else {
+        ui->label_War126Path->setText("NOT SET!");
+    }
+    if (config->W3PATH_LATEST!="") {
+        ui->label_WarLatestPath->setText(config->W3PATH_LATEST);
+    }
+    else {
+        ui->label_WarLatestPath->setText("NOT SET!");
+    }
 
     changeActiveMode(config->ACTIVE_MODE_KEY);
 
     updatesEnabled = ui->checkBox_updates->isChecked();
+
     //Add CD keys if needed
     Updater::replaceCDKeys(config);
 
     //Rename war3Patch.mpq to war3Mod.mpw as of 1.28.2
-    Updater::renamePatchMpq(config);
+    Updater::renamePatchMpqForLatestW3(config);
 
     //Sanity checks
     W3::sanityCheck(config);
@@ -134,16 +149,18 @@ MainWindow::MainWindow(QWidget *parent) :
  * @return
  */
 bool MainWindow::checkModeAvailability(QString modeKey, bool shouldWarnUser) {
-    // @todo refactor it someone lul
     if ((modeKey == config->W3_KEY_126 && config->W3PATH_126 != "") ||
         (modeKey == config->W3_KEY_LATEST && config->W3PATH_LATEST != "")) {
         return true;
     }
     if (shouldWarnUser) {
         QString version = config->getW3Version(modeKey);
-        status("Please, select the Warcraft " + version + " path in order to use 1.26a gateway");
-        QMessageBox mb(QMessageBox::Critical, "Warcraft " + version + " is not set",
-           "You should set up the XPAM to work with Warcraft 3 " + version + ".", QMessageBox::Ok);
+        status("Please, select the Warcraft " + version + " directory path in order to use this gateway");
+        QMessageBox mb(QMessageBox::Critical, "W3 path not set!",
+           "Please, select the Warcraft " + version + " directory path in order to use this gateway", QMessageBox::Ok);
+        mb.exec();
+
+        // Go to W3 tab
         ui->tabWidget->setCurrentIndex(2);
         if (modeKey == config->W3_KEY_126) {
             ui->pushButton_war126Path->setFocus();
@@ -171,6 +188,7 @@ MainWindow::~MainWindow()
 
 
 //Start w3 only, NORMAL gateway
+// CURRENTLY NOT USED !!!
 void MainWindow::on_pushButtonGWN_clicked()
 {
     if (changeActiveMode(config->W3_KEY_LATEST, true)) {
@@ -198,25 +216,24 @@ void MainWindow::on_pushButtonGWG_clicked()
 }
 
 void MainWindow::startW3AndGproxy() {
+
+    qDebug("Starting W3 and GProxy ");
+
+    //Hard WINAPI checks for w3 and gproxy running, all kind of problems if they are...
+    if (Util::isRunning(config->W3_EXENAME_LATEST) || Util::isRunning(config->W3_EXENAME_LATEST)) {
+        status("Warcraft III is already running");
+        return;
+    }
+    if (Util::isRunning("gproxy.exe")) {
+        status("GProxy is already running.");
+        return;
+    }
+
     QString w3Path;
     QString w3Exename;
 
     w3Path = config->getCurrentW3Path();
     w3Exename = config->getCurrentW3Exename();
-    //Hard WINAPI checks for w3 and gproxy running, all kind of problems if they are...
-    if (Util::isRunning(w3Exename)) {
-        status("Warcraft III is already running");
-        return;
-    }
-    if (Util::isRunning("gproxy.exe")) {
-        if (gproxy != nullptr && gproxy->process.isOpen()) {
-            // it is the process attached to Gproxy object, we can kill it
-            // @todo or better close() and wait? eh, who cares.
-            gproxy->process.kill();
-        } else { // some random gproxy.exe is running, which is know known by Gproxy object
-            status("GProxy is already running.");
-        }
-    }
 
     //Check if gproxy.exe exists and was not deleted by AV
     QFile gproxyFile(config->EUROPATH+"/gproxy.exe");
@@ -236,8 +253,6 @@ void MainWindow::startW3AndGproxy() {
          return;
     }
 
-    ui->tabWidget->setCurrentIndex(1);
-
     //Preloader
     QMovie *movie = new QMovie(":/preloader.gif");
     ui->preloaderLabel1->setMovie(movie);
@@ -251,26 +266,28 @@ void MainWindow::startW3AndGproxy() {
     QString gpmode=(config->ACTIVE_MODE_KEY == config->W3_KEY_126) ? "restricted" : "normal";
     status("Launching GProxy...");
     ui->labelGproxyout->setText("Working directory: "+gpdir);
+
     gproxy=new GProxy(gpdir, gpexe, gpmode, config->GPROXY_SERVER, w3Exename, w3Path);
     gpt=new QThread();
-    gproxy->moveToThread(gpt);
 
     QObject::connect(gpt, SIGNAL(started()), gproxy, SLOT(readStdout()));
     QObject::connect(gproxy, SIGNAL(gproxyReady(QString)), this, SLOT(gproxyReady(QString)));
-    QObject::connect(gproxy, SIGNAL(gproxyExiting()), this, SLOT(gproxyExiting()));
+    QObject::connect(gproxy, SIGNAL(gproxyExiting(bool)), this, SLOT(gproxyExiting(bool)));
     QObject::connect(gproxy, SIGNAL(sendLine(QString)), this, SLOT(receiveLine(QString)), Qt::QueuedConnection);
+    QObject::connect(this, SIGNAL(terminateCurrentGproxyInstance()), gproxy, SLOT(kill()));
 
-    QObject::connect(gproxy, SIGNAL(gproxyExiting()), gpt, SLOT(quit()));
-    QObject::connect(gproxy, SIGNAL(gproxyExiting()), gproxy, SLOT(deleteLater()));
+    QObject::connect(gproxy, SIGNAL(gproxyExiting(bool)), gpt, SLOT(quit()));
+    QObject::connect(gproxy, SIGNAL(gproxyExiting(bool)), gproxy, SLOT(deleteLater()));
     QObject::connect(gpt, SIGNAL(finished()), gpt, SLOT(deleteLater()));
 
+    gproxy->moveToThread(gpt);
     gpt->start();
 }
 
 void MainWindow::runW3() {
 
     //Again, hard WINAPI check
-    if (Util::isRunning(config->W3_EXENAME_LATEST)) {
+    if (Util::isRunning(config->W3_EXENAME_LATEST) || Util::isRunning(config->W3_EXENAME_LATEST)) {
         status("Warcraft III is already running");
         return;
     }
@@ -322,7 +339,11 @@ void MainWindow::gproxyReady(QString w3Exename) {
     ui->preloaderLabel1->movie()->stop();
 }
 
-void MainWindow::gproxyExiting() {
+void MainWindow::gproxyExiting(bool killedForcefully) {
+    qDebug("GProxy exited nicely");
+    if (killedForcefully) {
+        qDebug("GProxy closed forcefully");
+    }
     status("GProxy has closed");
 }
 
@@ -838,12 +859,12 @@ bool MainWindow::showW3PathDialog(QString modeKey) {
     qfd.setDirectory(settings.value(modeKey + "/path", "").toString());
     const QString path = qfd.getExistingDirectory(this);
     QString p = path;
-    p = p.replace(QChar('/'), QChar('\\'));
+    p = p.replace(QChar('\\'), QChar('/'));
 
     if (p=="") {  //On Cancel it returns empty
         return false;
     }
-    QString w3_path = p+"\\"+exename;
+    QString w3_path = p+"/"+exename;
     QFile f(w3_path);
     if (!f.exists()) {
         status("Failed to set W3 path, " + exename + " not present in that directory.");
@@ -855,13 +876,23 @@ bool MainWindow::showW3PathDialog(QString modeKey) {
         status("Failed to set W3 path, " + exename + " has the wrong version. Expected: " + expectedW3Version + ", got: " + w3version);
         return false;
     }
-    settings.setValue(modeKey + "/path", p);
-    if (modeKey == config->W3_KEY_126) {
-        ui->label_War126Path->setText(p);
-    } else {
-        ui->label_WarLatestPath->setText(p);
-    }
+    setNewW3PathSetting(modeKey, &settings, p);
+
     return true;
+}
+
+void MainWindow::setNewW3PathSetting(QString modeKey, QSettings *settings, QString newPath) {
+
+    newPath = newPath.replace(QChar('\\'), QChar('/'));
+
+    settings->setValue(modeKey + "/path", newPath);
+    if (modeKey == config->W3_KEY_126) {
+        ui->label_War126Path->setText(newPath);
+        config->W3PATH_126 = newPath;
+    } else {
+        ui->label_WarLatestPath->setText(newPath);
+        config->W3PATH_LATEST = newPath;
+    }
 }
 
 //Set new w3 path
@@ -976,11 +1007,23 @@ bool MainWindow::checkW3PathUnicode() {
     //Check if w3 path contains .exe
     QFile f(config->W3PATH_LATEST+"\\"+config->W3_EXENAME_LATEST);
     if (!f.exists()) {
-        QMessageBox mb(QMessageBox::Critical, "W3 path alert",
-           "Your W3 path is missing 'Warcraft III.exe' which probably means the path is incorrect.",
-           QMessageBox::Ok);
-         mb.exec();
-         return false;
+
+        // Try to set from w3dir registry
+        Registry r;
+        QString wp = r.getW3dir();
+        if (wp!="") {
+            QSettings settings(config->XPAM_CONFIG_PATH, QSettings::IniFormat);
+            this->setNewW3PathSetting(config->W3_KEY_LATEST, &settings, wp);
+        }
+
+        QFile f2(config->W3PATH_LATEST+"\\"+config->W3_EXENAME_LATEST);
+        if (!f2.exists()) {
+            QMessageBox mb(QMessageBox::Critical, "W3 path alert",
+               "Your W3 path is missing 'Warcraft III.exe' which probably means the path is incorrect.",
+               QMessageBox::Ok);
+             mb.exec();
+             return false;
+        }
     }
 
     Logger::log("W3 path sanity check: "+w3path, config);
