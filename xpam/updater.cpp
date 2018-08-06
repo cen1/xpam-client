@@ -55,7 +55,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Updater::Updater(Config * c, int t, QString w) {
     config=c;
     type=t;
-    w3=w;
+    jsonKey=w;
     mirrorno=0;
     restartNeeded=false;
     downloader=nullptr;
@@ -80,8 +80,8 @@ void Updater::startUpdate() {
      * 7. Download and extract the archive to %appdata%/Eurobattle.net
      * 8. Open instructions.txt and execute the commands
      * 9. COMMANDS
-     *    MOVE <from> <to EUROPATH | W3PATH | MAPPATH>              //always overwrite
-     *    DELETE <filename> <location EUROPATH | W3PATH | MAPPATH>  //deletes a file
+     *    MOVE <from> <to EUROPATH | W3PATH | W3PATH_126 | MAPPATH | MAPPATH_126> //always overwrite
+     *    DELETE <filename> <location EUROPATH | W3PATH | MAPPATH>                //deletes a file
      *
      * 10. Cleanup %appdata$ after update
      * 11. If instructions.txt included a file called newxpam.exe then start update.bat and exit app.
@@ -244,7 +244,7 @@ bool Updater::instructions() {
     /*
      * MOVE, DELETE or ICONS
      * Filename
-     * EUROPATH, SOUNDPATH, W3PATH, W3PATH_126 or MAPPATH
+     * EUROPATH, SOUNDPATH, W3PATH, W3PATH_126, MAPPATH, MAPPATH_126
     */
     QFile inst(config->APPDATA+"\\instructions.txt");
     if (inst.open(QIODevice::ReadOnly)) {
@@ -261,6 +261,7 @@ bool Updater::instructions() {
             else if (l.last()=="W3PATH") dstPath=config->W3PATH_LATEST;
             else if (l.last()=="W3PATH_126") dstPath=config->W3PATH_126;
             else if (l.last()=="MAPPATH") dstPath=config->DOCMAPPATHDL;
+            else if (l.last()=="MAPPATH_126") dstPath=config->MAPPATH_126DL;
             else if (l.last()=="SOUNDPATH") dstPath=config->SOUNDPATH;
 
             if (l[0]=="MOVE") {
@@ -277,7 +278,7 @@ bool Updater::instructions() {
                 if (QFile::exists(dstPath+"\\"+midParam)) QFile::remove(dstPath+"\\"+midParam);
 
                 //check if download folder exists
-                if(l.last()=="MAPPATH")
+                if(l.last()=="MAPPATH" || l.last()=="MAPPATH_126")
                 {
                     if (!QDir().exists(dstPath))
                         QDir().mkdir(dstPath);
@@ -536,27 +537,27 @@ int Updater::setCurrentPlusOneJson() {
     else if (type==1 || type==2) {
         //Full or partial W3 update
         emit sendLine("Requested patch: full or quick W3 update");
-        QString key = w3;
+        QString key = jsonKey;
         QStringList keys = obj.keys();
 
         if (!keys.contains(key)) {
             emit sendLine("No W3 patch exists.");
             return 2;
         }
-        value=obj.value(w3);
+        value=obj.value(jsonKey);
         real=value.toObject();
     }
     else if (type==4) {
         //DotA map download
         emit sendLine("Requested patch: DotA map download");
-        QString key = w3;
+        QString key = jsonKey;
         QStringList keys = obj.keys();
 
         if (!keys.contains(key)) {
             emit sendLine("No DotA map exists on download server.");
             return 2;
         }
-        value=obj.value(w3);
+        value=obj.value(jsonKey);
         real=value.toObject();
     }
     else {

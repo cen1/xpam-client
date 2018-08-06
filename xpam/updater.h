@@ -51,7 +51,7 @@ public:
 private:
     Config *        config;
     int             type;
-    QString         w3;
+    QString         jsonKey;
     QByteArray      archive;
     QThread *       dlthread;
     Downloader *    downloader;

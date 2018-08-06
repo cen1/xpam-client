@@ -5,7 +5,7 @@
             "mirror2" : "http://xpam.pl/update/update26beta.zip",
             "mirror3" : "http://xpam.pl/update/update26beta.zip",
             "mirror4" : "http://xpam.pl/update/update26beta.zip",
-            "sha1" : "1dce3854cdf28219f6a7dc7e8f712e34c2cd262d"
+            "sha1" : "356c5d6fe6cc70cfb87860b770f193b49127777f"
     },
     "1.28.4" : {
             "version" : 1,

@@ -27,8 +27,8 @@ public:
     QString DOCPATH;
     QString DOCMAPPATH;
     QString DOCMAPPATHDL;
-    QString OLDMAPPATH;
-    QString OLDMAPPATHDL;
+    QString MAPPATH_126;
+    QString MAPPATH_126DL;
     QString EUROPATH;
     QString SOUNDPATH;
     QString APPDATA;
@@ -41,7 +41,7 @@ public:
     QVector<QString> W3_OPTIONS;
     QVector<QString> GPROXY_OPTIONS;
     QVector<QString> W3_VERSIONS;
-    QVector<QString> DOTA_MAPS;
+    QVector<QPair<QString, QString>> DOTA_MAPS;
 
     QUrl json1;
     QUrl json2;

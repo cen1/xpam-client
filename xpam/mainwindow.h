@@ -60,7 +60,8 @@ private slots:
     void on_pushButtonGWN_clicked();
     void on_pushButtonGWD_clicked();
     void on_pushButtonBU_clicked();
-    void handleCheckbox(bool checked);
+    void handleCheckBoxGProxy(bool checked);
+    void handleSpinBoxGProxy(int value);
     void handleCheckboxXpam(bool checked);
     void handleCheckboxClient(bool checked);
 

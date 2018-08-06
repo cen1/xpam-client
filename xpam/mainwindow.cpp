@@ -69,21 +69,28 @@ MainWindow::MainWindow(QWidget *parent) :
     ismax=false;
 
     // GProxy options
-    connect(ui->checkBox_console, SIGNAL(clicked(bool)), this, SLOT(handleCheckbox(bool)));
-    connect(ui->checkBox_option_sounds, SIGNAL(clicked(bool)), this, SLOT(handleCheckbox(bool)));
-    connect(ui->checkBox_sound_1, SIGNAL(clicked(bool)), this, SLOT(handleCheckbox(bool)));
-    connect(ui->checkBox_sound_2, SIGNAL(clicked(bool)), this, SLOT(handleCheckbox(bool)));
-    connect(ui->checkBox_sound_3, SIGNAL(clicked(bool)), this, SLOT(handleCheckbox(bool)));
-    connect(ui->checkBox_sound_4, SIGNAL(clicked(bool)), this, SLOT(handleCheckbox(bool)));
-    connect(ui->checkBox_sound_5, SIGNAL(clicked(bool)), this, SLOT(handleCheckbox(bool)));
-    connect(ui->checkBox_sound_6, SIGNAL(clicked(bool)), this, SLOT(handleCheckbox(bool)));
-    connect(ui->checkBox_sound_7, SIGNAL(clicked(bool)), this, SLOT(handleCheckbox(bool)));
-    connect(ui->checkBox_sound_8, SIGNAL(clicked(bool)), this, SLOT(handleCheckbox(bool)));
-    connect(ui->checkBox_sound_9, SIGNAL(clicked(bool)), this, SLOT(handleCheckbox(bool)));
-    connect(ui->checkBox_sound_10, SIGNAL(clicked(bool)), this, SLOT(handleCheckbox(bool)));
-    connect(ui->checkBox_chatbuffer, SIGNAL(clicked(bool)), this, SLOT(handleCheckbox(bool)));
-    connect(ui->checkBox_debug, SIGNAL(clicked(bool)), this, SLOT(handleCheckbox(bool)));
-    connect(ui->checkBox_telemetry, SIGNAL(clicked(bool)), this, SLOT(handleCheckbox(bool)));
+    connect(ui->checkBox_console, SIGNAL(clicked(bool)), this, SLOT(handleCheckBoxGProxy(bool)));
+    connect(ui->checkBox_chatbuffer, SIGNAL(clicked(bool)), this, SLOT(handleCheckBoxGProxy(bool)));
+    connect(ui->checkBox_debug, SIGNAL(clicked(bool)), this, SLOT(handleCheckBoxGProxy(bool)));
+    connect(ui->checkBox_telemetry, SIGNAL(clicked(bool)), this, SLOT(handleCheckBoxGProxy(bool)));
+    connect(ui->checkBox_autojoin, SIGNAL(clicked(bool)), this, SLOT(handleCheckBoxGProxy(bool)));
+
+    connect(ui->checkBox_option_sounds, SIGNAL(clicked(bool)), this, SLOT(handleCheckBoxGProxy(bool)));
+    connect(ui->checkBox_sound_1, SIGNAL(clicked(bool)), this, SLOT(handleCheckBoxGProxy(bool)));
+    connect(ui->checkBox_sound_2, SIGNAL(clicked(bool)), this, SLOT(handleCheckBoxGProxy(bool)));
+    connect(ui->checkBox_sound_3, SIGNAL(clicked(bool)), this, SLOT(handleCheckBoxGProxy(bool)));
+    connect(ui->checkBox_sound_4, SIGNAL(clicked(bool)), this, SLOT(handleCheckBoxGProxy(bool)));
+    connect(ui->checkBox_sound_5, SIGNAL(clicked(bool)), this, SLOT(handleCheckBoxGProxy(bool)));
+    connect(ui->checkBox_sound_6, SIGNAL(clicked(bool)), this, SLOT(handleCheckBoxGProxy(bool)));
+    connect(ui->checkBox_sound_7, SIGNAL(clicked(bool)), this, SLOT(handleCheckBoxGProxy(bool)));
+    connect(ui->checkBox_sound_8, SIGNAL(clicked(bool)), this, SLOT(handleCheckBoxGProxy(bool)));
+    connect(ui->checkBox_sound_9, SIGNAL(clicked(bool)), this, SLOT(handleCheckBoxGProxy(bool)));
+    connect(ui->checkBox_sound_10, SIGNAL(clicked(bool)), this, SLOT(handleCheckBoxGProxy(bool)));
+    connect(ui->checkBox_sound_11, SIGNAL(clicked(bool)), this, SLOT(handleCheckBoxGProxy(bool)));
+    connect(ui->checkBox_sound_12, SIGNAL(clicked(bool)), this, SLOT(handleCheckBoxGProxy(bool)));
+
+    connect(ui->spinBox_autojoin_delay, SIGNAL(valueChanged(int)), this, SLOT(handleSpinBoxGProxy(int)));
+    connect(ui->spinBox_autojoin_gndelay, SIGNAL(valueChanged(int)), this, SLOT(handleSpinBoxGProxy(int)));
 
     // W3 options
     connect(ui->checkBox_windowed_latest, SIGNAL(clicked(bool)), this, SLOT(handleCheckboxClient(bool)));
@@ -513,11 +520,30 @@ void MainWindow::on_pushButtonBU_clicked()
 
 //Iterates over dota map vector and downloads missing maps. Returns false when no updates exist.
 int MainWindow::checkDotaUpdates() {
+
     if (config->DOTA_MAPS.size()>0 && this->lastCheckedDota<config->DOTA_MAPS.size()) {
 
-        QString mapName = config->DOTA_MAPS.at(this->lastCheckedDota);
+        QString mapName = config->DOTA_MAPS.at(this->lastCheckedDota).first;
+        QString w3Path = config->DOTA_MAPS.at(this->lastCheckedDota).second;
+
+        // If dl path does not exist, skip
+        if (w3Path==config->W3PATH_LATEST && !QDir(config->DOCMAPPATHDL).exists()) {
+            Logger::log("Map path does not exist, ignoring DotA map download.", config);
+            return 0;
+        }
+        if (w3Path==config->W3PATH_126 && !QDir(config->MAPPATH_126DL).exists()) {
+            Logger::log("Map path does not exist, ignoring DotA map download.", config);
+            return 0;
+        }
+
         Logger::log("Checking if DotA map exist: "+mapName, config);
-        QFile map(config->DOCMAPPATHDL+"/"+mapName);
+
+        QString dlPath = config->DOCMAPPATHDL;
+        if (w3Path==config->W3PATH_126) {
+            dlPath=config->MAPPATH_126DL;
+        }
+
+        QFile map(dlPath+"/"+mapName);
         if (map.exists()) {
             Logger::log(mapName+" exists.", config);
             this->lastCheckedDota++;
@@ -694,14 +720,22 @@ void MainWindow::handleCheckboxXpam(bool checked)
     settings.setValue(option, value);
 }
 
-//Handle gproxy options
-void MainWindow::handleCheckbox(bool checked)
+//Handle GProxy checkbox options
+void MainWindow::handleCheckBoxGProxy(bool checked)
 {
     QString option = QObject::sender()->objectName().remove("checkBox_");
     QString value = "0";
     if (checked) value="1";
     QSettings settings(config->GPROXY_CONFIG_PATH, QSettings::IniFormat);
     settings.setValue(option, value);
+}
+
+//Handle GProxy spinBox options
+void MainWindow::handleSpinBoxGProxy(int value)
+{
+    QString option = QObject::sender()->objectName().remove("spinBox_");
+    QSettings settings(config->GPROXY_CONFIG_PATH, QSettings::IniFormat);
+    settings.setValue(option, QString::number(value));
 }
 
 //Handle client options
@@ -736,7 +770,7 @@ void MainWindow::initXpamOptions() {
         QCheckBox * find = this->findChild<QCheckBox *>("checkBox_"+option_name);
         if (find != 0) {
             find->setChecked(settings.value(option_name, "0") == "1" ? true : false);
-        } // @todo: else throw the error? because it is config's fault
+        }
     }
 }
 
@@ -747,8 +781,11 @@ void MainWindow::initGproxyOptions() {
         QCheckBox * find = this->findChild<QCheckBox *>("checkBox_"+option_name);
         if (find != 0) {
             find->setChecked(settings.value(option_name, "0") == "1" ? true : false);
-        } // @todo: else throw the error? because it is config's fault
+        }
     }
+
+    ui->spinBox_autojoin_delay->setValue(settings.value("autojoin_delay", "2").toInt());
+    ui->spinBox_autojoin_gndelay->setValue(settings.value("autojoin_gndelay", "2").toInt());
 }
 
 //Init client checkboxes according to ini file
@@ -895,13 +932,13 @@ void MainWindow::setNewW3PathSetting(QString modeKey, QSettings *settings, QStri
     }
 }
 
-//Set new w3 path
+//Set new W3 path for latest
 void MainWindow::on_pushButton_warLatestPath_clicked()
 {
     showW3PathDialog(config->W3_KEY_LATEST);
 }
 
-// @todo: refactor? kinda same method as above, with different strings
+//Set new W3 path for 1.26
 void MainWindow::on_pushButton_war126Path_clicked()
 {
     showW3PathDialog(config->W3_KEY_126);

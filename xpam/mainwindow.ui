@@ -344,10 +344,7 @@ or manually host your games.</string>
                    <cursorShape>PointingHandCursor</cursorShape>
                   </property>
                   <property name="toolTip">
-                   <string>Starting with GProxy is required for some DotA leagues&lt;br /&gt;
-to be able to join their games. It also provides reconnection&lt;br /&gt;
-in case you drop in the middle of the game.&lt;br /&gt;
-YOU CAN'T PLAY PG OR MANUALLY HOST GAMES IN THIS MODE!</string>
+                   <string>Choose this gateway to play PG and CG on latest supported Warcraft version.</string>
                   </property>
                   <property name="text">
                    <string/>
@@ -375,7 +372,7 @@ YOU CAN'T PLAY PG OR MANUALLY HOST GAMES IN THIS MODE!</string>
                    <cursorShape>PointingHandCursor</cursorShape>
                   </property>
                   <property name="toolTip">
-                   <string>Warcraft 1.26a gateway</string>
+                   <string>Choose this gateway to play DotA v6.88 lagabuse.com, Warcraft patch 1.26.</string>
                   </property>
                   <property name="text">
                    <string/>
@@ -509,10 +506,10 @@ YOU CAN'T PLAY PG OR MANUALLY HOST GAMES IN THIS MODE!</string>
          <widget class="QGroupBox" name="gpoptionsgroupBox">
           <property name="geometry">
            <rect>
-            <x>40</x>
+            <x>240</x>
             <y>120</y>
-            <width>241</width>
-            <height>351</height>
+            <width>441</width>
+            <height>281</height>
            </rect>
           </property>
           <property name="styleSheet">
@@ -526,8 +523,8 @@ YOU CAN'T PLAY PG OR MANUALLY HOST GAMES IN THIS MODE!</string>
             <rect>
              <x>10</x>
              <y>30</y>
-             <width>221</width>
-             <height>311</height>
+             <width>180</width>
+             <height>97</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -541,6 +538,132 @@ YOU CAN'T PLAY PG OR MANUALLY HOST GAMES IN THIS MODE!</string>
               </property>
              </widget>
             </item>
+            <item>
+             <widget class="QCheckBox" name="checkBox_chatbuffer">
+              <property name="layoutDirection">
+               <enum>Qt::LeftToRight</enum>
+              </property>
+              <property name="text">
+               <string>Chat buffer (experimental)</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="checkBox_debug">
+              <property name="text">
+               <string>Debug logging</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="checkBox_telemetry">
+              <property name="text">
+               <string>Telemetry logging</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="checkBox_autojoin">
+              <property name="text">
+               <string>Game autojoin (experimental)</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="verticalLayoutWidget_6">
+           <property name="geometry">
+            <rect>
+             <x>10</x>
+             <y>140</y>
+             <width>372</width>
+             <height>89</height>
+            </rect>
+           </property>
+           <layout class="QVBoxLayout" name="verticalLayout_9">
+            <item>
+             <widget class="QLabel" name="label_3">
+              <property name="text">
+               <string>Autojoin: delay before typing the game name after game list opens (sec):</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QSpinBox" name="spinBox_autojoin_gndelay">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>25</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>50</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="minimum">
+               <number>1</number>
+              </property>
+              <property name="maximum">
+               <number>5</number>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_4">
+              <property name="text">
+               <string>Autojoin: delay before opening game list after game is created or followed player joins (sec):</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QSpinBox" name="spinBox_autojoin_delay">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>25</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>50</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="minimum">
+               <number>1</number>
+              </property>
+              <property name="maximum">
+               <number>15</number>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </widget>
+         <widget class="QGroupBox" name="groupBox">
+          <property name="geometry">
+           <rect>
+            <x>40</x>
+            <y>120</y>
+            <width>181</width>
+            <height>281</height>
+           </rect>
+          </property>
+          <property name="title">
+           <string>GProxy Sounds</string>
+          </property>
+          <widget class="QWidget" name="verticalLayoutWidget_5">
+           <property name="geometry">
+            <rect>
+             <x>10</x>
+             <y>20</y>
+             <width>153</width>
+             <height>257</height>
+            </rect>
+           </property>
+           <layout class="QVBoxLayout" name="verticalLayout_8">
             <item>
              <widget class="QCheckBox" name="checkBox_option_sounds">
               <property name="layoutDirection">
@@ -649,26 +772,16 @@ YOU CAN'T PLAY PG OR MANUALLY HOST GAMES IN THIS MODE!</string>
              </widget>
             </item>
             <item>
-             <widget class="QCheckBox" name="checkBox_chatbuffer">
-              <property name="layoutDirection">
-               <enum>Qt::LeftToRight</enum>
-              </property>
+             <widget class="QCheckBox" name="checkBox_sound_11">
               <property name="text">
-               <string>Chat buffer (experimental)</string>
+               <string>&quot;Autujoining game&quot; sound</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QCheckBox" name="checkBox_debug">
+             <widget class="QCheckBox" name="checkBox_sound_12">
               <property name="text">
-               <string>Debugging</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QCheckBox" name="checkBox_telemetry">
-              <property name="text">
-               <string>Telemetry</string>
+               <string>&quot;Server Announcement&quot; sound</string>
               </property>
              </widget>
             </item>
@@ -704,8 +817,8 @@ YOU CAN'T PLAY PG OR MANUALLY HOST GAMES IN THIS MODE!</string>
            <rect>
             <x>30</x>
             <y>90</y>
-            <width>391</width>
-            <height>181</height>
+            <width>400</width>
+            <height>221</height>
            </rect>
           </property>
           <property name="title">
@@ -716,15 +829,33 @@ YOU CAN'T PLAY PG OR MANUALLY HOST GAMES IN THIS MODE!</string>
             <rect>
              <x>10</x>
              <y>20</y>
-             <width>371</width>
-             <height>151</height>
+             <width>381</width>
+             <height>191</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_4">
+            <property name="spacing">
+             <number>5</number>
+            </property>
             <item>
              <layout class="QHBoxLayout" name="horizontalLayout_2">
+              <property name="sizeConstraint">
+               <enum>QLayout::SetDefaultConstraint</enum>
+              </property>
               <item>
                <widget class="QLabel" name="war_latest_label_2">
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>20</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>16777215</width>
+                  <height>20</height>
+                 </size>
+                </property>
                 <property name="text">
                  <string>Warcraft location</string>
                 </property>
@@ -735,6 +866,18 @@ YOU CAN'T PLAY PG OR MANUALLY HOST GAMES IN THIS MODE!</string>
               </item>
               <item>
                <widget class="QLabel" name="label_WarLatestPath">
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>20</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>16777215</width>
+                  <height>20</height>
+                 </size>
+                </property>
                 <property name="text">
                  <string>Loading...</string>
                 </property>
@@ -762,11 +905,34 @@ YOU CAN'T PLAY PG OR MANUALLY HOST GAMES IN THIS MODE!</string>
              </widget>
             </item>
             <item>
+             <widget class="QLabel" name="label_5">
+              <property name="text">
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Do not have Warcraft 1.28.5? Download it &lt;a href=&quot;http://wiki.eurobattle.net/index.php?title=How_to_install_Warcraft_III&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#85c3e5;&quot;&gt;here&lt;/span&gt;&lt;/a&gt;.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
+              <property name="openExternalLinks">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="verticalSpacer_2">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>40</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
              <widget class="QGroupBox" name="groupBox_latest">
               <property name="minimumSize">
                <size>
                 <width>0</width>
-                <height>100</height>
+                <height>110</height>
                </size>
               </property>
               <property name="title">
@@ -777,11 +943,17 @@ YOU CAN'T PLAY PG OR MANUALLY HOST GAMES IN THIS MODE!</string>
                 <rect>
                  <x>10</x>
                  <y>20</y>
-                 <width>141</width>
-                 <height>77</height>
+                 <width>92</width>
+                 <height>86</height>
                 </rect>
                </property>
                <layout class="QVBoxLayout" name="verticalLayout_gb_latest">
+                <property name="spacing">
+                 <number>8</number>
+                </property>
+                <property name="sizeConstraint">
+                 <enum>QLayout::SetDefaultConstraint</enum>
+                </property>
                 <item>
                  <widget class="QCheckBox" name="checkBox_fullscreen_latest">
                   <property name="text">
@@ -826,10 +998,10 @@ YOU CAN'T PLAY PG OR MANUALLY HOST GAMES IN THIS MODE!</string>
          <widget class="QGroupBox" name="war_latest_groupbox_2">
           <property name="geometry">
            <rect>
-            <x>440</x>
+            <x>470</x>
             <y>90</y>
-            <width>391</width>
-            <height>191</height>
+            <width>400</width>
+            <height>221</height>
            </rect>
           </property>
           <property name="title">
@@ -840,8 +1012,8 @@ YOU CAN'T PLAY PG OR MANUALLY HOST GAMES IN THIS MODE!</string>
             <rect>
              <x>9</x>
              <y>19</y>
-             <width>371</width>
-             <height>161</height>
+             <width>381</width>
+             <height>191</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_7">
@@ -849,6 +1021,12 @@ YOU CAN'T PLAY PG OR MANUALLY HOST GAMES IN THIS MODE!</string>
              <layout class="QHBoxLayout" name="horizontalLayout_7">
               <item>
                <widget class="QLabel" name="label">
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>20</height>
+                 </size>
+                </property>
                 <property name="text">
                  <string>Warcraft 1.26a location</string>
                 </property>
@@ -896,11 +1074,24 @@ YOU CAN'T PLAY PG OR MANUALLY HOST GAMES IN THIS MODE!</string>
              </widget>
             </item>
             <item>
+             <spacer name="verticalSpacer_3">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>40</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
              <widget class="QGroupBox" name="groupBox_126">
               <property name="minimumSize">
                <size>
                 <width>0</width>
-                <height>80</height>
+                <height>90</height>
                </size>
               </property>
               <property name="title">
@@ -912,10 +1103,13 @@ YOU CAN'T PLAY PG OR MANUALLY HOST GAMES IN THIS MODE!</string>
                  <x>10</x>
                  <y>20</y>
                  <width>121</width>
-                 <height>57</height>
+                 <height>63</height>
                 </rect>
                </property>
                <layout class="QVBoxLayout" name="verticalLayout__gb_126">
+                <property name="spacing">
+                 <number>8</number>
+                </property>
                 <item>
                  <widget class="QCheckBox" name="checkBox_opengl_126">
                   <property name="text">

@@ -64,8 +64,10 @@ Config::Config()
     DOCPATH     = QStandardPaths::locate(QStandardPaths::DocumentsLocation, QString(), QStandardPaths::LocateDirectory)+"Warcraft III";
     DOCMAPPATH  = QStandardPaths::locate(QStandardPaths::DocumentsLocation, QString(), QStandardPaths::LocateDirectory)+"Warcraft III/Maps";
     DOCMAPPATHDL= QStandardPaths::locate(QStandardPaths::DocumentsLocation, QString(), QStandardPaths::LocateDirectory)+"Warcraft III/Maps/Download";
-    //OLDMAPPATH  = W3PATH_126+"/Maps";
-    //OLDMAPPATHDL= W3PATH_126+"/Maps/Download";
+
+    MAPPATH_126  = W3PATH_126+"/Maps";
+    MAPPATH_126DL= W3PATH_126+"/Maps/Download";
+
     PATCH       = Registry::getPatchVersion();
     APPDATA     = Winutils::getAppData()+"\\Eurobattle.net";
     SYSTEM      = Winutils::getSystem32();
@@ -90,13 +92,15 @@ Config::Config()
     // List of XPAM options
     XPAM_OPTIONS.append("updates");
 
-    // List of gproxy options
+    // List of GProxy options
     GPROXY_OPTIONS.append("debug");
     GPROXY_OPTIONS.append("chatbuffer");
     GPROXY_OPTIONS.append("console");
+    GPROXY_OPTIONS.append("autojoin");
+    GPROXY_OPTIONS.append("telemetry");
+
     GPROXY_OPTIONS.append("option_sounds");
     GPROXY_OPTIONS.append("sound_1");
-    GPROXY_OPTIONS.append("sound_10");
     GPROXY_OPTIONS.append("sound_2");
     GPROXY_OPTIONS.append("sound_3");
     GPROXY_OPTIONS.append("sound_4");
@@ -105,7 +109,9 @@ Config::Config()
     GPROXY_OPTIONS.append("sound_7");
     GPROXY_OPTIONS.append("sound_8");
     GPROXY_OPTIONS.append("sound_9");
-    GPROXY_OPTIONS.append("telemetry");
+    GPROXY_OPTIONS.append("sound_10");
+    GPROXY_OPTIONS.append("sound_11");
+    GPROXY_OPTIONS.append("sound_12");
 
     //Quickpatch w3 versions
     W3_VERSIONS.append("1.28.0");
@@ -115,8 +121,10 @@ Config::Config()
     W3_VERSIONS.append("1.28.5");
 
     //DotA maps
-    DOTA_MAPS.append("DotA v6.85k Allstars.w3x");
-    //DOTA_MAPS.append("DotA v6.88g Allstars.w3x");
+    QPair<QString, QString> d1("DotA v6.85k Allstars.w3x", this->W3PATH_LATEST);
+    QPair<QString, QString> d2("DotA Allstars 6.88w3.w3x", this->W3PATH_126);
+    DOTA_MAPS.append(d1);
+    DOTA_MAPS.append(d2);
 }
 
 QString Config::getCorrectW3Key(QString modeKey) {
