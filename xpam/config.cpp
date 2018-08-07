@@ -47,7 +47,7 @@ Config::Config()
 
     EUROPATH    = Registry::getEuroPath();
     XPAM_CONFIG_PATH = EUROPATH+"\\xpam.ini";
-    GPROXY_CONFIG_PATH = EUROPATH+"\\gproxy.cfg";
+    GPROXY_CONFIG_PATH = EUROPATH+"\\gproxy.ini";
     SOUNDPATH   = EUROPATH+"\\sounds";
     //
     QSettings settings(XPAM_CONFIG_PATH, QSettings::IniFormat);
@@ -82,12 +82,13 @@ Config::Config()
 #else
     json1 = "http://xpam.pl/update/update.json";
     json2 = "http://tools.eurobattle.net/update/update.json";
-    json3 = "http://leaguebots.com/cen/update/update.json";
+    json3 = "https://xpam-update.herokuapp.com/update.json";
 #endif    
     // List of checkboxes which are standing for Warcraft 3 arguments
     W3_OPTIONS.append("windowed");
     W3_OPTIONS.append("fullscreen");
     W3_OPTIONS.append("opengl");
+    W3_OPTIONS.append("gproxy");
 
     // List of XPAM options
     XPAM_OPTIONS.append("updates");

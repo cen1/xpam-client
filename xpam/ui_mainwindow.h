@@ -107,7 +107,7 @@ public:
     QCheckBox *checkBox_fullscreen_latest;
     QCheckBox *checkBox_opengl_latest;
     QCheckBox *checkBox_windowed_latest;
-    QCheckBox *check_useGproxy_latest;
+    QCheckBox *checkBox_gproxy_latest;
     QGroupBox *war_latest_groupbox_2;
     QWidget *verticalLayoutWidget_4;
     QVBoxLayout *verticalLayout_7;
@@ -122,7 +122,7 @@ public:
     QVBoxLayout *verticalLayout__gb_126;
     QCheckBox *checkBox_opengl_126;
     QCheckBox *checkBox_windowed_126;
-    QCheckBox *checkBox_useGproxy_126;
+    QCheckBox *checkBox_gproxy_126;
     QWidget *tabUpdate;
     QWidget *layoutWidget1;
     QVBoxLayout *verticalLayout_6;
@@ -701,10 +701,10 @@ public:
 
         verticalLayout_gb_latest->addWidget(checkBox_windowed_latest);
 
-        check_useGproxy_latest = new QCheckBox(verticalLayoutWidget);
-        check_useGproxy_latest->setObjectName(QStringLiteral("check_useGproxy_latest"));
+        checkBox_gproxy_latest = new QCheckBox(verticalLayoutWidget);
+        checkBox_gproxy_latest->setObjectName(QStringLiteral("checkBox_gproxy_latest"));
 
-        verticalLayout_gb_latest->addWidget(check_useGproxy_latest);
+        verticalLayout_gb_latest->addWidget(checkBox_gproxy_latest);
 
 
         verticalLayout_4->addWidget(groupBox_latest);
@@ -779,13 +779,13 @@ public:
 
         verticalLayout__gb_126->addWidget(checkBox_windowed_126);
 
-        checkBox_useGproxy_126 = new QCheckBox(verticalLayoutWidget_2);
-        checkBox_useGproxy_126->setObjectName(QStringLiteral("checkBox_useGproxy_126"));
-        checkBox_useGproxy_126->setEnabled(true);
-        checkBox_useGproxy_126->setCheckable(true);
-        checkBox_useGproxy_126->setChecked(true);
+        checkBox_gproxy_126 = new QCheckBox(verticalLayoutWidget_2);
+        checkBox_gproxy_126->setObjectName(QStringLiteral("checkBox_gproxy_126"));
+        checkBox_gproxy_126->setEnabled(true);
+        checkBox_gproxy_126->setCheckable(true);
+        checkBox_gproxy_126->setChecked(true);
 
-        verticalLayout__gb_126->addWidget(checkBox_useGproxy_126);
+        verticalLayout__gb_126->addWidget(checkBox_gproxy_126);
 
 
         verticalLayout_7->addWidget(groupBox_126);
@@ -891,7 +891,7 @@ public:
 
         retranslateUi(MainWindow);
 
-        tabWidget->setCurrentIndex(0);
+        tabWidget->setCurrentIndex(2);
 
 
         QMetaObject::connectSlotsByName(MainWindow);
@@ -952,7 +952,7 @@ public:
         checkBox_fullscreen_latest->setText(QApplication::translate("MainWindow", "Native fullscreen", 0));
         checkBox_opengl_latest->setText(QApplication::translate("MainWindow", "OpenGL", 0));
         checkBox_windowed_latest->setText(QApplication::translate("MainWindow", "Windowed", 0));
-        check_useGproxy_latest->setText(QApplication::translate("MainWindow", "Use GProxy", 0));
+        checkBox_gproxy_latest->setText(QApplication::translate("MainWindow", "Use GProxy", 0));
         war_latest_groupbox_2->setTitle(QApplication::translate("MainWindow", "Warcraft 1.26a gateway", 0));
         label->setText(QApplication::translate("MainWindow", "Warcraft 1.26a location", 0));
         label_War126Path->setText(QApplication::translate("MainWindow", "Loading...", 0));
@@ -961,7 +961,7 @@ public:
         groupBox_126->setTitle(QApplication::translate("MainWindow", "Options", 0));
         checkBox_opengl_126->setText(QApplication::translate("MainWindow", "OpenGL", 0));
         checkBox_windowed_126->setText(QApplication::translate("MainWindow", "Windowed", 0));
-        checkBox_useGproxy_126->setText(QApplication::translate("MainWindow", "Use GProxy", 0));
+        checkBox_gproxy_126->setText(QApplication::translate("MainWindow", "Use GProxy", 0));
         tabWidget->setTabText(tabWidget->indexOf(tabW3), QApplication::translate("MainWindow", " WARCRAFT", 0));
         pushButtonBU->setText(QApplication::translate("MainWindow", "Get Beta patch", 0));
         checkBox_updates->setText(QApplication::translate("MainWindow", "Automatic updates enabled", 0));

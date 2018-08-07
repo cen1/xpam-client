@@ -245,7 +245,7 @@ QCheckBox::indicator:checked {
          <enum>Qt::LeftToRight</enum>
         </property>
         <property name="currentIndex">
-         <number>0</number>
+         <number>2</number>
         </property>
         <widget class="QWidget" name="tabLauncher">
          <property name="sizePolicy">
@@ -982,7 +982,7 @@ or manually host your games.</string>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QCheckBox" name="check_useGproxy_latest">
+                 <widget class="QCheckBox" name="checkBox_gproxy_latest">
                   <property name="text">
                    <string>Use GProxy</string>
                   </property>
@@ -1131,7 +1131,7 @@ or manually host your games.</string>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QCheckBox" name="checkBox_useGproxy_126">
+                 <widget class="QCheckBox" name="checkBox_gproxy_126">
                   <property name="enabled">
                    <bool>true</bool>
                   </property>

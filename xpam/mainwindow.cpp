@@ -96,8 +96,11 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->checkBox_windowed_latest, SIGNAL(clicked(bool)), this, SLOT(handleCheckboxClient(bool)));
     connect(ui->checkBox_opengl_latest, SIGNAL(clicked(bool)), this, SLOT(handleCheckboxClient(bool)));
     connect(ui->checkBox_fullscreen_latest, SIGNAL(clicked(bool)), this, SLOT(handleCheckboxClient(bool)));
+     connect(ui->checkBox_gproxy_latest, SIGNAL(clicked(bool)), this, SLOT(handleCheckboxClient(bool)));
+
     connect(ui->checkBox_windowed_126, SIGNAL(clicked(bool)), this, SLOT(handleCheckboxClient(bool)));
     connect(ui->checkBox_opengl_126, SIGNAL(clicked(bool)), this, SLOT(handleCheckboxClient(bool)));
+    connect(ui->checkBox_gproxy_126, SIGNAL(clicked(bool)), this, SLOT(handleCheckboxClient(bool)));
 
     // XPAM options
     connect(ui->checkBox_updates, SIGNAL(clicked(bool)), this, SLOT(handleCheckboxXpam(bool)));
@@ -761,6 +764,11 @@ void MainWindow::handleCheckboxClient(bool checked)
         }
     }
     settings.setValue(mode_key + "/" + option, checked ? "1" : "0");
+
+    //126 gateway always uses gproxy
+    if (!ui->checkBox_gproxy_126->isChecked()) {
+        ui->checkBox_gproxy_126->setChecked(true);
+    }
 }
 
 //Init XPAM checkboxes according to ini file
@@ -811,8 +819,8 @@ void MainWindow::initClientOptions() {
    }
 
    //126 gateway always uses gproxy
-   if (!ui->checkBox_useGproxy_126->isChecked()) {
-       ui->checkBox_useGproxy_126->setChecked(true);
+   if (!ui->checkBox_gproxy_126->isChecked()) {
+       ui->checkBox_gproxy_126->setChecked(true);
    }
 }
 
@@ -1083,5 +1091,5 @@ void MainWindow::quit() {
 
 void MainWindow::on_checkBox_useGproxy_126_toggled(bool checked)
 {
-    ui->checkBox_useGproxy_126->setChecked(true);
+    ui->checkBox_gproxy_126->setChecked(true);
 }
