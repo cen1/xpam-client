@@ -100,7 +100,11 @@ QGroupBox {
 }
 
 a {
- color: #007dc1;
+ color: #85c3e5;
+}
+
+a span {
+ color: #85c3e5;
 }
 
 #tabWidget {
@@ -208,6 +212,10 @@ QCheckBox::indicator:checked {
 }
 #pushButtonGWD:hover {
   border-color: #007dc1;
+}
+
+#checkBoxNoGp {
+  margin-left: 6px;	
 }</string>
    </property>
    <layout class="QHBoxLayout" name="horizontalLayout">
@@ -237,7 +245,7 @@ QCheckBox::indicator:checked {
          <enum>Qt::LeftToRight</enum>
         </property>
         <property name="currentIndex">
-         <number>4</number>
+         <number>1</number>
         </property>
         <widget class="QWidget" name="tabLauncher">
          <property name="sizePolicy">
@@ -274,6 +282,9 @@ QCheckBox::indicator:checked {
                 </property>
                 <item>
                  <widget class="QPushButton" name="pushButtonGWN">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                     <horstretch>0</horstretch>
@@ -282,8 +293,14 @@ QCheckBox::indicator:checked {
                   </property>
                   <property name="minimumSize">
                    <size>
-                    <width>266</width>
+                    <width>0</width>
                     <height>370</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>0</width>
+                    <height>0</height>
                    </size>
                   </property>
                   <property name="toolTip">
@@ -296,6 +313,9 @@ or manually host your games.</string>
                  </widget>
                 </item>
                 <item>
+                 <layout class="QFormLayout" name="formLayout"/>
+                </item>
+                <item>
                  <widget class="QPushButton" name="pushButtonGWG">
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -305,8 +325,14 @@ or manually host your games.</string>
                   </property>
                   <property name="minimumSize">
                    <size>
-                    <width>266</width>
-                    <height>370</height>
+                    <width>400</width>
+                    <height>350</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>400</width>
+                    <height>350</height>
                    </size>
                   </property>
                   <property name="font">
@@ -314,11 +340,11 @@ or manually host your games.</string>
                     <family>Lucida Sans Unicode</family>
                    </font>
                   </property>
+                  <property name="cursor">
+                   <cursorShape>PointingHandCursor</cursorShape>
+                  </property>
                   <property name="toolTip">
-                   <string>Starting with GProxy is required for some DotA leagues&lt;br /&gt;
-to be able to join their games. It also provides reconnection&lt;br /&gt;
-in case you drop in the middle of the game.&lt;br /&gt;
-YOU CAN'T PLAY PG OR MANUALLY HOST GAMES IN THIS MODE!</string>
+                   <string>Choose this gateway to play PG and CG on latest supported Warcraft version.</string>
                   </property>
                   <property name="text">
                    <string/>
@@ -332,12 +358,21 @@ YOU CAN'T PLAY PG OR MANUALLY HOST GAMES IN THIS MODE!</string>
                   </property>
                   <property name="minimumSize">
                    <size>
-                    <width>266</width>
-                    <height>370</height>
+                    <width>400</width>
+                    <height>350</height>
                    </size>
                   </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>400</width>
+                    <height>350</height>
+                   </size>
+                  </property>
+                  <property name="cursor">
+                   <cursorShape>PointingHandCursor</cursorShape>
+                  </property>
                   <property name="toolTip">
-                   <string>COMING SOON</string>
+                   <string>Choose this gateway to play DotA v6.88 lagabuse.com, Warcraft patch 1.26.</string>
                   </property>
                   <property name="text">
                    <string/>
@@ -347,31 +382,7 @@ YOU CAN'T PLAY PG OR MANUALLY HOST GAMES IN THIS MODE!</string>
                </layout>
               </item>
               <item>
-               <widget class="QCheckBox" name="checkBox_windowed">
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
-                <property name="text">
-                 <string>Windowed</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QCheckBox" name="checkBox_fullscreen">
-                <property name="text">
-                 <string>Native fullscreen</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QCheckBox" name="checkBox_opengl">
-                <property name="text">
-                 <string>OpenGL</string>
-                </property>
-               </widget>
+               <layout class="QHBoxLayout" name="horizontalLayoutOptions"/>
               </item>
               <item>
                <spacer name="verticalSpacer">
@@ -471,7 +482,7 @@ YOU CAN'T PLAY PG OR MANUALLY HOST GAMES IN THIS MODE!</string>
            <rect>
             <x>40</x>
             <y>80</y>
-            <width>171</width>
+            <width>250</width>
             <height>23</height>
            </rect>
           </property>
@@ -482,9 +493,9 @@ YOU CAN'T PLAY PG OR MANUALLY HOST GAMES IN THIS MODE!</string>
          <widget class="QPushButton" name="pushButtonGPNOTEPAD">
           <property name="geometry">
            <rect>
-            <x>220</x>
+            <x>300</x>
             <y>80</y>
-            <width>111</width>
+            <width>120</width>
             <height>23</height>
            </rect>
           </property>
@@ -495,10 +506,10 @@ YOU CAN'T PLAY PG OR MANUALLY HOST GAMES IN THIS MODE!</string>
          <widget class="QGroupBox" name="gpoptionsgroupBox">
           <property name="geometry">
            <rect>
-            <x>40</x>
+            <x>410</x>
             <y>120</y>
-            <width>241</width>
-            <height>351</height>
+            <width>441</width>
+            <height>291</height>
            </rect>
           </property>
           <property name="styleSheet">
@@ -512,8 +523,8 @@ YOU CAN'T PLAY PG OR MANUALLY HOST GAMES IN THIS MODE!</string>
             <rect>
              <x>10</x>
              <y>30</y>
-             <width>221</width>
-             <height>311</height>
+             <width>411</width>
+             <height>97</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -527,6 +538,135 @@ YOU CAN'T PLAY PG OR MANUALLY HOST GAMES IN THIS MODE!</string>
               </property>
              </widget>
             </item>
+            <item>
+             <widget class="QCheckBox" name="checkBox_chatbuffer">
+              <property name="layoutDirection">
+               <enum>Qt::LeftToRight</enum>
+              </property>
+              <property name="text">
+               <string>Chat buffer (experimental)</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="checkBox_debug">
+              <property name="text">
+               <string>Debug logging</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="checkBox_telemetry">
+              <property name="text">
+               <string>Telemetry logging</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="checkBox_autojoin">
+              <property name="text">
+               <string>Game autojoin (experimental)</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="verticalLayoutWidget_6">
+           <property name="geometry">
+            <rect>
+             <x>10</x>
+             <y>140</y>
+             <width>411</width>
+             <height>89</height>
+            </rect>
+           </property>
+           <layout class="QVBoxLayout" name="verticalLayout_9">
+            <item>
+             <widget class="QLabel" name="label_3">
+              <property name="text">
+               <string>Autojoin: delay before typing the game name after game list opens (sec):</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QSpinBox" name="spinBox_autojoin_gndelay">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>25</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>50</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="minimum">
+               <number>1</number>
+              </property>
+              <property name="maximum">
+               <number>5</number>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_4">
+              <property name="text">
+               <string>Autojoin: delay before opening game list after game is created or followed player joins (sec):</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QSpinBox" name="spinBox_autojoin_delay">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>25</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>50</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="minimum">
+               <number>1</number>
+              </property>
+              <property name="maximum">
+               <number>15</number>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </widget>
+         <widget class="QGroupBox" name="groupBox">
+          <property name="geometry">
+           <rect>
+            <x>40</x>
+            <y>120</y>
+            <width>361</width>
+            <height>291</height>
+           </rect>
+          </property>
+          <property name="title">
+           <string>GProxy Sounds</string>
+          </property>
+          <widget class="QWidget" name="verticalLayoutWidget_5">
+           <property name="geometry">
+            <rect>
+             <x>10</x>
+             <y>20</y>
+             <width>341</width>
+             <height>261</height>
+            </rect>
+           </property>
+           <layout class="QVBoxLayout" name="verticalLayout_8">
+            <property name="sizeConstraint">
+             <enum>QLayout::SetMaximumSize</enum>
+            </property>
             <item>
              <widget class="QCheckBox" name="checkBox_option_sounds">
               <property name="layoutDirection">
@@ -635,26 +775,16 @@ YOU CAN'T PLAY PG OR MANUALLY HOST GAMES IN THIS MODE!</string>
              </widget>
             </item>
             <item>
-             <widget class="QCheckBox" name="checkBox_chatbuffer">
-              <property name="layoutDirection">
-               <enum>Qt::LeftToRight</enum>
-              </property>
+             <widget class="QCheckBox" name="checkBox_sound_11">
               <property name="text">
-               <string>Chat buffer (experimental)</string>
+               <string>&quot;Autujoining game&quot; sound</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QCheckBox" name="checkBox_debug">
+             <widget class="QCheckBox" name="checkBox_sound_12">
               <property name="text">
-               <string>Debugging</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QCheckBox" name="checkBox_telemetry">
-              <property name="text">
-               <string>Telemetry</string>
+               <string>&quot;Server Announcement&quot; sound</string>
               </property>
              </widget>
             </item>
@@ -666,141 +796,346 @@ YOU CAN'T PLAY PG OR MANUALLY HOST GAMES IN THIS MODE!</string>
          <attribute name="title">
           <string> WARCRAFT</string>
          </attribute>
-         <widget class="QWidget" name="layoutWidget">
+         <widget class="QPushButton" name="pushButtonClientLog">
           <property name="geometry">
            <rect>
-            <x>20</x>
-            <y>20</y>
-            <width>871</width>
-            <height>141</height>
+            <x>30</x>
+            <y>30</y>
+            <width>150</width>
+            <height>19</height>
            </rect>
           </property>
-          <layout class="QVBoxLayout" name="verticalLayout_4">
-           <item>
-            <widget class="QPushButton" name="pushButtonClientLog">
-             <property name="maximumSize">
-              <size>
-               <width>150</width>
-               <height>16777215</height>
-              </size>
-             </property>
-             <property name="text">
-              <string>Open Client log file</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QPushButton" name="pushButton_w3path">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>150</width>
-               <height>16777215</height>
-              </size>
-             </property>
-             <property name="text">
-              <string>Change W3 path</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLabel" name="labelW3Path">
-             <property name="text">
-              <string/>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLabel" name="labelW3Version">
-             <property name="text">
-              <string/>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLabel" name="labelChangeVersion">
-             <property name="text">
-              <string>Change W3 version:</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_2">
-             <item>
-              <widget class="QLabel" name="label126">
-               <property name="maximumSize">
-                <size>
-                 <width>30</width>
-                 <height>16777215</height>
-                </size>
+          <property name="maximumSize">
+           <size>
+            <width>150</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>Open Client log file</string>
+          </property>
+         </widget>
+         <widget class="QGroupBox" name="war_latest_groupbox">
+          <property name="geometry">
+           <rect>
+            <x>30</x>
+            <y>90</y>
+            <width>400</width>
+            <height>221</height>
+           </rect>
+          </property>
+          <property name="title">
+           <string>Latest Warcraft gateway (1.28.5)</string>
+          </property>
+          <widget class="QWidget" name="verticalLayoutWidget_3">
+           <property name="geometry">
+            <rect>
+             <x>10</x>
+             <y>20</y>
+             <width>381</width>
+             <height>191</height>
+            </rect>
+           </property>
+           <layout class="QVBoxLayout" name="verticalLayout_4">
+            <property name="spacing">
+             <number>5</number>
+            </property>
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_2">
+              <property name="sizeConstraint">
+               <enum>QLayout::SetDefaultConstraint</enum>
+              </property>
+              <item>
+               <widget class="QLabel" name="war_latest_label_2">
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>20</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>16777215</width>
+                  <height>20</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>Warcraft location</string>
+                </property>
+                <property name="textFormat">
+                 <enum>Qt::AutoText</enum>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="label_WarLatestPath">
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>20</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>16777215</width>
+                  <height>20</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>Loading...</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <widget class="QPushButton" name="pushButton_warLatestPath">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>150</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>Change</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_5">
+              <property name="text">
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Do not have Warcraft 1.28.5? Download it &lt;a href=&quot;http://wiki.eurobattle.net/index.php?title=How_to_install_Warcraft_III&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#85c3e5;&quot;&gt;here&lt;/span&gt;&lt;/a&gt;.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
+              <property name="openExternalLinks">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QGroupBox" name="groupBox_latest">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>110</height>
+               </size>
+              </property>
+              <property name="title">
+               <string>Options</string>
+              </property>
+              <widget class="QWidget" name="verticalLayoutWidget">
+               <property name="geometry">
+                <rect>
+                 <x>10</x>
+                 <y>20</y>
+                 <width>121</width>
+                 <height>86</height>
+                </rect>
                </property>
-               <property name="text">
-                <string>1.26</string>
-               </property>
+               <layout class="QVBoxLayout" name="verticalLayout_gb_latest">
+                <property name="spacing">
+                 <number>8</number>
+                </property>
+                <property name="sizeConstraint">
+                 <enum>QLayout::SetDefaultConstraint</enum>
+                </property>
+                <item>
+                 <widget class="QCheckBox" name="checkBox_fullscreen_latest">
+                  <property name="text">
+                   <string>Native fullscreen</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="checkBox_opengl_latest">
+                  <property name="text">
+                   <string>OpenGL</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="checkBox_windowed_latest">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="text">
+                   <string>Windowed</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="checkBox_gproxy_latest">
+                  <property name="text">
+                   <string>Use GProxy</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
               </widget>
-             </item>
-             <item>
-              <widget class="QSlider" name="horizontalSliderW3Version">
-               <property name="enabled">
-                <bool>false</bool>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </widget>
+         <widget class="QGroupBox" name="war_latest_groupbox_2">
+          <property name="geometry">
+           <rect>
+            <x>470</x>
+            <y>90</y>
+            <width>400</width>
+            <height>221</height>
+           </rect>
+          </property>
+          <property name="title">
+           <string>Warcraft 1.26a gateway</string>
+          </property>
+          <widget class="QWidget" name="verticalLayoutWidget_4">
+           <property name="geometry">
+            <rect>
+             <x>9</x>
+             <y>19</y>
+             <width>381</width>
+             <height>191</height>
+            </rect>
+           </property>
+           <layout class="QVBoxLayout" name="verticalLayout_7">
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_7">
+              <item>
+               <widget class="QLabel" name="label">
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>20</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>Warcraft 1.26a location</string>
+                </property>
+                <property name="textFormat">
+                 <enum>Qt::AutoText</enum>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="label_War126Path">
+                <property name="text">
+                 <string>Loading...</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <widget class="QPushButton" name="pushButton_war126Path">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>150</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>Change</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_2">
+              <property name="text">
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Do not have Warcraft 1.26a? Download it &lt;a href=&quot;http://wiki.eurobattle.net/index.php?title=Warcraft_III_1.26&quot;&gt;&lt;span style=&quot; text-decoration: underline; color: #85c3e5;&quot;&gt;here&lt;/span&gt;&lt;/a&gt;.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
+              <property name="openExternalLinks">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QGroupBox" name="groupBox_126">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>110</height>
+               </size>
+              </property>
+              <property name="title">
+               <string>Options</string>
+              </property>
+              <widget class="QWidget" name="verticalLayoutWidget_2">
+               <property name="geometry">
+                <rect>
+                 <x>10</x>
+                 <y>20</y>
+                 <width>191</width>
+                 <height>86</height>
+                </rect>
                </property>
-               <property name="minimumSize">
-                <size>
-                 <width>120</width>
-                 <height>0</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>120</width>
-                 <height>16777215</height>
-                </size>
-               </property>
-               <property name="maximum">
-                <number>1</number>
-               </property>
-               <property name="value">
-                <number>1</number>
-               </property>
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
+               <layout class="QVBoxLayout" name="verticalLayout__gb_126">
+                <property name="spacing">
+                 <number>8</number>
+                </property>
+                <item>
+                 <widget class="QCheckBox" name="checkBox_opengl_126">
+                  <property name="text">
+                   <string>OpenGL</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="checkBox_windowed_126">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="text">
+                   <string>Windowed</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="checkBox_gproxy_126">
+                  <property name="enabled">
+                   <bool>true</bool>
+                  </property>
+                  <property name="text">
+                   <string>Use GProxy (can't disable)</string>
+                  </property>
+                  <property name="checkable">
+                   <bool>true</bool>
+                  </property>
+                  <property name="checked">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="checkBox_dummy">
+                  <property name="text">
+                   <string>dummy</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
               </widget>
-             </item>
-             <item>
-              <widget class="QLabel" name="labelLatest">
-               <property name="maximumSize">
-                <size>
-                 <width>35</width>
-                 <height>16777215</height>
-                </size>
-               </property>
-               <property name="text">
-                <string>1.28.5</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <spacer name="horizontalSpacer">
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>40</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-            </layout>
-           </item>
-          </layout>
+             </widget>
+            </item>
+           </layout>
+          </widget>
          </widget>
         </widget>
         <widget class="QWidget" name="tabUpdate">
@@ -870,28 +1205,9 @@ YOU CAN'T PLAY PG OR MANUALLY HOST GAMES IN THIS MODE!</string>
                 </layout>
                </item>
                <item>
-                <widget class="QPushButton" name="pushButton_updateW3">
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
-                 <property name="maximumSize">
-                  <size>
-                   <width>16777215</width>
-                   <height>16777215</height>
-                  </size>
-                 </property>
-                 <property name="text">
-                  <string>Perform full W3 update (1GB download)</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
                 <widget class="QCheckBox" name="checkBox_updates">
                  <property name="text">
-                  <string>Enable automatic updates</string>
+                  <string>Automatic updates enabled</string>
                  </property>
                 </widget>
                </item>
@@ -930,7 +1246,7 @@ YOU CAN'T PLAY PG OR MANUALLY HOST GAMES IN THIS MODE!</string>
            <rect>
             <x>20</x>
             <y>20</y>
-            <width>391</width>
+            <width>395</width>
             <height>501</height>
            </rect>
           </property>
@@ -950,7 +1266,7 @@ YOU CAN'T PLAY PG OR MANUALLY HOST GAMES IN THIS MODE!</string>
               </sizepolicy>
              </property>
              <property name="text">
-              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Eurobattle.net Client version 1.0 (September 2017), developed by cen&lt;/p&gt;&lt;p&gt;&lt;br/&gt;We are searching for Qt/ C++ developers to further expand this client.&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;TODO:&lt;/p&gt;&lt;p&gt;-bnet Chat client&lt;/p&gt;&lt;p&gt;-TS integration&lt;/p&gt;&lt;p&gt;-Displaying player's profile and league stats in the client&lt;/p&gt;&lt;p&gt;-and more...&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;Special thanks to:&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;IStealSkills&lt;/span&gt; - help with desig&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Stefos007&lt;/span&gt; - original GProxy implementation&lt;/p&gt;&lt;p&gt;BNETtdocs, Stormlib, PvPGN and GHost projects&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Eurobattle.net Client version 1.1 (August 2018), developed by cen, additional contributions by deer&lt;/p&gt;&lt;p&gt;&lt;br/&gt;We are searching for Qt/ C++ developers to further expand this client.&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;TODO:&lt;/p&gt;&lt;p&gt;-bnet Chat client&lt;/p&gt;&lt;p&gt;-TS integration&lt;/p&gt;&lt;p&gt;-Displaying player's profile and league stats in the client&lt;/p&gt;&lt;p&gt;- Native Warkeys?&lt;/p&gt;&lt;p&gt;-and more...&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;Special thanks to:&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;IStealSkills&lt;/span&gt; - help with desig&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Stefos007&lt;/span&gt; - original GProxy implementation&lt;/p&gt;&lt;p&gt;BNETtdocs, Stormlib, PvPGN and GHost projects&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>

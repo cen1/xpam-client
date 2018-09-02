@@ -62,12 +62,13 @@ DEFINES += UNICODE
 
 ### QUAZIP
 win32:CONFIG(release, debug|release): LIBS += -L$$PWD/quazip/ -lquazip
+win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/quazip/ -lquazip
 
 INCLUDEPATH += $$PWD/quazip
 DEPENDPATH += $$PWD/quazip
 
 win32:CONFIG(release, debug|release): PRE_TARGETDEPS += $$PWD/quazip/quazip.lib
-else:win32:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/quazip/quazip.lib
+win32:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/quazip/quazip.lib
 
 ### ZLIB
 INCLUDEPATH +=$$PWD/zlib
@@ -75,6 +76,7 @@ DEPENDPATH += $$PWD/zlib
 
 ## STORMLIB
 win32:CONFIG(release, debug|release): LIBS += -L$$PWD/stormlib/ -lStormLib
+win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/stormlib/ -lStormLib
 
 INCLUDEPATH += $$PWD/stormlib
 DEPENDPATH += $$PWD/stormlib
@@ -84,7 +86,6 @@ LIBS += version.lib
 
 # Fix for UI changes not taking effect
 UI_DIR = $$PWD
-
 
 ### MANIFEST
 

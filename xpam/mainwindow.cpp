@@ -43,6 +43,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "QObjectList"
 #include "QFileDialog"
 #include "QTimer"
+#include "QSizePolicy"
 
 #ifndef WINUTILS_H
     #include "winutils.h"
@@ -68,73 +69,86 @@ MainWindow::MainWindow(QWidget *parent) :
     isStartupUpdate=true;
     ismax=false;
 
-    //gproxy options
-    connect(ui->checkBox_console, SIGNAL(clicked(bool)), this, SLOT(handleCheckbox(bool)));
-    connect(ui->checkBox_option_sounds, SIGNAL(clicked(bool)), this, SLOT(handleCheckbox(bool)));
-    connect(ui->checkBox_sound_1, SIGNAL(clicked(bool)), this, SLOT(handleCheckbox(bool)));
-    connect(ui->checkBox_sound_2, SIGNAL(clicked(bool)), this, SLOT(handleCheckbox(bool)));
-    connect(ui->checkBox_sound_3, SIGNAL(clicked(bool)), this, SLOT(handleCheckbox(bool)));
-    connect(ui->checkBox_sound_4, SIGNAL(clicked(bool)), this, SLOT(handleCheckbox(bool)));
-    connect(ui->checkBox_sound_5, SIGNAL(clicked(bool)), this, SLOT(handleCheckbox(bool)));
-    connect(ui->checkBox_sound_6, SIGNAL(clicked(bool)), this, SLOT(handleCheckbox(bool)));
-    connect(ui->checkBox_sound_7, SIGNAL(clicked(bool)), this, SLOT(handleCheckbox(bool)));
-    connect(ui->checkBox_sound_8, SIGNAL(clicked(bool)), this, SLOT(handleCheckbox(bool)));
-    connect(ui->checkBox_sound_9, SIGNAL(clicked(bool)), this, SLOT(handleCheckbox(bool)));
-    connect(ui->checkBox_sound_10, SIGNAL(clicked(bool)), this, SLOT(handleCheckbox(bool)));
-    connect(ui->checkBox_chatbuffer, SIGNAL(clicked(bool)), this, SLOT(handleCheckbox(bool)));
-    connect(ui->checkBox_debug, SIGNAL(clicked(bool)), this, SLOT(handleCheckbox(bool)));
-    connect(ui->checkBox_telemetry, SIGNAL(clicked(bool)), this, SLOT(handleCheckbox(bool)));
+    //Hide layout dummies
+    QSizePolicy sp_retain = ui->checkBox_dummy->sizePolicy();
+    sp_retain.setRetainSizeWhenHidden(true);
+    ui->checkBox_dummy->setSizePolicy(sp_retain);
+    ui->checkBox_dummy->hide();
 
-    //w3 options
-    connect(ui->checkBox_windowed, SIGNAL(clicked(bool)), this, SLOT(handleCheckboxClient(bool)));
-    connect(ui->checkBox_opengl, SIGNAL(clicked(bool)), this, SLOT(handleCheckboxClient(bool)));
-    connect(ui->checkBox_fullscreen, SIGNAL(clicked(bool)), this, SLOT(handleCheckboxClient(bool)));
-    connect(ui->checkBox_updates, SIGNAL(clicked(bool)), this, SLOT(handleCheckboxClient(bool)));
+    // GProxy options
+    connect(ui->checkBox_console, SIGNAL(clicked(bool)), this, SLOT(handleCheckBoxGProxy(bool)));
+    connect(ui->checkBox_chatbuffer, SIGNAL(clicked(bool)), this, SLOT(handleCheckBoxGProxy(bool)));
+    connect(ui->checkBox_debug, SIGNAL(clicked(bool)), this, SLOT(handleCheckBoxGProxy(bool)));
+    connect(ui->checkBox_telemetry, SIGNAL(clicked(bool)), this, SLOT(handleCheckBoxGProxy(bool)));
+    connect(ui->checkBox_autojoin, SIGNAL(clicked(bool)), this, SLOT(handleCheckBoxGProxy(bool)));
 
-    //load w3 options
+    connect(ui->checkBox_option_sounds, SIGNAL(clicked(bool)), this, SLOT(handleCheckBoxGProxy(bool)));
+    connect(ui->checkBox_sound_1, SIGNAL(clicked(bool)), this, SLOT(handleCheckBoxGProxy(bool)));
+    connect(ui->checkBox_sound_2, SIGNAL(clicked(bool)), this, SLOT(handleCheckBoxGProxy(bool)));
+    connect(ui->checkBox_sound_3, SIGNAL(clicked(bool)), this, SLOT(handleCheckBoxGProxy(bool)));
+    connect(ui->checkBox_sound_4, SIGNAL(clicked(bool)), this, SLOT(handleCheckBoxGProxy(bool)));
+    connect(ui->checkBox_sound_5, SIGNAL(clicked(bool)), this, SLOT(handleCheckBoxGProxy(bool)));
+    connect(ui->checkBox_sound_6, SIGNAL(clicked(bool)), this, SLOT(handleCheckBoxGProxy(bool)));
+    connect(ui->checkBox_sound_7, SIGNAL(clicked(bool)), this, SLOT(handleCheckBoxGProxy(bool)));
+    connect(ui->checkBox_sound_8, SIGNAL(clicked(bool)), this, SLOT(handleCheckBoxGProxy(bool)));
+    connect(ui->checkBox_sound_9, SIGNAL(clicked(bool)), this, SLOT(handleCheckBoxGProxy(bool)));
+    connect(ui->checkBox_sound_10, SIGNAL(clicked(bool)), this, SLOT(handleCheckBoxGProxy(bool)));
+    connect(ui->checkBox_sound_11, SIGNAL(clicked(bool)), this, SLOT(handleCheckBoxGProxy(bool)));
+    connect(ui->checkBox_sound_12, SIGNAL(clicked(bool)), this, SLOT(handleCheckBoxGProxy(bool)));
+
+    connect(ui->spinBox_autojoin_delay, SIGNAL(valueChanged(int)), this, SLOT(handleSpinBoxGProxy(int)));
+    connect(ui->spinBox_autojoin_gndelay, SIGNAL(valueChanged(int)), this, SLOT(handleSpinBoxGProxy(int)));
+
+    // W3 options
+    connect(ui->checkBox_windowed_latest, SIGNAL(clicked(bool)), this, SLOT(handleCheckboxClient(bool)));
+    connect(ui->checkBox_opengl_latest, SIGNAL(clicked(bool)), this, SLOT(handleCheckboxClient(bool)));
+    connect(ui->checkBox_fullscreen_latest, SIGNAL(clicked(bool)), this, SLOT(handleCheckboxClient(bool)));
+     connect(ui->checkBox_gproxy_latest, SIGNAL(clicked(bool)), this, SLOT(handleCheckboxClient(bool)));
+
+    connect(ui->checkBox_windowed_126, SIGNAL(clicked(bool)), this, SLOT(handleCheckboxClient(bool)));
+    connect(ui->checkBox_opengl_126, SIGNAL(clicked(bool)), this, SLOT(handleCheckboxClient(bool)));
+    connect(ui->checkBox_gproxy_126, SIGNAL(clicked(bool)), this, SLOT(handleCheckboxClient(bool)));
+
+    // XPAM options
+    connect(ui->checkBox_updates, SIGNAL(clicked(bool)), this, SLOT(handleCheckboxXpam(bool)));
+
+    // Load XPAM options
+    this->initXpamOptions();
+
+    // Load W3 options
     this->initClientOptions();
 
-    //initiate gproxy options
+    // Initiate GProxy options
     this->initGproxyOptions();
 
-    if (config->IS_PORTABLE) {
-        updatesEnabled = false;
-    }
-    else {
-        updatesEnabled = ui->checkBox_updates->isChecked();
-    }
-
-    //Clean the update log on every startup
-    QFile log(config->EUROPATH+"\\xpam.log");
+    // Clear the update log on every startup
+    QFile log(config->EUROPATH+"/xpam.log");
     log.open(QFile::WriteOnly | QFile::Truncate);
     log.close();
+
+    // Set W3 path labels
+    if (config->W3PATH_126!="") {
+        ui->label_War126Path->setText(config->W3PATH_126);
+    }
+    else {
+        ui->label_War126Path->setText("NOT SET!");
+    }
+    if (config->W3PATH_LATEST!="") {
+        ui->label_WarLatestPath->setText(config->W3PATH_LATEST);
+    }
+    else {
+        ui->label_WarLatestPath->setText("NOT SET!");
+    }
+
+    changeActiveMode(config->ACTIVE_MODE_KEY);
+
+    updatesEnabled = ui->checkBox_updates->isChecked();
 
     //Add CD keys if needed
     Updater::replaceCDKeys(config);
 
     //Rename war3Patch.mpq to war3Mod.mpw as of 1.28.2
-    Updater::renamePatchMpq(config);
-
-    //Enable or disable DotA gateway
-    if (config->USE_DUAL_VERSION) {
-        ui->pushButtonGWD->setEnabled(true);
-    }
-    else {
-        ui->pushButtonGWD->setEnabled(false);
-    }
-
-    //Set current w3 version on slider
-    QString currentV = W3::getActiveVersion(config);
-    if (currentV==W3::W3_126) {
-        ui->horizontalSliderW3Version->setValue(0);
-    }
-    else if (currentV==W3::W3_LATEST) {
-        ui->horizontalSliderW3Version->setValue(1);
-    }
-    else {
-        status("ERROR: unable to determine current W3 version, corrupt state");
-        ui->horizontalSliderW3Version->setEnabled(false);
-    }
+    Updater::renamePatchMpqForLatestW3(config);
 
     //Sanity checks
     W3::sanityCheck(config);
@@ -144,12 +158,46 @@ MainWindow::MainWindow(QWidget *parent) :
     r.createEuroKey();
     r.createBlizzKey();
     r.setDefaultTFT();
+}
 
-    //Hide slider for now
-    ui->horizontalSliderW3Version->hide();
-    ui->labelChangeVersion->hide();
-    ui->label126->hide();
-    ui->labelLatest->hide();
+/**
+ * @brief MainWindow::checkModeAvailability
+ *
+ * @param mode_key The mode key to check
+ * @param should_warn_user Will redirect user to Warcraft page and show the alert
+ * @return
+ */
+bool MainWindow::checkModeAvailability(QString modeKey, bool shouldWarnUser) {
+    if ((modeKey == config->W3_KEY_126 && config->W3PATH_126 != "") ||
+        (modeKey == config->W3_KEY_LATEST && config->W3PATH_LATEST != "")) {
+        return true;
+    }
+    if (shouldWarnUser) {
+        QString version = config->getW3Version(modeKey);
+        status("Please, select the Warcraft " + version + " directory path in order to use this gateway");
+        QMessageBox mb(QMessageBox::Critical, "W3 path not set!",
+           "Please, select the Warcraft " + version + " directory path in order to use this gateway", QMessageBox::Ok);
+        mb.exec();
+
+        // Go to W3 tab
+        ui->tabWidget->setCurrentIndex(2);
+        if (modeKey == config->W3_KEY_126) {
+            ui->pushButton_war126Path->setFocus();
+        } else {
+            ui->pushButton_warLatestPath->setFocus();
+        }
+    }
+    return false;
+}
+
+bool MainWindow::changeActiveMode(QString modeKey, bool shouldWarnUser) {
+    if (!checkModeAvailability(modeKey, shouldWarnUser)) {
+        return false;
+    }
+    config->ACTIVE_MODE_KEY = modeKey;
+    QSettings settings(config->XPAM_CONFIG_PATH, QSettings::IniFormat);
+    settings.setValue("active_mode", config->ACTIVE_MODE_KEY);
+    return true;
 }
 
 MainWindow::~MainWindow()
@@ -157,26 +205,61 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-//GProxy gateway, Start w3 and gproxy
-void MainWindow::on_pushButtonGWG_clicked()
+
+//Start w3 only, NORMAL gateway
+// CURRENTLY NOT USED !!!
+void MainWindow::on_pushButtonGWN_clicked()
 {
-    if (config->USE_DUAL_VERSION) {
-        W3::setVersion(W3::W3_LATEST, config);
+    if (changeActiveMode(config->W3_KEY_LATEST, true)) {
+        //Set normal gateway as default
+        Registry::setGateways();
+        runW3();
     }
-    startW3AndGproxy(config->W3_EXENAME_LATEST);
 }
 
-void MainWindow::startW3AndGproxy(QString w3Exename, QString restrictedVersion) {
+//Dota gateway, Start w3 and gproxy, switch version as needed
+void MainWindow::on_pushButtonGWD_clicked()
+{
+    if (changeActiveMode(config->W3_KEY_126, true)) {
+        //Start gproxy gateway
+        startW3AndGproxy();
+    }
+}
+
+//GProxy gateway (WAR3_LATEST), Start w3 and optionally gproxy
+void MainWindow::on_pushButtonGWG_clicked()
+{
+    if (changeActiveMode(config->W3_KEY_LATEST, true)) {
+        if (ui->checkBox_gproxy_latest->isChecked()) {
+            Registry::setGproxyGateways();
+            startW3AndGproxy();
+        }
+        else {
+            Registry::setGateways();
+            runW3();
+        }
+    }
+}
+
+void MainWindow::startW3AndGproxy() {
+
+    qDebug("Starting W3 and GProxy ");
 
     //Hard WINAPI checks for w3 and gproxy running, all kind of problems if they are...
-    if (Util::isRunning(w3Exename)) {
+    if (Util::isRunning(config->W3_EXENAME_LATEST) || Util::isRunning(config->W3_EXENAME_LATEST)) {
         status("Warcraft III is already running");
         return;
     }
     if (Util::isRunning("gproxy.exe")) {
-        status("GProxy is already running");
+        status("GProxy is already running.");
         return;
     }
+
+    QString w3Path;
+    QString w3Exename;
+
+    w3Path = config->getCurrentW3Path();
+    w3Exename = config->getCurrentW3Exename();
 
     //Check if gproxy.exe exists and was not deleted by AV
     QFile gproxyFile(config->EUROPATH+"/gproxy.exe");
@@ -187,7 +270,7 @@ void MainWindow::startW3AndGproxy(QString w3Exename, QString restrictedVersion) 
          return;
     }
     //Check if w3l.exe exists and was not deleted by AV
-    QString w3exe = config->W3PATH+"\\w3l.exe";
+    QString w3exe = w3Path+"\\w3l.exe";
     QFile w3lFile(w3exe);
     if (!w3lFile.exists()) {
         QMessageBox mb(QMessageBox::Critical, "W3l missing",
@@ -195,8 +278,6 @@ void MainWindow::startW3AndGproxy(QString w3Exename, QString restrictedVersion) 
          mb.exec();
          return;
     }
-
-    ui->tabWidget->setCurrentIndex(1);
 
     //Preloader
     QMovie *movie = new QMovie(":/preloader.gif");
@@ -208,60 +289,35 @@ void MainWindow::startW3AndGproxy(QString w3Exename, QString restrictedVersion) 
 
     QString gpdir=config->EUROPATH;
     QString gpexe="\""+gpdir+"\\gproxy.exe\"";
-
+    QString gpmode=(config->ACTIVE_MODE_KEY == config->W3_KEY_126) ? "restricted" : "normal";
     status("Launching GProxy...");
     ui->labelGproxyout->setText("Working directory: "+gpdir);
 
-    gproxy=new GProxy(gpdir, gpexe, w3Exename, restrictedVersion, config->W3PATH);
+    gproxy=new GProxy(gpdir, gpexe, gpmode, config->GPROXY_SERVER, w3Exename, w3Path);
     gpt=new QThread();
-    gproxy->moveToThread(gpt);
 
     QObject::connect(gpt, SIGNAL(started()), gproxy, SLOT(readStdout()));
     QObject::connect(gproxy, SIGNAL(gproxyReady(QString)), this, SLOT(gproxyReady(QString)));
-    QObject::connect(gproxy, SIGNAL(gproxyExiting()), this, SLOT(gproxyExiting()));
+    QObject::connect(gproxy, SIGNAL(gproxyExiting(bool)), this, SLOT(gproxyExiting(bool)));
     QObject::connect(gproxy, SIGNAL(sendLine(QString)), this, SLOT(receiveLine(QString)), Qt::QueuedConnection);
+    QObject::connect(this, SIGNAL(terminateCurrentGproxyInstance()), gproxy, SLOT(kill()));
 
-    QObject::connect(gproxy, SIGNAL(gproxyExiting()), gpt, SLOT(quit()));
-    QObject::connect(gproxy, SIGNAL(gproxyExiting()), gproxy, SLOT(deleteLater()));
+    QObject::connect(gproxy, SIGNAL(gproxyExiting(bool)), gpt, SLOT(quit()));
+    QObject::connect(gproxy, SIGNAL(gproxyExiting(bool)), gproxy, SLOT(deleteLater()));
     QObject::connect(gpt, SIGNAL(finished()), gpt, SLOT(deleteLater()));
 
+    gproxy->moveToThread(gpt);
     gpt->start();
-}
-
-//Start w3 only, NORMAL gateway
-void MainWindow::on_pushButtonGWN_clicked()
-{    
-    if (config->USE_DUAL_VERSION) {
-        W3::setVersion(W3::W3_LATEST, config);
-    }
-
-    //Set normal gateway as default
-    Registry::setGateways();
-
-    runW3();
-}
-
-//Dota gateway, Start w3 and gproxy, switch version as needed
-void MainWindow::on_pushButtonGWD_clicked()
-{
-    if (config->USE_DUAL_VERSION) {
-        //Switch version
-        W3::setVersion(W3::W3_126, config);
-
-        //Start gproxy gateway
-        startW3AndGproxy(config->W3_EXENAME_126, config->W3_VERSION_126);
-    }
 }
 
 void MainWindow::runW3() {
 
     //Again, hard WINAPI check
-    if (Util::isRunning(config->W3_EXENAME_LATEST)) {
+    if (Util::isRunning(config->W3_EXENAME_LATEST) || Util::isRunning(config->W3_EXENAME_LATEST)) {
         status("Warcraft III is already running");
         return;
     }
-
-    QString w3dir=config->W3PATH;
+    QString w3dir=config->getCurrentW3Path();
     QString w3exe=w3dir+"\\w3l.exe";
 
     //Check if w3l.exe exists and was not deleted by AV
@@ -276,9 +332,14 @@ void MainWindow::runW3() {
     status("Launching Warcraft III...");
 
     QStringList list;
-    if (ui->checkBox_windowed->isChecked()) list << "-windowed";
-    if (ui->checkBox_fullscreen->isChecked()) list << "-nativefullscr";
-    if (ui->checkBox_opengl->isChecked()) list << "-opengl";
+    if (config->ACTIVE_MODE_KEY == config->W3_KEY_126) {
+        if (ui->checkBox_windowed_126->isChecked()) list << "-windowed";
+        if (ui->checkBox_opengl_126->isChecked()) list << "-opengl";
+    } else {
+        if (ui->checkBox_windowed_latest->isChecked()) list << "-windowed";
+        if (ui->checkBox_fullscreen_latest->isChecked()) list << "-nativefullscr";
+        if (ui->checkBox_opengl_latest->isChecked()) list << "-opengl";
+    }
 
     w3=new W3(w3dir, w3exe, list, config);
     w3t=new QThread();
@@ -304,7 +365,11 @@ void MainWindow::gproxyReady(QString w3Exename) {
     ui->preloaderLabel1->movie()->stop();
 }
 
-void MainWindow::gproxyExiting() {
+void MainWindow::gproxyExiting(bool killedForcefully) {
+    qDebug("GProxy exited nicely");
+    if (killedForcefully) {
+        qDebug("GProxy closed forcefully");
+    }
     status("GProxy has closed");
 }
 
@@ -423,7 +488,6 @@ void MainWindow::checkUpdates(){
 
     //disable beta button or all kind of hell will ensue
     ui->pushButtonBU->setDisabled(true);
-    ui->pushButton_updateW3->setDisabled(true);
 
     ui->tabWidget->setCurrentIndex(3);
     lockTabs(ui->tabWidget->currentIndex());
@@ -472,7 +536,6 @@ void MainWindow::on_pushButtonBU_clicked()
     QObject::connect(upt, SIGNAL(finished()), upt, SLOT(deleteLater()));
 
     updateInProgress=true;
-    ui->pushButton_updateW3->setEnabled(false);
     ui->pushButtonBU->setEnabled(false);
 
     upt->start();
@@ -480,11 +543,30 @@ void MainWindow::on_pushButtonBU_clicked()
 
 //Iterates over dota map vector and downloads missing maps. Returns false when no updates exist.
 int MainWindow::checkDotaUpdates() {
+
     if (config->DOTA_MAPS.size()>0 && this->lastCheckedDota<config->DOTA_MAPS.size()) {
 
-        QString mapName = config->DOTA_MAPS.at(this->lastCheckedDota);
+        QString mapName = config->DOTA_MAPS.at(this->lastCheckedDota).first;
+        QString w3Path = config->DOTA_MAPS.at(this->lastCheckedDota).second;
+
+        // If dl path does not exist, skip
+        if (config->W3PATH_LATEST=="" || (w3Path==config->W3PATH_LATEST && !QDir(config->DOCMAPPATHDL).exists())) {
+            Logger::log("Map path does not exist, ignoring DotA map download.", config);
+            return 0;
+        }
+        if (config->W3PATH_126=="" || (w3Path==config->W3PATH_126 && !QDir(config->MAPPATH_126DL).exists())) {
+            Logger::log("Map path does not exist, ignoring DotA map download.", config);
+            return 0;
+        }
+
         Logger::log("Checking if DotA map exist: "+mapName, config);
-        QFile map(config->DOCMAPPATHDL+"/"+mapName);
+
+        QString dlPath = config->DOCMAPPATHDL;
+        if (w3Path==config->W3PATH_126) {
+            dlPath=config->MAPPATH_126DL;
+        }
+
+        QFile map(dlPath+"/"+mapName);
         if (map.exists()) {
             Logger::log(mapName+" exists.", config);
             this->lastCheckedDota++;
@@ -511,7 +593,6 @@ int MainWindow::checkDotaUpdates() {
         QObject::connect(upt, SIGNAL(finished()), upt, SLOT(deleteLater()));
 
         updateInProgress=true;
-        ui->pushButton_updateW3->setEnabled(false);
         ui->pushButtonBU->setEnabled(false);
 
         //Increment
@@ -543,13 +624,11 @@ void MainWindow::updateFinished(bool restartNeeded, bool ok, bool isUpToDate, bo
         if (!patchResult) {
             Patcher::cleanMetadata(config);
             QMessageBox msgBox;
-            msgBox.setText("Unable to do fast incremental update to W3 "+config->W3_VERSION_LATEST+". Would you like to do a full game update instead? This could take a while.");
+            msgBox.setText("Unable to do fast incremental update to W3 "+config->W3_VERSION_LATEST+".");
             msgBox.setStandardButtons(QMessageBox::Yes);
-            msgBox.addButton(QMessageBox::No);
-            msgBox.setDefaultButton(QMessageBox::No);
             if(msgBox.exec() == QMessageBox::Yes){
                 //Execute manual update
-                on_pushButton_updateW3_released();
+                //on_pushButton_updateW3_released();
             }
         }
         else {
@@ -573,20 +652,18 @@ void MainWindow::updateFinished(bool restartNeeded, bool ok, bool isUpToDate, bo
         status("Could not find an incremental W3 patch, full upgrade needed.");
         Logger::log("Could not find an incremental W3 patch, full upgrade needed.", config);
         QMessageBox msgBox;
-        msgBox.setText("Unable to do fast incremental update to W3 "+config->W3_VERSION_LATEST+". Would you like to do a full game update instead? This could take a while.");
+        msgBox.setText("Unable to do fast incremental update to W3 "+config->W3_VERSION_LATEST+".");
         msgBox.setStandardButtons(QMessageBox::Yes);
-        msgBox.addButton(QMessageBox::No);
-        msgBox.setDefaultButton(QMessageBox::No);
         if(msgBox.exec() == QMessageBox::Yes){
             //Execute manual update
-            on_pushButton_updateW3_released();
+            //on_pushButton_updateW3_released();
         }
     }
-    else if (type==2 && !ok) {
+    /*else if (type==2 && !ok) {
         status("Full W3 update failed, you will have to update manually.");
         Logger::log("Full W3 update failed, you will have to update manually.", config);
         ui->pushButton_updateW3->setText("Perform full W3 update (1GB download)");
-    }
+    }*/
     else if (type==2 && canceled) {
         status("Full W3 update was canceled.");
         Logger::log("Full W3 update was canceled.", config);
@@ -651,100 +728,122 @@ void MainWindow::updateFinished(bool restartNeeded, bool ok, bool isUpToDate, bo
     }
 
     if (enableButtons) {
-        ui->pushButton_updateW3->setEnabled(true);
         ui->pushButtonBU->setEnabled(true);
         unlockTabs();
     }
 }
 
-//Handle gproxy options
-void MainWindow::handleCheckbox(bool checked)
+//Handle XPAM options
+void MainWindow::handleCheckboxXpam(bool checked)
 {
     QString option = QObject::sender()->objectName().remove("checkBox_");
     QString value = "0";
     if (checked) value="1";
+    QSettings settings(config->XPAM_CONFIG_PATH, QSettings::IniFormat);
+    settings.setValue(option, value);
+}
 
-    bool r=config->SetOption(config->EUROPATH+"\\gproxy.cfg", option, value);
-    if (!r) ui->statusBar->showMessage("Could not change gproxy config", 10000);
+//Handle GProxy checkbox options
+void MainWindow::handleCheckBoxGProxy(bool checked)
+{
+    QString option = QObject::sender()->objectName().remove("checkBox_");
+    QString value = "0";
+    if (checked) value="1";
+    QSettings settings(config->GPROXY_CONFIG_PATH, QSettings::IniFormat);
+    settings.setValue(option, value);
+}
+
+//Handle GProxy spinBox options
+void MainWindow::handleSpinBoxGProxy(int value)
+{
+    QString option = QObject::sender()->objectName().remove("spinBox_");
+    QSettings settings(config->GPROXY_CONFIG_PATH, QSettings::IniFormat);
+    settings.setValue(option, QString::number(value));
 }
 
 //Handle client options
 void MainWindow::handleCheckboxClient(bool checked)
 {
-    QString option = QObject::sender()->objectName().remove("checkBox_");
-    QString value = "0";
-    if (checked) value="1";
-
-    if (QObject::sender()==ui->checkBox_fullscreen) {
-        if (ui->checkBox_windowed->isChecked()) {
-            ui->checkBox_windowed->setChecked(false);
-            config->SetOption(config->EUROPATH+"\\xpam.cfg", "windowed", "0");
+    QSettings settings(config->XPAM_CONFIG_PATH, QSettings::IniFormat);
+    QStringList tokens = QObject::sender()->objectName().split("_");
+    if (tokens.size() != 3) {
+        return;
+    }
+    // checkBox_[option_name]_[126/latest]
+    QString option = tokens[1];
+    QString mode_key = tokens[2] == "126" ? config->W3_KEY_126 : config->W3_KEY_LATEST;
+    if (mode_key == config->W3_KEY_LATEST) {
+        // fullscreen/windowed handling for LATEST version
+        if (QObject::sender()==ui->checkBox_fullscreen_latest && ui->checkBox_windowed_latest->isChecked()) {
+            ui->checkBox_windowed_latest->setChecked(false);
+            settings.setValue(config->W3_KEY_LATEST + "/windowed", "0");
+        }
+        if (QObject::sender()==ui->checkBox_windowed_latest && ui->checkBox_fullscreen_latest->isChecked()) {
+            ui->checkBox_fullscreen_latest->setChecked(false);
+            settings.setValue(config->W3_KEY_LATEST + "/fullscreen", "0");
         }
     }
-    if (QObject::sender()==ui->checkBox_windowed) {
-        if (ui->checkBox_fullscreen->isChecked()) {
-            ui->checkBox_fullscreen->setChecked(false);
-            config->SetOption(config->EUROPATH+"\\xpam.cfg", "fullscreen", "0");
-        }
+    if (mode_key!=config->W3_KEY_126 || option!="gproxy") {
+        settings.setValue(mode_key + "/" + option, checked ? "1" : "0");
     }
 
-    bool r=config->SetOption(config->EUROPATH+"\\xpam.cfg", option, value);
-    if (!r) ui->statusBar->showMessage("Could not change client config", 10000);
+    //126 gateway always uses gproxy
+    if (!ui->checkBox_gproxy_126->isChecked()) {
+        ui->checkBox_gproxy_126->setChecked(true);
+    }
 }
 
-//Init checkboxes according to cfg file
+//Init XPAM checkboxes according to ini file
+void MainWindow::initXpamOptions() {
+    QSettings settings(config->XPAM_CONFIG_PATH, QSettings::IniFormat);
+    foreach (const QString &option_name, config->XPAM_OPTIONS) {
+        QCheckBox * find = this->findChild<QCheckBox *>("checkBox_"+option_name);
+        if (find != 0) {
+            find->setChecked(settings.value(option_name, "0") == "1" ? true : false);
+        }
+    }
+}
+
+//Init gproxy checkboxes according to ini file
 void MainWindow::initGproxyOptions() {
-    QFile conf(config->EUROPATH+"\\gproxy.cfg");
-    if (!conf.open(QFile::ReadOnly)) {
-        ui->statusBar->showMessage("Unable to load gproxy options from ", 10000);
-        return;
-    }
-
-    QStringList lines;
-    while(!conf.atEnd())
-        lines.append(conf.readLine());
-
-    conf.close();
-    for (auto i = lines.begin(); i!=lines.end(); i++) {
-        if ((*i).startsWith("#")) continue;
-        QStringList l = (*i).split("=");
-        QCheckBox * find = this->findChild<QCheckBox *>("checkBox_"+l[0].simplified());
-        if (find!=0) {
-            if (l[1].simplified()=="1") find->setChecked(true);
-            else if (l[1].simplified()=="0") find->setChecked(false);
+    QSettings settings(config->GPROXY_CONFIG_PATH, QSettings::IniFormat);
+    foreach (const QString &option_name, config->GPROXY_OPTIONS) {
+        QCheckBox * find = this->findChild<QCheckBox *>("checkBox_"+option_name);
+        if (find != 0) {
+            find->setChecked(settings.value(option_name, "0") == "1" ? true : false);
         }
     }
+
+    ui->spinBox_autojoin_delay->setValue(settings.value("autojoin_delay", "2").toInt());
+    ui->spinBox_autojoin_gndelay->setValue(settings.value("autojoin_gndelay", "2").toInt());
 }
 
-//Init checkboxes according to cfg
+//Init client checkboxes according to ini file
 void MainWindow::initClientOptions() {
+    QSettings settings(config->XPAM_CONFIG_PATH, QSettings::IniFormat);
+    QVector<QString> checkbox_postfixes = {"126", "latest"};
 
-    QFile conf(config->EUROPATH+"\\xpam.cfg");
-    if (!conf.open(QFile::ReadOnly)) {
-        ui->statusBar->showMessage("Unable to load client options", 10000);
-        return;
-    }
-
-    QStringList lines;
-    while(!conf.atEnd())
-        lines.append(conf.readLine());
-
-    conf.close();
-    for (auto i = lines.begin(); i!=lines.end(); i++) {
-        if ((*i).startsWith("#")) continue;
-        QStringList l = (*i).split("=");
-        QCheckBox * find = this->findChild<QCheckBox *>("checkBox_"+l[0].simplified());
-        if (find!=0) {
-            if (l[1].simplified()=="1") find->setChecked(true);
-            else if (l[1].simplified()=="0") find->setChecked(false);
+    foreach (const QString &postfix, checkbox_postfixes) {
+        foreach (const QString &option_name, config->W3_OPTIONS) {
+            QCheckBox * find = this->findChild<QCheckBox *>("checkBox_"+option_name + "_" + postfix);
+            if (find != 0) {
+                QString mode_key = postfix == "126" ? config->W3_KEY_126 : config->W3_KEY_LATEST;
+                find->setChecked(settings.value(mode_key + "/" + option_name, "0") == "1" ? true : false);
+            }
         }
     }
 
-    if (ui->checkBox_fullscreen->isChecked() && ui->checkBox_windowed->isChecked()) {
-        ui->checkBox_fullscreen->setChecked(true);
-        ui->checkBox_windowed->setChecked(false);
-       config->SetOption(config->EUROPATH+"\\xpam.cfg", "windowed", "0");
-    }
+   //Can't have windowed and fullscreen at the same time
+   if (ui->checkBox_fullscreen_latest->isChecked() && ui->checkBox_windowed_latest->isChecked()) {
+       ui->checkBox_fullscreen_latest->setChecked(true);
+       ui->checkBox_windowed_latest->setChecked(false);
+       settings.setValue(config->W3_KEY_LATEST + "/windowed", "0");
+   }
+
+   //126 gateway always uses gproxy
+   if (!ui->checkBox_gproxy_126->isChecked()) {
+       ui->checkBox_gproxy_126->setChecked(true);
+   }
 }
 
 //This slot is only connected for startup update check
@@ -818,64 +917,66 @@ void MainWindow::on_pushButtonClientLog_clicked()
     QDesktopServices::openUrl(QUrl("file:///"+config->EUROPATH+"/xpam.log"));
 }
 
-//Set new w3 path
-void MainWindow::on_pushButton_w3path_clicked()
-{
-    if (config->IS_PORTABLE) {
-        return;
-    }
+bool MainWindow::showW3PathDialog(QString modeKey) {
+    modeKey = config->getCorrectW3Key(modeKey);
+    QString exename = config->getW3Exename(modeKey);
+    QSettings settings(config->XPAM_CONFIG_PATH, QSettings::IniFormat);
 
     QFileDialog qfd;
-    qfd.setDirectory(config->W3PATH);
+    qfd.setDirectory(settings.value(modeKey + "/path", "").toString());
     const QString path = qfd.getExistingDirectory(this);
     QString p = path;
-    p=p.replace(QChar('/'), QChar('\\'));
+    p = p.replace(QChar('\\'), QChar('/'));
 
-    if (p!="") { //On Cancel it returns empty
-        QFile f(p+"\\"+config->W3_EXENAME_LATEST);
-        if (!f.exists()) {
-            status("Failed to set W3 path, "+config->W3_EXENAME_LATEST+" not present in that directory.");
-        }
-        else {
-            Registry reg;
-            if (reg.setInstallPath(p) && reg.setW3dir(p)) {
-                status("W3 path set to "+p);
-                config->W3PATH=p;
-                displayW3Version();
-            }
-            else {
-                status("Failed to set W3 path");
-            }
-        }
+    if (p=="") {  //On Cancel it returns empty
+        return false;
+    }
+    QString w3_path = p+"/"+exename;
+    QFile f(w3_path);
+    if (!f.exists()) {
+        status("Failed to set W3 path, " + exename + " not present in that directory.");
+        return false;
+    }
+    QString w3version = Winutils::getFileVersion(w3_path);
+    QString expectedW3Version = config->getW3Version(modeKey);
+    if (w3version != expectedW3Version) {
+        status("Failed to set W3 path, " + exename + " has the wrong version. Expected: " + expectedW3Version + ", got: " + w3version);
+        return false;
+    }
+    setNewW3PathSetting(modeKey, &settings, p);
+
+    return true;
+}
+
+void MainWindow::setNewW3PathSetting(QString modeKey, QSettings *settings, QString newPath) {
+
+    newPath = newPath.replace(QChar('\\'), QChar('/'));
+
+    settings->setValue(modeKey + "/path", newPath);
+    if (modeKey == config->W3_KEY_126) {
+        ui->label_War126Path->setText(newPath);
+        config->W3PATH_126 = newPath;
+    } else {
+        ui->label_WarLatestPath->setText(newPath);
+        config->W3PATH_LATEST = newPath;
     }
 }
 
-void MainWindow::on_horizontalSliderW3Version_sliderReleased()
+//Set new W3 path for latest
+void MainWindow::on_pushButton_warLatestPath_clicked()
 {
-    ui->horizontalSliderW3Version->setEnabled(false);
-    QString newVersion = config->W3_VERSION_126;
+    showW3PathDialog(config->W3_KEY_LATEST);
+}
 
-    bool r = false;
-    if (ui->horizontalSliderW3Version->value()==0) {
-        //126
-        r = W3::setVersion(W3::W3_126, config);
-    }
-    else {
-        //LATEST
-        r = W3::setVersion(W3::W3_LATEST, config);
-        newVersion = config->W3_VERSION_LATEST;
-    }
-    if (r) {
-        status("W3 version was changed to "+newVersion);
-    }
-
-    ui->horizontalSliderW3Version->setEnabled(true);
+//Set new W3 path for 1.26
+void MainWindow::on_pushButton_war126Path_clicked()
+{
+    showW3PathDialog(config->W3_KEY_126);
 }
 
 //Full W3 update
-void MainWindow::on_pushButton_updateW3_released()
+/*void MainWindow::on_pushButton_updateW3_released()
 {
-
     if (updateInProgress) {
         Logger::log("Update is in progress, cancelling", config);
         //User wants to cancel
@@ -924,7 +1025,7 @@ void MainWindow::on_pushButton_updateW3_released()
 
         upt->start();
     }
-}
+}*/
 
 //Diff W3 update
 void MainWindow::diffW3Update(QString version) {
@@ -934,7 +1035,6 @@ void MainWindow::diffW3Update(QString version) {
     ui->textBrowserUpdate->clear();
 
     ui->pushButtonBU->setEnabled(false);
-    ui->pushButton_updateW3->setEnabled(false);
 
     ui->tabWidget->setCurrentIndex(3);
     lockTabs(ui->tabWidget->currentIndex());
@@ -960,28 +1060,9 @@ void MainWindow::diffW3Update(QString version) {
     upt->start();
 }
 
-void MainWindow::displayW3Version() {
-    ui->labelW3Path->setText("W3 path: "+config->W3PATH);
-    QString w3versionDetected = Patcher::getCurrentW3Version(config);
-    if (w3versionDetected==config->W3_VERSION_LATEST) {
-        ui->labelW3Version->setText("Detected latest W3 version: "+w3versionDetected+" (OK)");
-    }
-    else {
-        ui->labelW3Version->setText("Detected latest W3 version: "+w3versionDetected+" (ERROR, needed: "+config->W3_VERSION_LATEST+")");
-    }
-}
-
-void MainWindow::on_tabWidget_currentChanged(int index)
-{
-    if (index==2) {
-        //Refresh detected w3 version
-        displayW3Version();
-    }
-}
-
 bool MainWindow::checkW3PathUnicode() {
     bool isUnicode = false;
-    QString w3path = config->W3PATH;
+    QString w3path = config->W3PATH_LATEST;
 
     for(int i = 0; i < w3path.size(); i++) {
         if(w3path.at(i).unicode() > 127) {
@@ -991,13 +1072,25 @@ bool MainWindow::checkW3PathUnicode() {
     }
 
     //Check if w3 path contains .exe
-    QFile f(config->W3PATH+"/Warcraft III.exe");
+    QFile f(config->W3PATH_LATEST+"\\"+config->W3_EXENAME_LATEST);
     if (!f.exists()) {
-        QMessageBox mb(QMessageBox::Critical, "W3 path alert",
-           "Your W3 path is missing 'Warcraft III.exe' which probably means the path is incorrect. "+config->W3PATH,
-           QMessageBox::Ok);
-         mb.exec();
-         return false;
+
+        // Try to set from w3dir registry
+        Registry r;
+        QString wp = r.getW3dir();
+        if (wp!="") {
+            QSettings settings(config->XPAM_CONFIG_PATH, QSettings::IniFormat);
+            this->setNewW3PathSetting(config->W3_KEY_LATEST, &settings, wp);
+        }
+
+        QFile f2(config->W3PATH_LATEST+"\\"+config->W3_EXENAME_LATEST);
+        if (!f2.exists()) {
+            QMessageBox mb(QMessageBox::Critical, "W3 path alert",
+               "Your W3 path is missing 'Warcraft III.exe' which probably means the path is incorrect.",
+               QMessageBox::Ok);
+             mb.exec();
+             return false;
+        }
     }
 
     Logger::log("W3 path sanity check: "+w3path, config);
@@ -1018,3 +1111,7 @@ void MainWindow::quit() {
     QApplication::quit();
 }
 
+void MainWindow::on_checkBox_useGproxy_126_toggled(bool checked)
+{
+    ui->checkBox_gproxy_126->setChecked(true);
+}

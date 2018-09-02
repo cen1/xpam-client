@@ -1,12 +1,11 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-
-
 #include <QObject>
 #include <QMap>
 #include <QUrl>
 #include <QVector>
+#include <QSettings>
 
 class Config : public QObject
 {
@@ -18,24 +17,32 @@ public:
     QString W3_EXENAME_LATEST;
     QString W3_EXENAME_126;
     int PATCH;
-    QString W3PATH;
+    QString XPAM_CONFIG_PATH;
+    QString GPROXY_CONFIG_PATH;
+    QString ACTIVE_MODE_KEY;
+    QString W3_KEY_126;
+    QString W3_KEY_LATEST;
+    QString W3PATH_126;
+    QString W3PATH_LATEST;
     QString DOCPATH;
     QString DOCMAPPATH;
     QString DOCMAPPATHDL;
-    QString OLDMAPPATH;
-    QString OLDMAPPATHDL;
+    QString MAPPATH_126;
+    QString MAPPATH_126DL;
     QString EUROPATH;
     QString SOUNDPATH;
     QString APPDATA;
     QString SYSTEM;
-    bool USE_DUAL_VERSION;
+    QString GPROXY_SERVER;
     bool ASK_FOR_W3_FAST_UPDATE;
     bool HAS_QUICK_PATCH;
     bool IS_PORTABLE;
 
-    QVector<QString> W3_COMMON_FILES;
+    QVector<QString> XPAM_OPTIONS;
+    QVector<QString> W3_OPTIONS;
+    QVector<QString> GPROXY_OPTIONS;
     QVector<QString> W3_VERSIONS;
-    QVector<QString> DOTA_MAPS;
+    QVector<QPair<QString, QString>> DOTA_MAPS;
 
     QUrl json1;
     QUrl json2;
@@ -43,9 +50,22 @@ public:
 
     QString BETAPIN;
 
-    bool SetOption(QString file, QString option, QString value);
     Config();
-};
+    QSettings settings();
 
+    QString getCorrectW3Key(QString modeKey);
+
+    QString getW3Path(QString modeKey);
+    QString getCurrentW3Path();
+
+    QString getW3Exename(QString modeKey);
+    QString getCurrentW3Exename();
+
+    QString getW3Version(QString modeKey);
+    QString getCurrentW3Version();
+
+    QString getW3ExePath(QString modeKey);
+    QString getCurrentW3ExePath();
+};
 
 #endif //CONFIG_H

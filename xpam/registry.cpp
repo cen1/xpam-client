@@ -35,7 +35,7 @@ QString Registry :: getW3dir() {
         return s;
     }
     else {
-        return "ERROR";
+        return "";
     }
 }
 

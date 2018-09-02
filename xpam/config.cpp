@@ -33,11 +33,17 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 Config::Config()
 {
-    VERSION_CLIENT = "0.9.0.0";
+    VERSION_CLIENT = "1.1.0.0";
+
     W3_VERSION_LATEST = "1.28.5.7680";
     W3_VERSION_126 = "1.26.0.6401";
-    W3_EXENAME_LATEST="Warcraft III.exe";
+
+    W3_KEY_126 = "WAR3_126";
+    W3_KEY_LATEST = "WAR3_LATEST";
+
     W3_EXENAME_126="war3.exe";
+    W3_EXENAME_LATEST="Warcraft III.exe";
+
     BETAPIN = "1377";
 
 #ifdef PORTABLE
@@ -46,20 +52,32 @@ Config::Config()
     IS_PORTABLE = true;
 #else
     EUROPATH    = Registry::getEuroPath();
-    W3PATH      = Registry::getW3dir();
-    IS_PORTABLE = false;
-#endif
+    XPAM_CONFIG_PATH = EUROPATH+"\\xpam.ini";
+    GPROXY_CONFIG_PATH = EUROPATH+"\\gproxy.ini";
     SOUNDPATH   = EUROPATH+"\\sounds";
+    //
+    QSettings settings(XPAM_CONFIG_PATH, QSettings::IniFormat);
+    ACTIVE_MODE_KEY = settings.value("active_mode", W3_KEY_LATEST).toString();
+    if (ACTIVE_MODE_KEY != W3_KEY_LATEST && ACTIVE_MODE_KEY != W3_KEY_126) {
+        // active_mode always should be valid, because we are using W3_KEY_* as a ini group
+        ACTIVE_MODE_KEY = W3_KEY_LATEST;
+        settings.setValue("active_mode", ACTIVE_MODE_KEY);
+    }
+    W3PATH_126 = settings.value(W3_KEY_126 + "/path", "").toString();
+    W3PATH_LATEST = settings.value(W3_KEY_LATEST + "/path", Registry::getW3dir()).toString();
+    GPROXY_SERVER = settings.value("server", "server.eurobattle.net").toString();
+
     DOCPATH     = QStandardPaths::locate(QStandardPaths::DocumentsLocation, QString(), QStandardPaths::LocateDirectory)+"Warcraft III";
     DOCMAPPATH  = QStandardPaths::locate(QStandardPaths::DocumentsLocation, QString(), QStandardPaths::LocateDirectory)+"Warcraft III/Maps";
     DOCMAPPATHDL= QStandardPaths::locate(QStandardPaths::DocumentsLocation, QString(), QStandardPaths::LocateDirectory)+"Warcraft III/Maps/Download";
-    OLDMAPPATH  = W3PATH+"/Maps";
-    OLDMAPPATHDL= W3PATH+"/Maps/Download";
+
+    MAPPATH_126  = W3PATH_126+"/Maps";
+    MAPPATH_126DL= W3PATH_126+"/Maps/Download";
+
     PATCH       = Registry::getPatchVersion();
     APPDATA     = Winutils::getAppData()+"\\Eurobattle.net";
     SYSTEM      = Winutils::getSystem32();
 
-    USE_DUAL_VERSION = false;
     ASK_FOR_W3_FAST_UPDATE = true;
     HAS_QUICK_PATCH=true;
 
@@ -70,23 +88,37 @@ Config::Config()
 #else
     json1 = "http://xpam.pl/update/update.json";
     json2 = "http://tools.eurobattle.net/update/update.json";
-    json3 = "http://leaguebots.com/cen/update/update.json";
-#endif
+    json3 = "https://xpam-update.herokuapp.com/update.json";
+#endif    
+    // List of checkboxes which are standing for Warcraft 3 arguments
+    W3_OPTIONS.append("windowed");
+    W3_OPTIONS.append("fullscreen");
+    W3_OPTIONS.append("opengl");
+    W3_OPTIONS.append("gproxy");
 
-    //Common files between 1.26 and LATEST which need to be renamed
-    //Unique files ot each version ar eleft untouched
-    W3_COMMON_FILES.append("bnupdate.exe");
-    W3_COMMON_FILES.append("game.dll");
-    W3_COMMON_FILES.append("icons-war3.bni");
-    W3_COMMON_FILES.append("storm.dll");
-    W3_COMMON_FILES.append("war3.exe");
-    W3_COMMON_FILES.append("war3.mpq");
-    W3_COMMON_FILES.append("war3patch.mpq");
-    W3_COMMON_FILES.append("war3x.mpq");
-    W3_COMMON_FILES.append("war3xlocal.mpq");
-    W3_COMMON_FILES.append("world editor.exe");
-    W3_COMMON_FILES.append("worldedit.exe");
-    W3_COMMON_FILES.append("Warcraft III.exe");
+    // List of XPAM options
+    XPAM_OPTIONS.append("updates");
+
+    // List of GProxy options
+    GPROXY_OPTIONS.append("debug");
+    GPROXY_OPTIONS.append("chatbuffer");
+    GPROXY_OPTIONS.append("console");
+    GPROXY_OPTIONS.append("autojoin");
+    GPROXY_OPTIONS.append("telemetry");
+
+    GPROXY_OPTIONS.append("option_sounds");
+    GPROXY_OPTIONS.append("sound_1");
+    GPROXY_OPTIONS.append("sound_2");
+    GPROXY_OPTIONS.append("sound_3");
+    GPROXY_OPTIONS.append("sound_4");
+    GPROXY_OPTIONS.append("sound_5");
+    GPROXY_OPTIONS.append("sound_6");
+    GPROXY_OPTIONS.append("sound_7");
+    GPROXY_OPTIONS.append("sound_8");
+    GPROXY_OPTIONS.append("sound_9");
+    GPROXY_OPTIONS.append("sound_10");
+    GPROXY_OPTIONS.append("sound_11");
+    GPROXY_OPTIONS.append("sound_12");
 
     //Quickpatch w3 versions
     W3_VERSIONS.append("1.28.0");
@@ -96,43 +128,46 @@ Config::Config()
     W3_VERSIONS.append("1.28.5");
 
     //DotA maps
-    DOTA_MAPS.append("DotA v6.85k Allstars.w3x");
-    //DOTA_MAPS.append("DotA v6.88g Allstars.w3x");
+    //QPair<QString, QString> d1("DotA v6.85k Allstars.w3x", this->W3PATH_LATEST);
+    QPair<QString, QString> d2("DotA Allstars 6.88w9.4.w3x", this->W3PATH_126);
+    //DOTA_MAPS.append(d1);
+    DOTA_MAPS.append(d2);
 }
 
-bool Config::SetOption(QString file, QString option, QString value) {
-    QFile conf(file);
-    if (!conf.open(QFile::ReadOnly)) return false;
-
-    QStringList lines;
-    while(!conf.atEnd())
-        lines.append(conf.readLine());
-
-    bool optionWasUpdated=false;
-
-    conf.close();
-    for (auto i = lines.begin(); i!=lines.end(); i++) {
-        if ((*i).startsWith("#")) continue;
-        QStringList l = (*i).split("=");
-        if (l[0].simplified()==option) {
-            l[1]=" "+value+"\r\n";
-            (*i)=l[0]+"="+l[1];
-            optionWasUpdated=true;
-        }
-    }
-    QFile conf2(file);
-    if (!conf2.open(QFile::WriteOnly)) {
-        return false;
-    }
-
-    if (!optionWasUpdated) {
-        lines.append(option+"="+value);
-    }
-
-    for (auto i = lines.begin(); i!=lines.end(); i++) {
-        QByteArray ba = (*i).toLocal8Bit();
-        conf2.write(ba.data());
-    }
-    conf2.close();
-    return true;
+QString Config::getCorrectW3Key(QString modeKey) {
+    return modeKey == W3_KEY_126 ? W3_KEY_126 : W3_KEY_LATEST;
 }
+
+QString Config::getW3Path(QString modeKey) {
+    return getCorrectW3Key(modeKey) == W3_KEY_126 ? W3PATH_126 : W3PATH_LATEST;
+}
+
+QString Config::getCurrentW3Path() {
+    return getW3Path(ACTIVE_MODE_KEY);
+}
+
+QString Config::getW3Exename(QString modeKey) {
+    return getCorrectW3Key(modeKey) == W3_KEY_126 ? W3_EXENAME_126 : W3_EXENAME_LATEST;
+}
+
+QString Config::getCurrentW3Exename() {
+    return getW3Exename(ACTIVE_MODE_KEY);
+}
+
+QString Config::getW3ExePath(QString modeKey) {
+    modeKey = getCorrectW3Key(modeKey);
+    return getW3Path(modeKey) + "\\" + getW3Exename(modeKey);
+}
+
+QString Config::getCurrentW3ExePath() {
+    return getW3ExePath(ACTIVE_MODE_KEY);
+}
+
+QString Config::getW3Version(QString modeKey) {
+    return getCorrectW3Key(modeKey) == W3_KEY_126 ? W3_VERSION_126 : W3_VERSION_LATEST;
+}
+
+QString Config::getCurrentW3Version() {
+    return getW3Exename(ACTIVE_MODE_KEY);
+}
+

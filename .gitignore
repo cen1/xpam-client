@@ -6,5 +6,6 @@ build*/
 build*/
 xpam/debug/
 xpam/release/
+xpam/updates/dota/
 xpam/updates/update*
 xpam/updates/zip_archives/

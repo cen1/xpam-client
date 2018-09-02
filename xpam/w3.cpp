@@ -63,84 +63,17 @@ void W3::startW3() {
     return;
 }
 
-QString W3::getActiveVersion(Config * config) {
-
-    bool is126 = true;
-    bool isLatest = true;
-    QString w3path = config->W3PATH;
-
-    for (int i = 0; i < config->W3_COMMON_FILES.size(); ++i) {
-        QFile f(w3path + "/" + config->W3_COMMON_FILES.at(i) + "." + W3::W3_126);
-        QFile f2(w3path + "/" + config->W3_COMMON_FILES.at(i) + "." + W3::W3_LATEST);
-        if (f.exists()) {
-            is126=false;
-        }
-        if (f2.exists()) {
-            isLatest=false;
-        }
-    }
-
-    if (is126) {
-        return W3::W3_126;
-    }
-    else if (isLatest) {
-        return W3::W3_LATEST;
-    }
-    else {
-        Logger::log("Unable to determine current W3 version. Something got messed up...", config);
-        return "ERROR";
-    }
-}
-
-bool W3::setVersion(QString version, Config * config) {
-
-    QString currentV = W3::getActiveVersion(config);
-    if (currentV==version) {
-        Logger::log("W3 is already at version "+version, config);
-        return true;
-    }
-    else if (currentV=="ERROR"){
-        Logger::log("W3 dual versioning is in unstable state, aborting ", config);
-        return false;
-    }
-
-    QString newExt = "";
-    QString currentExt = version;
-    if (version==W3::W3_126) {
-        newExt = W3::W3_LATEST;
-    }
-    else {
-        newExt = W3::W3_126;
-    }
-
-    QString w3path = config->W3PATH;
-
-    //Rename core files to newExt and currentExt to core
-    for (int i = 0; i < config->W3_COMMON_FILES.size(); ++i) {
-        bool ret =  QFile::rename(w3path + "/" + config->W3_COMMON_FILES.at(i),                     w3path + "/" + config->W3_COMMON_FILES.at(i) + "." + newExt );
-        bool ret2 = QFile::rename(w3path + "/" + config->W3_COMMON_FILES.at(i) + "." + currentExt,  w3path + "/" + config->W3_COMMON_FILES.at(i)                );
-
-        if (!ret || !ret2) {
-            Logger::log("Error switching version to "+version, config);
-            Logger::log(Winutils::getLastErrorMsg(), config);
-            return false;
-        }
-    }
-
-    return true;
-}
-
 void W3::sanityCheck(Config * config) {
 
     //Add old registries back if they do not exist
     Registry reg;
     QString installPath = reg.getInstallPath();
-    if (installPath=="ERROR" || installPath=="") {
-        reg.setInstallPath(config->W3PATH);
+    if (installPath=="") {
+        reg.setInstallPath(config->W3PATH_LATEST);
     }
     QString installPathX = reg.getInstallPathX();
-    if (installPathX=="ERROR" || installPathX=="") {
-        reg.setInstallPathX(config->W3PATH);
+    if (installPathX=="") {
+        reg.setInstallPathX(config->W3PATH_LATEST);
     }
 
     Logger::log("EUROPATH="+config->EUROPATH, config);

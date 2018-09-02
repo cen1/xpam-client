@@ -15,6 +15,7 @@
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QCheckBox>
+#include <QtWidgets/QFormLayout>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QGroupBox>
 #include <QtWidgets/QHBoxLayout>
@@ -23,8 +24,8 @@
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QPushButton>
-#include <QtWidgets/QSlider>
 #include <QtWidgets/QSpacerItem>
+#include <QtWidgets/QSpinBox>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QTabWidget>
 #include <QtWidgets/QTextBrowser>
@@ -47,11 +48,10 @@ public:
     QVBoxLayout *verticalLayout;
     QHBoxLayout *horizontalLayoutLauncher;
     QPushButton *pushButtonGWN;
+    QFormLayout *formLayout;
     QPushButton *pushButtonGWG;
     QPushButton *pushButtonGWD;
-    QCheckBox *checkBox_windowed;
-    QCheckBox *checkBox_fullscreen;
-    QCheckBox *checkBox_opengl;
+    QHBoxLayout *horizontalLayoutOptions;
     QSpacerItem *verticalSpacer;
     QSpacerItem *hs2;
     QWidget *tabGproxy;
@@ -64,6 +64,19 @@ public:
     QWidget *layoutWidget;
     QVBoxLayout *verticalLayout_2;
     QCheckBox *checkBox_console;
+    QCheckBox *checkBox_chatbuffer;
+    QCheckBox *checkBox_debug;
+    QCheckBox *checkBox_telemetry;
+    QCheckBox *checkBox_autojoin;
+    QWidget *verticalLayoutWidget_6;
+    QVBoxLayout *verticalLayout_9;
+    QLabel *label_3;
+    QSpinBox *spinBox_autojoin_gndelay;
+    QLabel *label_4;
+    QSpinBox *spinBox_autojoin_delay;
+    QGroupBox *groupBox;
+    QWidget *verticalLayoutWidget_5;
+    QVBoxLayout *verticalLayout_8;
     QCheckBox *checkBox_option_sounds;
     QCheckBox *checkBox_sound_1;
     QCheckBox *checkBox_sound_2;
@@ -75,24 +88,42 @@ public:
     QCheckBox *checkBox_sound_8;
     QCheckBox *checkBox_sound_9;
     QCheckBox *checkBox_sound_10;
-    QCheckBox *checkBox_chatbuffer;
-    QCheckBox *checkBox_debug;
-    QCheckBox *checkBox_telemetry;
+    QCheckBox *checkBox_sound_11;
+    QCheckBox *checkBox_sound_12;
     QWidget *tabW3;
-    QWidget *layoutWidget1;
-    QVBoxLayout *verticalLayout_4;
     QPushButton *pushButtonClientLog;
-    QPushButton *pushButton_w3path;
-    QLabel *labelW3Path;
-    QLabel *labelW3Version;
-    QLabel *labelChangeVersion;
+    QGroupBox *war_latest_groupbox;
+    QWidget *verticalLayoutWidget_3;
+    QVBoxLayout *verticalLayout_4;
     QHBoxLayout *horizontalLayout_2;
-    QLabel *label126;
-    QSlider *horizontalSliderW3Version;
-    QLabel *labelLatest;
-    QSpacerItem *horizontalSpacer;
+    QLabel *war_latest_label_2;
+    QLabel *label_WarLatestPath;
+    QPushButton *pushButton_warLatestPath;
+    QLabel *label_5;
+    QGroupBox *groupBox_latest;
+    QWidget *verticalLayoutWidget;
+    QVBoxLayout *verticalLayout_gb_latest;
+    QCheckBox *checkBox_fullscreen_latest;
+    QCheckBox *checkBox_opengl_latest;
+    QCheckBox *checkBox_windowed_latest;
+    QCheckBox *checkBox_gproxy_latest;
+    QGroupBox *war_latest_groupbox_2;
+    QWidget *verticalLayoutWidget_4;
+    QVBoxLayout *verticalLayout_7;
+    QHBoxLayout *horizontalLayout_7;
+    QLabel *label;
+    QLabel *label_War126Path;
+    QPushButton *pushButton_war126Path;
+    QLabel *label_2;
+    QGroupBox *groupBox_126;
+    QWidget *verticalLayoutWidget_2;
+    QVBoxLayout *verticalLayout__gb_126;
+    QCheckBox *checkBox_opengl_126;
+    QCheckBox *checkBox_windowed_126;
+    QCheckBox *checkBox_gproxy_126;
+    QCheckBox *checkBox_dummy;
     QWidget *tabUpdate;
-    QWidget *layoutWidget2;
+    QWidget *layoutWidget1;
     QVBoxLayout *verticalLayout_6;
     QTextBrowser *textBrowserUpdate;
     QHBoxLayout *horizontalLayout_4;
@@ -100,11 +131,10 @@ public:
     QHBoxLayout *horizontalLayout_3;
     QLineEdit *betapinbox;
     QPushButton *pushButtonBU;
-    QPushButton *pushButton_updateW3;
     QCheckBox *checkBox_updates;
     QSpacerItem *horizontalSpacer_2;
     QWidget *tabAbout;
-    QWidget *layoutWidget3;
+    QWidget *layoutWidget2;
     QVBoxLayout *verticalLayout_3;
     QLabel *labelAbout;
     QStatusBar *statusBar;
@@ -176,7 +206,11 @@ public:
 "}\n"
 "\n"
 "a {\n"
-" color: #007dc1;\n"
+" color: #85c3e5;\n"
+"}\n"
+"\n"
+"a span {\n"
+" color: #85c3e5;\n"
 "}\n"
 "\n"
 "#tabWidget {\n"
@@ -189,10 +223,10 @@ public:
 "\n"
 "QTabBar::tab {\n"
 "  background-color: rgba(150, 150, 150);\n"
-"  color:#ffffff;\n"
+"  c"
+                        "olor:#ffffff;\n"
 "  height: 30px;\n"
-"  font-"
-                        "family: \"Lucida Sans Unicode\";\n"
+"  font-family: \"Lucida Sans Unicode\";\n"
 "\n"
 "}\n"
 "QTabBar::tab:hover{  \n"
@@ -239,11 +273,11 @@ public:
 "\n"
 "QCheckBox {\n"
 "  color:white;\n"
-"  font-family: \"Lucida Sans Unicode\";\n"
+"  font-family: \"Lucida San"
+                        "s Unicode\";\n"
 "}\n"
 "\n"
-"QCheckBox::indica"
-                        "tor {\n"
+"QCheckBox::indicator {\n"
 "  border: 1px solid grey;\n"
 "  border-radius: 2px;\n"
 "  padding: 1px 1px 1px 1px;\n"
@@ -286,6 +320,11 @@ public:
 "}\n"
 "#pushButtonGWD:hover {\n"
 "  border-color: #007dc1;\n"
+"}\n"
+"\n"
+"#checkBoxNoG"
+                        "p {\n"
+"  margin-left: 6px;	\n"
 "}"));
         horizontalLayout = new QHBoxLayout(centralWidget);
         horizontalLayout->setSpacing(0);
@@ -321,55 +360,53 @@ public:
         horizontalLayoutLauncher->setObjectName(QStringLiteral("horizontalLayoutLauncher"));
         pushButtonGWN = new QPushButton(tabLauncher);
         pushButtonGWN->setObjectName(QStringLiteral("pushButtonGWN"));
+        pushButtonGWN->setEnabled(false);
         QSizePolicy sizePolicy1(QSizePolicy::Preferred, QSizePolicy::Preferred);
         sizePolicy1.setHorizontalStretch(0);
         sizePolicy1.setVerticalStretch(0);
         sizePolicy1.setHeightForWidth(pushButtonGWN->sizePolicy().hasHeightForWidth());
         pushButtonGWN->setSizePolicy(sizePolicy1);
-        pushButtonGWN->setMinimumSize(QSize(266, 370));
+        pushButtonGWN->setMinimumSize(QSize(0, 370));
+        pushButtonGWN->setMaximumSize(QSize(0, 0));
 
         horizontalLayoutLauncher->addWidget(pushButtonGWN);
+
+        formLayout = new QFormLayout();
+        formLayout->setSpacing(6);
+        formLayout->setObjectName(QStringLiteral("formLayout"));
+
+        horizontalLayoutLauncher->addLayout(formLayout);
 
         pushButtonGWG = new QPushButton(tabLauncher);
         pushButtonGWG->setObjectName(QStringLiteral("pushButtonGWG"));
         sizePolicy1.setHeightForWidth(pushButtonGWG->sizePolicy().hasHeightForWidth());
         pushButtonGWG->setSizePolicy(sizePolicy1);
-        pushButtonGWG->setMinimumSize(QSize(266, 370));
+        pushButtonGWG->setMinimumSize(QSize(400, 350));
+        pushButtonGWG->setMaximumSize(QSize(400, 350));
         QFont font1;
         font1.setFamily(QStringLiteral("Lucida Sans Unicode"));
         pushButtonGWG->setFont(font1);
+        pushButtonGWG->setCursor(QCursor(Qt::PointingHandCursor));
 
         horizontalLayoutLauncher->addWidget(pushButtonGWG);
 
         pushButtonGWD = new QPushButton(tabLauncher);
         pushButtonGWD->setObjectName(QStringLiteral("pushButtonGWD"));
         pushButtonGWD->setEnabled(true);
-        pushButtonGWD->setMinimumSize(QSize(266, 370));
+        pushButtonGWD->setMinimumSize(QSize(400, 350));
+        pushButtonGWD->setMaximumSize(QSize(400, 350));
+        pushButtonGWD->setCursor(QCursor(Qt::PointingHandCursor));
 
         horizontalLayoutLauncher->addWidget(pushButtonGWD);
 
 
         verticalLayout->addLayout(horizontalLayoutLauncher);
 
-        checkBox_windowed = new QCheckBox(tabLauncher);
-        checkBox_windowed->setObjectName(QStringLiteral("checkBox_windowed"));
-        QSizePolicy sizePolicy2(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
-        sizePolicy2.setHorizontalStretch(0);
-        sizePolicy2.setVerticalStretch(0);
-        sizePolicy2.setHeightForWidth(checkBox_windowed->sizePolicy().hasHeightForWidth());
-        checkBox_windowed->setSizePolicy(sizePolicy2);
+        horizontalLayoutOptions = new QHBoxLayout();
+        horizontalLayoutOptions->setSpacing(6);
+        horizontalLayoutOptions->setObjectName(QStringLiteral("horizontalLayoutOptions"));
 
-        verticalLayout->addWidget(checkBox_windowed);
-
-        checkBox_fullscreen = new QCheckBox(tabLauncher);
-        checkBox_fullscreen->setObjectName(QStringLiteral("checkBox_fullscreen"));
-
-        verticalLayout->addWidget(checkBox_fullscreen);
-
-        checkBox_opengl = new QCheckBox(tabLauncher);
-        checkBox_opengl->setObjectName(QStringLiteral("checkBox_opengl"));
-
-        verticalLayout->addWidget(checkBox_opengl);
+        verticalLayout->addLayout(horizontalLayoutOptions);
 
         verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
@@ -405,17 +442,17 @@ public:
         labelGproxywarnings->setTextInteractionFlags(Qt::TextBrowserInteraction);
         pushButtonGPCL = new QPushButton(tabGproxy);
         pushButtonGPCL->setObjectName(QStringLiteral("pushButtonGPCL"));
-        pushButtonGPCL->setGeometry(QRect(40, 80, 171, 23));
+        pushButtonGPCL->setGeometry(QRect(40, 80, 250, 23));
         pushButtonGPNOTEPAD = new QPushButton(tabGproxy);
         pushButtonGPNOTEPAD->setObjectName(QStringLiteral("pushButtonGPNOTEPAD"));
-        pushButtonGPNOTEPAD->setGeometry(QRect(220, 80, 111, 23));
+        pushButtonGPNOTEPAD->setGeometry(QRect(300, 80, 120, 23));
         gpoptionsgroupBox = new QGroupBox(tabGproxy);
         gpoptionsgroupBox->setObjectName(QStringLiteral("gpoptionsgroupBox"));
-        gpoptionsgroupBox->setGeometry(QRect(40, 120, 241, 351));
+        gpoptionsgroupBox->setGeometry(QRect(410, 120, 441, 291));
         gpoptionsgroupBox->setStyleSheet(QStringLiteral(""));
         layoutWidget = new QWidget(gpoptionsgroupBox);
         layoutWidget->setObjectName(QStringLiteral("layoutWidget"));
-        layoutWidget->setGeometry(QRect(10, 30, 221, 311));
+        layoutWidget->setGeometry(QRect(10, 30, 411, 97));
         verticalLayout_2 = new QVBoxLayout(layoutWidget);
         verticalLayout_2->setSpacing(6);
         verticalLayout_2->setContentsMargins(11, 11, 11, 11);
@@ -426,71 +463,6 @@ public:
         checkBox_console->setLayoutDirection(Qt::LeftToRight);
 
         verticalLayout_2->addWidget(checkBox_console);
-
-        checkBox_option_sounds = new QCheckBox(layoutWidget);
-        checkBox_option_sounds->setObjectName(QStringLiteral("checkBox_option_sounds"));
-        checkBox_option_sounds->setLayoutDirection(Qt::LeftToRight);
-
-        verticalLayout_2->addWidget(checkBox_option_sounds);
-
-        checkBox_sound_1 = new QCheckBox(layoutWidget);
-        checkBox_sound_1->setObjectName(QStringLiteral("checkBox_sound_1"));
-        checkBox_sound_1->setLayoutDirection(Qt::LeftToRight);
-
-        verticalLayout_2->addWidget(checkBox_sound_1);
-
-        checkBox_sound_2 = new QCheckBox(layoutWidget);
-        checkBox_sound_2->setObjectName(QStringLiteral("checkBox_sound_2"));
-        checkBox_sound_2->setLayoutDirection(Qt::LeftToRight);
-
-        verticalLayout_2->addWidget(checkBox_sound_2);
-
-        checkBox_sound_3 = new QCheckBox(layoutWidget);
-        checkBox_sound_3->setObjectName(QStringLiteral("checkBox_sound_3"));
-        checkBox_sound_3->setLayoutDirection(Qt::LeftToRight);
-
-        verticalLayout_2->addWidget(checkBox_sound_3);
-
-        checkBox_sound_4 = new QCheckBox(layoutWidget);
-        checkBox_sound_4->setObjectName(QStringLiteral("checkBox_sound_4"));
-        checkBox_sound_4->setLayoutDirection(Qt::LeftToRight);
-
-        verticalLayout_2->addWidget(checkBox_sound_4);
-
-        checkBox_sound_5 = new QCheckBox(layoutWidget);
-        checkBox_sound_5->setObjectName(QStringLiteral("checkBox_sound_5"));
-        checkBox_sound_5->setLayoutDirection(Qt::LeftToRight);
-
-        verticalLayout_2->addWidget(checkBox_sound_5);
-
-        checkBox_sound_6 = new QCheckBox(layoutWidget);
-        checkBox_sound_6->setObjectName(QStringLiteral("checkBox_sound_6"));
-        checkBox_sound_6->setLayoutDirection(Qt::LeftToRight);
-
-        verticalLayout_2->addWidget(checkBox_sound_6);
-
-        checkBox_sound_7 = new QCheckBox(layoutWidget);
-        checkBox_sound_7->setObjectName(QStringLiteral("checkBox_sound_7"));
-        checkBox_sound_7->setLayoutDirection(Qt::LeftToRight);
-
-        verticalLayout_2->addWidget(checkBox_sound_7);
-
-        checkBox_sound_8 = new QCheckBox(layoutWidget);
-        checkBox_sound_8->setObjectName(QStringLiteral("checkBox_sound_8"));
-        checkBox_sound_8->setLayoutDirection(Qt::LeftToRight);
-
-        verticalLayout_2->addWidget(checkBox_sound_8);
-
-        checkBox_sound_9 = new QCheckBox(layoutWidget);
-        checkBox_sound_9->setObjectName(QStringLiteral("checkBox_sound_9"));
-
-        verticalLayout_2->addWidget(checkBox_sound_9);
-
-        checkBox_sound_10 = new QCheckBox(layoutWidget);
-        checkBox_sound_10->setObjectName(QStringLiteral("checkBox_sound_10"));
-        checkBox_sound_10->setLayoutDirection(Qt::LeftToRight);
-
-        verticalLayout_2->addWidget(checkBox_sound_10);
 
         checkBox_chatbuffer = new QCheckBox(layoutWidget);
         checkBox_chatbuffer->setObjectName(QStringLiteral("checkBox_chatbuffer"));
@@ -508,96 +480,327 @@ public:
 
         verticalLayout_2->addWidget(checkBox_telemetry);
 
+        checkBox_autojoin = new QCheckBox(layoutWidget);
+        checkBox_autojoin->setObjectName(QStringLiteral("checkBox_autojoin"));
+
+        verticalLayout_2->addWidget(checkBox_autojoin);
+
+        verticalLayoutWidget_6 = new QWidget(gpoptionsgroupBox);
+        verticalLayoutWidget_6->setObjectName(QStringLiteral("verticalLayoutWidget_6"));
+        verticalLayoutWidget_6->setGeometry(QRect(10, 140, 411, 89));
+        verticalLayout_9 = new QVBoxLayout(verticalLayoutWidget_6);
+        verticalLayout_9->setSpacing(6);
+        verticalLayout_9->setContentsMargins(11, 11, 11, 11);
+        verticalLayout_9->setObjectName(QStringLiteral("verticalLayout_9"));
+        verticalLayout_9->setContentsMargins(0, 0, 0, 0);
+        label_3 = new QLabel(verticalLayoutWidget_6);
+        label_3->setObjectName(QStringLiteral("label_3"));
+
+        verticalLayout_9->addWidget(label_3);
+
+        spinBox_autojoin_gndelay = new QSpinBox(verticalLayoutWidget_6);
+        spinBox_autojoin_gndelay->setObjectName(QStringLiteral("spinBox_autojoin_gndelay"));
+        spinBox_autojoin_gndelay->setMinimumSize(QSize(0, 25));
+        spinBox_autojoin_gndelay->setMaximumSize(QSize(50, 16777215));
+        spinBox_autojoin_gndelay->setMinimum(1);
+        spinBox_autojoin_gndelay->setMaximum(5);
+
+        verticalLayout_9->addWidget(spinBox_autojoin_gndelay);
+
+        label_4 = new QLabel(verticalLayoutWidget_6);
+        label_4->setObjectName(QStringLiteral("label_4"));
+
+        verticalLayout_9->addWidget(label_4);
+
+        spinBox_autojoin_delay = new QSpinBox(verticalLayoutWidget_6);
+        spinBox_autojoin_delay->setObjectName(QStringLiteral("spinBox_autojoin_delay"));
+        spinBox_autojoin_delay->setMinimumSize(QSize(0, 25));
+        spinBox_autojoin_delay->setMaximumSize(QSize(50, 16777215));
+        spinBox_autojoin_delay->setMinimum(1);
+        spinBox_autojoin_delay->setMaximum(15);
+
+        verticalLayout_9->addWidget(spinBox_autojoin_delay);
+
+        groupBox = new QGroupBox(tabGproxy);
+        groupBox->setObjectName(QStringLiteral("groupBox"));
+        groupBox->setGeometry(QRect(40, 120, 361, 291));
+        verticalLayoutWidget_5 = new QWidget(groupBox);
+        verticalLayoutWidget_5->setObjectName(QStringLiteral("verticalLayoutWidget_5"));
+        verticalLayoutWidget_5->setGeometry(QRect(10, 20, 341, 261));
+        verticalLayout_8 = new QVBoxLayout(verticalLayoutWidget_5);
+        verticalLayout_8->setSpacing(6);
+        verticalLayout_8->setContentsMargins(11, 11, 11, 11);
+        verticalLayout_8->setObjectName(QStringLiteral("verticalLayout_8"));
+        verticalLayout_8->setSizeConstraint(QLayout::SetMaximumSize);
+        verticalLayout_8->setContentsMargins(0, 0, 0, 0);
+        checkBox_option_sounds = new QCheckBox(verticalLayoutWidget_5);
+        checkBox_option_sounds->setObjectName(QStringLiteral("checkBox_option_sounds"));
+        checkBox_option_sounds->setLayoutDirection(Qt::LeftToRight);
+
+        verticalLayout_8->addWidget(checkBox_option_sounds);
+
+        checkBox_sound_1 = new QCheckBox(verticalLayoutWidget_5);
+        checkBox_sound_1->setObjectName(QStringLiteral("checkBox_sound_1"));
+        checkBox_sound_1->setLayoutDirection(Qt::LeftToRight);
+
+        verticalLayout_8->addWidget(checkBox_sound_1);
+
+        checkBox_sound_2 = new QCheckBox(verticalLayoutWidget_5);
+        checkBox_sound_2->setObjectName(QStringLiteral("checkBox_sound_2"));
+        checkBox_sound_2->setLayoutDirection(Qt::LeftToRight);
+
+        verticalLayout_8->addWidget(checkBox_sound_2);
+
+        checkBox_sound_3 = new QCheckBox(verticalLayoutWidget_5);
+        checkBox_sound_3->setObjectName(QStringLiteral("checkBox_sound_3"));
+        checkBox_sound_3->setLayoutDirection(Qt::LeftToRight);
+
+        verticalLayout_8->addWidget(checkBox_sound_3);
+
+        checkBox_sound_4 = new QCheckBox(verticalLayoutWidget_5);
+        checkBox_sound_4->setObjectName(QStringLiteral("checkBox_sound_4"));
+        checkBox_sound_4->setLayoutDirection(Qt::LeftToRight);
+
+        verticalLayout_8->addWidget(checkBox_sound_4);
+
+        checkBox_sound_5 = new QCheckBox(verticalLayoutWidget_5);
+        checkBox_sound_5->setObjectName(QStringLiteral("checkBox_sound_5"));
+        checkBox_sound_5->setLayoutDirection(Qt::LeftToRight);
+
+        verticalLayout_8->addWidget(checkBox_sound_5);
+
+        checkBox_sound_6 = new QCheckBox(verticalLayoutWidget_5);
+        checkBox_sound_6->setObjectName(QStringLiteral("checkBox_sound_6"));
+        checkBox_sound_6->setLayoutDirection(Qt::LeftToRight);
+
+        verticalLayout_8->addWidget(checkBox_sound_6);
+
+        checkBox_sound_7 = new QCheckBox(verticalLayoutWidget_5);
+        checkBox_sound_7->setObjectName(QStringLiteral("checkBox_sound_7"));
+        checkBox_sound_7->setLayoutDirection(Qt::LeftToRight);
+
+        verticalLayout_8->addWidget(checkBox_sound_7);
+
+        checkBox_sound_8 = new QCheckBox(verticalLayoutWidget_5);
+        checkBox_sound_8->setObjectName(QStringLiteral("checkBox_sound_8"));
+        checkBox_sound_8->setLayoutDirection(Qt::LeftToRight);
+
+        verticalLayout_8->addWidget(checkBox_sound_8);
+
+        checkBox_sound_9 = new QCheckBox(verticalLayoutWidget_5);
+        checkBox_sound_9->setObjectName(QStringLiteral("checkBox_sound_9"));
+
+        verticalLayout_8->addWidget(checkBox_sound_9);
+
+        checkBox_sound_10 = new QCheckBox(verticalLayoutWidget_5);
+        checkBox_sound_10->setObjectName(QStringLiteral("checkBox_sound_10"));
+        checkBox_sound_10->setLayoutDirection(Qt::LeftToRight);
+
+        verticalLayout_8->addWidget(checkBox_sound_10);
+
+        checkBox_sound_11 = new QCheckBox(verticalLayoutWidget_5);
+        checkBox_sound_11->setObjectName(QStringLiteral("checkBox_sound_11"));
+
+        verticalLayout_8->addWidget(checkBox_sound_11);
+
+        checkBox_sound_12 = new QCheckBox(verticalLayoutWidget_5);
+        checkBox_sound_12->setObjectName(QStringLiteral("checkBox_sound_12"));
+
+        verticalLayout_8->addWidget(checkBox_sound_12);
+
         tabWidget->addTab(tabGproxy, QString());
         tabW3 = new QWidget();
         tabW3->setObjectName(QStringLiteral("tabW3"));
-        layoutWidget1 = new QWidget(tabW3);
-        layoutWidget1->setObjectName(QStringLiteral("layoutWidget1"));
-        layoutWidget1->setGeometry(QRect(20, 20, 871, 141));
-        verticalLayout_4 = new QVBoxLayout(layoutWidget1);
-        verticalLayout_4->setSpacing(6);
+        pushButtonClientLog = new QPushButton(tabW3);
+        pushButtonClientLog->setObjectName(QStringLiteral("pushButtonClientLog"));
+        pushButtonClientLog->setGeometry(QRect(30, 30, 150, 19));
+        pushButtonClientLog->setMaximumSize(QSize(150, 16777215));
+        war_latest_groupbox = new QGroupBox(tabW3);
+        war_latest_groupbox->setObjectName(QStringLiteral("war_latest_groupbox"));
+        war_latest_groupbox->setGeometry(QRect(30, 90, 400, 221));
+        verticalLayoutWidget_3 = new QWidget(war_latest_groupbox);
+        verticalLayoutWidget_3->setObjectName(QStringLiteral("verticalLayoutWidget_3"));
+        verticalLayoutWidget_3->setGeometry(QRect(10, 20, 381, 191));
+        verticalLayout_4 = new QVBoxLayout(verticalLayoutWidget_3);
+        verticalLayout_4->setSpacing(5);
         verticalLayout_4->setContentsMargins(11, 11, 11, 11);
         verticalLayout_4->setObjectName(QStringLiteral("verticalLayout_4"));
         verticalLayout_4->setContentsMargins(0, 0, 0, 0);
-        pushButtonClientLog = new QPushButton(layoutWidget1);
-        pushButtonClientLog->setObjectName(QStringLiteral("pushButtonClientLog"));
-        pushButtonClientLog->setMaximumSize(QSize(150, 16777215));
-
-        verticalLayout_4->addWidget(pushButtonClientLog);
-
-        pushButton_w3path = new QPushButton(layoutWidget1);
-        pushButton_w3path->setObjectName(QStringLiteral("pushButton_w3path"));
-        QSizePolicy sizePolicy3(QSizePolicy::Minimum, QSizePolicy::Fixed);
-        sizePolicy3.setHorizontalStretch(0);
-        sizePolicy3.setVerticalStretch(0);
-        sizePolicy3.setHeightForWidth(pushButton_w3path->sizePolicy().hasHeightForWidth());
-        pushButton_w3path->setSizePolicy(sizePolicy3);
-        pushButton_w3path->setMaximumSize(QSize(150, 16777215));
-
-        verticalLayout_4->addWidget(pushButton_w3path);
-
-        labelW3Path = new QLabel(layoutWidget1);
-        labelW3Path->setObjectName(QStringLiteral("labelW3Path"));
-
-        verticalLayout_4->addWidget(labelW3Path);
-
-        labelW3Version = new QLabel(layoutWidget1);
-        labelW3Version->setObjectName(QStringLiteral("labelW3Version"));
-
-        verticalLayout_4->addWidget(labelW3Version);
-
-        labelChangeVersion = new QLabel(layoutWidget1);
-        labelChangeVersion->setObjectName(QStringLiteral("labelChangeVersion"));
-
-        verticalLayout_4->addWidget(labelChangeVersion);
-
         horizontalLayout_2 = new QHBoxLayout();
         horizontalLayout_2->setSpacing(6);
         horizontalLayout_2->setObjectName(QStringLiteral("horizontalLayout_2"));
-        label126 = new QLabel(layoutWidget1);
-        label126->setObjectName(QStringLiteral("label126"));
-        label126->setMaximumSize(QSize(30, 16777215));
+        horizontalLayout_2->setSizeConstraint(QLayout::SetDefaultConstraint);
+        war_latest_label_2 = new QLabel(verticalLayoutWidget_3);
+        war_latest_label_2->setObjectName(QStringLiteral("war_latest_label_2"));
+        war_latest_label_2->setMinimumSize(QSize(0, 20));
+        war_latest_label_2->setMaximumSize(QSize(16777215, 20));
+        war_latest_label_2->setTextFormat(Qt::AutoText);
 
-        horizontalLayout_2->addWidget(label126);
+        horizontalLayout_2->addWidget(war_latest_label_2);
 
-        horizontalSliderW3Version = new QSlider(layoutWidget1);
-        horizontalSliderW3Version->setObjectName(QStringLiteral("horizontalSliderW3Version"));
-        horizontalSliderW3Version->setEnabled(false);
-        horizontalSliderW3Version->setMinimumSize(QSize(120, 0));
-        horizontalSliderW3Version->setMaximumSize(QSize(120, 16777215));
-        horizontalSliderW3Version->setMaximum(1);
-        horizontalSliderW3Version->setValue(1);
-        horizontalSliderW3Version->setOrientation(Qt::Horizontal);
+        label_WarLatestPath = new QLabel(verticalLayoutWidget_3);
+        label_WarLatestPath->setObjectName(QStringLiteral("label_WarLatestPath"));
+        label_WarLatestPath->setMinimumSize(QSize(0, 20));
+        label_WarLatestPath->setMaximumSize(QSize(16777215, 20));
 
-        horizontalLayout_2->addWidget(horizontalSliderW3Version);
-
-        labelLatest = new QLabel(layoutWidget1);
-        labelLatest->setObjectName(QStringLiteral("labelLatest"));
-        labelLatest->setMaximumSize(QSize(35, 16777215));
-
-        horizontalLayout_2->addWidget(labelLatest);
-
-        horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
-
-        horizontalLayout_2->addItem(horizontalSpacer);
+        horizontalLayout_2->addWidget(label_WarLatestPath);
 
 
         verticalLayout_4->addLayout(horizontalLayout_2);
+
+        pushButton_warLatestPath = new QPushButton(verticalLayoutWidget_3);
+        pushButton_warLatestPath->setObjectName(QStringLiteral("pushButton_warLatestPath"));
+        QSizePolicy sizePolicy2(QSizePolicy::Minimum, QSizePolicy::Fixed);
+        sizePolicy2.setHorizontalStretch(0);
+        sizePolicy2.setVerticalStretch(0);
+        sizePolicy2.setHeightForWidth(pushButton_warLatestPath->sizePolicy().hasHeightForWidth());
+        pushButton_warLatestPath->setSizePolicy(sizePolicy2);
+        pushButton_warLatestPath->setMaximumSize(QSize(150, 16777215));
+
+        verticalLayout_4->addWidget(pushButton_warLatestPath);
+
+        label_5 = new QLabel(verticalLayoutWidget_3);
+        label_5->setObjectName(QStringLiteral("label_5"));
+        label_5->setOpenExternalLinks(true);
+
+        verticalLayout_4->addWidget(label_5);
+
+        groupBox_latest = new QGroupBox(verticalLayoutWidget_3);
+        groupBox_latest->setObjectName(QStringLiteral("groupBox_latest"));
+        groupBox_latest->setMinimumSize(QSize(0, 110));
+        verticalLayoutWidget = new QWidget(groupBox_latest);
+        verticalLayoutWidget->setObjectName(QStringLiteral("verticalLayoutWidget"));
+        verticalLayoutWidget->setGeometry(QRect(10, 20, 121, 86));
+        verticalLayout_gb_latest = new QVBoxLayout(verticalLayoutWidget);
+        verticalLayout_gb_latest->setSpacing(8);
+        verticalLayout_gb_latest->setContentsMargins(11, 11, 11, 11);
+        verticalLayout_gb_latest->setObjectName(QStringLiteral("verticalLayout_gb_latest"));
+        verticalLayout_gb_latest->setSizeConstraint(QLayout::SetDefaultConstraint);
+        verticalLayout_gb_latest->setContentsMargins(0, 0, 0, 0);
+        checkBox_fullscreen_latest = new QCheckBox(verticalLayoutWidget);
+        checkBox_fullscreen_latest->setObjectName(QStringLiteral("checkBox_fullscreen_latest"));
+
+        verticalLayout_gb_latest->addWidget(checkBox_fullscreen_latest);
+
+        checkBox_opengl_latest = new QCheckBox(verticalLayoutWidget);
+        checkBox_opengl_latest->setObjectName(QStringLiteral("checkBox_opengl_latest"));
+
+        verticalLayout_gb_latest->addWidget(checkBox_opengl_latest);
+
+        checkBox_windowed_latest = new QCheckBox(verticalLayoutWidget);
+        checkBox_windowed_latest->setObjectName(QStringLiteral("checkBox_windowed_latest"));
+        QSizePolicy sizePolicy3(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
+        sizePolicy3.setHorizontalStretch(0);
+        sizePolicy3.setVerticalStretch(0);
+        sizePolicy3.setHeightForWidth(checkBox_windowed_latest->sizePolicy().hasHeightForWidth());
+        checkBox_windowed_latest->setSizePolicy(sizePolicy3);
+
+        verticalLayout_gb_latest->addWidget(checkBox_windowed_latest);
+
+        checkBox_gproxy_latest = new QCheckBox(verticalLayoutWidget);
+        checkBox_gproxy_latest->setObjectName(QStringLiteral("checkBox_gproxy_latest"));
+
+        verticalLayout_gb_latest->addWidget(checkBox_gproxy_latest);
+
+
+        verticalLayout_4->addWidget(groupBox_latest);
+
+        war_latest_groupbox_2 = new QGroupBox(tabW3);
+        war_latest_groupbox_2->setObjectName(QStringLiteral("war_latest_groupbox_2"));
+        war_latest_groupbox_2->setGeometry(QRect(470, 90, 400, 221));
+        verticalLayoutWidget_4 = new QWidget(war_latest_groupbox_2);
+        verticalLayoutWidget_4->setObjectName(QStringLiteral("verticalLayoutWidget_4"));
+        verticalLayoutWidget_4->setGeometry(QRect(9, 19, 381, 191));
+        verticalLayout_7 = new QVBoxLayout(verticalLayoutWidget_4);
+        verticalLayout_7->setSpacing(6);
+        verticalLayout_7->setContentsMargins(11, 11, 11, 11);
+        verticalLayout_7->setObjectName(QStringLiteral("verticalLayout_7"));
+        verticalLayout_7->setContentsMargins(0, 0, 0, 0);
+        horizontalLayout_7 = new QHBoxLayout();
+        horizontalLayout_7->setSpacing(6);
+        horizontalLayout_7->setObjectName(QStringLiteral("horizontalLayout_7"));
+        label = new QLabel(verticalLayoutWidget_4);
+        label->setObjectName(QStringLiteral("label"));
+        label->setMinimumSize(QSize(0, 20));
+        label->setTextFormat(Qt::AutoText);
+
+        horizontalLayout_7->addWidget(label);
+
+        label_War126Path = new QLabel(verticalLayoutWidget_4);
+        label_War126Path->setObjectName(QStringLiteral("label_War126Path"));
+
+        horizontalLayout_7->addWidget(label_War126Path);
+
+
+        verticalLayout_7->addLayout(horizontalLayout_7);
+
+        pushButton_war126Path = new QPushButton(verticalLayoutWidget_4);
+        pushButton_war126Path->setObjectName(QStringLiteral("pushButton_war126Path"));
+        sizePolicy2.setHeightForWidth(pushButton_war126Path->sizePolicy().hasHeightForWidth());
+        pushButton_war126Path->setSizePolicy(sizePolicy2);
+        pushButton_war126Path->setMaximumSize(QSize(150, 16777215));
+
+        verticalLayout_7->addWidget(pushButton_war126Path);
+
+        label_2 = new QLabel(verticalLayoutWidget_4);
+        label_2->setObjectName(QStringLiteral("label_2"));
+        label_2->setOpenExternalLinks(true);
+
+        verticalLayout_7->addWidget(label_2);
+
+        groupBox_126 = new QGroupBox(verticalLayoutWidget_4);
+        groupBox_126->setObjectName(QStringLiteral("groupBox_126"));
+        groupBox_126->setMinimumSize(QSize(0, 110));
+        verticalLayoutWidget_2 = new QWidget(groupBox_126);
+        verticalLayoutWidget_2->setObjectName(QStringLiteral("verticalLayoutWidget_2"));
+        verticalLayoutWidget_2->setGeometry(QRect(10, 20, 191, 86));
+        verticalLayout__gb_126 = new QVBoxLayout(verticalLayoutWidget_2);
+        verticalLayout__gb_126->setSpacing(8);
+        verticalLayout__gb_126->setContentsMargins(11, 11, 11, 11);
+        verticalLayout__gb_126->setObjectName(QStringLiteral("verticalLayout__gb_126"));
+        verticalLayout__gb_126->setContentsMargins(0, 0, 0, 0);
+        checkBox_opengl_126 = new QCheckBox(verticalLayoutWidget_2);
+        checkBox_opengl_126->setObjectName(QStringLiteral("checkBox_opengl_126"));
+
+        verticalLayout__gb_126->addWidget(checkBox_opengl_126);
+
+        checkBox_windowed_126 = new QCheckBox(verticalLayoutWidget_2);
+        checkBox_windowed_126->setObjectName(QStringLiteral("checkBox_windowed_126"));
+        sizePolicy3.setHeightForWidth(checkBox_windowed_126->sizePolicy().hasHeightForWidth());
+        checkBox_windowed_126->setSizePolicy(sizePolicy3);
+
+        verticalLayout__gb_126->addWidget(checkBox_windowed_126);
+
+        checkBox_gproxy_126 = new QCheckBox(verticalLayoutWidget_2);
+        checkBox_gproxy_126->setObjectName(QStringLiteral("checkBox_gproxy_126"));
+        checkBox_gproxy_126->setEnabled(true);
+        checkBox_gproxy_126->setCheckable(true);
+        checkBox_gproxy_126->setChecked(true);
+
+        verticalLayout__gb_126->addWidget(checkBox_gproxy_126);
+
+        checkBox_dummy = new QCheckBox(verticalLayoutWidget_2);
+        checkBox_dummy->setObjectName(QStringLiteral("checkBox_dummy"));
+
+        verticalLayout__gb_126->addWidget(checkBox_dummy);
+
+
+        verticalLayout_7->addWidget(groupBox_126);
 
         tabWidget->addTab(tabW3, QString());
         tabUpdate = new QWidget();
         tabUpdate->setObjectName(QStringLiteral("tabUpdate"));
         sizePolicy.setHeightForWidth(tabUpdate->sizePolicy().hasHeightForWidth());
         tabUpdate->setSizePolicy(sizePolicy);
-        layoutWidget2 = new QWidget(tabUpdate);
-        layoutWidget2->setObjectName(QStringLiteral("layoutWidget2"));
-        layoutWidget2->setGeometry(QRect(8, 8, 881, 531));
-        verticalLayout_6 = new QVBoxLayout(layoutWidget2);
+        layoutWidget1 = new QWidget(tabUpdate);
+        layoutWidget1->setObjectName(QStringLiteral("layoutWidget1"));
+        layoutWidget1->setGeometry(QRect(8, 8, 881, 531));
+        verticalLayout_6 = new QVBoxLayout(layoutWidget1);
         verticalLayout_6->setSpacing(6);
         verticalLayout_6->setContentsMargins(11, 11, 11, 11);
         verticalLayout_6->setObjectName(QStringLiteral("verticalLayout_6"));
         verticalLayout_6->setContentsMargins(0, 0, 0, 0);
-        textBrowserUpdate = new QTextBrowser(layoutWidget2);
+        textBrowserUpdate = new QTextBrowser(layoutWidget1);
         textBrowserUpdate->setObjectName(QStringLiteral("textBrowserUpdate"));
 
         verticalLayout_6->addWidget(textBrowserUpdate);
@@ -611,7 +814,7 @@ public:
         horizontalLayout_3 = new QHBoxLayout();
         horizontalLayout_3->setSpacing(6);
         horizontalLayout_3->setObjectName(QStringLiteral("horizontalLayout_3"));
-        betapinbox = new QLineEdit(layoutWidget2);
+        betapinbox = new QLineEdit(layoutWidget1);
         betapinbox->setObjectName(QStringLiteral("betapinbox"));
         QSizePolicy sizePolicy4(QSizePolicy::Fixed, QSizePolicy::Fixed);
         sizePolicy4.setHorizontalStretch(0);
@@ -621,7 +824,7 @@ public:
 
         horizontalLayout_3->addWidget(betapinbox);
 
-        pushButtonBU = new QPushButton(layoutWidget2);
+        pushButtonBU = new QPushButton(layoutWidget1);
         pushButtonBU->setObjectName(QStringLiteral("pushButtonBU"));
         sizePolicy1.setHeightForWidth(pushButtonBU->sizePolicy().hasHeightForWidth());
         pushButtonBU->setSizePolicy(sizePolicy1);
@@ -633,18 +836,7 @@ public:
 
         verticalLayout_5->addLayout(horizontalLayout_3);
 
-        pushButton_updateW3 = new QPushButton(layoutWidget2);
-        pushButton_updateW3->setObjectName(QStringLiteral("pushButton_updateW3"));
-        QSizePolicy sizePolicy5(QSizePolicy::Preferred, QSizePolicy::Fixed);
-        sizePolicy5.setHorizontalStretch(0);
-        sizePolicy5.setVerticalStretch(0);
-        sizePolicy5.setHeightForWidth(pushButton_updateW3->sizePolicy().hasHeightForWidth());
-        pushButton_updateW3->setSizePolicy(sizePolicy5);
-        pushButton_updateW3->setMaximumSize(QSize(16777215, 16777215));
-
-        verticalLayout_5->addWidget(pushButton_updateW3);
-
-        checkBox_updates = new QCheckBox(layoutWidget2);
+        checkBox_updates = new QCheckBox(layoutWidget1);
         checkBox_updates->setObjectName(QStringLiteral("checkBox_updates"));
 
         verticalLayout_5->addWidget(checkBox_updates);
@@ -664,16 +856,16 @@ public:
         tabAbout->setObjectName(QStringLiteral("tabAbout"));
         sizePolicy.setHeightForWidth(tabAbout->sizePolicy().hasHeightForWidth());
         tabAbout->setSizePolicy(sizePolicy);
-        layoutWidget3 = new QWidget(tabAbout);
-        layoutWidget3->setObjectName(QStringLiteral("layoutWidget3"));
-        layoutWidget3->setGeometry(QRect(20, 20, 391, 501));
-        verticalLayout_3 = new QVBoxLayout(layoutWidget3);
+        layoutWidget2 = new QWidget(tabAbout);
+        layoutWidget2->setObjectName(QStringLiteral("layoutWidget2"));
+        layoutWidget2->setGeometry(QRect(20, 20, 395, 501));
+        verticalLayout_3 = new QVBoxLayout(layoutWidget2);
         verticalLayout_3->setSpacing(10);
         verticalLayout_3->setContentsMargins(11, 11, 11, 11);
         verticalLayout_3->setObjectName(QStringLiteral("verticalLayout_3"));
         verticalLayout_3->setSizeConstraint(QLayout::SetDefaultConstraint);
         verticalLayout_3->setContentsMargins(0, 0, 0, 0);
-        labelAbout = new QLabel(layoutWidget3);
+        labelAbout = new QLabel(layoutWidget2);
         labelAbout->setObjectName(QStringLiteral("labelAbout"));
         sizePolicy.setHeightForWidth(labelAbout->sizePolicy().hasHeightForWidth());
         labelAbout->setSizePolicy(sizePolicy);
@@ -696,7 +888,7 @@ public:
 
         retranslateUi(MainWindow);
 
-        tabWidget->setCurrentIndex(4);
+        tabWidget->setCurrentIndex(1);
 
 
         QMetaObject::connectSlotsByName(MainWindow);
@@ -711,19 +903,13 @@ public:
 #endif // QT_NO_TOOLTIP
         pushButtonGWN->setText(QString());
 #ifndef QT_NO_TOOLTIP
-        pushButtonGWG->setToolTip(QApplication::translate("MainWindow", "Starting with GProxy is required for some DotA leagues<br />\n"
-"to be able to join their games. It also provides reconnection<br />\n"
-"in case you drop in the middle of the game.<br />\n"
-"YOU CAN'T PLAY PG OR MANUALLY HOST GAMES IN THIS MODE!", 0));
+        pushButtonGWG->setToolTip(QApplication::translate("MainWindow", "Choose this gateway to play PG and CG on latest supported Warcraft version.", 0));
 #endif // QT_NO_TOOLTIP
         pushButtonGWG->setText(QString());
 #ifndef QT_NO_TOOLTIP
-        pushButtonGWD->setToolTip(QApplication::translate("MainWindow", "COMING SOON", 0));
+        pushButtonGWD->setToolTip(QApplication::translate("MainWindow", "Choose this gateway to play DotA v6.88 lagabuse.com, Warcraft patch 1.26.", 0));
 #endif // QT_NO_TOOLTIP
         pushButtonGWD->setText(QString());
-        checkBox_windowed->setText(QApplication::translate("MainWindow", "Windowed", 0));
-        checkBox_fullscreen->setText(QApplication::translate("MainWindow", "Native fullscreen", 0));
-        checkBox_opengl->setText(QApplication::translate("MainWindow", "OpenGL", 0));
         tabWidget->setTabText(tabWidget->indexOf(tabLauncher), QApplication::translate("MainWindow", " LAUNCHER ", 0));
         preloaderLabel1->setText(QString());
         labelGproxyout->setText(QApplication::translate("MainWindow", "GProxy output", 0));
@@ -732,6 +918,13 @@ public:
         pushButtonGPNOTEPAD->setText(QApplication::translate("MainWindow", "Open log file", 0));
         gpoptionsgroupBox->setTitle(QApplication::translate("MainWindow", "GProxy Options", 0));
         checkBox_console->setText(QApplication::translate("MainWindow", "Visible console (must start manually)", 0));
+        checkBox_chatbuffer->setText(QApplication::translate("MainWindow", "Chat buffer (experimental)", 0));
+        checkBox_debug->setText(QApplication::translate("MainWindow", "Debug logging", 0));
+        checkBox_telemetry->setText(QApplication::translate("MainWindow", "Telemetry logging", 0));
+        checkBox_autojoin->setText(QApplication::translate("MainWindow", "Game autojoin (experimental)", 0));
+        label_3->setText(QApplication::translate("MainWindow", "Autojoin: delay before typing the game name after game list opens (sec):", 0));
+        label_4->setText(QApplication::translate("MainWindow", "Autojoin: delay before opening game list after game is created or followed player joins (sec):", 0));
+        groupBox->setTitle(QApplication::translate("MainWindow", "GProxy Sounds", 0));
         checkBox_option_sounds->setText(QApplication::translate("MainWindow", "Enable sounds", 0));
         checkBox_sound_1->setText(QApplication::translate("MainWindow", "\"Game started\" sound", 0));
         checkBox_sound_2->setText(QApplication::translate("MainWindow", "\"Join the game\" sound", 0));
@@ -743,23 +936,35 @@ public:
         checkBox_sound_8->setText(QApplication::translate("MainWindow", "\"Friend joined game\" sound", 0));
         checkBox_sound_9->setText(QApplication::translate("MainWindow", "\"Whisper\" sound", 0));
         checkBox_sound_10->setText(QApplication::translate("MainWindow", "\"You were kicked\" sound", 0));
-        checkBox_chatbuffer->setText(QApplication::translate("MainWindow", "Chat buffer (experimental)", 0));
-        checkBox_debug->setText(QApplication::translate("MainWindow", "Debugging", 0));
-        checkBox_telemetry->setText(QApplication::translate("MainWindow", "Telemetry", 0));
+        checkBox_sound_11->setText(QApplication::translate("MainWindow", "\"Autujoining game\" sound", 0));
+        checkBox_sound_12->setText(QApplication::translate("MainWindow", "\"Server Announcement\" sound", 0));
         tabWidget->setTabText(tabWidget->indexOf(tabGproxy), QApplication::translate("MainWindow", "  GPROXY  ", 0));
         pushButtonClientLog->setText(QApplication::translate("MainWindow", "Open Client log file", 0));
-        pushButton_w3path->setText(QApplication::translate("MainWindow", "Change W3 path", 0));
-        labelW3Path->setText(QString());
-        labelW3Version->setText(QString());
-        labelChangeVersion->setText(QApplication::translate("MainWindow", "Change W3 version:", 0));
-        label126->setText(QApplication::translate("MainWindow", "1.26", 0));
-        labelLatest->setText(QApplication::translate("MainWindow", "1.28.5", 0));
+        war_latest_groupbox->setTitle(QApplication::translate("MainWindow", "Latest Warcraft gateway (1.28.5)", 0));
+        war_latest_label_2->setText(QApplication::translate("MainWindow", "Warcraft location", 0));
+        label_WarLatestPath->setText(QApplication::translate("MainWindow", "Loading...", 0));
+        pushButton_warLatestPath->setText(QApplication::translate("MainWindow", "Change", 0));
+        label_5->setText(QApplication::translate("MainWindow", "<html><head/><body><p>Do not have Warcraft 1.28.5? Download it <a href=\"http://wiki.eurobattle.net/index.php?title=How_to_install_Warcraft_III\"><span style=\" text-decoration: underline; color:#85c3e5;\">here</span></a>.</p></body></html>", 0));
+        groupBox_latest->setTitle(QApplication::translate("MainWindow", "Options", 0));
+        checkBox_fullscreen_latest->setText(QApplication::translate("MainWindow", "Native fullscreen", 0));
+        checkBox_opengl_latest->setText(QApplication::translate("MainWindow", "OpenGL", 0));
+        checkBox_windowed_latest->setText(QApplication::translate("MainWindow", "Windowed", 0));
+        checkBox_gproxy_latest->setText(QApplication::translate("MainWindow", "Use GProxy", 0));
+        war_latest_groupbox_2->setTitle(QApplication::translate("MainWindow", "Warcraft 1.26a gateway", 0));
+        label->setText(QApplication::translate("MainWindow", "Warcraft 1.26a location", 0));
+        label_War126Path->setText(QApplication::translate("MainWindow", "Loading...", 0));
+        pushButton_war126Path->setText(QApplication::translate("MainWindow", "Change", 0));
+        label_2->setText(QApplication::translate("MainWindow", "<html><head/><body><p>Do not have Warcraft 1.26a? Download it <a href=\"http://wiki.eurobattle.net/index.php?title=Warcraft_III_1.26\"><span style=\" text-decoration: underline; color: #85c3e5;\">here</span></a>.</p></body></html>", 0));
+        groupBox_126->setTitle(QApplication::translate("MainWindow", "Options", 0));
+        checkBox_opengl_126->setText(QApplication::translate("MainWindow", "OpenGL", 0));
+        checkBox_windowed_126->setText(QApplication::translate("MainWindow", "Windowed", 0));
+        checkBox_gproxy_126->setText(QApplication::translate("MainWindow", "Use GProxy (can't disable)", 0));
+        checkBox_dummy->setText(QApplication::translate("MainWindow", "dummy", 0));
         tabWidget->setTabText(tabWidget->indexOf(tabW3), QApplication::translate("MainWindow", " WARCRAFT", 0));
         pushButtonBU->setText(QApplication::translate("MainWindow", "Get Beta patch", 0));
-        pushButton_updateW3->setText(QApplication::translate("MainWindow", "Perform full W3 update (1GB download)", 0));
-        checkBox_updates->setText(QApplication::translate("MainWindow", "Enable automatic updates", 0));
+        checkBox_updates->setText(QApplication::translate("MainWindow", "Automatic updates enabled", 0));
         tabWidget->setTabText(tabWidget->indexOf(tabUpdate), QApplication::translate("MainWindow", " UPDATE ", 0));
-        labelAbout->setText(QApplication::translate("MainWindow", "<html><head/><body><p>Eurobattle.net Client version 1.0 (September 2017), developed by cen</p><p><br/>We are searching for Qt/ C++ developers to further expand this client.</p><p><br/></p><p>TODO:</p><p>-bnet Chat client</p><p>-TS integration</p><p>-Displaying player's profile and league stats in the client</p><p>-and more...</p><p><br/></p><p>Special thanks to:</p><p><span style=\" font-weight:600;\">IStealSkills</span> - help with desig</p><p><span style=\" font-weight:600;\">Stefos007</span> - original GProxy implementation</p><p>BNETtdocs, Stormlib, PvPGN and GHost projects</p></body></html>", 0));
+        labelAbout->setText(QApplication::translate("MainWindow", "<html><head/><body><p>Eurobattle.net Client version 1.1 (August 2018), developed by cen, additional contributions by deer</p><p><br/>We are searching for Qt/ C++ developers to further expand this client.</p><p><br/></p><p>TODO:</p><p>-bnet Chat client</p><p>-TS integration</p><p>-Displaying player's profile and league stats in the client</p><p>- Native Warkeys?</p><p>-and more...</p><p><br/></p><p>Special thanks to:</p><p><span style=\" font-weight:600;\">IStealSkills</span> - help with desig</p><p><span style=\" font-weight:600;\">Stefos007</span> - original GProxy implementation</p><p>BNETtdocs, Stormlib, PvPGN and GHost projects</p></body></html>", 0));
         tabWidget->setTabText(tabWidget->indexOf(tabAbout), QApplication::translate("MainWindow", " ABOUT ", 0));
     } // retranslateUi
 

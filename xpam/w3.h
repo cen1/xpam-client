@@ -47,8 +47,6 @@ public:
     QString exedir;
     QStringList args;
 
-    static bool setVersion(QString version, Config * config);
-    static QString getActiveVersion(Config * config);
     static void sanityCheck(Config * config);
 
     static const  QString W3_126;

@@ -1,11 +1,11 @@
 {
     "beta" : {
-            "version" : 24,
-            "mirror1" : "http://xpam.pl/update/update24beta.zip",
-            "mirror2" : "http://xpam.pl/update/update24beta.zip",
-            "mirror3" : "http://xpam.pl/update/update24beta.zip",
-            "mirror4" : "http://xpam.pl/update/update24beta.zip",
-            "sha1" : "f04068e7be44f682c17a3ccea78b6993d5955b35"
+            "version" : 26,
+            "mirror1" : "http://xpam.pl/update/update26beta.zip",
+            "mirror2" : "http://xpam.pl/update/update26beta.zip",
+            "mirror3" : "http://xpam.pl/update/update26beta.zip",
+            "mirror4" : "http://xpam.pl/update/update26beta.zip",
+            "sha1" : "8c6c2719bb5d4dee244a2cc11a9eba0a6144cc12"
     },
     "1.28.4" : {
             "version" : 1,
@@ -47,21 +47,29 @@
             "mirror4" : "https://goo.gl/rzjixw",
             "sha1" : "53ad53375a9ef77beed4424652cc7f2cd7a5c5cc"
     },
-    "DotA v6.88g Allstars.w3x": {
-        "version" : 1,
-        "mirror1" : "http://xpam.pl/update/v6.88g.zip",
-        "mirror2" : "http://files.eurobattle.net/updates/dota/v6.88g.zip",
-        "mirror3" : "http://xpam.pl/update/v6.88g.zip",
-        "mirror4" : "http://xpam.pl/update/v6.88g.zip",
-        "sha1" : "29e274ead3221507550f8a90a393425f37602d77"
+    "DotA Allstars 6.88w9.4.w3x" : {
+            "version" : 1,
+            "mirror1" : "https://drive.google.com/uc?id=1TCbDABmR_OvnlZn2hvKdIHKvKXcMFwLV",
+            "mirror2" : "http://xpam.pl/update/v88w9.4.zip",
+            "mirror3" : "http://xpam.pl/update/v88w9.4.zip",
+            "mirror4" : "http://xpam.pl/update/v88w9.4.zip",
+            "sha1" : "452ec1e6b866ec84ef9d42c1f7112d98311282b5"
     },
-    "DotA v6.85k Allstars.w3x": {
-        "version" : 1,
-        "mirror1" : "http://xpam.pl/update/v6.85k.zip",
-        "mirror2" : "http://files.eurobattle.net/updates/dota/v6.85k.zip",
-        "mirror3" : "http://xpam.pl/update/v6.85k.zip",
-        "mirror4" : "http://xpam.pl/update/v6.85k.zip",
-        "sha1" : "035b8be69fc0549083a6ce06df873c3d5eef0a9a"
+    "27" : {
+            "version" : 27,
+            "mirror1" : "https://drive.google.com/uc?id=1MBxqFBVmrlqr566VELsrMkcA5v39Hoi4",
+            "mirror2" : "https://drive.google.com/uc?id=1XdXRa-DkU2UoFpVVkJIixjM8OOj2-ksP",
+            "mirror3" : "http://files.eurobattle.net/updates/update27.zip",
+            "mirror4" : "http://xpam.pl/update/update27.zip",
+            "sha1" : "316f5f84dba9155fde2cb8e51c5b98d20211cfe6"
+    },
+    "26" : {
+            "version" : 26,
+            "mirror1" : "https://drive.google.com/uc?id=1o9PfcOS1mmLoj0r4RQZpkCR5vsVQDfvm",
+            "mirror2" : "https://drive.google.com/uc?id=15ZHmiDDxOQGcxV_Fn-_Sn5hf8FdHt3mR",
+            "mirror3" : "http://files.eurobattle.net/updates/update26.zip",
+            "mirror4" : "http://xpam.pl/update/update26.zip",
+            "sha1" : "7f08c29d816c9208401a15f353957511cc73e9a7"
     },
     "25" : {
             "version" : 25,

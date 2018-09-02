@@ -29,6 +29,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <QMainWindow>
 #include "QString"
 #include "QMouseEvent"
+#include "QSettings"
 
 namespace Ui {
 class MainWindow;
@@ -43,6 +44,7 @@ signals:
     void startUpdate();             //starts the update
     void updateCheckFinished();     //terminates the splash screen event loop
     void cancelUpdate();
+    void terminateCurrentGproxyInstance();
 
 public:
     explicit MainWindow(QWidget *parent = 0);
@@ -51,33 +53,46 @@ public:
     bool checkW3Updates();
     bool updatesEnabled;
     bool checkW3PathUnicode();
+    void setNewW3PathSetting(QString modeKey, QSettings *settings, QString newPath);
     
 private slots:
     void on_pushButtonGWG_clicked();
     void on_pushButtonGWN_clicked();
     void on_pushButtonGWD_clicked();
     void on_pushButtonBU_clicked();
-    void handleCheckbox(bool checked);
+    void handleCheckBoxGProxy(bool checked);
+    void handleSpinBoxGProxy(int value);
+    void handleCheckboxXpam(bool checked);
     void handleCheckboxClient(bool checked);
+
     void initGproxyOptions();
+    void initXpamOptions();
     void initClientOptions();
 
     void on_pushButtonGPCL_clicked();
     void on_pushButtonGPNOTEPAD_clicked();
     void on_pushButtonClientLog_clicked();
-    void on_pushButton_w3path_clicked();
-    
-    void on_horizontalSliderW3Version_sliderReleased();
-    
-    void on_pushButton_updateW3_released();
 
-    void on_tabWidget_currentChanged(int index);
+    bool checkModeAvailability(QString modeKey, bool shouldWarnUser=false);
+    bool changeActiveMode(QString modeKey, bool shouldWarnUser=false);
 
     void quit();
 
+    bool showW3PathDialog(QString modeKey);
+
+    void on_pushButton_warLatestPath_clicked();
+
+    void on_pushButton_war126Path_clicked();
+
+    void on_checkBox_useGproxy_126_toggled(bool checked);
+
+    //void on_pushButton_updateW3_released();
+
+    //void on_pushButton_updateW3_clicked();
+
 public slots:
     void gproxyReady(QString w3Exename);
-    void gproxyExiting();
+    void gproxyExiting(bool killedForcefully);
     void receiveLine(QString line);
     void w3Exited();
 
@@ -106,9 +121,8 @@ private:
     QSize normalsize;
     int lastCheckedDota=0;
 
-    void startW3AndGproxy(QString w3Exename, QString restrictedVersion="");
+    void startW3AndGproxy();
 
-    void displayW3Version();
     void diffW3Update(QString version);
     int checkDotaUpdates();
     void runW3();

@@ -55,7 +55,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Updater::Updater(Config * c, int t, QString w) {
     config=c;
     type=t;
-    w3=w;
+    jsonKey=w;
     mirrorno=0;
     restartNeeded=false;
     downloader=nullptr;
@@ -80,8 +80,8 @@ void Updater::startUpdate() {
      * 7. Download and extract the archive to %appdata%/Eurobattle.net
      * 8. Open instructions.txt and execute the commands
      * 9. COMMANDS
-     *    MOVE <from> <to EUROPATH | W3PATH | MAPPATH>              //always overwrite
-     *    DELETE <filename> <location EUROPATH | W3PATH | MAPPATH>  //deletes a file
+     *    MOVE <from> <to EUROPATH | W3PATH | W3PATH_126 | MAPPATH | MAPPATH_126> //always overwrite
+     *    DELETE <filename> <location EUROPATH | W3PATH | MAPPATH>                //deletes a file
      *
      * 10. Cleanup %appdata$ after update
      * 11. If instructions.txt included a file called newxpam.exe then start update.bat and exit app.
@@ -244,7 +244,7 @@ bool Updater::instructions() {
     /*
      * MOVE, DELETE or ICONS
      * Filename
-     * EUROPATH, SOUNDPATH, W3PATH or MAPPATH
+     * EUROPATH, SOUNDPATH, W3PATH, W3PATH_126, MAPPATH, MAPPATH_126
     */
     QFile inst(config->APPDATA+"\\instructions.txt");
     if (inst.open(QIODevice::ReadOnly)) {
@@ -256,17 +256,19 @@ bool Updater::instructions() {
 
             //emit sendLine("Instruction: <"+l.first()+"> <"+midParam+"> <"+l.last()+">");
 
-            if (l[0]=="MOVE") {
+            QString dstPath;
+            if      (l.last()=="EUROPATH") dstPath=config->EUROPATH;
+            else if (l.last()=="W3PATH") dstPath=config->W3PATH_LATEST;
+            else if (l.last()=="W3PATH_126") dstPath=config->W3PATH_126;
+            else if (l.last()=="MAPPATH") dstPath=config->DOCMAPPATHDL;
+            else if (l.last()=="MAPPATH_126") dstPath=config->MAPPATH_126DL;
+            else if (l.last()=="SOUNDPATH") dstPath=config->SOUNDPATH;
 
-                QString dstPath;
-                if      (l.last()=="EUROPATH") dstPath=config->EUROPATH;
-                else if (l.last()=="W3PATH") dstPath=config->W3PATH;
-                else if (l.last()=="MAPPATH") dstPath=config->DOCMAPPATHDL;
-                else if (l.last()=="SOUNDPATH") dstPath=config->SOUNDPATH;
+            if (l[0]=="MOVE") {
 
                 //Skip cdkey files if they exist in destination
                 if (midParam=="roc.w3k" || midParam=="tft.w3k") {
-                    QFile cdkey(config->W3PATH+"/"+midParam);
+                    QFile cdkey(dstPath+"/"+midParam);
                     if (cdkey.exists()) {
                         continue;
                     }
@@ -276,7 +278,7 @@ bool Updater::instructions() {
                 if (QFile::exists(dstPath+"\\"+midParam)) QFile::remove(dstPath+"\\"+midParam);
 
                 //check if download folder exists
-                if(l.last()=="MAPPATH")
+                if(l.last()=="MAPPATH" || l.last()=="MAPPATH_126")
                 {
                     if (!QDir().exists(dstPath))
                         QDir().mkdir(dstPath);
@@ -292,13 +294,10 @@ bool Updater::instructions() {
             else if (l[0]=="DELETE") {
                 emit sendLine("Deleting "+midParam);
 
-                if     (l.last()=="EUROPATH") QFile::remove(config->EUROPATH+"\\"+midParam);
-                else if(l.last()=="W3PATH")   QFile::remove(config->W3PATH+"\\"+midParam);
-                else if(l.last()=="MAPPATH")  QFile::remove(config->DOCMAPPATHDL+"\\"+midParam);
-                else if(l.last()=="SOUNDPATH")  QFile::remove(config->SOUNDPATH+"\\"+midParam);
+                QFile::remove(dstPath+"\\"+midParam);
             }
             else if (l[0]=="ICONS") {
-                if (!updateMPQ()) {
+                if (!updateMPQ(dstPath)) {
                     emit sendLine("Failed to update icons. Please contact Technical Support");
                     return false;
                 }
@@ -319,7 +318,7 @@ bool Updater::instructions() {
     return true;
 }
 
-bool Updater::updateMPQ()
+bool Updater::updateMPQ(QString w3path)
 {
     emit sendLine("Updating MPQ with custom icons");
     //O = open
@@ -337,8 +336,8 @@ bool Updater::updateMPQ()
             QStringList l = line.split(" ");
 
             if (l[0]=="O") {
-                if (mpq.open(config->W3PATH+"\\"+l[1])==false) {
-                    emit sendLine(Util::getLastErrorMsg()+config->W3PATH+"\\"+l[1]);
+                if (mpq.open(w3path+"\\"+l[1])==false) {
+                    emit sendLine(Util::getLastErrorMsg()+config->W3PATH_LATEST+"\\"+l[1]);
                     return false;
                 }
             }
@@ -391,8 +390,8 @@ bool Updater::updateMPQ()
     return false;
 }
 
-//receives download progress from downloader
-//we use a timer so we don't waste cycles
+// Receives download progress from downloader
+// We use a timer so we don't waste cycles
 void Updater::receiveProgress(qint64 bytesReceived, qint64 bytesTotal) {
     //emit sendLine("Slot activated "+QString::number(bytesReceived));
     if (progressTime.elapsed() > 200 && bytesTotal != -1) {
@@ -538,27 +537,27 @@ int Updater::setCurrentPlusOneJson() {
     else if (type==1 || type==2) {
         //Full or partial W3 update
         emit sendLine("Requested patch: full or quick W3 update");
-        QString key = w3;
+        QString key = jsonKey;
         QStringList keys = obj.keys();
 
         if (!keys.contains(key)) {
             emit sendLine("No W3 patch exists.");
             return 2;
         }
-        value=obj.value(w3);
+        value=obj.value(jsonKey);
         real=value.toObject();
     }
     else if (type==4) {
         //DotA map download
         emit sendLine("Requested patch: DotA map download");
-        QString key = w3;
+        QString key = jsonKey;
         QStringList keys = obj.keys();
 
         if (!keys.contains(key)) {
             emit sendLine("No DotA map exists on download server.");
             return 2;
         }
-        value=obj.value(w3);
+        value=obj.value(jsonKey);
         real=value.toObject();
     }
     else {
@@ -625,9 +624,9 @@ QString Updater::moveToDocuments(Config *config) {
     QDir dir;
 
     for (int i = 0; i < folders.size(); ++i) {
-        boolean moved = dir.rename(config->W3PATH+"\\"+folders.at(i), config->DOCPATH+"/"+folders.at(i));
+        boolean moved = dir.rename(config->W3PATH_LATEST+"\\"+folders.at(i), config->DOCPATH+"/"+folders.at(i));
 
-        log+="<br />"+config->W3PATH+"\\"+folders.at(i)+" -> "+config->DOCPATH+"/"+folders.at(i);
+        log+="<br />"+config->W3PATH_LATEST+"\\"+folders.at(i)+" -> "+config->DOCPATH+"/"+folders.at(i);
         if (moved) {
             log+=" (MOVED)";
         }
@@ -644,29 +643,29 @@ QString Updater::moveToDocuments(Config *config) {
 }
 
 void Updater::replaceCDKeys(Config *config) {
-       QFile roc(config->W3PATH+"\\roc.w3k");
+       QFile roc(config->W3PATH_LATEST+"\\roc.w3k");
        if (!roc.exists()) {
-           QFile rocNew(config->W3PATH+"\\roc.w3k.new");
+           QFile rocNew(config->W3PATH_LATEST+"\\roc.w3k.new");
            if (rocNew.exists()) {
-               rocNew.rename(config->W3PATH+"\\roc.w3k");
+               rocNew.rename(config->W3PATH_LATEST+"\\roc.w3k");
            }
        }
 
-       QFile tft(config->W3PATH+"\\tft.w3k");
+       QFile tft(config->W3PATH_LATEST+"\\tft.w3k");
        if (!tft.exists()) {
-           QFile tftnew(config->W3PATH+"\\tft.w3k.new");
+           QFile tftnew(config->W3PATH_LATEST+"\\tft.w3k.new");
            if (tftnew.exists()) {
-               tftnew.rename(config->W3PATH+"\\tft.w3k");
+               tftnew.rename(config->W3PATH_LATEST+"\\tft.w3k");
            }
        }
 }
 
-void Updater::renamePatchMpq(Config *config) {
-    QFile modMpq(config->W3PATH+"\\War3Mod.mpq");
+void Updater::renamePatchMpqForLatestW3(Config *config) {
+    QFile modMpq(config->W3PATH_LATEST+"\\War3Mod.mpq");
     if (!modMpq.exists()) {
-        QFile patchMpq(config->W3PATH+"\\War3Patch.mpq");
+        QFile patchMpq(config->W3PATH_LATEST+"\\War3Patch.mpq");
         if (patchMpq.exists()) {
-            patchMpq.copy(config->W3PATH+"\\War3Mod.mpq");
+            patchMpq.copy(config->W3PATH_LATEST+"\\War3Mod.mpq");
         }
     }
 }
