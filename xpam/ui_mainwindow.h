@@ -100,7 +100,6 @@ public:
     QLabel *label_WarLatestPath;
     QPushButton *pushButton_warLatestPath;
     QLabel *label_5;
-    QSpacerItem *verticalSpacer_2;
     QGroupBox *groupBox_latest;
     QWidget *verticalLayoutWidget;
     QVBoxLayout *verticalLayout_gb_latest;
@@ -116,13 +115,13 @@ public:
     QLabel *label_War126Path;
     QPushButton *pushButton_war126Path;
     QLabel *label_2;
-    QSpacerItem *verticalSpacer_3;
     QGroupBox *groupBox_126;
     QWidget *verticalLayoutWidget_2;
     QVBoxLayout *verticalLayout__gb_126;
     QCheckBox *checkBox_opengl_126;
     QCheckBox *checkBox_windowed_126;
     QCheckBox *checkBox_gproxy_126;
+    QCheckBox *checkBox_dummy;
     QWidget *tabUpdate;
     QWidget *layoutWidget1;
     QVBoxLayout *verticalLayout_6;
@@ -443,17 +442,17 @@ public:
         labelGproxywarnings->setTextInteractionFlags(Qt::TextBrowserInteraction);
         pushButtonGPCL = new QPushButton(tabGproxy);
         pushButtonGPCL->setObjectName(QStringLiteral("pushButtonGPCL"));
-        pushButtonGPCL->setGeometry(QRect(40, 80, 171, 23));
+        pushButtonGPCL->setGeometry(QRect(40, 80, 250, 23));
         pushButtonGPNOTEPAD = new QPushButton(tabGproxy);
         pushButtonGPNOTEPAD->setObjectName(QStringLiteral("pushButtonGPNOTEPAD"));
-        pushButtonGPNOTEPAD->setGeometry(QRect(220, 80, 111, 23));
+        pushButtonGPNOTEPAD->setGeometry(QRect(300, 80, 120, 23));
         gpoptionsgroupBox = new QGroupBox(tabGproxy);
         gpoptionsgroupBox->setObjectName(QStringLiteral("gpoptionsgroupBox"));
-        gpoptionsgroupBox->setGeometry(QRect(240, 120, 441, 281));
+        gpoptionsgroupBox->setGeometry(QRect(410, 120, 441, 291));
         gpoptionsgroupBox->setStyleSheet(QStringLiteral(""));
         layoutWidget = new QWidget(gpoptionsgroupBox);
         layoutWidget->setObjectName(QStringLiteral("layoutWidget"));
-        layoutWidget->setGeometry(QRect(10, 30, 180, 97));
+        layoutWidget->setGeometry(QRect(10, 30, 411, 97));
         verticalLayout_2 = new QVBoxLayout(layoutWidget);
         verticalLayout_2->setSpacing(6);
         verticalLayout_2->setContentsMargins(11, 11, 11, 11);
@@ -488,7 +487,7 @@ public:
 
         verticalLayoutWidget_6 = new QWidget(gpoptionsgroupBox);
         verticalLayoutWidget_6->setObjectName(QStringLiteral("verticalLayoutWidget_6"));
-        verticalLayoutWidget_6->setGeometry(QRect(10, 140, 372, 89));
+        verticalLayoutWidget_6->setGeometry(QRect(10, 140, 411, 89));
         verticalLayout_9 = new QVBoxLayout(verticalLayoutWidget_6);
         verticalLayout_9->setSpacing(6);
         verticalLayout_9->setContentsMargins(11, 11, 11, 11);
@@ -524,14 +523,15 @@ public:
 
         groupBox = new QGroupBox(tabGproxy);
         groupBox->setObjectName(QStringLiteral("groupBox"));
-        groupBox->setGeometry(QRect(40, 120, 181, 281));
+        groupBox->setGeometry(QRect(40, 120, 361, 291));
         verticalLayoutWidget_5 = new QWidget(groupBox);
         verticalLayoutWidget_5->setObjectName(QStringLiteral("verticalLayoutWidget_5"));
-        verticalLayoutWidget_5->setGeometry(QRect(10, 20, 153, 257));
+        verticalLayoutWidget_5->setGeometry(QRect(10, 20, 341, 261));
         verticalLayout_8 = new QVBoxLayout(verticalLayoutWidget_5);
         verticalLayout_8->setSpacing(6);
         verticalLayout_8->setContentsMargins(11, 11, 11, 11);
         verticalLayout_8->setObjectName(QStringLiteral("verticalLayout_8"));
+        verticalLayout_8->setSizeConstraint(QLayout::SetMaximumSize);
         verticalLayout_8->setContentsMargins(0, 0, 0, 0);
         checkBox_option_sounds = new QCheckBox(verticalLayoutWidget_5);
         checkBox_option_sounds->setObjectName(QStringLiteral("checkBox_option_sounds"));
@@ -665,16 +665,12 @@ public:
 
         verticalLayout_4->addWidget(label_5);
 
-        verticalSpacer_2 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
-
-        verticalLayout_4->addItem(verticalSpacer_2);
-
         groupBox_latest = new QGroupBox(verticalLayoutWidget_3);
         groupBox_latest->setObjectName(QStringLiteral("groupBox_latest"));
         groupBox_latest->setMinimumSize(QSize(0, 110));
         verticalLayoutWidget = new QWidget(groupBox_latest);
         verticalLayoutWidget->setObjectName(QStringLiteral("verticalLayoutWidget"));
-        verticalLayoutWidget->setGeometry(QRect(10, 20, 92, 86));
+        verticalLayoutWidget->setGeometry(QRect(10, 20, 121, 86));
         verticalLayout_gb_latest = new QVBoxLayout(verticalLayoutWidget);
         verticalLayout_gb_latest->setSpacing(8);
         verticalLayout_gb_latest->setContentsMargins(11, 11, 11, 11);
@@ -752,16 +748,12 @@ public:
 
         verticalLayout_7->addWidget(label_2);
 
-        verticalSpacer_3 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
-
-        verticalLayout_7->addItem(verticalSpacer_3);
-
         groupBox_126 = new QGroupBox(verticalLayoutWidget_4);
         groupBox_126->setObjectName(QStringLiteral("groupBox_126"));
-        groupBox_126->setMinimumSize(QSize(0, 90));
+        groupBox_126->setMinimumSize(QSize(0, 110));
         verticalLayoutWidget_2 = new QWidget(groupBox_126);
         verticalLayoutWidget_2->setObjectName(QStringLiteral("verticalLayoutWidget_2"));
-        verticalLayoutWidget_2->setGeometry(QRect(10, 20, 121, 63));
+        verticalLayoutWidget_2->setGeometry(QRect(10, 20, 191, 86));
         verticalLayout__gb_126 = new QVBoxLayout(verticalLayoutWidget_2);
         verticalLayout__gb_126->setSpacing(8);
         verticalLayout__gb_126->setContentsMargins(11, 11, 11, 11);
@@ -786,6 +778,11 @@ public:
         checkBox_gproxy_126->setChecked(true);
 
         verticalLayout__gb_126->addWidget(checkBox_gproxy_126);
+
+        checkBox_dummy = new QCheckBox(verticalLayoutWidget_2);
+        checkBox_dummy->setObjectName(QStringLiteral("checkBox_dummy"));
+
+        verticalLayout__gb_126->addWidget(checkBox_dummy);
 
 
         verticalLayout_7->addWidget(groupBox_126);
@@ -891,7 +888,7 @@ public:
 
         retranslateUi(MainWindow);
 
-        tabWidget->setCurrentIndex(2);
+        tabWidget->setCurrentIndex(1);
 
 
         QMetaObject::connectSlotsByName(MainWindow);
@@ -961,7 +958,8 @@ public:
         groupBox_126->setTitle(QApplication::translate("MainWindow", "Options", 0));
         checkBox_opengl_126->setText(QApplication::translate("MainWindow", "OpenGL", 0));
         checkBox_windowed_126->setText(QApplication::translate("MainWindow", "Windowed", 0));
-        checkBox_gproxy_126->setText(QApplication::translate("MainWindow", "Use GProxy", 0));
+        checkBox_gproxy_126->setText(QApplication::translate("MainWindow", "Use GProxy (can't disable)", 0));
+        checkBox_dummy->setText(QApplication::translate("MainWindow", "dummy", 0));
         tabWidget->setTabText(tabWidget->indexOf(tabW3), QApplication::translate("MainWindow", " WARCRAFT", 0));
         pushButtonBU->setText(QApplication::translate("MainWindow", "Get Beta patch", 0));
         checkBox_updates->setText(QApplication::translate("MainWindow", "Automatic updates enabled", 0));

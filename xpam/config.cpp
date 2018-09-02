@@ -122,9 +122,9 @@ Config::Config()
     W3_VERSIONS.append("1.28.5");
 
     //DotA maps
-    QPair<QString, QString> d1("DotA v6.85k Allstars.w3x", this->W3PATH_LATEST);
-    QPair<QString, QString> d2("DotA Allstars 6.88w3.w3x", this->W3PATH_126);
-    DOTA_MAPS.append(d1);
+    //QPair<QString, QString> d1("DotA v6.85k Allstars.w3x", this->W3PATH_LATEST);
+    QPair<QString, QString> d2("DotA Allstars 6.88w9.4.w3x", this->W3PATH_126);
+    //DOTA_MAPS.append(d1);
     DOTA_MAPS.append(d2);
 }
 

@@ -43,6 +43,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "QObjectList"
 #include "QFileDialog"
 #include "QTimer"
+#include "QSizePolicy"
 
 #ifndef WINUTILS_H
     #include "winutils.h"
@@ -67,6 +68,12 @@ MainWindow::MainWindow(QWidget *parent) :
 
     isStartupUpdate=true;
     ismax=false;
+
+    //Hide layout dummies
+    QSizePolicy sp_retain = ui->checkBox_dummy->sizePolicy();
+    sp_retain.setRetainSizeWhenHidden(true);
+    ui->checkBox_dummy->setSizePolicy(sp_retain);
+    ui->checkBox_dummy->hide();
 
     // GProxy options
     connect(ui->checkBox_console, SIGNAL(clicked(bool)), this, SLOT(handleCheckBoxGProxy(bool)));
@@ -217,11 +224,18 @@ void MainWindow::on_pushButtonGWD_clicked()
     }
 }
 
-//GProxy gateway (WAR3_LATEST), Start w3 and gproxy
+//GProxy gateway (WAR3_LATEST), Start w3 and optionally gproxy
 void MainWindow::on_pushButtonGWG_clicked()
 {
     if (changeActiveMode(config->W3_KEY_LATEST, true)) {
-        startW3AndGproxy();
+        if (ui->checkBox_gproxy_latest->isChecked()) {
+            Registry::setGproxyGateways();
+            startW3AndGproxy();
+        }
+        else {
+            Registry::setGateways();
+            runW3();
+        }
     }
 }
 
@@ -530,11 +544,11 @@ int MainWindow::checkDotaUpdates() {
         QString w3Path = config->DOTA_MAPS.at(this->lastCheckedDota).second;
 
         // If dl path does not exist, skip
-        if (w3Path==config->W3PATH_LATEST && !QDir(config->DOCMAPPATHDL).exists()) {
+        if (config->W3PATH_LATEST=="" || (w3Path==config->W3PATH_LATEST && !QDir(config->DOCMAPPATHDL).exists())) {
             Logger::log("Map path does not exist, ignoring DotA map download.", config);
             return 0;
         }
-        if (w3Path==config->W3PATH_126 && !QDir(config->MAPPATH_126DL).exists()) {
+        if (config->W3PATH_126=="" || (w3Path==config->W3PATH_126 && !QDir(config->MAPPATH_126DL).exists())) {
             Logger::log("Map path does not exist, ignoring DotA map download.", config);
             return 0;
         }
@@ -763,7 +777,9 @@ void MainWindow::handleCheckboxClient(bool checked)
             settings.setValue(config->W3_KEY_LATEST + "/fullscreen", "0");
         }
     }
-    settings.setValue(mode_key + "/" + option, checked ? "1" : "0");
+    if (mode_key!=config->W3_KEY_126 || option!="gproxy") {
+        settings.setValue(mode_key + "/" + option, checked ? "1" : "0");
+    }
 
     //126 gateway always uses gproxy
     if (!ui->checkBox_gproxy_126->isChecked()) {

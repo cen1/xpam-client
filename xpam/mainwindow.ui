@@ -245,7 +245,7 @@ QCheckBox::indicator:checked {
          <enum>Qt::LeftToRight</enum>
         </property>
         <property name="currentIndex">
-         <number>2</number>
+         <number>1</number>
         </property>
         <widget class="QWidget" name="tabLauncher">
          <property name="sizePolicy">
@@ -482,7 +482,7 @@ or manually host your games.</string>
            <rect>
             <x>40</x>
             <y>80</y>
-            <width>171</width>
+            <width>250</width>
             <height>23</height>
            </rect>
           </property>
@@ -493,9 +493,9 @@ or manually host your games.</string>
          <widget class="QPushButton" name="pushButtonGPNOTEPAD">
           <property name="geometry">
            <rect>
-            <x>220</x>
+            <x>300</x>
             <y>80</y>
-            <width>111</width>
+            <width>120</width>
             <height>23</height>
            </rect>
           </property>
@@ -506,10 +506,10 @@ or manually host your games.</string>
          <widget class="QGroupBox" name="gpoptionsgroupBox">
           <property name="geometry">
            <rect>
-            <x>240</x>
+            <x>410</x>
             <y>120</y>
             <width>441</width>
-            <height>281</height>
+            <height>291</height>
            </rect>
           </property>
           <property name="styleSheet">
@@ -523,7 +523,7 @@ or manually host your games.</string>
             <rect>
              <x>10</x>
              <y>30</y>
-             <width>180</width>
+             <width>411</width>
              <height>97</height>
             </rect>
            </property>
@@ -576,7 +576,7 @@ or manually host your games.</string>
             <rect>
              <x>10</x>
              <y>140</y>
-             <width>372</width>
+             <width>411</width>
              <height>89</height>
             </rect>
            </property>
@@ -647,8 +647,8 @@ or manually host your games.</string>
            <rect>
             <x>40</x>
             <y>120</y>
-            <width>181</width>
-            <height>281</height>
+            <width>361</width>
+            <height>291</height>
            </rect>
           </property>
           <property name="title">
@@ -659,11 +659,14 @@ or manually host your games.</string>
             <rect>
              <x>10</x>
              <y>20</y>
-             <width>153</width>
-             <height>257</height>
+             <width>341</width>
+             <height>261</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_8">
+            <property name="sizeConstraint">
+             <enum>QLayout::SetMaximumSize</enum>
+            </property>
             <item>
              <widget class="QCheckBox" name="checkBox_option_sounds">
               <property name="layoutDirection">
@@ -915,19 +918,6 @@ or manually host your games.</string>
              </widget>
             </item>
             <item>
-             <spacer name="verticalSpacer_2">
-              <property name="orientation">
-               <enum>Qt::Vertical</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>20</width>
-                <height>40</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-            <item>
              <widget class="QGroupBox" name="groupBox_latest">
               <property name="minimumSize">
                <size>
@@ -943,7 +933,7 @@ or manually host your games.</string>
                 <rect>
                  <x>10</x>
                  <y>20</y>
-                 <width>92</width>
+                 <width>121</width>
                  <height>86</height>
                 </rect>
                </property>
@@ -1074,24 +1064,11 @@ or manually host your games.</string>
              </widget>
             </item>
             <item>
-             <spacer name="verticalSpacer_3">
-              <property name="orientation">
-               <enum>Qt::Vertical</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>20</width>
-                <height>40</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-            <item>
              <widget class="QGroupBox" name="groupBox_126">
               <property name="minimumSize">
                <size>
                 <width>0</width>
-                <height>90</height>
+                <height>110</height>
                </size>
               </property>
               <property name="title">
@@ -1102,8 +1079,8 @@ or manually host your games.</string>
                 <rect>
                  <x>10</x>
                  <y>20</y>
-                 <width>121</width>
-                 <height>63</height>
+                 <width>191</width>
+                 <height>86</height>
                 </rect>
                </property>
                <layout class="QVBoxLayout" name="verticalLayout__gb_126">
@@ -1136,13 +1113,20 @@ or manually host your games.</string>
                    <bool>true</bool>
                   </property>
                   <property name="text">
-                   <string>Use GProxy</string>
+                   <string>Use GProxy (can't disable)</string>
                   </property>
                   <property name="checkable">
                    <bool>true</bool>
                   </property>
                   <property name="checked">
                    <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="checkBox_dummy">
+                  <property name="text">
+                   <string>dummy</string>
                   </property>
                  </widget>
                 </item>
