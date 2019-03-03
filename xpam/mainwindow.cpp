@@ -44,6 +44,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "QFileDialog"
 #include "QTimer"
 #include "QSizePolicy"
+#include "QJsonDocument"
+#include "QJsonArray"
 
 #ifndef WINUTILS_H
     #include "winutils.h"
@@ -103,7 +105,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->checkBox_windowed_latest, SIGNAL(clicked(bool)), this, SLOT(handleCheckboxClient(bool)));
     connect(ui->checkBox_opengl_latest, SIGNAL(clicked(bool)), this, SLOT(handleCheckboxClient(bool)));
     connect(ui->checkBox_fullscreen_latest, SIGNAL(clicked(bool)), this, SLOT(handleCheckboxClient(bool)));
-     connect(ui->checkBox_gproxy_latest, SIGNAL(clicked(bool)), this, SLOT(handleCheckboxClient(bool)));
+    connect(ui->checkBox_gproxy_latest, SIGNAL(clicked(bool)), this, SLOT(handleCheckboxClient(bool)));
 
     connect(ui->checkBox_windowed_126, SIGNAL(clicked(bool)), this, SLOT(handleCheckboxClient(bool)));
     connect(ui->checkBox_opengl_126, SIGNAL(clicked(bool)), this, SLOT(handleCheckboxClient(bool)));
@@ -152,6 +154,27 @@ MainWindow::MainWindow(QWidget *parent) :
 
     //Sanity checks
     W3::sanityCheck(config);
+
+    //Prefill map update info
+    if (updatesEnabled) {
+        Logger::log("Prefilling map update info", config);
+        QByteArray jsonba = Updater::getUpdateJson(config);
+        QJsonDocument json = QJsonDocument::fromJson(jsonba);
+        QJsonObject obj=json.object();
+        QStringList keys = obj.keys();
+
+        if (keys.contains("maps")) {
+            Logger::log("Mandatory maps found on remote", config);
+            QJsonValue value = obj.value("maps");
+            QJsonArray maps = value.toArray();
+
+            foreach (const QJsonValue & value, maps) {
+                QJsonObject obj = value.toObject();
+                UPDATE_MAPS.append(obj);
+                Logger::log("Added remote map entry "+obj.value("name").toString(), config);
+            }
+        }
+    }
 
     //Set TFT as default client
     Registry r;
@@ -441,6 +464,8 @@ bool MainWindow::checkW3Updates(){
         return true;
     }
 
+    if (config->W3PATH_LATEST == "") return false; //no latest w3 installed
+
     //Either autopatch fails or there is no autopatch and W3 version is incorrect
     QString w3version = Patcher::getCurrentW3Version(config);
     if (w3version!=config->W3_VERSION_LATEST) {
@@ -541,25 +566,26 @@ void MainWindow::on_pushButtonBU_clicked()
     upt->start();
 }
 
-//Iterates over dota map vector and downloads missing maps. Returns false when no updates exist.
-int MainWindow::checkDotaUpdates() {
+//Iterates over map vector and downloads missing maps. Returns false when no updates exist.
+int MainWindow::checkMapUpdates() {
 
-    if (config->DOTA_MAPS.size()>0 && this->lastCheckedDota<config->DOTA_MAPS.size()) {
+    if (this->UPDATE_MAPS.size() > 0 && this->lastCheckedMap < this->UPDATE_MAPS.size()) {
 
-        QString mapName = config->DOTA_MAPS.at(this->lastCheckedDota).first;
-        QString w3Path = config->DOTA_MAPS.at(this->lastCheckedDota).second;
+        QString mapName = this->UPDATE_MAPS.at(this->lastCheckedMap).value("name").toString();
+        QString w3Path = this->UPDATE_MAPS.at(this->lastCheckedMap)
+                .value("targetPath")=="W3PATH_126" ? config->W3PATH_126 : config->W3PATH_LATEST;
 
         // If dl path does not exist, skip
-        if (config->W3PATH_LATEST=="" || (w3Path==config->W3PATH_LATEST && !QDir(config->DOCMAPPATHDL).exists())) {
-            Logger::log("Map path does not exist, ignoring DotA map download.", config);
+        if (w3Path==config->W3PATH_LATEST && (config->W3PATH_LATEST=="" || !QDir(config->DOCMAPPATHDL).exists())) {
+            Logger::log("Map path does not exist, ignoring map download.", config);
             return 0;
         }
-        if (config->W3PATH_126=="" || (w3Path==config->W3PATH_126 && !QDir(config->MAPPATH_126DL).exists())) {
-            Logger::log("Map path does not exist, ignoring DotA map download.", config);
+        if (w3Path==config->W3PATH_126 && (config->W3PATH_126=="" || !QDir(config->MAPPATH_126DL).exists())) {
+            Logger::log("Map path does not exist, ignoring map download.", config);
             return 0;
         }
 
-        Logger::log("Checking if DotA map exist: "+mapName, config);
+        Logger::log("Checking if map exist: "+mapName, config);
 
         QString dlPath = config->DOCMAPPATHDL;
         if (w3Path==config->W3PATH_126) {
@@ -569,8 +595,8 @@ int MainWindow::checkDotaUpdates() {
         QFile map(dlPath+"/"+mapName);
         if (map.exists()) {
             Logger::log(mapName+" exists.", config);
-            this->lastCheckedDota++;
-            return checkDotaUpdates();
+            this->lastCheckedMap++;
+            return checkMapUpdates();
         }
 
         isStartupUpdate=false;
@@ -596,7 +622,7 @@ int MainWindow::checkDotaUpdates() {
         ui->pushButtonBU->setEnabled(false);
 
         //Increment
-        this->lastCheckedDota++;
+        this->lastCheckedMap++;
 
         Logger::log(mapName+" does not exist, downloading.", config);
 
@@ -638,11 +664,11 @@ void MainWindow::updateFinished(bool restartNeeded, bool ok, bool isUpToDate, bo
             }
             else {
                 //Return 0 means no updates are needed (anymore), go to initial tab
-                int dotaret = checkDotaUpdates();
-                if (dotaret==0) {
+                int mapret = checkMapUpdates();
+                if (mapret==0) {
                     ui->tabWidget->setCurrentIndex(0);
                 }
-                else if (dotaret==1) {
+                else if (mapret==1) {
                     enableButtons=false;
                 }
             }
@@ -669,8 +695,8 @@ void MainWindow::updateFinished(bool restartNeeded, bool ok, bool isUpToDate, bo
         Logger::log("Full W3 update was canceled.", config);
     }
     else if (type==4 && ok) {
-        Logger::log("Dota map download successful", config);
-        if (checkDotaUpdates()==0) {
+        Logger::log("Map download successful", config);
+        if (checkMapUpdates()==0) {
             ui->tabWidget->setCurrentIndex(0);
         }
     }
@@ -692,11 +718,11 @@ void MainWindow::updateFinished(bool restartNeeded, bool ok, bool isUpToDate, bo
                 Logger::log("W3 is up to date", config);
 
                 //Return 0 means no updates are needed (anymore), go to initial tab
-                int dotaret = checkDotaUpdates();
-                if (dotaret==0) {
+                int mapret = checkMapUpdates();
+                if (mapret==0) {
                     ui->tabWidget->setCurrentIndex(0);
                 }
-                else if (dotaret==1) {
+                else if (mapret==1) {
                     enableButtons=false;
                 }
             }
@@ -1064,43 +1090,45 @@ bool MainWindow::checkW3PathUnicode() {
     bool isUnicode = false;
     QString w3path = config->W3PATH_LATEST;
 
-    for(int i = 0; i < w3path.size(); i++) {
-        if(w3path.at(i).unicode() > 127) {
-            isUnicode = true;
-            break;
-        }
-    }
-
-    //Check if w3 path contains .exe
-    QFile f(config->W3PATH_LATEST+"\\"+config->W3_EXENAME_LATEST);
-    if (!f.exists()) {
-
-        // Try to set from w3dir registry
-        Registry r;
-        QString wp = r.getW3dir();
-        if (wp!="") {
-            QSettings settings(config->XPAM_CONFIG_PATH, QSettings::IniFormat);
-            this->setNewW3PathSetting(config->W3_KEY_LATEST, &settings, wp);
+    if (w3path != "") {
+        for(int i = 0; i < w3path.size(); i++) {
+            if(w3path.at(i).unicode() > 127) {
+                isUnicode = true;
+                break;
+            }
         }
 
-        QFile f2(config->W3PATH_LATEST+"\\"+config->W3_EXENAME_LATEST);
-        if (!f2.exists()) {
-            QMessageBox mb(QMessageBox::Critical, "W3 path alert",
-               "Your W3 path is missing 'Warcraft III.exe' which probably means the path is incorrect.",
+        //Check if w3 path contains .exe
+        QFile f(config->W3PATH_LATEST+"\\"+config->W3_EXENAME_LATEST);
+        if (!f.exists()) {
+
+            // Try to set from w3dir registry
+            Registry r;
+            QString wp = r.getW3dir();
+            if (wp!="") {
+                QSettings settings(config->XPAM_CONFIG_PATH, QSettings::IniFormat);
+                this->setNewW3PathSetting(config->W3_KEY_LATEST, &settings, wp);
+            }
+
+            QFile f2(config->W3PATH_LATEST+"\\"+config->W3_EXENAME_LATEST);
+            if (!f2.exists()) {
+                QMessageBox mb(QMessageBox::Critical, "W3 path alert",
+                   "Your W3 path is missing 'Warcraft III.exe' which probably means the path is incorrect.",
+                   QMessageBox::Ok);
+                 mb.exec();
+                 return false;
+            }
+        }
+
+        Logger::log("W3 path sanity check: "+w3path, config);
+        if (isUnicode) {
+            Logger::log("W3 path is unicode", config);
+            QMessageBox mb(QMessageBox::Critical, "Unicode alert",
+               "It appears your W3 is installed in  path that contains non-ASCII characters. Please move it to path that conains only ASCII characters or you will have a lot of problems.",
                QMessageBox::Ok);
              mb.exec();
              return false;
         }
-    }
-
-    Logger::log("W3 path sanity check: "+w3path, config);
-    if (isUnicode) {
-        Logger::log("W3 path is unicode", config);
-        QMessageBox mb(QMessageBox::Critical, "Unicode alert",
-           "It appears your W3 is installed in  path that contains non-ASCII characters. Please move it to path that conains only ASCII characters or you will have a lot of problems.",
-           QMessageBox::Ok);
-         mb.exec();
-         return false;
     }
 
     return true;

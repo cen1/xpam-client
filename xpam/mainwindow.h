@@ -119,15 +119,16 @@ private:
     bool ismax;
     QPoint normalpos;
     QSize normalsize;
-    int lastCheckedDota=0;
+    int lastCheckedMap=0;
 
     void startW3AndGproxy();
 
     void diffW3Update(QString version);
-    int checkDotaUpdates();
+    int checkMapUpdates();
     void runW3();
 
     bool updateInProgress;
+    QVector<QJsonObject> UPDATE_MAPS;
 
 protected:
     //void mousePressEvent(QMouseEvent *event);

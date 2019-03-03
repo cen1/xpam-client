@@ -46,16 +46,18 @@ Config::Config()
 
     BETAPIN = "1377";
 
-#ifdef PORTABLE
-    EUROPATH    = QDir::currentPath();
-    W3PATH      = QDir::currentPath()+"/../Warcraft III";
-    IS_PORTABLE = true;
-#else
+//#ifdef PORTABLE
+    //EUROPATH    = QDir::currentPath();
+    //W3PATH      = QDir::currentPath()+"/../Warcraft III";
+    //IS_PORTABLE = true;
+//#else
+    IS_PORTABLE = false;
+
     EUROPATH    = Registry::getEuroPath();
     XPAM_CONFIG_PATH = EUROPATH+"\\xpam.ini";
     GPROXY_CONFIG_PATH = EUROPATH+"\\gproxy.ini";
     SOUNDPATH   = EUROPATH+"\\sounds";
-    //
+
     QSettings settings(XPAM_CONFIG_PATH, QSettings::IniFormat);
     ACTIVE_MODE_KEY = settings.value("active_mode", W3_KEY_LATEST).toString();
     if (ACTIVE_MODE_KEY != W3_KEY_LATEST && ACTIVE_MODE_KEY != W3_KEY_126) {
@@ -126,12 +128,6 @@ Config::Config()
     W3_VERSIONS.append("1.28.2");
     W3_VERSIONS.append("1.28.4");
     W3_VERSIONS.append("1.28.5");
-
-    //DotA maps
-    //QPair<QString, QString> d1("DotA v6.85k Allstars.w3x", this->W3PATH_LATEST);
-    QPair<QString, QString> d2("DotA Allstars 6.88w9.4.w3x", this->W3PATH_126);
-    //DOTA_MAPS.append(d1);
-    DOTA_MAPS.append(d2);
 }
 
 QString Config::getCorrectW3Key(QString modeKey) {

@@ -50,7 +50,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * 1 = diff w3 patch
  * 2 = full w3 upate
  * 3 = beta
- * 4 = dota
+ * 4 = map
  */
 Updater::Updater(Config * c, int t, QString w) {
     config=c;
@@ -90,8 +90,6 @@ void Updater::startUpdate() {
      *
      * UPLOAD INSTRUCTIONS
      * -Google Drive: make sure you mark as public
-     * -SkyDrive: ID from public link
-     * -Ubuntu ONE: More->Publish
      */
     QTime now = QTime::currentTime();
     qsrand(now.msec());
@@ -548,17 +546,28 @@ int Updater::setCurrentPlusOneJson() {
         real=value.toObject();
     }
     else if (type==4) {
-        //DotA map download
-        emit sendLine("Requested patch: DotA map download");
-        QString key = jsonKey;
-        QStringList keys = obj.keys();
+        //Map download
+        emit sendLine("Requested patch: map download: "+jsonKey);
 
-        if (!keys.contains(key)) {
-            emit sendLine("No DotA map exists on download server.");
+        //Key here means map name in maps array!
+        QString key = jsonKey;
+
+        QJsonValue value = obj.value("maps");
+        QJsonArray maps = value.toArray();
+
+        bool found = false;
+        foreach (const QJsonValue & v, maps) {
+            QJsonObject obj = v.toObject();
+            if (obj.value("name").toString()==key) {
+                found = true;
+                real=v.toObject();
+            }
+        }
+
+        if (!found) {
+            emit sendLine("No map exists on download server.");
             return 2;
         }
-        value=obj.value(jsonKey);
-        real=value.toObject();
     }
     else {
         emit sendLine("Requested patch: stable");
@@ -594,11 +603,38 @@ QByteArray Updater::simpleDl(QUrl url) {
         return ba;
     }
     else {
-        emit sendLine("Error with simple download: "+reply->errorString());
         QByteArray ba;
         reply->deleteLater();
         return ba;
     }
+}
+
+QByteArray Updater::getUpdateJson(Config * config) {
+
+    QByteArray jsonba;
+
+    QByteArray j1=simpleDl(config->json1);
+    QByteArray j2=simpleDl(config->json2);
+    QByteArray j3=simpleDl(config->json3);
+
+    if ((j1.isEmpty() && j2.isEmpty()) || (j1.isEmpty() && j3.isEmpty()) || (j2.isEmpty() && j3.isEmpty())) {
+        return QByteArray();
+    }
+
+    if (j1==j2){
+        jsonba=j1;
+    }
+    else if (j1==j3){
+        jsonba=j1;
+    }
+    else if (j2==j3){
+        jsonba=j2;
+    }
+    else {
+        return QByteArray();
+    }
+
+    return jsonba;
 }
 
 QString Updater::moveToDocuments(Config *config) {

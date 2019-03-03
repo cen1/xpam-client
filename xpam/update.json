@@ -1,11 +1,11 @@
 {
     "beta" : {
-            "version" : 26,
-            "mirror1" : "http://xpam.pl/update/update26beta.zip",
-            "mirror2" : "http://xpam.pl/update/update26beta.zip",
-            "mirror3" : "http://xpam.pl/update/update26beta.zip",
-            "mirror4" : "http://xpam.pl/update/update26beta.zip",
-            "sha1" : "8c6c2719bb5d4dee244a2cc11a9eba0a6144cc12"
+            "version" : 29,
+            "mirror1" : "http://xpam.pl/update/update29beta.zip",
+            "mirror2" : "http://xpam.pl/update/update29beta.zip",
+            "mirror3" : "http://xpam.pl/update/update29beta.zip",
+            "mirror4" : "http://xpam.pl/update/update29beta.zip",
+            "sha1" : "2d0b30a139d7e0db5a66dbaec32f7d694d2f6518"
     },
     "1.28.4" : {
             "version" : 1,
@@ -48,12 +48,36 @@
             "sha1" : "53ad53375a9ef77beed4424652cc7f2cd7a5c5cc"
     },
     "DotA Allstars 6.88w9.4.w3x" : {
-            "version" : 1,
-            "mirror1" : "https://drive.google.com/uc?id=1TCbDABmR_OvnlZn2hvKdIHKvKXcMFwLV",
-            "mirror2" : "http://xpam.pl/update/v88w9.4.zip",
-            "mirror3" : "http://xpam.pl/update/v88w9.4.zip",
-            "mirror4" : "http://xpam.pl/update/v88w9.4.zip",
-            "sha1" : "452ec1e6b866ec84ef9d42c1f7112d98311282b5"
+        "version" : 1,
+        "mirror1" : "https://drive.google.com/uc?id=1TCbDABmR_OvnlZn2hvKdIHKvKXcMFwLV",
+        "mirror2" : "http://xpam.pl/update/v88w9.4.zip",
+        "mirror3" : "http://xpam.pl/update/v88w9.4.zip",
+        "mirror4" : "http://xpam.pl/update/v88w9.4.zip",
+        "sha1" : "452ec1e6b866ec84ef9d42c1f7112d98311282b5"
+    },
+    "30" : {
+            "version" : 30,
+            "mirror1" : "https://drive.google.com/uc?id=1qG-GrEr5W8vstQ2tWhgReCTgddwkbrnU",
+            "mirror2" : "https://drive.google.com/uc?id=1A9UHL-gJuj8NAdaxOYEf2GIBEhCU5tPu",
+            "mirror3" : "http://files.eurobattle.net/updates/update30.zip",
+            "mirror4" : "http://xpam.pl/update/update30.zip",
+            "sha1" : "8ac865ab3511476d58034ee2f0745a72bb84636f"
+    },
+    "29" : {
+            "version" : 29,
+            "mirror1" : "https://drive.google.com/uc?id=1TZnwFTULoPiqFOkB0WPczwvbkecmN731",
+            "mirror2" : "https://drive.google.com/uc?id=1t02LFk2hG-b8QuYe0n3NxfnvJ9039baR",
+            "mirror3" : "http://files.eurobattle.net/updates/update29.zip",
+            "mirror4" : "http://xpam.pl/update/update29.zip",
+            "sha1" : "d3e9aa769bcc51511bdd790468e4a5789488c7a4"
+    },
+    "28" : {
+            "version" : 28,
+            "mirror1" : "https://drive.google.com/uc?id=1ic_U-mA2cxYyYJRKvvGi1pU0yP-5euhY",
+            "mirror2" : "https://drive.google.com/uc?id=1d-ZkPu2u374huAcEkhjfRuA4HgWIG9ny",
+            "mirror3" : "http://files.eurobattle.net/updates/update28.zip",
+            "mirror4" : "http://xpam.pl/update/update28.zip",
+            "sha1" : "5f0a182c952a079ed17f29bea852b9904815709f"
     },
     "27" : {
             "version" : 27,
@@ -262,5 +286,27 @@
         "mirror3" : "http://files.eurobattle.net/updates/update1beta.zip",
         "mirror4" : "http://leaguebots.com/cen/update/update1beta.zip",
         "sha1" : "ff2ee4efff025f834be435a2ada1f9deb5c9af6e"
-    }
+    },
+    "maps" : [
+        {
+            "name": "DotA_Allstars_6.88x7c.w3x",
+            "targetPath": "W3PATH_126",
+            "version" : 1,
+            "mirror1" : "https://drive.google.com/uc?id=1VkCVjADmdbDVlsPG5UTA4oFUl8-2oMla",
+            "mirror2" : "https://drive.google.com/uc?id=1OPLp_3SJu-Kw7ToY_zvTdHf4Dd5e3bJT",
+            "mirror3" : "http://xpam.pl/update/v88x7c.zip",
+            "mirror4" : "http://xpam.pl/update/v88x7c.zip",
+            "sha1" : "e638eea3c22d74c18afd9fdb7efc7552e5f1d1c5"
+        },
+        {
+            "name": "DotA_Allstars_6.88x8b.w3x",
+            "targetPath": "W3PATH_126",
+            "version" : 1,
+            "mirror1" : "https://drive.google.com/uc?id=13NADGxk0Mg2rHv5h9WSofFOrJW0th_Cr",
+            "mirror2" : "https://drive.google.com/uc?id=1vDyAWo77zJh0Ply6EaAu0567jaxw3iJf",
+            "mirror3" : "http://xpam.pl/update/v88x8b.zip",
+            "mirror4" : "http://xpam.pl/update/v88x8b.zip",
+            "sha1" : "60d38ba2d2a9410873108f593dd9843b4dda5ba4"
+        }
+    ]
 }

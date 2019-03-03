@@ -77,5 +77,6 @@ void W3::sanityCheck(Config * config) {
     }
 
     Logger::log("EUROPATH="+config->EUROPATH, config);
-    Logger::log("W3PATH="+config->W3PATH, config);
+    Logger::log("W3PATH_LATEST="+config->W3PATH_LATEST, config);
+    Logger::log("W3PATH_126="+config->W3PATH_126, config);
 }

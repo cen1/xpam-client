@@ -47,6 +47,8 @@ public:
     static QString Updater::moveToDocuments(Config *config);
     static void Updater::replaceCDKeys(Config *config);
     static void Updater::renamePatchMpqForLatestW3(Config *config);
+    static QByteArray simpleDl(QUrl url);
+    static QByteArray getUpdateJson(Config * config);
     
 private:
     Config *        config;
@@ -70,7 +72,6 @@ private:
     bool instructions();
     bool updateMPQ(QString w3path);
 
-    QByteArray simpleDl(QUrl url);
     int setCurrentPlusOneJson();
     int getRandomMirror();
 

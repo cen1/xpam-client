@@ -42,7 +42,6 @@ public:
     QVector<QString> W3_OPTIONS;
     QVector<QString> GPROXY_OPTIONS;
     QVector<QString> W3_VERSIONS;
-    QVector<QPair<QString, QString>> DOTA_MAPS;
 
     QUrl json1;
     QUrl json2;
