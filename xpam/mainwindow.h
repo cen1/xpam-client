@@ -90,6 +90,9 @@ private slots:
 
     //void on_pushButton_updateW3_clicked();
 
+    void on_pushButton_warLatestClear_clicked();
+    void on_pushButton_war126Clear_clicked();
+
 public slots:
     void gproxyReady(QString w3Exename);
     void gproxyExiting(bool killedForcefully);

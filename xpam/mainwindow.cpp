@@ -994,10 +994,24 @@ void MainWindow::on_pushButton_warLatestPath_clicked()
     showW3PathDialog(config->W3_KEY_LATEST);
 }
 
+//Clear path for W3 latest
+void MainWindow::on_pushButton_warLatestClear_clicked()
+{
+    QSettings settings(config->XPAM_CONFIG_PATH, QSettings::IniFormat);
+    setNewW3PathSetting(config->W3_KEY_LATEST, &settings, "");
+}
+
 //Set new W3 path for 1.26
 void MainWindow::on_pushButton_war126Path_clicked()
 {
     showW3PathDialog(config->W3_KEY_126);
+}
+
+//Clear path for W3 1.26
+void MainWindow::on_pushButton_war126Clear_clicked()
+{
+    QSettings settings(config->XPAM_CONFIG_PATH, QSettings::IniFormat);
+    setNewW3PathSetting(config->W3_KEY_126, &settings, "");
 }
 
 //Full W3 update

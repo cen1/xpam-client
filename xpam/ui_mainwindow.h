@@ -98,7 +98,10 @@ public:
     QHBoxLayout *horizontalLayout_2;
     QLabel *war_latest_label_2;
     QLabel *label_WarLatestPath;
+    QHBoxLayout *horizontalLayout_8;
     QPushButton *pushButton_warLatestPath;
+    QSpacerItem *horizontalSpacer;
+    QPushButton *pushButton_warLatestClear;
     QLabel *label_5;
     QGroupBox *groupBox_latest;
     QWidget *verticalLayoutWidget;
@@ -113,7 +116,10 @@ public:
     QHBoxLayout *horizontalLayout_7;
     QLabel *label;
     QLabel *label_War126Path;
+    QHBoxLayout *horizontalLayout_9;
     QPushButton *pushButton_war126Path;
+    QSpacerItem *horizontalSpacer_3;
+    QPushButton *pushButton_war126Clear;
     QLabel *label_2;
     QGroupBox *groupBox_126;
     QWidget *verticalLayoutWidget_2;
@@ -620,7 +626,7 @@ public:
         war_latest_groupbox->setGeometry(QRect(30, 90, 400, 221));
         verticalLayoutWidget_3 = new QWidget(war_latest_groupbox);
         verticalLayoutWidget_3->setObjectName(QStringLiteral("verticalLayoutWidget_3"));
-        verticalLayoutWidget_3->setGeometry(QRect(10, 20, 381, 191));
+        verticalLayoutWidget_3->setGeometry(QRect(10, 20, 381, 201));
         verticalLayout_4 = new QVBoxLayout(verticalLayoutWidget_3);
         verticalLayout_4->setSpacing(5);
         verticalLayout_4->setContentsMargins(11, 11, 11, 11);
@@ -648,6 +654,9 @@ public:
 
         verticalLayout_4->addLayout(horizontalLayout_2);
 
+        horizontalLayout_8 = new QHBoxLayout();
+        horizontalLayout_8->setSpacing(6);
+        horizontalLayout_8->setObjectName(QStringLiteral("horizontalLayout_8"));
         pushButton_warLatestPath = new QPushButton(verticalLayoutWidget_3);
         pushButton_warLatestPath->setObjectName(QStringLiteral("pushButton_warLatestPath"));
         QSizePolicy sizePolicy2(QSizePolicy::Minimum, QSizePolicy::Fixed);
@@ -655,9 +664,25 @@ public:
         sizePolicy2.setVerticalStretch(0);
         sizePolicy2.setHeightForWidth(pushButton_warLatestPath->sizePolicy().hasHeightForWidth());
         pushButton_warLatestPath->setSizePolicy(sizePolicy2);
+        pushButton_warLatestPath->setMinimumSize(QSize(150, 0));
         pushButton_warLatestPath->setMaximumSize(QSize(150, 16777215));
+        pushButton_warLatestPath->setStyleSheet(QStringLiteral(""));
 
-        verticalLayout_4->addWidget(pushButton_warLatestPath);
+        horizontalLayout_8->addWidget(pushButton_warLatestPath);
+
+        horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        horizontalLayout_8->addItem(horizontalSpacer);
+
+        pushButton_warLatestClear = new QPushButton(verticalLayoutWidget_3);
+        pushButton_warLatestClear->setObjectName(QStringLiteral("pushButton_warLatestClear"));
+        pushButton_warLatestClear->setMinimumSize(QSize(100, 0));
+        pushButton_warLatestClear->setMaximumSize(QSize(100, 16777215));
+
+        horizontalLayout_8->addWidget(pushButton_warLatestClear);
+
+
+        verticalLayout_4->addLayout(horizontalLayout_8);
 
         label_5 = new QLabel(verticalLayoutWidget_3);
         label_5->setObjectName(QStringLiteral("label_5"));
@@ -734,13 +759,31 @@ public:
 
         verticalLayout_7->addLayout(horizontalLayout_7);
 
+        horizontalLayout_9 = new QHBoxLayout();
+        horizontalLayout_9->setSpacing(6);
+        horizontalLayout_9->setObjectName(QStringLiteral("horizontalLayout_9"));
         pushButton_war126Path = new QPushButton(verticalLayoutWidget_4);
         pushButton_war126Path->setObjectName(QStringLiteral("pushButton_war126Path"));
         sizePolicy2.setHeightForWidth(pushButton_war126Path->sizePolicy().hasHeightForWidth());
         pushButton_war126Path->setSizePolicy(sizePolicy2);
+        pushButton_war126Path->setMinimumSize(QSize(150, 0));
         pushButton_war126Path->setMaximumSize(QSize(150, 16777215));
 
-        verticalLayout_7->addWidget(pushButton_war126Path);
+        horizontalLayout_9->addWidget(pushButton_war126Path);
+
+        horizontalSpacer_3 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        horizontalLayout_9->addItem(horizontalSpacer_3);
+
+        pushButton_war126Clear = new QPushButton(verticalLayoutWidget_4);
+        pushButton_war126Clear->setObjectName(QStringLiteral("pushButton_war126Clear"));
+        pushButton_war126Clear->setMinimumSize(QSize(100, 0));
+        pushButton_war126Clear->setMaximumSize(QSize(100, 16777215));
+
+        horizontalLayout_9->addWidget(pushButton_war126Clear);
+
+
+        verticalLayout_7->addLayout(horizontalLayout_9);
 
         label_2 = new QLabel(verticalLayoutWidget_4);
         label_2->setObjectName(QStringLiteral("label_2"));
@@ -888,7 +931,7 @@ public:
 
         retranslateUi(MainWindow);
 
-        tabWidget->setCurrentIndex(1);
+        tabWidget->setCurrentIndex(2);
 
 
         QMetaObject::connectSlotsByName(MainWindow);
@@ -944,6 +987,7 @@ public:
         war_latest_label_2->setText(QApplication::translate("MainWindow", "Warcraft location", 0));
         label_WarLatestPath->setText(QApplication::translate("MainWindow", "Loading...", 0));
         pushButton_warLatestPath->setText(QApplication::translate("MainWindow", "Change", 0));
+        pushButton_warLatestClear->setText(QApplication::translate("MainWindow", "Clear", 0));
         label_5->setText(QApplication::translate("MainWindow", "<html><head/><body><p>Do not have Warcraft 1.28.5? Download it <a href=\"http://wiki.eurobattle.net/index.php?title=How_to_install_Warcraft_III\"><span style=\" text-decoration: underline; color:#85c3e5;\">here</span></a>.</p></body></html>", 0));
         groupBox_latest->setTitle(QApplication::translate("MainWindow", "Options", 0));
         checkBox_fullscreen_latest->setText(QApplication::translate("MainWindow", "Native fullscreen", 0));
@@ -954,6 +998,7 @@ public:
         label->setText(QApplication::translate("MainWindow", "Warcraft 1.26a location", 0));
         label_War126Path->setText(QApplication::translate("MainWindow", "Loading...", 0));
         pushButton_war126Path->setText(QApplication::translate("MainWindow", "Change", 0));
+        pushButton_war126Clear->setText(QApplication::translate("MainWindow", "Clear", 0));
         label_2->setText(QApplication::translate("MainWindow", "<html><head/><body><p>Do not have Warcraft 1.26a? Download it <a href=\"http://wiki.eurobattle.net/index.php?title=Warcraft_III_1.26\"><span style=\" text-decoration: underline; color: #85c3e5;\">here</span></a>.</p></body></html>", 0));
         groupBox_126->setTitle(QApplication::translate("MainWindow", "Options", 0));
         checkBox_opengl_126->setText(QApplication::translate("MainWindow", "OpenGL", 0));
