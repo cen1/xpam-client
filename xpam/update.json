@@ -289,16 +289,6 @@
     },
     "maps" : [
         {
-            "name": "DotA_Allstars_6.88x7c.w3x",
-            "targetPath": "W3PATH_126",
-            "version" : 1,
-            "mirror1" : "https://drive.google.com/uc?id=1VkCVjADmdbDVlsPG5UTA4oFUl8-2oMla",
-            "mirror2" : "https://drive.google.com/uc?id=1OPLp_3SJu-Kw7ToY_zvTdHf4Dd5e3bJT",
-            "mirror3" : "http://xpam.pl/update/v88x7c.zip",
-            "mirror4" : "http://xpam.pl/update/v88x7c.zip",
-            "sha1" : "e638eea3c22d74c18afd9fdb7efc7552e5f1d1c5"
-        },
-        {
             "name": "DotA_Allstars_6.88x8b.w3x",
             "targetPath": "W3PATH_126",
             "version" : 1,
@@ -307,6 +297,26 @@
             "mirror3" : "http://xpam.pl/update/v88x8b.zip",
             "mirror4" : "http://xpam.pl/update/v88x8b.zip",
             "sha1" : "60d38ba2d2a9410873108f593dd9843b4dda5ba4"
+        },
+        {
+            "name": "DotA_Allstars_6.89a4.w3x",
+            "targetPath": "W3PATH_126",
+            "version" : 1,
+            "mirror1" : "https://drive.google.com/uc?id=1_JRgbNJmNFetORmHpAdEb5G_4SVFASzE",
+            "mirror2" : "https://drive.google.com/uc?id=1zrq25U8sc7sY43YGY5PfGQktjpdrqVlC",
+            "mirror3" : "http://xpam.pl/update/v6.89a4.zip",
+            "mirror4" : "http://xpam.pl/update/v6.89a4.zip",
+            "sha1" : "5887d33e12ed9ad635215fff42a7ce073c09a20d"
+        },
+        {
+            "name": "DotA_Allstars_6.89a7.w3x",
+            "targetPath": "W3PATH_126",
+            "version" : 1,
+            "mirror1" : "https://drive.google.com/uc?id=1ZKVVynG9Lf1KMczFoLRbE0N_6v1-l8kw",
+            "mirror2" : "https://drive.google.com/uc?id=1ReOxpan7c-tZqpt7xA6ASnLvAZGFJzSg",
+            "mirror3" : "http://xpam.pl/update/v6.89a7.zip",
+            "mirror4" : "http://xpam.pl/update/v6.89a7.zip",
+            "sha1" : "69a09909dcaafc11f35f9aa0e7e778fb613d5a37"
         }
     ]
 }
