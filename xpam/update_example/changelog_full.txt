@@ -1,0 +1,133 @@
+CHANGELOG #31:
+
+-added button to clear W3 path if game version is no longer used
+
+CHANGELOG #30:
+
+-updater bugfix
+
+CHANGELOG #29:
+
+-improved client to no longer need full release to update DotA map for leagues
+
+CHANGELOG #28:
+
+-updated DotA map to DotA Allstars 6.88x3
+
+CHANGELOG #27:
+
+-updated DotA map to DotA Allstars 6.88w9.4
+
+CHANGELOG #26:
+
+-support for dual versioning and DotA 6.88
+-added sound for announcements
+-added sound for autojoin
+-new GProxy commands: !apriv <gn> and !apub <gn>, automatically host DotA ladder game on lagabuse.com
+-new GProxy functionality: autojoin. If enabled, GProxy simulates keystrokes to join the lagabuse game you just hosted
+-new GProxy functionality: !follow <player> command. Simulates keystrokes to join a friend if in game or when enters the game.
+
+CHANGELOG #25:
+
+-it is now possible to play PG and manually host even on GProxy gateway. Make sure you port forward 6112-6115.
+
+CHANGELOG #24:
+
+-w3l fix for Wine Linux
+-client improvements
+
+CHANGELOG #23:
+
+-update to W3 1.28.5
+-various client improvements
+
+CHANGELOG #22:
+
+-fix some client bug
+-better 4K screen support, still needs work
+-fix channel icons
+
+CHANGELOG #21:
+
+-fix gproxy memory leak
+
+CHANGELOG #20:
+
+-add native fullscreen option
+
+CHANGELOG #19:
+
+-1.28.2 loader, client and gproxy update
+
+CHANGELOG #18:
+
+-1.27b loader update
+-GProxy update for 1.27b
+
+CHANGELOG #17:
+
+-Improved GProxy antihack capabilities.
+
+CHANGELOG #16:
+
+-Fixed a minor problem with GProxy and official online W3 downloads.
+-Added new DotA map.
+
+CHANGELOG #14:
+
+-New server icons.
+
+CHANGELOG #13:
+
+-Added OpenGL option to W3 launcher, aunch settings are now remembered on next start
+
+CHANGELOG #12:
+
+-Removed autologin feature which was accidentally pushed in update 11 and was not ready for prime time. Soon (TM)
+
+CHANGELOG #11:
+
+-Improved updater to handle new icon insertions.
+
+CHANGELOG #10:
+
+-DotA v6.83d
+
+CHANGELOG #9:
+
+-DotA v6.83c
+
+CHANGELOG #8:
+
+-additional debug logging
+-multithreaded optimizations
+
+CHANGELOG #7:
+
+-general gproxy improvements
+
+CHANGELOG #6:
+
+-DotA v6.81d
+
+CHANGELOG #5:
+
+-fixed a bug in updater if Downloads folder did not exist
+-reworked GProxy client section
+
+CHANGELOG #4:
+
+-DotA v6.81c
+
+CHANGELOG #3:
+
+-antihack improvements
+-gproxy bumped to version 9
+
+CHANGELOG #2:
+
+-added new executable
+
+CHANGELOG #1:
+
+-added dota

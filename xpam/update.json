@@ -1,11 +1,11 @@
 {
     "beta" : {
-            "version" : 29,
-            "mirror1" : "http://xpam.pl/update/update29beta.zip",
-            "mirror2" : "http://xpam.pl/update/update29beta.zip",
-            "mirror3" : "http://xpam.pl/update/update29beta.zip",
-            "mirror4" : "http://xpam.pl/update/update29beta.zip",
-            "sha1" : "2d0b30a139d7e0db5a66dbaec32f7d694d2f6518"
+            "version" : 31,
+            "mirror1" : "http://xpam.pl/update/update31beta.zip",
+            "mirror2" : "http://xpam.pl/update/update31beta.zip",
+            "mirror3" : "http://xpam.pl/update/update31beta.zip",
+            "mirror4" : "http://xpam.pl/update/update31beta.zip",
+            "sha1" : "6d6aadb6b73d666ab603ddb67210340b084b2d86"
     },
     "1.28.4" : {
             "version" : 1,
@@ -54,6 +54,14 @@
         "mirror3" : "http://xpam.pl/update/v88w9.4.zip",
         "mirror4" : "http://xpam.pl/update/v88w9.4.zip",
         "sha1" : "452ec1e6b866ec84ef9d42c1f7112d98311282b5"
+    },
+    "31" : {
+            "version" : 31,
+            "mirror1" : "https://drive.google.com/uc?id=1s7-pwEhpW6MDYfpEmsIYbFwW6Yp8LHJa",
+            "mirror2" : "https://drive.google.com/uc?id=1vMTBfdLlg0XRP1stPmWW739k5WKFk1Le",
+            "mirror3" : "http://files.eurobattle.net/updates/update31.zip",
+            "mirror4" : "http://xpam.pl/update/update31.zip",
+            "sha1" : "d2e461e6256da5c831939a163ff93edb6c76ffb2"
     },
     "30" : {
             "version" : 30,
