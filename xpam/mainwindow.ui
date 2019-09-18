@@ -821,7 +821,7 @@ or manually host your games.</string>
             <x>30</x>
             <y>90</y>
             <width>400</width>
-            <height>221</height>
+            <height>291</height>
            </rect>
           </property>
           <property name="title">
@@ -890,6 +890,12 @@ or manually host your games.</string>
             </item>
             <item>
              <layout class="QHBoxLayout" name="horizontalLayout_8">
+              <property name="leftMargin">
+               <number>5</number>
+              </property>
+              <property name="rightMargin">
+               <number>5</number>
+              </property>
               <item>
                <widget class="QPushButton" name="pushButton_warLatestPath">
                 <property name="sizePolicy">
@@ -1036,7 +1042,7 @@ or manually host your games.</string>
             <x>470</x>
             <y>90</y>
             <width>400</width>
-            <height>221</height>
+            <height>291</height>
            </rect>
           </property>
           <property name="title">
@@ -1048,7 +1054,7 @@ or manually host your games.</string>
              <x>9</x>
              <y>19</y>
              <width>381</width>
-             <height>191</height>
+             <height>241</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_7">
@@ -1081,6 +1087,12 @@ or manually host your games.</string>
             </item>
             <item>
              <layout class="QHBoxLayout" name="horizontalLayout_9">
+              <property name="leftMargin">
+               <number>5</number>
+              </property>
+              <property name="rightMargin">
+               <number>5</number>
+              </property>
               <item>
                <widget class="QPushButton" name="pushButton_war126Path">
                 <property name="sizePolicy">
@@ -1216,6 +1228,57 @@ or manually host your games.</string>
                    <string>dummy</string>
                   </property>
                  </widget>
+                </item>
+               </layout>
+              </widget>
+             </widget>
+            </item>
+            <item>
+             <widget class="QGroupBox" name="groupBox_DotAOptions">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>50</height>
+               </size>
+              </property>
+              <property name="title">
+               <string>DotA Options</string>
+              </property>
+              <widget class="QWidget" name="horizontalLayoutWidget">
+               <property name="geometry">
+                <rect>
+                 <x>0</x>
+                 <y>19</y>
+                 <width>381</width>
+                 <height>22</height>
+                </rect>
+               </property>
+               <layout class="QHBoxLayout" name="horizontalLayout_10">
+                <property name="spacing">
+                 <number>5</number>
+                </property>
+                <property name="leftMargin">
+                 <number>5</number>
+                </property>
+                <item>
+                 <widget class="QPushButton" name="pushButton_DotaConfig">
+                  <property name="text">
+                   <string>Edit DotA Config</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <spacer name="horizontalSpacer_4">
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>40</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                 </spacer>
                 </item>
                </layout>
               </widget>

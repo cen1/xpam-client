@@ -1153,7 +1153,20 @@ void MainWindow::quit() {
     QApplication::quit();
 }
 
-void MainWindow::on_checkBox_useGproxy_126_toggled(bool checked)
-{
+void MainWindow::on_checkBox_useGproxy_126_toggled(bool checked) {
     ui->checkBox_gproxy_126->setChecked(true);
+}
+
+void MainWindow::on_pushButton_DotaConfig_clicked() {
+    QString cfg = config->W3PATH_126+"/config.dota.ini";
+    QFile f(cfg);
+    if (f.exists()) {
+        QDesktopServices::openUrl(QUrl("file:///"+cfg));
+    }
+    else {
+        QMessageBox mb(QMessageBox::Critical, "No dota.config.ini",
+           "There is no dota.config.ini in your W3 folder.",
+           QMessageBox::Ok);
+         mb.exec();
+    }
 }

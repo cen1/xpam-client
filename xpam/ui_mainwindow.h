@@ -128,6 +128,11 @@ public:
     QCheckBox *checkBox_windowed_126;
     QCheckBox *checkBox_gproxy_126;
     QCheckBox *checkBox_dummy;
+    QGroupBox *groupBox_DotAOptions;
+    QWidget *horizontalLayoutWidget;
+    QHBoxLayout *horizontalLayout_10;
+    QPushButton *pushButton_DotaConfig;
+    QSpacerItem *horizontalSpacer_4;
     QWidget *tabUpdate;
     QWidget *layoutWidget1;
     QVBoxLayout *verticalLayout_6;
@@ -623,7 +628,7 @@ public:
         pushButtonClientLog->setMaximumSize(QSize(150, 16777215));
         war_latest_groupbox = new QGroupBox(tabW3);
         war_latest_groupbox->setObjectName(QStringLiteral("war_latest_groupbox"));
-        war_latest_groupbox->setGeometry(QRect(30, 90, 400, 221));
+        war_latest_groupbox->setGeometry(QRect(30, 90, 400, 291));
         verticalLayoutWidget_3 = new QWidget(war_latest_groupbox);
         verticalLayoutWidget_3->setObjectName(QStringLiteral("verticalLayoutWidget_3"));
         verticalLayoutWidget_3->setGeometry(QRect(10, 20, 381, 201));
@@ -657,6 +662,7 @@ public:
         horizontalLayout_8 = new QHBoxLayout();
         horizontalLayout_8->setSpacing(6);
         horizontalLayout_8->setObjectName(QStringLiteral("horizontalLayout_8"));
+        horizontalLayout_8->setContentsMargins(5, -1, 5, -1);
         pushButton_warLatestPath = new QPushButton(verticalLayoutWidget_3);
         pushButton_warLatestPath->setObjectName(QStringLiteral("pushButton_warLatestPath"));
         QSizePolicy sizePolicy2(QSizePolicy::Minimum, QSizePolicy::Fixed);
@@ -732,10 +738,10 @@ public:
 
         war_latest_groupbox_2 = new QGroupBox(tabW3);
         war_latest_groupbox_2->setObjectName(QStringLiteral("war_latest_groupbox_2"));
-        war_latest_groupbox_2->setGeometry(QRect(470, 90, 400, 221));
+        war_latest_groupbox_2->setGeometry(QRect(470, 90, 400, 291));
         verticalLayoutWidget_4 = new QWidget(war_latest_groupbox_2);
         verticalLayoutWidget_4->setObjectName(QStringLiteral("verticalLayoutWidget_4"));
-        verticalLayoutWidget_4->setGeometry(QRect(9, 19, 381, 191));
+        verticalLayoutWidget_4->setGeometry(QRect(9, 19, 381, 241));
         verticalLayout_7 = new QVBoxLayout(verticalLayoutWidget_4);
         verticalLayout_7->setSpacing(6);
         verticalLayout_7->setContentsMargins(11, 11, 11, 11);
@@ -762,6 +768,7 @@ public:
         horizontalLayout_9 = new QHBoxLayout();
         horizontalLayout_9->setSpacing(6);
         horizontalLayout_9->setObjectName(QStringLiteral("horizontalLayout_9"));
+        horizontalLayout_9->setContentsMargins(5, -1, 5, -1);
         pushButton_war126Path = new QPushButton(verticalLayoutWidget_4);
         pushButton_war126Path->setObjectName(QStringLiteral("pushButton_war126Path"));
         sizePolicy2.setHeightForWidth(pushButton_war126Path->sizePolicy().hasHeightForWidth());
@@ -829,6 +836,29 @@ public:
 
 
         verticalLayout_7->addWidget(groupBox_126);
+
+        groupBox_DotAOptions = new QGroupBox(verticalLayoutWidget_4);
+        groupBox_DotAOptions->setObjectName(QStringLiteral("groupBox_DotAOptions"));
+        groupBox_DotAOptions->setMinimumSize(QSize(0, 50));
+        horizontalLayoutWidget = new QWidget(groupBox_DotAOptions);
+        horizontalLayoutWidget->setObjectName(QStringLiteral("horizontalLayoutWidget"));
+        horizontalLayoutWidget->setGeometry(QRect(0, 19, 381, 22));
+        horizontalLayout_10 = new QHBoxLayout(horizontalLayoutWidget);
+        horizontalLayout_10->setSpacing(5);
+        horizontalLayout_10->setContentsMargins(11, 11, 11, 11);
+        horizontalLayout_10->setObjectName(QStringLiteral("horizontalLayout_10"));
+        horizontalLayout_10->setContentsMargins(5, 0, 0, 0);
+        pushButton_DotaConfig = new QPushButton(horizontalLayoutWidget);
+        pushButton_DotaConfig->setObjectName(QStringLiteral("pushButton_DotaConfig"));
+
+        horizontalLayout_10->addWidget(pushButton_DotaConfig);
+
+        horizontalSpacer_4 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        horizontalLayout_10->addItem(horizontalSpacer_4);
+
+
+        verticalLayout_7->addWidget(groupBox_DotAOptions);
 
         tabWidget->addTab(tabW3, QString());
         tabUpdate = new QWidget();
@@ -1005,6 +1035,8 @@ public:
         checkBox_windowed_126->setText(QApplication::translate("MainWindow", "Windowed", 0));
         checkBox_gproxy_126->setText(QApplication::translate("MainWindow", "Use GProxy (can't disable)", 0));
         checkBox_dummy->setText(QApplication::translate("MainWindow", "dummy", 0));
+        groupBox_DotAOptions->setTitle(QApplication::translate("MainWindow", "DotA Options", 0));
+        pushButton_DotaConfig->setText(QApplication::translate("MainWindow", "Edit DotA Config", 0));
         tabWidget->setTabText(tabWidget->indexOf(tabW3), QApplication::translate("MainWindow", " WARCRAFT", 0));
         pushButtonBU->setText(QApplication::translate("MainWindow", "Get Beta patch", 0));
         checkBox_updates->setText(QApplication::translate("MainWindow", "Automatic updates enabled", 0));
