@@ -27,7 +27,9 @@ SOURCES += main.cpp\
     w3.cpp \
     test.cpp \
     mpq.cpp \
-    patcher.cpp
+    patcher.cpp \
+    bnethash.cpp \
+    rest.cpp
 
 HEADERS  += mainwindow.h \
     registry.h \
@@ -41,7 +43,10 @@ HEADERS  += mainwindow.h \
     test.h \
     mpq.h \
     logger.h \
-    patcher.h
+    patcher.h \
+    bnethash.h \
+    rest.h \
+    replytimeout.h
 
 FORMS    += mainwindow.ui
 

@@ -46,6 +46,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "QSizePolicy"
 #include "QJsonDocument"
 #include "QJsonArray"
+#include "bnethash.h"
+#include "rest.h"
 
 #ifndef WINUTILS_H
     #include "winutils.h"
@@ -106,6 +108,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->checkBox_opengl_latest, SIGNAL(clicked(bool)), this, SLOT(handleCheckboxClient(bool)));
     connect(ui->checkBox_fullscreen_latest, SIGNAL(clicked(bool)), this, SLOT(handleCheckboxClient(bool)));
     connect(ui->checkBox_gproxy_latest, SIGNAL(clicked(bool)), this, SLOT(handleCheckboxClient(bool)));
+    connect(ui->checkBox_pf_latest, SIGNAL(clicked(bool)), this, SLOT(handleCheckboxClient(bool)));
 
     connect(ui->checkBox_windowed_126, SIGNAL(clicked(bool)), this, SLOT(handleCheckboxClient(bool)));
     connect(ui->checkBox_opengl_126, SIGNAL(clicked(bool)), this, SLOT(handleCheckboxClient(bool)));
@@ -122,6 +125,9 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // Initiate GProxy options
     this->initGproxyOptions();
+
+    // Authenticate
+    this->initLogin();
 
     // Clear the update log on every startup
     QFile log(config->EUROPATH+"/xpam.log");
@@ -808,6 +814,15 @@ void MainWindow::handleCheckboxClient(bool checked)
             ui->checkBox_fullscreen_latest->setChecked(false);
             settings.setValue(config->W3_KEY_LATEST + "/fullscreen", "0");
         }
+        //Pf and gproxy exclusivity
+        if (QObject::sender()==ui->checkBox_pf_latest && ui->checkBox_gproxy_latest->isChecked()) {
+            ui->checkBox_gproxy_latest->setChecked(false);
+            settings.setValue(config->W3_KEY_LATEST + "/gproxy", "0");
+        }
+        if (QObject::sender()==ui->checkBox_gproxy_latest && ui->checkBox_pf_latest->isChecked()) {
+            ui->checkBox_pf_latest->setChecked(false);
+            settings.setValue(config->W3_KEY_LATEST + "/pf", "0");
+        }
     }
     if (mode_key!=config->W3_KEY_126 || option!="gproxy") {
         settings.setValue(mode_key + "/" + option, checked ? "1" : "0");
@@ -1169,4 +1184,78 @@ void MainWindow::on_pushButton_DotaConfig_clicked() {
            QMessageBox::Ok);
          mb.exec();
     }
+}
+
+void MainWindow::on_pushButton_login_clicked()
+{
+    QString username = ui->lineEdit_username->text();
+    QString pass = ui->lineEdit_password->text().toLower();
+
+    if (username=="" || pass=="") {
+        QMessageBox mb(QMessageBox::Critical, "Failed to login", "Empty username or password.", QMessageBox::Ok);
+        mb.exec();
+    }
+
+    Bnethash bh;
+    QString hashStr = bh.getHashString(pass);
+
+    QString hash256 = QString(QCryptographicHash::hash(hashStr.toLocal8Bit(), QCryptographicHash::Sha256).toHex());
+
+    bool auth = Rest::authenticate(username, hash256);
+    if (auth) {
+        ui->label_offline->hide();
+        ui->lineEdit_username->hide();
+        ui->lineEdit_password->hide();
+        ui->pushButton_login->hide();
+
+        ui->pushButton_diff_account->show();
+        ui->label_online->show();
+        ui->label_online->setText("<html><head/><body><p>You are currently <span style=\" color:#55aa00;\">online</span> as <span style=\"color: rgb(0, 170, 255);\">"+username+"</span></p></body></html>");
+
+        QSettings settings(config->XPAM_CONFIG_PATH, QSettings::IniFormat);
+        settings.setValue("username", ui->lineEdit_username->text());
+        settings.setValue("secret", hash256);
+    }
+    else {
+        ui->label_online->hide();
+        ui->pushButton_diff_account->hide();
+        QMessageBox mb(QMessageBox::Critical, "Failed to login", "Failed to login due to bad username or password.", QMessageBox::Ok);
+        mb.exec();
+    }
+}
+
+void MainWindow::initLogin() {
+    QSettings settings(config->XPAM_CONFIG_PATH, QSettings::IniFormat);
+    QString username = settings.value("username", "").toString();
+    QString secret = settings.value("secret", "").toString();
+    if (username=="" || secret=="") {
+        ui->label_online->hide();
+        ui->pushButton_diff_account->hide();
+    }
+    else {
+        bool auth = Rest::authenticate(username, secret);
+        if (auth) {
+            ui->label_offline->hide();
+            ui->lineEdit_username->hide();
+            ui->lineEdit_password->hide();
+            ui->pushButton_login->hide();
+
+            ui->pushButton_diff_account->show();
+            ui->label_online->show();
+            ui->label_online->setText("<html><head/><body><p>You are currently <span style=\" color:#55aa00;\">online</span> as <span style=\"color: rgb(0, 170, 255);\">"+username+"</span></p></body></html>");
+        }
+        else {
+            ui->label_online->hide();
+            ui->pushButton_diff_account->hide();
+            status("Failed to login on startup");
+        }
+    }
+}
+
+void MainWindow::on_pushButton_diff_account_clicked()
+{
+    ui->lineEdit_username->show();
+    ui->lineEdit_password->show();
+    ui->pushButton_login->show();
+    ui->pushButton_diff_account->hide();
 }

@@ -95,6 +95,10 @@ private slots:
 
     void on_pushButton_DotaConfig_clicked();
 
+    void on_pushButton_login_clicked();
+
+    void on_pushButton_diff_account_clicked();
+
 public slots:
     void gproxyReady(QString w3Exename);
     void gproxyExiting(bool killedForcefully);
@@ -113,6 +117,7 @@ private:
     void unlockTabs();
     void removeLastLine();
     void status(QString status);
+    void initLogin();
 
     bool isStartupUpdate;
 

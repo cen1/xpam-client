@@ -52,7 +52,16 @@ public:
     QPushButton *pushButtonGWG;
     QPushButton *pushButtonGWD;
     QHBoxLayout *horizontalLayoutOptions;
+    QVBoxLayout *verticalLayout_11;
+    QLabel *label_register;
+    QLabel *label_offline;
+    QLabel *label_online;
+    QLineEdit *lineEdit_username;
+    QLineEdit *lineEdit_password;
+    QPushButton *pushButton_login;
+    QPushButton *pushButton_diff_account;
     QSpacerItem *verticalSpacer;
+    QSpacerItem *horizontalSpacer_5;
     QSpacerItem *hs2;
     QWidget *tabGproxy;
     QLabel *preloaderLabel1;
@@ -110,6 +119,7 @@ public:
     QCheckBox *checkBox_opengl_latest;
     QCheckBox *checkBox_windowed_latest;
     QCheckBox *checkBox_gproxy_latest;
+    QCheckBox *checkBox_pf_latest;
     QGroupBox *war_latest_groupbox_2;
     QWidget *verticalLayoutWidget_4;
     QVBoxLayout *verticalLayout_7;
@@ -416,12 +426,69 @@ public:
         horizontalLayoutOptions = new QHBoxLayout();
         horizontalLayoutOptions->setSpacing(6);
         horizontalLayoutOptions->setObjectName(QStringLiteral("horizontalLayoutOptions"));
+        verticalLayout_11 = new QVBoxLayout();
+        verticalLayout_11->setSpacing(6);
+        verticalLayout_11->setObjectName(QStringLiteral("verticalLayout_11"));
+        label_register = new QLabel(tabLauncher);
+        label_register->setObjectName(QStringLiteral("label_register"));
+        label_register->setStyleSheet(QStringLiteral(""));
+        label_register->setOpenExternalLinks(false);
 
-        verticalLayout->addLayout(horizontalLayoutOptions);
+        verticalLayout_11->addWidget(label_register);
+
+        label_offline = new QLabel(tabLauncher);
+        label_offline->setObjectName(QStringLiteral("label_offline"));
+
+        verticalLayout_11->addWidget(label_offline);
+
+        label_online = new QLabel(tabLauncher);
+        label_online->setObjectName(QStringLiteral("label_online"));
+
+        verticalLayout_11->addWidget(label_online);
+
+        lineEdit_username = new QLineEdit(tabLauncher);
+        lineEdit_username->setObjectName(QStringLiteral("lineEdit_username"));
+        QSizePolicy sizePolicy2(QSizePolicy::Minimum, QSizePolicy::Fixed);
+        sizePolicy2.setHorizontalStretch(0);
+        sizePolicy2.setVerticalStretch(0);
+        sizePolicy2.setHeightForWidth(lineEdit_username->sizePolicy().hasHeightForWidth());
+        lineEdit_username->setSizePolicy(sizePolicy2);
+        lineEdit_username->setMinimumSize(QSize(100, 0));
+
+        verticalLayout_11->addWidget(lineEdit_username);
+
+        lineEdit_password = new QLineEdit(tabLauncher);
+        lineEdit_password->setObjectName(QStringLiteral("lineEdit_password"));
+        sizePolicy2.setHeightForWidth(lineEdit_password->sizePolicy().hasHeightForWidth());
+        lineEdit_password->setSizePolicy(sizePolicy2);
+        lineEdit_password->setMinimumSize(QSize(100, 0));
+        lineEdit_password->setEchoMode(QLineEdit::Password);
+
+        verticalLayout_11->addWidget(lineEdit_password);
+
+        pushButton_login = new QPushButton(tabLauncher);
+        pushButton_login->setObjectName(QStringLiteral("pushButton_login"));
+
+        verticalLayout_11->addWidget(pushButton_login);
+
+        pushButton_diff_account = new QPushButton(tabLauncher);
+        pushButton_diff_account->setObjectName(QStringLiteral("pushButton_diff_account"));
+
+        verticalLayout_11->addWidget(pushButton_diff_account);
 
         verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
-        verticalLayout->addItem(verticalSpacer);
+        verticalLayout_11->addItem(verticalSpacer);
+
+
+        horizontalLayoutOptions->addLayout(verticalLayout_11);
+
+        horizontalSpacer_5 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        horizontalLayoutOptions->addItem(horizontalSpacer_5);
+
+
+        verticalLayout->addLayout(horizontalLayoutOptions);
 
 
         horizontalLayout_5->addLayout(verticalLayout);
@@ -631,7 +698,7 @@ public:
         war_latest_groupbox->setGeometry(QRect(30, 90, 400, 291));
         verticalLayoutWidget_3 = new QWidget(war_latest_groupbox);
         verticalLayoutWidget_3->setObjectName(QStringLiteral("verticalLayoutWidget_3"));
-        verticalLayoutWidget_3->setGeometry(QRect(10, 20, 381, 201));
+        verticalLayoutWidget_3->setGeometry(QRect(10, 20, 381, 222));
         verticalLayout_4 = new QVBoxLayout(verticalLayoutWidget_3);
         verticalLayout_4->setSpacing(5);
         verticalLayout_4->setContentsMargins(11, 11, 11, 11);
@@ -665,9 +732,6 @@ public:
         horizontalLayout_8->setContentsMargins(5, -1, 5, -1);
         pushButton_warLatestPath = new QPushButton(verticalLayoutWidget_3);
         pushButton_warLatestPath->setObjectName(QStringLiteral("pushButton_warLatestPath"));
-        QSizePolicy sizePolicy2(QSizePolicy::Minimum, QSizePolicy::Fixed);
-        sizePolicy2.setHorizontalStretch(0);
-        sizePolicy2.setVerticalStretch(0);
         sizePolicy2.setHeightForWidth(pushButton_warLatestPath->sizePolicy().hasHeightForWidth());
         pushButton_warLatestPath->setSizePolicy(sizePolicy2);
         pushButton_warLatestPath->setMinimumSize(QSize(150, 0));
@@ -698,10 +762,10 @@ public:
 
         groupBox_latest = new QGroupBox(verticalLayoutWidget_3);
         groupBox_latest->setObjectName(QStringLiteral("groupBox_latest"));
-        groupBox_latest->setMinimumSize(QSize(0, 110));
+        groupBox_latest->setMinimumSize(QSize(0, 150));
         verticalLayoutWidget = new QWidget(groupBox_latest);
         verticalLayoutWidget->setObjectName(QStringLiteral("verticalLayoutWidget"));
-        verticalLayoutWidget->setGeometry(QRect(10, 20, 121, 86));
+        verticalLayoutWidget->setGeometry(QRect(10, 20, 121, 109));
         verticalLayout_gb_latest = new QVBoxLayout(verticalLayoutWidget);
         verticalLayout_gb_latest->setSpacing(8);
         verticalLayout_gb_latest->setContentsMargins(11, 11, 11, 11);
@@ -732,6 +796,11 @@ public:
         checkBox_gproxy_latest->setObjectName(QStringLiteral("checkBox_gproxy_latest"));
 
         verticalLayout_gb_latest->addWidget(checkBox_gproxy_latest);
+
+        checkBox_pf_latest = new QCheckBox(verticalLayoutWidget);
+        checkBox_pf_latest->setObjectName(QStringLiteral("checkBox_pf_latest"));
+
+        verticalLayout_gb_latest->addWidget(checkBox_pf_latest);
 
 
         verticalLayout_4->addWidget(groupBox_latest);
@@ -961,7 +1030,7 @@ public:
 
         retranslateUi(MainWindow);
 
-        tabWidget->setCurrentIndex(2);
+        tabWidget->setCurrentIndex(0);
 
 
         QMetaObject::connectSlotsByName(MainWindow);
@@ -983,6 +1052,14 @@ public:
         pushButtonGWD->setToolTip(QApplication::translate("MainWindow", "Choose this gateway to play DotA v6.88 lagabuse.com, Warcraft patch 1.26.", 0));
 #endif // QT_NO_TOOLTIP
         pushButtonGWD->setText(QString());
+        label_register->setText(QApplication::translate("MainWindow", "<html><head/><body><p>Don't have an account yet? <a href=\"http://warden.eurobattle.net/pvpgn/createaccount\"><span style=\" text-decoration: underline; color: rgb(0, 170, 255);\">Register</span></a></p></body></html>", 0));
+        label_offline->setText(QApplication::translate("MainWindow", "<html><head/><body><p>You are currently <span style=\" color:#ff6b4e;\">offline</span>.</p></body></html>", 0));
+        label_online->setText(QApplication::translate("MainWindow", "<html><head/><body><p>You are currently <span style=\" color:#55aa00;\">online</span> as </p></body></html>", 0));
+        lineEdit_username->setPlaceholderText(QApplication::translate("MainWindow", "username", 0));
+        lineEdit_password->setText(QString());
+        lineEdit_password->setPlaceholderText(QApplication::translate("MainWindow", "password", 0));
+        pushButton_login->setText(QApplication::translate("MainWindow", "Login", 0));
+        pushButton_diff_account->setText(QApplication::translate("MainWindow", "Use different account", 0));
         tabWidget->setTabText(tabWidget->indexOf(tabLauncher), QApplication::translate("MainWindow", " LAUNCHER ", 0));
         preloaderLabel1->setText(QString());
         labelGproxyout->setText(QApplication::translate("MainWindow", "GProxy output", 0));
@@ -1024,6 +1101,7 @@ public:
         checkBox_opengl_latest->setText(QApplication::translate("MainWindow", "OpenGL", 0));
         checkBox_windowed_latest->setText(QApplication::translate("MainWindow", "Windowed", 0));
         checkBox_gproxy_latest->setText(QApplication::translate("MainWindow", "Use GProxy", 0));
+        checkBox_pf_latest->setText(QApplication::translate("MainWindow", "Use Port Forwarding", 0));
         war_latest_groupbox_2->setTitle(QApplication::translate("MainWindow", "Warcraft 1.26a gateway", 0));
         label->setText(QApplication::translate("MainWindow", "Warcraft 1.26a location", 0));
         label_War126Path->setText(QApplication::translate("MainWindow", "Loading...", 0));
