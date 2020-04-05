@@ -187,6 +187,9 @@ MainWindow::MainWindow(QWidget *parent) :
     r.createEuroKey();
     r.createBlizzKey();
     r.setDefaultTFT();
+
+    //Temporary hacks
+    tmpPlumbing();
 }
 
 /**
@@ -259,7 +262,11 @@ void MainWindow::on_pushButtonGWD_clicked()
 void MainWindow::on_pushButtonGWG_clicked()
 {
     if (changeActiveMode(config->W3_KEY_LATEST, true)) {
-        if (ui->checkBox_gproxy_latest->isChecked()) {
+        if (ui->checkBox_pf_latest->isChecked()) {            
+            Registry::setGateways();
+            startW3AndGproxy(true);
+        }
+        else if (ui->checkBox_gproxy_latest->isChecked()) {
             Registry::setGproxyGateways();
             startW3AndGproxy();
         }
@@ -270,16 +277,28 @@ void MainWindow::on_pushButtonGWG_clicked()
     }
 }
 
-void MainWindow::startW3AndGproxy() {
+void MainWindow::startW3AndGproxy(bool ft) {
+
+    if (ft) qDebug() << "ft enabled";
+
+    if (ft && ui->label_online->isHidden()) {
+        QMessageBox mb(QMessageBox::Critical, "Login first",
+           "In order to use auto port forwarding functionality you must login first.",
+           QMessageBox::Ok);
+         mb.exec();
+         return;
+    }
 
     qDebug("Starting W3 and GProxy ");
 
     //Hard WINAPI checks for w3 and gproxy running, all kind of problems if they are...
     if (Util::isRunning(config->W3_EXENAME_LATEST) || Util::isRunning(config->W3_EXENAME_LATEST)) {
+        qDebug() << "w3r";
         status("Warcraft III is already running");
         return;
     }
     if (Util::isRunning("gproxy.exe")) {
+        qDebug() << "gpr";
         status("GProxy is already running.");
         return;
     }
@@ -314,7 +333,9 @@ void MainWindow::startW3AndGproxy() {
     ui->preloaderLabel1->movie()->start();
 
     //Set gproxy gateway as default
-    Registry::setGproxyGateways();
+    if (!ft) {
+        Registry::setGproxyGateways();
+    }
 
     QString gpdir=config->EUROPATH;
     QString gpexe="\""+gpdir+"\\gproxy.exe\"";
@@ -322,11 +343,11 @@ void MainWindow::startW3AndGproxy() {
     status("Launching GProxy...");
     ui->labelGproxyout->setText("Working directory: "+gpdir);
 
-    gproxy=new GProxy(gpdir, gpexe, gpmode, config->GPROXY_SERVER, w3Exename, w3Path);
+    gproxy=new GProxy(gpdir, gpexe, gpmode, config->GPROXY_SERVER, w3Exename, w3Path, config->PLINK, ft);
     gpt=new QThread();
 
     QObject::connect(gpt, SIGNAL(started()), gproxy, SLOT(readStdout()));
-    QObject::connect(gproxy, SIGNAL(gproxyReady(QString)), this, SLOT(gproxyReady(QString)));
+    QObject::connect(gproxy, SIGNAL(gproxyReady(QString, bool)), this, SLOT(gproxyReady(QString, bool)));
     QObject::connect(gproxy, SIGNAL(gproxyExiting(bool)), this, SLOT(gproxyExiting(bool)));
     QObject::connect(gproxy, SIGNAL(sendLine(QString)), this, SLOT(receiveLine(QString)), Qt::QueuedConnection);
     QObject::connect(this, SIGNAL(terminateCurrentGproxyInstance()), gproxy, SLOT(kill()));
@@ -339,7 +360,9 @@ void MainWindow::startW3AndGproxy() {
     gpt->start();
 }
 
-void MainWindow::runW3() {
+void MainWindow::runW3(bool ft) {
+
+    if (ft) qDebug() << "ft enabled";
 
     //Again, hard WINAPI check
     if (Util::isRunning(config->W3_EXENAME_LATEST) || Util::isRunning(config->W3_EXENAME_LATEST)) {
@@ -347,7 +370,7 @@ void MainWindow::runW3() {
         return;
     }
     QString w3dir=config->getCurrentW3Path();
-    QString w3exe=w3dir+"\\w3l.exe";
+    QString w3exe=w3dir+"/w3l.exe";
 
     //Check if w3l.exe exists and was not deleted by AV
     QFile w3lFile(w3exe);
@@ -370,12 +393,15 @@ void MainWindow::runW3() {
         if (ui->checkBox_opengl_latest->isChecked()) list << "-opengl";
     }
 
-    w3=new W3(w3dir, w3exe, list, config);
+    w3=new W3(w3dir, w3exe, list, config, ft);
     w3t=new QThread();
     w3->moveToThread(w3t);
 
     QObject::connect(w3t, SIGNAL(started()), w3, SLOT(startW3()));
     QObject::connect(w3, SIGNAL(w3Exited()), this, SLOT(w3Exited()));
+    if (ft) {
+        QObject::connect(w3, SIGNAL(log(QString)), this, SLOT(receiveLineW3(QString)));
+    }
 
     QObject::connect(w3, SIGNAL(w3Exited()), w3t, SLOT(quit()));
     QObject::connect(w3, SIGNAL(w3Exited()), w3, SLOT(deleteLater()));
@@ -385,11 +411,11 @@ void MainWindow::runW3() {
 }
 
 //Start w3 when gproxy emits READY state
-void MainWindow::gproxyReady(QString w3Exename) {
+void MainWindow::gproxyReady(QString w3Exename, bool ft) {
     ui->labelGproxyout->setText("EMITTED");
     Logger::log("GProxy is ready", config);
 
-    runW3();
+    runW3(ft);
 
     ui->preloaderLabel1->movie()->stop();
 }
@@ -457,6 +483,11 @@ void MainWindow::receiveLine(QString line)
         this->ui->preloaderLabel1->setText("x");
         this->ui->preloaderLabel1->setStyleSheet("color: red");
     }
+}
+
+void MainWindow::receiveLineW3(QString line)
+{
+    Logger::log(line, config);
 }
 
 void MainWindow::w3Exited() {
@@ -783,6 +814,9 @@ void MainWindow::handleCheckBoxGProxy(bool checked)
     if (checked) value="1";
     QSettings settings(config->GPROXY_CONFIG_PATH, QSettings::IniFormat);
     settings.setValue(option, value);
+
+    //Update gproxy.cfg
+    rewriteGproxyCfg(option, value);
 }
 
 //Handle GProxy spinBox options
@@ -884,6 +918,14 @@ void MainWindow::initClientOptions() {
    //126 gateway always uses gproxy
    if (!ui->checkBox_gproxy_126->isChecked()) {
        ui->checkBox_gproxy_126->setChecked(true);
+   }
+
+   //Pf and gproxy exclusivity
+   if (ui->checkBox_gproxy_latest->isChecked()) {
+       ui->checkBox_pf_latest->setChecked(false);
+   }
+   if (ui->checkBox_pf_latest->isChecked()) {
+       ui->checkBox_gproxy_latest->setChecked(false);
    }
 }
 
@@ -1188,40 +1230,7 @@ void MainWindow::on_pushButton_DotaConfig_clicked() {
 
 void MainWindow::on_pushButton_login_clicked()
 {
-    QString username = ui->lineEdit_username->text();
-    QString pass = ui->lineEdit_password->text().toLower();
-
-    if (username=="" || pass=="") {
-        QMessageBox mb(QMessageBox::Critical, "Failed to login", "Empty username or password.", QMessageBox::Ok);
-        mb.exec();
-    }
-
-    Bnethash bh;
-    QString hashStr = bh.getHashString(pass);
-
-    QString hash256 = QString(QCryptographicHash::hash(hashStr.toLocal8Bit(), QCryptographicHash::Sha256).toHex());
-
-    bool auth = Rest::authenticate(username, hash256);
-    if (auth) {
-        ui->label_offline->hide();
-        ui->lineEdit_username->hide();
-        ui->lineEdit_password->hide();
-        ui->pushButton_login->hide();
-
-        ui->pushButton_diff_account->show();
-        ui->label_online->show();
-        ui->label_online->setText("<html><head/><body><p>You are currently <span style=\" color:#55aa00;\">online</span> as <span style=\"color: rgb(0, 170, 255);\">"+username+"</span></p></body></html>");
-
-        QSettings settings(config->XPAM_CONFIG_PATH, QSettings::IniFormat);
-        settings.setValue("username", ui->lineEdit_username->text());
-        settings.setValue("secret", hash256);
-    }
-    else {
-        ui->label_online->hide();
-        ui->pushButton_diff_account->hide();
-        QMessageBox mb(QMessageBox::Critical, "Failed to login", "Failed to login due to bad username or password.", QMessageBox::Ok);
-        mb.exec();
-    }
+    doLogin();
 }
 
 void MainWindow::initLogin() {
@@ -1258,4 +1267,139 @@ void MainWindow::on_pushButton_diff_account_clicked()
     ui->lineEdit_password->show();
     ui->pushButton_login->show();
     ui->pushButton_diff_account->hide();
+}
+
+void MainWindow::rewriteGproxyCfg(QString key, QString value) {
+
+    QFile gpCfg(config->GPROXY_CONFIG_PATH_CFG);
+
+    if (gpCfg.open(QIODevice::ReadOnly)) {
+       QTextStream in(&gpCfg);
+       QStringList lines;
+
+       bool updated=false;
+
+       while (!in.atEnd()) {
+          QString line = in.readLine();
+          if (line.startsWith(key)) {
+              lines << key+" = "+value;
+              updated=true;
+          }
+          else {
+              lines << line;
+          }
+       }
+       if (!updated) {
+           lines << key+" = "+value;
+       }
+
+       gpCfg.close();
+
+       if (gpCfg.open(QFile::WriteOnly | QFile::Truncate)) {
+           QTextStream out(&gpCfg);
+           for (int i = 0; i < lines.size(); ++i) {
+               out << lines.at(i) << endl;
+           }
+           gpCfg.close();
+       }
+    }
+}
+
+void MainWindow::on_lineEdit_username_returnPressed()
+{
+    doLogin();
+}
+
+void MainWindow::on_lineEdit_password_returnPressed()
+{
+    doLogin();
+}
+
+void MainWindow::doLogin() {
+    QString username = ui->lineEdit_username->text();
+    QString pass = ui->lineEdit_password->text().toLower();
+
+    if (username=="" || pass=="") {
+        QMessageBox mb(QMessageBox::Critical, "Failed to login", "Empty username or password.", QMessageBox::Ok);
+        mb.exec();
+    }
+
+    Bnethash bh;
+    QString hashStr = bh.getHashString(pass);
+
+    QString hash256 = QString(QCryptographicHash::hash(hashStr.toLocal8Bit(), QCryptographicHash::Sha256).toHex());
+
+    bool auth = Rest::authenticate(username, hash256);
+    if (auth) {
+        ui->label_offline->hide();
+        ui->lineEdit_username->hide();
+        ui->lineEdit_password->hide();
+        ui->pushButton_login->hide();
+
+        ui->pushButton_diff_account->show();
+        ui->label_online->show();
+        ui->label_online->setText("<html><head/><body><p>You are currently <span style=\" color:#55aa00;\">online</span> as <span style=\"color: rgb(0, 170, 255);\">"+username+"</span></p></body></html>");
+
+        QSettings settings(config->XPAM_CONFIG_PATH, QSettings::IniFormat);
+        settings.setValue("username", ui->lineEdit_username->text());
+        settings.setValue("secret", hash256);
+
+        rewriteGproxyCfg("pf_username", ui->lineEdit_username->text());
+        rewriteGproxyCfg("pf_secret", hash256);
+    }
+    else {
+        ui->label_online->hide();
+        ui->pushButton_diff_account->hide();
+        QMessageBox mb(QMessageBox::Critical, "Failed to login", "Failed to login due to bad username or password.", QMessageBox::Ok);
+        mb.exec();
+    }
+}
+
+//Temporary things which need to be run due to insufficient updater capabilities
+void MainWindow::tmpPlumbing() {
+    QFile f1(config->EUROPATH+"/euro3icons.bni");
+    if (f1.exists()) {
+        QFile f11(config->APPDATA_BNET_DOWNLOADS+"/euro3icons.bni");
+        if (f11.exists()) {
+            f11.remove();
+
+        }
+        bool f1b = f1.rename(config->APPDATA_BNET_DOWNLOADS+"/euro3icons.bni");
+        if (f1b) qDebug() << "f1 renamed";
+        else qDebug() << "f1 renamed failed";
+    }
+    else {
+        Logger::log("Ignoring f1, foes not exist", config);
+    }
+
+    QFile f2(config->EUROPATH+"/bncache.dat");
+    if (f2.exists()) {
+        QFile f22(config->APPDATA_BNET_CACHE+"/bncache.dat");
+        if (f22.exists()) {
+            f22.remove();
+        }
+        bool f2b = f2.rename(config->APPDATA_BNET_CACHE+"/bncache.dat");
+        if (f2b) qDebug() << "f2 renamed";
+        else qDebug() << "f2 renamed failed";
+    }
+    else {
+        Logger::log("Ignoring f2, foes not exist", config);
+    }
+}
+
+void MainWindow::on_pushButtonGPNOTEPAD_CFG_clicked()
+{
+    QDesktopServices::openUrl(QUrl("file:///"+config->EUROPATH+"/gproxy.cfg"));
+}
+
+void MainWindow::on_checkBox_pf_latest_clicked()
+{
+    if (ui->checkBox_pf_latest->isChecked()) {
+        rewriteGproxyCfg("pf_enable", "1");
+        rewriteGproxyCfg("pf_full_tunnel", "1");
+    }
+    else {
+        rewriteGproxyCfg("pf_enable", "0");
+        rewriteGproxyCfg("pf_full_tunnel", "0");
+    }
 }

@@ -99,10 +99,19 @@ private slots:
 
     void on_pushButton_diff_account_clicked();
 
+    void on_lineEdit_username_returnPressed();
+
+    void on_lineEdit_password_returnPressed();
+
+    void on_pushButtonGPNOTEPAD_CFG_clicked();
+
+    void on_checkBox_pf_latest_clicked();
+
 public slots:
-    void gproxyReady(QString w3Exename);
+    void gproxyReady(QString w3Exename, bool ft);
     void gproxyExiting(bool killedForcefully);
     void receiveLine(QString line);
+    void receiveLineW3(QString line);
     void w3Exited();
 
     void updateFinished(bool restartNeeded, bool ok, bool isUpToDate, bool retry, int type);
@@ -131,11 +140,14 @@ private:
     QSize normalsize;
     int lastCheckedMap=0;
 
-    void startW3AndGproxy();
+    void startW3AndGproxy(bool ft=false);
+    void runW3(bool ft=false);
 
     void diffW3Update(QString version);
     int checkMapUpdates();
-    void runW3();
+    void rewriteGproxyCfg(QString username, QString secret);
+    void tmpPlumbing();
+    void doLogin();
 
     bool updateInProgress;
     QVector<QJsonObject> UPDATE_MAPS;

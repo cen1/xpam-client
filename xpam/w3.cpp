@@ -26,6 +26,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "w3.h"
 #include <QProcess>
 #include <QThread>
+#include <QDebug>
 #include "winutils.h"
 #include "logger.h"
 #include "registry.h"
@@ -33,11 +34,12 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 const QString W3::W3_126="126";
 const QString W3::W3_LATEST="LATEST";
 
-W3::W3(QString w, QString e, QStringList a, Config * c) {
+W3::W3(QString w, QString e, QStringList a, Config * c, bool cFt) {
     workdir=w;
     exedir=e;
     args=a;
     config = c;
+    ft = cFt;
 }
 
 W3::~W3() {
@@ -47,13 +49,38 @@ W3::~W3() {
 void W3::startW3() {
     QProcess p;
     p.setWorkingDirectory(workdir);
-    p.start(exedir, args);
+
+    if (ft) {
+
+        QStringList sArgs;
+        //sArgs << config->SOCKS;
+        sArgs << "-f";
+        sArgs << config->SOCKS_CFG;
+        sArgs << exedir;
+        sArgs << args;
+
+        qDebug() << sArgs.join(" ");
+        //p.start(sArgs.join(" "));
+        p.start(config->SOCKS, sArgs);
+        //p.start("\"C:/Program Files (x86)/Eurobattle.net/proxychains_win32_x86.exe\" -f \"C:/Program Files (x86)/Eurobattle.net/proxychains.conf\" \"E:/Warcraft III/w3l.exe\" \"-windowed\"");
+    }
+    else {
+        p.start(exedir, args);
+    }
+
     if (!p.waitForStarted()) {
         emit w3Exited();
         return;
     }
 
     while(true) {
+        if (ft) {
+            p.waitForReadyRead(100);
+            while (p.canReadLine()) {
+                QString line(p.readLine());
+                emit log(line);
+            }
+        }
         QThread::sleep(1);
         if (p.state() != QProcess::Running) {
             break;

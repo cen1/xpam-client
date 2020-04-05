@@ -19,6 +19,7 @@ public:
     int PATCH;
     QString XPAM_CONFIG_PATH;
     QString GPROXY_CONFIG_PATH;
+    QString GPROXY_CONFIG_PATH_CFG;
     QString ACTIVE_MODE_KEY;
     QString W3_KEY_126;
     QString W3_KEY_LATEST;
@@ -32,8 +33,13 @@ public:
     QString EUROPATH;
     QString SOUNDPATH;
     QString APPDATA;
+    QString APPDATA_BNET_CACHE;
+    QString APPDATA_BNET_DOWNLOADS;
     QString SYSTEM;
     QString GPROXY_SERVER;
+    QString PLINK;
+    QString SOCKS;
+    QString SOCKS_CFG;
     bool ASK_FOR_W3_FAST_UPDATE;
     bool HAS_QUICK_PATCH;
     bool IS_PORTABLE;

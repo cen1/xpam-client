@@ -261,6 +261,8 @@ bool Updater::instructions() {
             else if (l.last()=="MAPPATH") dstPath=config->DOCMAPPATHDL;
             else if (l.last()=="MAPPATH_126") dstPath=config->MAPPATH_126DL;
             else if (l.last()=="SOUNDPATH") dstPath=config->SOUNDPATH;
+            else if (l.last()=="APPDATA_BNET_CACHE") dstPath=config->APPDATA_BNET_CACHE;
+            else if (l.last()=="APPDATA_BNET_DOWNLOADS") dstPath=config->APPDATA_BNET_DOWNLOADS;
 
             if (l[0]=="MOVE") {
 

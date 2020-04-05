@@ -99,6 +99,7 @@ public:
     QCheckBox *checkBox_sound_10;
     QCheckBox *checkBox_sound_11;
     QCheckBox *checkBox_sound_12;
+    QPushButton *pushButtonGPNOTEPAD_CFG;
     QWidget *tabW3;
     QPushButton *pushButtonClientLog;
     QGroupBox *war_latest_groupbox;
@@ -686,6 +687,9 @@ public:
 
         verticalLayout_8->addWidget(checkBox_sound_12);
 
+        pushButtonGPNOTEPAD_CFG = new QPushButton(tabGproxy);
+        pushButtonGPNOTEPAD_CFG->setObjectName(QStringLiteral("pushButtonGPNOTEPAD_CFG"));
+        pushButtonGPNOTEPAD_CFG->setGeometry(QRect(430, 80, 120, 23));
         tabWidget->addTab(tabGproxy, QString());
         tabW3 = new QWidget();
         tabW3->setObjectName(QStringLiteral("tabW3"));
@@ -765,7 +769,7 @@ public:
         groupBox_latest->setMinimumSize(QSize(0, 150));
         verticalLayoutWidget = new QWidget(groupBox_latest);
         verticalLayoutWidget->setObjectName(QStringLiteral("verticalLayoutWidget"));
-        verticalLayoutWidget->setGeometry(QRect(10, 20, 121, 109));
+        verticalLayoutWidget->setGeometry(QRect(10, 20, 151, 109));
         verticalLayout_gb_latest = new QVBoxLayout(verticalLayoutWidget);
         verticalLayout_gb_latest->setSpacing(8);
         verticalLayout_gb_latest->setContentsMargins(11, 11, 11, 11);
@@ -1030,7 +1034,7 @@ public:
 
         retranslateUi(MainWindow);
 
-        tabWidget->setCurrentIndex(0);
+        tabWidget->setCurrentIndex(2);
 
 
         QMetaObject::connectSlotsByName(MainWindow);
@@ -1049,7 +1053,7 @@ public:
 #endif // QT_NO_TOOLTIP
         pushButtonGWG->setText(QString());
 #ifndef QT_NO_TOOLTIP
-        pushButtonGWD->setToolTip(QApplication::translate("MainWindow", "Choose this gateway to play DotA v6.88 lagabuse.com, Warcraft patch 1.26.", 0));
+        pushButtonGWD->setToolTip(QApplication::translate("MainWindow", "Choose this gateway to play d1stats DotA on lagabuse.com, Warcraft patch 1.26.", 0));
 #endif // QT_NO_TOOLTIP
         pushButtonGWD->setText(QString());
         label_register->setText(QApplication::translate("MainWindow", "<html><head/><body><p>Don't have an account yet? <a href=\"http://warden.eurobattle.net/pvpgn/createaccount\"><span style=\" text-decoration: underline; color: rgb(0, 170, 255);\">Register</span></a></p></body></html>", 0));
@@ -1088,6 +1092,7 @@ public:
         checkBox_sound_10->setText(QApplication::translate("MainWindow", "\"You were kicked\" sound", 0));
         checkBox_sound_11->setText(QApplication::translate("MainWindow", "\"Autujoining game\" sound", 0));
         checkBox_sound_12->setText(QApplication::translate("MainWindow", "\"Server Announcement\" sound", 0));
+        pushButtonGPNOTEPAD_CFG->setText(QApplication::translate("MainWindow", "Open config file", 0));
         tabWidget->setTabText(tabWidget->indexOf(tabGproxy), QApplication::translate("MainWindow", "  GPROXY  ", 0));
         pushButtonClientLog->setText(QApplication::translate("MainWindow", "Open Client log file", 0));
         war_latest_groupbox->setTitle(QApplication::translate("MainWindow", "Latest Warcraft gateway (1.28.5)", 0));
@@ -1119,7 +1124,7 @@ public:
         pushButtonBU->setText(QApplication::translate("MainWindow", "Get Beta patch", 0));
         checkBox_updates->setText(QApplication::translate("MainWindow", "Automatic updates enabled", 0));
         tabWidget->setTabText(tabWidget->indexOf(tabUpdate), QApplication::translate("MainWindow", " UPDATE ", 0));
-        labelAbout->setText(QApplication::translate("MainWindow", "<html><head/><body><p>Eurobattle.net Client version 1.1 (August 2018), developed by cen, additional contributions by deer</p><p><br/>We are searching for Qt/ C++ developers to further expand this client.</p><p><br/></p><p>TODO:</p><p>-bnet Chat client</p><p>-TS integration</p><p>-Displaying player's profile and league stats in the client</p><p>- Native Warkeys?</p><p>-and more...</p><p><br/></p><p>Special thanks to:</p><p><span style=\" font-weight:600;\">IStealSkills</span> - help with desig</p><p><span style=\" font-weight:600;\">Stefos007</span> - original GProxy implementation</p><p>BNETtdocs, Stormlib, PvPGN and GHost projects</p></body></html>", 0));
+        labelAbout->setText(QApplication::translate("MainWindow", "<html><head/><body><p>Eurobattle.net Client version 1.2 (April 2020), developed by cen, additional contributions by deer</p><p><br/>We are searching for Qt/ C++ developers to further expand this client.</p><p><br/></p><p>TODO:</p><p>-bnet Chat client</p><p>-TS integration</p><p>-Displaying player's profile and league stats in the client</p><p>- Native Warkeys?</p><p>-and more...</p><p><br/></p><p>Special thanks to:</p><p><span style=\" font-weight:600;\">IStealSkills</span> - help with desig</p><p><span style=\" font-weight:600;\">Stefos007</span> - original GProxy implementation</p><p>BNETtdocs, Stormlib, PvPGN and GHost projects</p></body></html>", 0));
         tabWidget->setTabText(tabWidget->indexOf(tabAbout), QApplication::translate("MainWindow", " ABOUT ", 0));
     } // retranslateUi
 

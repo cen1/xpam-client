@@ -106,6 +106,19 @@ namespace Winutils
         }
     }
 
+    inline QString getAppDataLocal()
+    {
+        TCHAR szPath[MAX_PATH];
+        if(SUCCEEDED(SHGetFolderPath(NULL, CSIDL_LOCAL_APPDATA, NULL, 0, szPath)))
+        {
+            return QString::fromWCharArray(szPath);
+        }
+        else
+        {
+            return "";
+        }
+    }
+
     inline QString getSystem32()
         {
             TCHAR szPath[MAX_PATH];

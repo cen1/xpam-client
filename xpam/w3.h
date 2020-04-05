@@ -40,12 +40,13 @@ signals:
 private:
     Config * config;
 public:
-    W3(QString w, QString e, QStringList a, Config * c);
+    W3(QString w, QString e, QStringList a, Config * c, bool cFt);
     ~W3();
 
     QString workdir;
     QString exedir;
     QStringList args;
+    bool ft;
 
     static void sanityCheck(Config * config);
 

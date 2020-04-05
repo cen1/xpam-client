@@ -53,10 +53,11 @@ Config::Config()
 //#else
     IS_PORTABLE = false;
 
-    EUROPATH    = Registry::getEuroPath();
-    XPAM_CONFIG_PATH = EUROPATH+"\\xpam.ini";
-    GPROXY_CONFIG_PATH = EUROPATH+"\\gproxy.ini";
-    SOUNDPATH   = EUROPATH+"\\sounds";
+    EUROPATH    = Registry::getEuroPath().replace(QChar('\\'), QChar('/'));
+    XPAM_CONFIG_PATH = EUROPATH+"/xpam.ini";
+    GPROXY_CONFIG_PATH = EUROPATH+"/gproxy.ini";
+    GPROXY_CONFIG_PATH_CFG = EUROPATH+"/gproxy.cfg";
+    SOUNDPATH   = EUROPATH+"/sounds";
 
     QSettings settings(XPAM_CONFIG_PATH, QSettings::IniFormat);
     ACTIVE_MODE_KEY = settings.value("active_mode", W3_KEY_LATEST).toString();
@@ -65,9 +66,12 @@ Config::Config()
         ACTIVE_MODE_KEY = W3_KEY_LATEST;
         settings.setValue("active_mode", ACTIVE_MODE_KEY);
     }
-    W3PATH_126 = settings.value(W3_KEY_126 + "/path", "").toString();
-    W3PATH_LATEST = settings.value(W3_KEY_LATEST + "/path", Registry::getW3dir()).toString();
+    W3PATH_126 = settings.value(W3_KEY_126 + "/path", "").toString().replace(QChar('\\'), QChar('/'));
+    W3PATH_LATEST = settings.value(W3_KEY_LATEST + "/path", Registry::getW3dir()).toString().replace(QChar('\\'), QChar('/'));
     GPROXY_SERVER = settings.value("server", "server.eurobattle.net").toString();
+    PLINK = EUROPATH+"/plink.exe";
+    SOCKS = EUROPATH+"/proxychains_win32_x86.exe";
+    SOCKS_CFG = EUROPATH+"/proxychains.conf";
 
     DOCPATH     = QStandardPaths::locate(QStandardPaths::DocumentsLocation, QString(), QStandardPaths::LocateDirectory)+"Warcraft III";
     DOCMAPPATH  = QStandardPaths::locate(QStandardPaths::DocumentsLocation, QString(), QStandardPaths::LocateDirectory)+"Warcraft III/Maps";
@@ -77,7 +81,9 @@ Config::Config()
     MAPPATH_126DL= W3PATH_126+"/Maps/Download";
 
     PATCH       = Registry::getPatchVersion();
-    APPDATA     = Winutils::getAppData()+"\\Eurobattle.net";
+    APPDATA     = Winutils::getAppData()+"/Eurobattle.net";
+    APPDATA_BNET_CACHE = Winutils::getAppDataLocal()+"/Blizzard/Warcraft III/BattleNet/Cache";
+    APPDATA_BNET_DOWNLOADS = Winutils::getAppDataLocal()+"/Blizzard/Warcraft III/BattleNet/Downloads";
     SYSTEM      = Winutils::getSystem32();
 
     ASK_FOR_W3_FAST_UPDATE = true;
@@ -97,6 +103,7 @@ Config::Config()
     W3_OPTIONS.append("fullscreen");
     W3_OPTIONS.append("opengl");
     W3_OPTIONS.append("gproxy");
+    W3_OPTIONS.append("pf");
 
     // List of XPAM options
     XPAM_OPTIONS.append("updates");
@@ -152,7 +159,7 @@ QString Config::getCurrentW3Exename() {
 
 QString Config::getW3ExePath(QString modeKey) {
     modeKey = getCorrectW3Key(modeKey);
-    return getW3Path(modeKey) + "\\" + getW3Exename(modeKey);
+    return getW3Path(modeKey) + "/" + getW3Exename(modeKey);
 }
 
 QString Config::getCurrentW3ExePath() {

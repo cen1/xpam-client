@@ -25,6 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "gproxy.h"
 #include <QDir>
+#include <QDebug>
 #ifndef QTHREAD_H
     #include "QThread"
 #endif
@@ -33,7 +34,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #endif
 #include "winutils.h"
 
-GProxy::GProxy(QString gpDir, QString gpExe, QString gpMode, QString gpServer, QString w3exe, QString w3p)
+GProxy::GProxy(QString gpDir, QString gpExe, QString gpMode, QString gpServer, QString w3exe, QString w3p, QString gpPlink, bool gpFt)
 {
     abort=false;
     workdir=gpDir;
@@ -42,6 +43,8 @@ GProxy::GProxy(QString gpDir, QString gpExe, QString gpMode, QString gpServer, Q
     server=gpServer;
     w3Exename=w3exe;
     w3Path=w3p;
+    plink=gpPlink;
+    ft=gpFt;
 
     this->killedForcefully = false;
 }
@@ -58,6 +61,14 @@ void GProxy::readStdout() {
     args << "--w3exe=\"" + w3Path + "/" + w3Exename + "\"";
     args << "--mode=" + mode;
     args << "--server=" + server;
+
+    if (ft) {
+        args << "--ft=1";
+        args << "--plink=\""+plink+"\"";
+    }
+
+    qDebug() << args.join(" ");
+
     process = new QProcess();
     process->setWorkingDirectory(workdir);
     process->start(args.join(" "));
@@ -83,7 +94,8 @@ void GProxy::readStdout() {
             //if (tokens.count() >= 4) emit sendLine(tokens[1]+"---"+tokens[2]+"---"+tokens[3]);
             //general
             if (tokens.size() >= 4 && tokens[1] == "SYSTEM" && tokens[2] == "LOG_INFO" && tokens[3] == "GPROXY READY") {
-                emit gproxyReady(w3Exename);
+                qDebug() << "gpr";
+                emit gproxyReady(w3Exename, ft);
             }
             else if (tokens.size() >= 4 && tokens[1] == "SYSTEM" && tokens[2] == "LOG_INFO" && tokens[3] == "GPROXY EXITING") {
                 emit sendLine("Received the EXIT signal");
