@@ -19,7 +19,7 @@ public:
     int PATCH;
     QString XPAM_CONFIG_PATH;
     QString GPROXY_CONFIG_PATH;
-    QString GPROXY_CONFIG_PATH_CFG;
+    //QString GPROXY_CONFIG_PATH_CFG;
     QString ACTIVE_MODE_KEY;
     QString W3_KEY_126;
     QString W3_KEY_LATEST;

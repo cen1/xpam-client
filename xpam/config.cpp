@@ -56,7 +56,7 @@ Config::Config()
     EUROPATH    = Registry::getEuroPath().replace(QChar('\\'), QChar('/'));
     XPAM_CONFIG_PATH = EUROPATH+"/xpam.ini";
     GPROXY_CONFIG_PATH = EUROPATH+"/gproxy.ini";
-    GPROXY_CONFIG_PATH_CFG = EUROPATH+"/gproxy.cfg";
+    //GPROXY_CONFIG_PATH_CFG = EUROPATH+"/gproxy.cfg";
     SOUNDPATH   = EUROPATH+"/sounds";
 
     QSettings settings(XPAM_CONFIG_PATH, QSettings::IniFormat);
@@ -103,7 +103,7 @@ Config::Config()
     W3_OPTIONS.append("fullscreen");
     W3_OPTIONS.append("opengl");
     W3_OPTIONS.append("gproxy");
-    W3_OPTIONS.append("pf");
+    W3_OPTIONS.append("pfEnable");
 
     // List of XPAM options
     XPAM_OPTIONS.append("updates");

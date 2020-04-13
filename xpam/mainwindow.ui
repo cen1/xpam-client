@@ -245,7 +245,7 @@ QCheckBox::indicator:checked {
          <enum>Qt::LeftToRight</enum>
         </property>
         <property name="currentIndex">
-         <number>2</number>
+         <number>0</number>
         </property>
         <widget class="QWidget" name="tabLauncher">
          <property name="sizePolicy">
@@ -391,10 +391,10 @@ or manually host your games.</string>
                      <string notr="true"/>
                     </property>
                     <property name="text">
-                     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Don't have an account yet? &lt;a href=&quot;http://warden.eurobattle.net/pvpgn/createaccount&quot;&gt;&lt;span style=&quot; text-decoration: underline; color: rgb(0, 170, 255);&quot;&gt;Register&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Don't have an account yet? &lt;a href=&quot;http://warden.eurobattle.net/pvpgn/createaccount&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#85c3e5;&quot;&gt;Register&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                     </property>
                     <property name="openExternalLinks">
-                     <bool>false</bool>
+                     <bool>true</bool>
                     </property>
                    </widget>
                   </item>
@@ -1146,7 +1146,13 @@ or manually host your games.</string>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QCheckBox" name="checkBox_pf_latest">
+                 <widget class="QCheckBox" name="checkBox_pfEnable_latest">
+                  <property name="maximumSize">
+                   <size>
+                    <width>16777215</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
                   <property name="text">
                    <string>Use Port Forwarding</string>
                   </property>
@@ -1409,6 +1415,25 @@ or manually host your games.</string>
             </item>
            </layout>
           </widget>
+         </widget>
+         <widget class="QPushButton" name="pushButtonClientConfig">
+          <property name="geometry">
+           <rect>
+            <x>190</x>
+            <y>30</y>
+            <width>150</width>
+            <height>19</height>
+           </rect>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>150</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>Open Client config file</string>
+          </property>
          </widget>
         </widget>
         <widget class="QWidget" name="tabUpdate">

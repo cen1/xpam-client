@@ -120,7 +120,7 @@ public:
     QCheckBox *checkBox_opengl_latest;
     QCheckBox *checkBox_windowed_latest;
     QCheckBox *checkBox_gproxy_latest;
-    QCheckBox *checkBox_pf_latest;
+    QCheckBox *checkBox_pfEnable_latest;
     QGroupBox *war_latest_groupbox_2;
     QWidget *verticalLayoutWidget_4;
     QVBoxLayout *verticalLayout_7;
@@ -144,6 +144,7 @@ public:
     QHBoxLayout *horizontalLayout_10;
     QPushButton *pushButton_DotaConfig;
     QSpacerItem *horizontalSpacer_4;
+    QPushButton *pushButtonClientConfig;
     QWidget *tabUpdate;
     QWidget *layoutWidget1;
     QVBoxLayout *verticalLayout_6;
@@ -433,7 +434,7 @@ public:
         label_register = new QLabel(tabLauncher);
         label_register->setObjectName(QStringLiteral("label_register"));
         label_register->setStyleSheet(QStringLiteral(""));
-        label_register->setOpenExternalLinks(false);
+        label_register->setOpenExternalLinks(true);
 
         verticalLayout_11->addWidget(label_register);
 
@@ -801,10 +802,11 @@ public:
 
         verticalLayout_gb_latest->addWidget(checkBox_gproxy_latest);
 
-        checkBox_pf_latest = new QCheckBox(verticalLayoutWidget);
-        checkBox_pf_latest->setObjectName(QStringLiteral("checkBox_pf_latest"));
+        checkBox_pfEnable_latest = new QCheckBox(verticalLayoutWidget);
+        checkBox_pfEnable_latest->setObjectName(QStringLiteral("checkBox_pfEnable_latest"));
+        checkBox_pfEnable_latest->setMaximumSize(QSize(16777215, 16777215));
 
-        verticalLayout_gb_latest->addWidget(checkBox_pf_latest);
+        verticalLayout_gb_latest->addWidget(checkBox_pfEnable_latest);
 
 
         verticalLayout_4->addWidget(groupBox_latest);
@@ -933,6 +935,10 @@ public:
 
         verticalLayout_7->addWidget(groupBox_DotAOptions);
 
+        pushButtonClientConfig = new QPushButton(tabW3);
+        pushButtonClientConfig->setObjectName(QStringLiteral("pushButtonClientConfig"));
+        pushButtonClientConfig->setGeometry(QRect(190, 30, 150, 19));
+        pushButtonClientConfig->setMaximumSize(QSize(150, 16777215));
         tabWidget->addTab(tabW3, QString());
         tabUpdate = new QWidget();
         tabUpdate->setObjectName(QStringLiteral("tabUpdate"));
@@ -1034,7 +1040,7 @@ public:
 
         retranslateUi(MainWindow);
 
-        tabWidget->setCurrentIndex(2);
+        tabWidget->setCurrentIndex(0);
 
 
         QMetaObject::connectSlotsByName(MainWindow);
@@ -1056,7 +1062,7 @@ public:
         pushButtonGWD->setToolTip(QApplication::translate("MainWindow", "Choose this gateway to play d1stats DotA on lagabuse.com, Warcraft patch 1.26.", 0));
 #endif // QT_NO_TOOLTIP
         pushButtonGWD->setText(QString());
-        label_register->setText(QApplication::translate("MainWindow", "<html><head/><body><p>Don't have an account yet? <a href=\"http://warden.eurobattle.net/pvpgn/createaccount\"><span style=\" text-decoration: underline; color: rgb(0, 170, 255);\">Register</span></a></p></body></html>", 0));
+        label_register->setText(QApplication::translate("MainWindow", "<html><head/><body><p>Don't have an account yet? <a href=\"http://warden.eurobattle.net/pvpgn/createaccount\"><span style=\" text-decoration: underline; color:#85c3e5;\">Register</span></a></p></body></html>", 0));
         label_offline->setText(QApplication::translate("MainWindow", "<html><head/><body><p>You are currently <span style=\" color:#ff6b4e;\">offline</span>.</p></body></html>", 0));
         label_online->setText(QApplication::translate("MainWindow", "<html><head/><body><p>You are currently <span style=\" color:#55aa00;\">online</span> as </p></body></html>", 0));
         lineEdit_username->setPlaceholderText(QApplication::translate("MainWindow", "username", 0));
@@ -1106,7 +1112,7 @@ public:
         checkBox_opengl_latest->setText(QApplication::translate("MainWindow", "OpenGL", 0));
         checkBox_windowed_latest->setText(QApplication::translate("MainWindow", "Windowed", 0));
         checkBox_gproxy_latest->setText(QApplication::translate("MainWindow", "Use GProxy", 0));
-        checkBox_pf_latest->setText(QApplication::translate("MainWindow", "Use Port Forwarding", 0));
+        checkBox_pfEnable_latest->setText(QApplication::translate("MainWindow", "Use Port Forwarding", 0));
         war_latest_groupbox_2->setTitle(QApplication::translate("MainWindow", "Warcraft 1.26a gateway", 0));
         label->setText(QApplication::translate("MainWindow", "Warcraft 1.26a location", 0));
         label_War126Path->setText(QApplication::translate("MainWindow", "Loading...", 0));
@@ -1120,6 +1126,7 @@ public:
         checkBox_dummy->setText(QApplication::translate("MainWindow", "dummy", 0));
         groupBox_DotAOptions->setTitle(QApplication::translate("MainWindow", "DotA Options", 0));
         pushButton_DotaConfig->setText(QApplication::translate("MainWindow", "Edit DotA Config", 0));
+        pushButtonClientConfig->setText(QApplication::translate("MainWindow", "Open Client config file", 0));
         tabWidget->setTabText(tabWidget->indexOf(tabW3), QApplication::translate("MainWindow", " WARCRAFT", 0));
         pushButtonBU->setText(QApplication::translate("MainWindow", "Get Beta patch", 0));
         checkBox_updates->setText(QApplication::translate("MainWindow", "Automatic updates enabled", 0));

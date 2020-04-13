@@ -105,7 +105,7 @@ private slots:
 
     void on_pushButtonGPNOTEPAD_CFG_clicked();
 
-    void on_checkBox_pf_latest_clicked();
+    void on_pushButtonClientConfig_clicked();
 
 public slots:
     void gproxyReady(QString w3Exename, bool ft);
@@ -145,7 +145,7 @@ private:
 
     void diffW3Update(QString version);
     int checkMapUpdates();
-    void rewriteGproxyCfg(QString username, QString secret);
+    //void rewriteGproxyCfg(QString username, QString secret);
     void tmpPlumbing();
     void doLogin();
 

@@ -66,6 +66,9 @@ void GProxy::readStdout() {
         args << "--ft=1";
         args << "--plink=\""+plink+"\"";
     }
+    else {
+        args << "--ft=0";
+    }
 
     qDebug() << args.join(" ");
 

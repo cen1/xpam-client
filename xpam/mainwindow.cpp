@@ -99,6 +99,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->checkBox_sound_10, SIGNAL(clicked(bool)), this, SLOT(handleCheckBoxGProxy(bool)));
     connect(ui->checkBox_sound_11, SIGNAL(clicked(bool)), this, SLOT(handleCheckBoxGProxy(bool)));
     connect(ui->checkBox_sound_12, SIGNAL(clicked(bool)), this, SLOT(handleCheckBoxGProxy(bool)));
+    connect(ui->checkBox_pfEnable_latest, SIGNAL(clicked(bool)), this, SLOT(handleCheckBoxGProxy(bool)));
 
     connect(ui->spinBox_autojoin_delay, SIGNAL(valueChanged(int)), this, SLOT(handleSpinBoxGProxy(int)));
     connect(ui->spinBox_autojoin_gndelay, SIGNAL(valueChanged(int)), this, SLOT(handleSpinBoxGProxy(int)));
@@ -108,7 +109,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->checkBox_opengl_latest, SIGNAL(clicked(bool)), this, SLOT(handleCheckboxClient(bool)));
     connect(ui->checkBox_fullscreen_latest, SIGNAL(clicked(bool)), this, SLOT(handleCheckboxClient(bool)));
     connect(ui->checkBox_gproxy_latest, SIGNAL(clicked(bool)), this, SLOT(handleCheckboxClient(bool)));
-    connect(ui->checkBox_pf_latest, SIGNAL(clicked(bool)), this, SLOT(handleCheckboxClient(bool)));
+    connect(ui->checkBox_pfEnable_latest, SIGNAL(clicked(bool)), this, SLOT(handleCheckboxClient(bool)));
 
     connect(ui->checkBox_windowed_126, SIGNAL(clicked(bool)), this, SLOT(handleCheckboxClient(bool)));
     connect(ui->checkBox_opengl_126, SIGNAL(clicked(bool)), this, SLOT(handleCheckboxClient(bool)));
@@ -262,7 +263,7 @@ void MainWindow::on_pushButtonGWD_clicked()
 void MainWindow::on_pushButtonGWG_clicked()
 {
     if (changeActiveMode(config->W3_KEY_LATEST, true)) {
-        if (ui->checkBox_pf_latest->isChecked()) {            
+        if (ui->checkBox_pfEnable_latest->isChecked()) {
             Registry::setGateways();
             startW3AndGproxy(true);
         }
@@ -284,6 +285,14 @@ void MainWindow::startW3AndGproxy(bool ft) {
     if (ft && ui->label_online->isHidden()) {
         QMessageBox mb(QMessageBox::Critical, "Login first",
            "In order to use auto port forwarding functionality you must login first.",
+           QMessageBox::Ok);
+         mb.exec();
+         return;
+    }
+    QSettings settings(config->GPROXY_CONFIG_PATH, QSettings::IniFormat);
+    if (settings.value("pf_username", "")=="" || settings.value("pf_secret", "")=="") {
+        QMessageBox mb(QMessageBox::Critical, "Relog",
+           "Please login again on the dashboard.",
            QMessageBox::Ok);
          mb.exec();
          return;
@@ -809,14 +818,11 @@ void MainWindow::handleCheckboxXpam(bool checked)
 //Handle GProxy checkbox options
 void MainWindow::handleCheckBoxGProxy(bool checked)
 {
-    QString option = QObject::sender()->objectName().remove("checkBox_");
+    QString option = Util::fromCamelCase(QObject::sender()->objectName().remove("checkBox_").remove("_latest"));
     QString value = "0";
     if (checked) value="1";
     QSettings settings(config->GPROXY_CONFIG_PATH, QSettings::IniFormat);
     settings.setValue(option, value);
-
-    //Update gproxy.cfg
-    rewriteGproxyCfg(option, value);
 }
 
 //Handle GProxy spinBox options
@@ -832,6 +838,7 @@ void MainWindow::handleCheckboxClient(bool checked)
 {
     QSettings settings(config->XPAM_CONFIG_PATH, QSettings::IniFormat);
     QStringList tokens = QObject::sender()->objectName().split("_");
+
     if (tokens.size() != 3) {
         return;
     }
@@ -849,13 +856,13 @@ void MainWindow::handleCheckboxClient(bool checked)
             settings.setValue(config->W3_KEY_LATEST + "/fullscreen", "0");
         }
         //Pf and gproxy exclusivity
-        if (QObject::sender()==ui->checkBox_pf_latest && ui->checkBox_gproxy_latest->isChecked()) {
+        if (QObject::sender()==ui->checkBox_pfEnable_latest && ui->checkBox_gproxy_latest->isChecked()) {
             ui->checkBox_gproxy_latest->setChecked(false);
             settings.setValue(config->W3_KEY_LATEST + "/gproxy", "0");
         }
-        if (QObject::sender()==ui->checkBox_gproxy_latest && ui->checkBox_pf_latest->isChecked()) {
-            ui->checkBox_pf_latest->setChecked(false);
-            settings.setValue(config->W3_KEY_LATEST + "/pf", "0");
+        if (QObject::sender()==ui->checkBox_gproxy_latest && ui->checkBox_pfEnable_latest->isChecked()) {
+            ui->checkBox_pfEnable_latest->setChecked(false);
+            settings.setValue(config->W3_KEY_LATEST + "/pfEnable", "0");
         }
     }
     if (mode_key!=config->W3_KEY_126 || option!="gproxy") {
@@ -900,6 +907,7 @@ void MainWindow::initClientOptions() {
 
     foreach (const QString &postfix, checkbox_postfixes) {
         foreach (const QString &option_name, config->W3_OPTIONS) {
+            qDebug() << "checkBox_"+option_name + "_" + postfix;
             QCheckBox * find = this->findChild<QCheckBox *>("checkBox_"+option_name + "_" + postfix);
             if (find != 0) {
                 QString mode_key = postfix == "126" ? config->W3_KEY_126 : config->W3_KEY_LATEST;
@@ -922,9 +930,9 @@ void MainWindow::initClientOptions() {
 
    //Pf and gproxy exclusivity
    if (ui->checkBox_gproxy_latest->isChecked()) {
-       ui->checkBox_pf_latest->setChecked(false);
+       ui->checkBox_pfEnable_latest->setChecked(false);
    }
-   if (ui->checkBox_pf_latest->isChecked()) {
+   if (ui->checkBox_pfEnable_latest->isChecked()) {
        ui->checkBox_gproxy_latest->setChecked(false);
    }
 }
@@ -1269,7 +1277,7 @@ void MainWindow::on_pushButton_diff_account_clicked()
     ui->pushButton_diff_account->hide();
 }
 
-void MainWindow::rewriteGproxyCfg(QString key, QString value) {
+/*void MainWindow::rewriteGproxyCfg(QString key, QString value) {
 
     QFile gpCfg(config->GPROXY_CONFIG_PATH_CFG);
 
@@ -1298,12 +1306,12 @@ void MainWindow::rewriteGproxyCfg(QString key, QString value) {
        if (gpCfg.open(QFile::WriteOnly | QFile::Truncate)) {
            QTextStream out(&gpCfg);
            for (int i = 0; i < lines.size(); ++i) {
-               out << lines.at(i) << endl;
+               out << lines.at(i) << "\r\n";
            }
            gpCfg.close();
        }
     }
-}
+}*/
 
 void MainWindow::on_lineEdit_username_returnPressed()
 {
@@ -1344,8 +1352,9 @@ void MainWindow::doLogin() {
         settings.setValue("username", ui->lineEdit_username->text());
         settings.setValue("secret", hash256);
 
-        rewriteGproxyCfg("pf_username", ui->lineEdit_username->text());
-        rewriteGproxyCfg("pf_secret", hash256);
+        QSettings settingsGp(config->GPROXY_CONFIG_PATH, QSettings::IniFormat);
+        settingsGp.setValue("pf_username", ui->lineEdit_username->text());
+        settingsGp.setValue("pf_secret", hash256);
     }
     else {
         ui->label_online->hide();
@@ -1389,17 +1398,10 @@ void MainWindow::tmpPlumbing() {
 
 void MainWindow::on_pushButtonGPNOTEPAD_CFG_clicked()
 {
-    QDesktopServices::openUrl(QUrl("file:///"+config->EUROPATH+"/gproxy.cfg"));
+    QDesktopServices::openUrl(QUrl("file:///"+config->EUROPATH+"/gproxy.ini"));
 }
 
-void MainWindow::on_checkBox_pf_latest_clicked()
+void MainWindow::on_pushButtonClientConfig_clicked()
 {
-    if (ui->checkBox_pf_latest->isChecked()) {
-        rewriteGproxyCfg("pf_enable", "1");
-        rewriteGproxyCfg("pf_full_tunnel", "1");
-    }
-    else {
-        rewriteGproxyCfg("pf_enable", "0");
-        rewriteGproxyCfg("pf_full_tunnel", "0");
-    }
+    QDesktopServices::openUrl(QUrl("file:///"+config->EUROPATH+"/xpam.ini"));
 }
