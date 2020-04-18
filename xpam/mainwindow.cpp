@@ -282,6 +282,7 @@ void MainWindow::startW3AndGproxy(bool ft) {
 
     if (ft) qDebug() << "ft enabled";
 
+    //Ft and no login
     if (ft && ui->label_online->isHidden()) {
         QMessageBox mb(QMessageBox::Critical, "Login first",
            "In order to use auto port forwarding functionality you must login first.",
@@ -289,8 +290,10 @@ void MainWindow::startW3AndGproxy(bool ft) {
          mb.exec();
          return;
     }
+
+    //Ft and no config
     QSettings settings(config->GPROXY_CONFIG_PATH, QSettings::IniFormat);
-    if (settings.value("pf_username", "")=="" || settings.value("pf_secret", "")=="") {
+    if (ft && (settings.value("pf_username", "")=="" || settings.value("pf_secret", "")=="")) {
         QMessageBox mb(QMessageBox::Critical, "Relog",
            "Please login again on the dashboard.",
            QMessageBox::Ok);
