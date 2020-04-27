@@ -9,8 +9,10 @@
 
 bool Rest::authenticate(QString username, QString secret) {
 
-    QUrl serviceUrl = QUrl("http://warden.eurobattle.net/api/pvpgn/auth");
+    QUrl serviceUrl = QUrl("https://eurobattle.net/api/pvpgn/auth");
     QNetworkRequest request(serviceUrl);
+    request.setAttribute(QNetworkRequest::FollowRedirectsAttribute, true);
+
     QJsonObject json;
     json.insert("username",username);
     json.insert("secret",secret);
