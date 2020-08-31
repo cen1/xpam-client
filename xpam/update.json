@@ -1,59 +1,51 @@
 {
     "beta" : {
-            "version" : 32,
-            "mirror1" : "http://xpam.pl/update/update32beta.zip",
-            "mirror2" : "http://xpam.pl/update/update32beta.zip",
-            "mirror3" : "http://xpam.pl/update/update32beta.zip",
-            "mirror4" : "http://xpam.pl/update/update32beta.zip",
-            "sha1" : "52afe5b015d1da4ebf2216004d92c52d6ca62bdd"
+            "version" : 34,
+            "mirror1" : "http://xpam.pl/update/update34.zip",
+            "mirror2" : "http://xpam.pl/update/update34.zip",
+            "mirror3" : "http://xpam.pl/update/update34.zip",
+            "mirror4" : "http://xpam.pl/update/update34.zip",
+            "sha1" : "8622119e427e833314953146d0043d99f529a700"
     },
-    "1.28.4" : {
-            "version" : 1,
-            "mirror1" : "https://drive.google.com/uc?id=0B6cPcpH1ZToaLTJMOE82NFA2a1k",
-            "mirror2" : "http://files.eurobattle.net/updates/w3/1284_to_1285.zip",
-            "mirror3" : "http://xpam.pl/update/1284_to_1285.zip",
-            "mirror4" : "http://xpam.pl/update/1284_to_1285.zip",
-            "sha1" : "84c1afdf8c33b58a69505ce960517e339ceaa33a"
+    "37" : {
+            "version" : 37,
+            "mirror1" : "https://drive.google.com/uc?id=1Qhl2jBarLxMWeMPDuQaJIiCjNi9zwTwZ",
+            "mirror2" : "http://xpam.pl/update/update37.zip",
+            "mirror3" : "http://xpam.pl/update/update37.zip",
+            "mirror4" : "http://xpam.pl/update/update37.zip",
+            "sha1" : "bd24f32e6245835e817221bf775027daed7900e2"
     },
-    "1.28.2" : {
-            "version" : 1,
-            "mirror1" : "https://drive.google.com/uc?id=0B6cPcpH1ZToaUjVPcVl5YUFBUE0",
-            "mirror2" : "http://files.eurobattle.net/updates/w3/1282_to_1284.zip",
-            "mirror3" : "http://xpam.pl/update/1282_to_1284.zip",
-            "mirror4" : "http://xpam.pl/update/1282_to_1284.zip",
-            "sha1" : "986a14e15aa26d99f494ddd3150da9bbf1857947"
+    "36" : {
+            "version" : 36,
+            "mirror1" : "https://drive.google.com/uc?id=1YN5yNeTAa9lbvFS43kJmnLXvvSMBC-oE",
+            "mirror2" : "http://xpam.pl/update/update36.zip",
+            "mirror3" : "http://xpam.pl/update/update36.zip",
+            "mirror4" : "http://xpam.pl/update/update36.zip",
+            "sha1" : "545efa4945c65cec0be4770ed2305e9411aed0a9"
     },
-    "1.28.1" : {
-            "version" : 1,
-            "mirror1" : "https://drive.google.com/uc?id=0B6cPcpH1ZToacklMQVJQWjIwQXM",
-            "mirror2" : "http://files.eurobattle.net/updates/w3/1281_to_1282.zip",
-            "mirror3" : "http://xpam.pl/update/1281_to_1282.zip",
-            "mirror4" : "http://xpam.pl/update/1281_to_1282.zip",
-            "sha1" : "b27d84fc2496c7581fbe1055509b97f03384517a"
+    "35" : {
+            "version" : 35,
+            "mirror1" : "https://drive.google.com/uc?id=17jws3V1c4Vaxu07OWhOFlxxa-emjjkWM",
+            "mirror2" : "http://xpam.pl/update/update35.zip",
+            "mirror3" : "http://xpam.pl/update/update35.zip",
+            "mirror4" : "http://xpam.pl/update/update35.zip",
+            "sha1" : "73ee8086bfa2ca1fec2c9a7033da0bdfebcd77bf"
     },
-    "1.28.0" : {
-            "version" : 1,
-            "mirror1" : "https://drive.google.com/uc?id=0B6cPcpH1ZToaUUxhblcwdWRTOHc",
-            "mirror2" : "http://files.eurobattle.net/updates/w3/1280_to_1281.zip",
-            "mirror3" : "http://xpam.pl/update/1280_to_1281.zip",
-            "mirror4" : "http://xpam.pl/update/1280_to_1281.zip",
-            "sha1" : "284a25e33eb787952654a963cc290dc45db647dc"
+    "34" : {
+            "version" : 34,
+            "mirror1" : "https://drive.google.com/uc?id=1BtaUNO1Kl3KmXyuewUif3kebUsARwqyZ",
+            "mirror2" : "http://xpam.pl/update/update34.zip",
+            "mirror3" : "http://xpam.pl/update/update34.zip",
+            "mirror4" : "http://xpam.pl/update/update34.zip",
+            "sha1" : "8622119e427e833314953146d0043d99f529a700"
     },
-    "1.28.5.7680.FULL" : {
-            "version" : 1,
-            "mirror1" : "https://goo.gl/CJWwNp",
-            "mirror2" : "http://xpam.pl/update/w31_28_5.zip",
-            "mirror3" : "http://files.eurobattle.net/updates/w3/w31_28_5.zip",
-            "mirror4" : "https://goo.gl/rzjixw",
-            "sha1" : "53ad53375a9ef77beed4424652cc7f2cd7a5c5cc"
-    },
-    "DotA Allstars 6.88w9.4.w3x" : {
-        "version" : 1,
-        "mirror1" : "https://drive.google.com/uc?id=1TCbDABmR_OvnlZn2hvKdIHKvKXcMFwLV",
-        "mirror2" : "http://xpam.pl/update/v88w9.4.zip",
-        "mirror3" : "http://xpam.pl/update/v88w9.4.zip",
-        "mirror4" : "http://xpam.pl/update/v88w9.4.zip",
-        "sha1" : "452ec1e6b866ec84ef9d42c1f7112d98311282b5"
+    "33" : {
+            "version" : 33,
+            "mirror1" : "https://drive.google.com/uc?id=1JRD48oiWM4OizJEWSD9GOQkd0oQfwPdc",
+            "mirror2" : "https://drive.google.com/uc?id=1IDO2K6WWcZs3Z4hosL7alOeRc4MikIc3",
+            "mirror3" : "http://xpam.pl/update/update33.zip",
+            "mirror4" : "http://xpam.pl/update/update33.zip",
+            "sha1" : "7b9e4dfa72571966cbedb4ac648b3b9e44f17db8"
     },
     "32" : {
             "version" : 32,
@@ -315,14 +307,14 @@
             "sha1" : "3a8b1084455e6c21def70f49dfab6b40e9f7ba8f"
         },
         {
-            "name": "DotA_Allstars_6.89a7.w3x",
+            "name": "DotA_Allstars_7.00d1.w3x",
             "targetPath": "W3PATH_126",
             "version" : 1,
-            "mirror1" : "https://drive.google.com/uc?id=1ZKVVynG9Lf1KMczFoLRbE0N_6v1-l8kw",
-            "mirror2" : "https://drive.google.com/uc?id=1ReOxpan7c-tZqpt7xA6ASnLvAZGFJzSg",
-            "mirror3" : "http://xpam.pl/update/v6.89a7.zip",
-            "mirror4" : "http://xpam.pl/update/v6.89a7.zip",
-            "sha1" : "69a09909dcaafc11f35f9aa0e7e778fb613d5a37"
+            "mirror1" : "https://www.googleapis.com/drive/v3/files/1sBTatTNruzDifOU-6il0MI7CfvFEMd1k/?key=AIzaSyDexUMJldtp6pVsAeddDQFwT8HAJEhgJpY&alt=media",
+            "mirror2" : "https://www.googleapis.com/drive/v3/files/1BAfLfyJh6g-F2TlZI7t5muhHl5cNCC3o/?key=AIzaSyDexUMJldtp6pVsAeddDQFwT8HAJEhgJpY&alt=media",
+            "mirror3" : "http://xpam.pl/update/v7.00d1.zip",
+            "mirror4" : "http://xpam.pl/update/v7.00d1.zip",
+            "sha1" : "677bb08a6a78117f5875de76dbc9b4cd18879dc7"
         }
     ]
 }

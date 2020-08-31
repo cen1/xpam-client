@@ -593,7 +593,9 @@ int Updater::setCurrentPlusOneJson() {
  */
 QByteArray Updater::simpleDl(QUrl url) {
     QNetworkAccessManager nam;
-    QNetworkReply * reply = nam.get(QNetworkRequest(url));
+    QNetworkRequest request(url);
+    request.setTransferTimeout(10000);
+    QNetworkReply * reply = nam.get(request);
 
     QEventLoop loop;
     connect(reply, SIGNAL(finished()), &loop, SLOT(quit()));

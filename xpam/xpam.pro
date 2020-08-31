@@ -45,8 +45,7 @@ HEADERS  += mainwindow.h \
     logger.h \
     patcher.h \
     bnethash.h \
-    rest.h \
-    replytimeout.h
+    rest.h
 
 FORMS    += mainwindow.ui
 

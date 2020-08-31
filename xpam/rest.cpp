@@ -5,12 +5,14 @@
 #include "QNetworkRequest"
 #include "QNetworkAccessManager"
 #include "QEventLoop"
-#include "replytimeout.h"
+#include "QDebug"
+#include "QNetworkReply"
 
 bool Rest::authenticate(QString username, QString secret) {
 
     QUrl serviceUrl = QUrl("https://eurobattle.net/api/pvpgn/auth");
     QNetworkRequest request(serviceUrl);
+    request.setTransferTimeout(10000);
     request.setAttribute(QNetworkRequest::FollowRedirectsAttribute, true);
 
     QJsonObject json;
@@ -22,7 +24,6 @@ bool Rest::authenticate(QString username, QString secret) {
 
     QNetworkAccessManager nam;
     QNetworkReply * reply = nam.post(request, jsonData);
-    ReplyTimeout::set(reply, 5000);
 
     QEventLoop loop;
     connect(reply, SIGNAL(finished()), &loop, SLOT(quit()));

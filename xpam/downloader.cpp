@@ -52,7 +52,9 @@ void Downloader::startDl() {
         file->open(QFile::WriteOnly | QFile::Truncate);
 
         //nam.setNetworkAccessible(QNetworkAccessManager::Accessible);
-        reply = nam.get(QNetworkRequest(url));
+        QNetworkRequest request(url);
+        request.setTransferTimeout(10000);
+        reply = nam.get(request);
 
         emit sendInfo("Starting download");
         emit sendInfo(""); //empty line which will be removed for the progress text
@@ -94,7 +96,9 @@ void Downloader::finishedSlot(){
             //emit sendInfo("Redirected to "+possibleRedirectUrl.toUrl().toString());
 
             reply->deleteLater();
-            reply = nam.get(QNetworkRequest(possibleRedirectUrl.toUrl())); //when this reply is finished this slot will get re-triggered
+            QNetworkRequest request(possibleRedirectUrl.toUrl());
+            request.setTransferTimeout(10000);
+            reply = nam.get(request); //when this reply is finished this slot will get re-triggered
 
             emit sendInfo("Redirecting...");
             emit sendInfo("");
