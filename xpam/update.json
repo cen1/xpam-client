@@ -315,6 +315,16 @@
             "mirror3" : "http://xpam.pl/update/v7.00d1.zip",
             "mirror4" : "http://xpam.pl/update/v7.00d1.zip",
             "sha1" : "677bb08a6a78117f5875de76dbc9b4cd18879dc7"
+        },
+        {
+            "name": "DotA_Allstars_7.00e1.w3x",
+            "targetPath": "W3PATH_126",
+            "version" : 1,
+            "mirror1" : "https://www.googleapis.com/drive/v3/files/1p76n7rtukGfwOPQ4aRFf_BOh2BIm1XrL/?key=AIzaSyDexUMJldtp6pVsAeddDQFwT8HAJEhgJpY&alt=media",
+            "mirror2" : "https://www.googleapis.com/drive/v3/files/1VeBGug63NjA4gQuZNlH535XNIdMiplgW/?key=AIzaSyDexUMJldtp6pVsAeddDQFwT8HAJEhgJpY&alt=media",
+            "mirror3" : "http://xpam.pl/update/v7.00e1.zip",
+            "mirror4" : "http://xpam.pl/update/v7.00e1.zip",
+            "sha1" : "d29744a1c2381491d8ec9d6e84bc4638ec109eb1"
         }
     ]
 }

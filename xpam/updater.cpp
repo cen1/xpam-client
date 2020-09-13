@@ -110,6 +110,19 @@ void Updater::startUpdate() {
         return;
     }
 
+    QCryptographicHash h1(QCryptographicHash::Sha1);
+    h1.addData(j1);
+    QString sh1(h1.result().toHex());
+    emit sendLine("Hash 1 is: "+sh1);
+    h1.reset();
+    h1.addData(j2);
+    QString sh2(h1.result().toHex());
+    emit sendLine("Hash 2 is: "+sh2);
+    h1.reset();
+    h1.addData(j3);
+    QString sh3(h1.result().toHex());
+    emit sendLine("Hash 3 is: "+sh3);
+
     if (j1==j2){
         jsonba=j1;
     }
@@ -587,14 +600,11 @@ int Updater::setCurrentPlusOneJson() {
     return 1;
 }
 
-/*
- * When there are no redirects and no need for progress reporting
- * For getting JSON
- */
 QByteArray Updater::simpleDl(QUrl url) {
     QNetworkAccessManager nam;
     QNetworkRequest request(url);
     request.setTransferTimeout(10000);
+    request.setAttribute(QNetworkRequest::FollowRedirectsAttribute, true);
     QNetworkReply * reply = nam.get(request);
 
     QEventLoop loop;
