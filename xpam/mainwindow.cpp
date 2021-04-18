@@ -48,6 +48,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "QJsonArray"
 #include "bnethash.h"
 #include "rest.h"
+#include "QUrl"
 
 #ifndef WINUTILS_H
     #include "winutils.h"
@@ -191,6 +192,13 @@ MainWindow::MainWindow(QWidget *parent) :
 
     //Temporary hacks
     tmpPlumbing();
+
+    //Mm web
+    QSettings settings(config->XPAM_CONFIG_PATH, QSettings::IniFormat);
+    QString mmUrl = settings.value("mm_url").toString();
+    qDebug() << mmUrl;
+    this->ui->mmWebEngineView->load(QUrl(mmUrl));
+    this->ui->mmWebEngineView->show();
 }
 
 /**

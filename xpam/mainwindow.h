@@ -30,6 +30,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "QString"
 #include "QMouseEvent"
 #include "QSettings"
+//#include "QWebView"
 
 namespace Ui {
 class MainWindow;
@@ -151,6 +152,8 @@ private:
 
     bool updateInProgress;
     QVector<QJsonObject> UPDATE_MAPS;
+
+    //QWebView *m_Mview;
 
 protected:
     //void mousePressEvent(QMouseEvent *event);

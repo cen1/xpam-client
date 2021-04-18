@@ -29,6 +29,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <QApplication>
 #include "QSplashScreen"
 #include "QTextCodec"
+#include "QWebEngineSettings"
 
 int main(int argc, char *argv[])
 {
@@ -37,6 +38,15 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
     MainWindow w;
     w.setWindowIcon(QIcon(":/favicon.ico"));
+
+    //Mm
+    QWebEngineSettings::defaultSettings()->setAttribute(QWebEngineSettings::ShowScrollBars, false);
+    QWebEngineSettings::defaultSettings()->setAttribute(QWebEngineSettings::PdfViewerEnabled, false);
+    QWebEngineSettings::defaultSettings()->setAttribute(QWebEngineSettings::WebGLEnabled, false);
+    QWebEngineSettings::defaultSettings()->setAttribute(QWebEngineSettings::LocalContentCanAccessFileUrls, false);
+    QWebEngineSettings::defaultSettings()->setAttribute(QWebEngineSettings::LocalContentCanAccessRemoteUrls, false);
+    QWebEngineSettings::defaultSettings()->setAttribute(QWebEngineSettings::JavascriptCanOpenWindows, false);
+    QWebEngineSettings::defaultSettings()->setAttribute(QWebEngineSettings::ShowScrollBars, false);
 
     //splash screen to hide the few seconds of update check
     QPixmap pixmap(":/splash.png");

@@ -4,7 +4,9 @@
 #
 #-------------------------------------------------
 
-QT += core gui network
+QT += core gui network webenginewidgets
+
+#webkit webview webkitwidgets
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 

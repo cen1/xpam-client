@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'mainwindow.ui'
 **
-** Created by: Qt User Interface Compiler version 5.15.1
+** Created by: Qt User Interface Compiler version 5.15.2
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -29,6 +29,7 @@
 #include <QtWidgets/QTextBrowser>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
+#include "qwebengineview.h"
 
 QT_BEGIN_NAMESPACE
 
@@ -143,6 +144,9 @@ public:
     QPushButton *pushButton_DotaConfig;
     QSpacerItem *horizontalSpacer_4;
     QPushButton *pushButtonClientConfig;
+    QWidget *tabMm;
+    QVBoxLayout *verticalLayout_10;
+    QWebEngineView *mmWebEngineView;
     QWidget *tabUpdate;
     QWidget *layoutWidget1;
     QVBoxLayout *verticalLayout_6;
@@ -530,7 +534,7 @@ public:
         gpoptionsgroupBox->setStyleSheet(QString::fromUtf8(""));
         layoutWidget = new QWidget(gpoptionsgroupBox);
         layoutWidget->setObjectName(QString::fromUtf8("layoutWidget"));
-        layoutWidget->setGeometry(QRect(10, 30, 411, 97));
+        layoutWidget->setGeometry(QRect(10, 30, 411, 116));
         verticalLayout_2 = new QVBoxLayout(layoutWidget);
         verticalLayout_2->setSpacing(6);
         verticalLayout_2->setContentsMargins(11, 11, 11, 11);
@@ -565,7 +569,7 @@ public:
 
         verticalLayoutWidget_6 = new QWidget(gpoptionsgroupBox);
         verticalLayoutWidget_6->setObjectName(QString::fromUtf8("verticalLayoutWidget_6"));
-        verticalLayoutWidget_6->setGeometry(QRect(10, 140, 411, 89));
+        verticalLayoutWidget_6->setGeometry(QRect(10, 140, 454, 98));
         verticalLayout_9 = new QVBoxLayout(verticalLayoutWidget_6);
         verticalLayout_9->setSpacing(6);
         verticalLayout_9->setContentsMargins(11, 11, 11, 11);
@@ -604,7 +608,7 @@ public:
         groupBox->setGeometry(QRect(40, 120, 361, 291));
         verticalLayoutWidget_5 = new QWidget(groupBox);
         verticalLayoutWidget_5->setObjectName(QString::fromUtf8("verticalLayoutWidget_5"));
-        verticalLayoutWidget_5->setGeometry(QRect(10, 20, 341, 261));
+        verticalLayoutWidget_5->setGeometry(QRect(10, 20, 341, 308));
         verticalLayout_8 = new QVBoxLayout(verticalLayoutWidget_5);
         verticalLayout_8->setSpacing(6);
         verticalLayout_8->setContentsMargins(11, 11, 11, 11);
@@ -701,7 +705,7 @@ public:
         war_latest_groupbox->setGeometry(QRect(30, 90, 400, 291));
         verticalLayoutWidget_3 = new QWidget(war_latest_groupbox);
         verticalLayoutWidget_3->setObjectName(QString::fromUtf8("verticalLayoutWidget_3"));
-        verticalLayoutWidget_3->setGeometry(QRect(10, 20, 381, 222));
+        verticalLayoutWidget_3->setGeometry(QRect(10, 20, 381, 226));
         verticalLayout_4 = new QVBoxLayout(verticalLayoutWidget_3);
         verticalLayout_4->setSpacing(5);
         verticalLayout_4->setContentsMargins(11, 11, 11, 11);
@@ -768,7 +772,7 @@ public:
         groupBox_latest->setMinimumSize(QSize(0, 150));
         verticalLayoutWidget = new QWidget(groupBox_latest);
         verticalLayoutWidget->setObjectName(QString::fromUtf8("verticalLayoutWidget"));
-        verticalLayoutWidget->setGeometry(QRect(10, 20, 151, 109));
+        verticalLayoutWidget->setGeometry(QRect(10, 20, 151, 124));
         verticalLayout_gb_latest = new QVBoxLayout(verticalLayoutWidget);
         verticalLayout_gb_latest->setSpacing(8);
         verticalLayout_gb_latest->setContentsMargins(11, 11, 11, 11);
@@ -814,7 +818,7 @@ public:
         war_latest_groupbox_2->setGeometry(QRect(470, 90, 400, 291));
         verticalLayoutWidget_4 = new QWidget(war_latest_groupbox_2);
         verticalLayoutWidget_4->setObjectName(QString::fromUtf8("verticalLayoutWidget_4"));
-        verticalLayoutWidget_4->setGeometry(QRect(9, 19, 381, 241));
+        verticalLayoutWidget_4->setGeometry(QRect(9, 19, 381, 245));
         verticalLayout_7 = new QVBoxLayout(verticalLayoutWidget_4);
         verticalLayout_7->setSpacing(6);
         verticalLayout_7->setContentsMargins(11, 11, 11, 11);
@@ -876,7 +880,7 @@ public:
         groupBox_126->setMinimumSize(QSize(0, 110));
         verticalLayoutWidget_2 = new QWidget(groupBox_126);
         verticalLayoutWidget_2->setObjectName(QString::fromUtf8("verticalLayoutWidget_2"));
-        verticalLayoutWidget_2->setGeometry(QRect(10, 20, 191, 86));
+        verticalLayoutWidget_2->setGeometry(QRect(10, 20, 191, 98));
         verticalLayout__gb_126 = new QVBoxLayout(verticalLayoutWidget_2);
         verticalLayout__gb_126->setSpacing(8);
         verticalLayout__gb_126->setContentsMargins(11, 11, 11, 11);
@@ -915,7 +919,7 @@ public:
         groupBox_DotAOptions->setMinimumSize(QSize(0, 50));
         horizontalLayoutWidget = new QWidget(groupBox_DotAOptions);
         horizontalLayoutWidget->setObjectName(QString::fromUtf8("horizontalLayoutWidget"));
-        horizontalLayoutWidget->setGeometry(QRect(0, 19, 381, 22));
+        horizontalLayoutWidget->setGeometry(QRect(0, 19, 381, 23));
         horizontalLayout_10 = new QHBoxLayout(horizontalLayoutWidget);
         horizontalLayout_10->setSpacing(5);
         horizontalLayout_10->setContentsMargins(11, 11, 11, 11);
@@ -938,6 +942,24 @@ public:
         pushButtonClientConfig->setGeometry(QRect(190, 30, 150, 19));
         pushButtonClientConfig->setMaximumSize(QSize(150, 16777215));
         tabWidget->addTab(tabW3, QString());
+        tabMm = new QWidget();
+        tabMm->setObjectName(QString::fromUtf8("tabMm"));
+        sizePolicy.setHeightForWidth(tabMm->sizePolicy().hasHeightForWidth());
+        tabMm->setSizePolicy(sizePolicy);
+        tabMm->setMaximumSize(QSize(16777215, 16777215));
+        verticalLayout_10 = new QVBoxLayout(tabMm);
+        verticalLayout_10->setSpacing(0);
+        verticalLayout_10->setContentsMargins(11, 11, 11, 11);
+        verticalLayout_10->setObjectName(QString::fromUtf8("verticalLayout_10"));
+        verticalLayout_10->setContentsMargins(0, 0, 0, 0);
+        mmWebEngineView = new QWebEngineView(tabMm);
+        mmWebEngineView->setObjectName(QString::fromUtf8("mmWebEngineView"));
+        sizePolicy.setHeightForWidth(mmWebEngineView->sizePolicy().hasHeightForWidth());
+        mmWebEngineView->setSizePolicy(sizePolicy);
+
+        verticalLayout_10->addWidget(mmWebEngineView);
+
+        tabWidget->addTab(tabMm, QString());
         tabUpdate = new QWidget();
         tabUpdate->setObjectName(QString::fromUtf8("tabUpdate"));
         sizePolicy.setHeightForWidth(tabUpdate->sizePolicy().hasHeightForWidth());
@@ -1008,7 +1030,7 @@ public:
         tabAbout->setSizePolicy(sizePolicy);
         layoutWidget2 = new QWidget(tabAbout);
         layoutWidget2->setObjectName(QString::fromUtf8("layoutWidget2"));
-        layoutWidget2->setGeometry(QRect(20, 20, 395, 501));
+        layoutWidget2->setGeometry(QRect(20, 20, 471, 501));
         verticalLayout_3 = new QVBoxLayout(layoutWidget2);
         verticalLayout_3->setSpacing(10);
         verticalLayout_3->setContentsMargins(11, 11, 11, 11);
@@ -1038,7 +1060,7 @@ public:
 
         retranslateUi(MainWindow);
 
-        tabWidget->setCurrentIndex(0);
+        tabWidget->setCurrentIndex(3);
 
 
         QMetaObject::connectSlotsByName(MainWindow);
@@ -1126,6 +1148,7 @@ public:
         pushButton_DotaConfig->setText(QCoreApplication::translate("MainWindow", "Edit DotA Config", nullptr));
         pushButtonClientConfig->setText(QCoreApplication::translate("MainWindow", "Open Client config file", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(tabW3), QCoreApplication::translate("MainWindow", " WARCRAFT", nullptr));
+        tabWidget->setTabText(tabWidget->indexOf(tabMm), QCoreApplication::translate("MainWindow", "MM", nullptr));
         pushButtonBU->setText(QCoreApplication::translate("MainWindow", "Get Beta patch", nullptr));
         checkBox_updates->setText(QCoreApplication::translate("MainWindow", "Automatic updates enabled", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(tabUpdate), QCoreApplication::translate("MainWindow", " UPDATE ", nullptr));

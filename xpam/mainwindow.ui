@@ -245,7 +245,7 @@ QCheckBox::indicator:checked {
          <enum>Qt::LeftToRight</enum>
         </property>
         <property name="currentIndex">
-         <number>0</number>
+         <number>3</number>
         </property>
         <widget class="QWidget" name="tabLauncher">
          <property name="sizePolicy">
@@ -627,7 +627,7 @@ or manually host your games.</string>
              <x>10</x>
              <y>30</y>
              <width>411</width>
-             <height>97</height>
+             <height>116</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -679,8 +679,8 @@ or manually host your games.</string>
             <rect>
              <x>10</x>
              <y>140</y>
-             <width>411</width>
-             <height>89</height>
+             <width>454</width>
+             <height>98</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_9">
@@ -763,7 +763,7 @@ or manually host your games.</string>
              <x>10</x>
              <y>20</y>
              <width>341</width>
-             <height>261</height>
+             <height>308</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_8">
@@ -949,7 +949,7 @@ or manually host your games.</string>
              <x>10</x>
              <y>20</y>
              <width>381</width>
-             <height>222</height>
+             <height>226</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_4">
@@ -1101,7 +1101,7 @@ or manually host your games.</string>
                  <x>10</x>
                  <y>20</y>
                  <width>151</width>
-                 <height>109</height>
+                 <height>124</height>
                 </rect>
                </property>
                <layout class="QVBoxLayout" name="verticalLayout_gb_latest">
@@ -1183,7 +1183,7 @@ or manually host your games.</string>
              <x>9</x>
              <y>19</y>
              <width>381</width>
-             <height>241</height>
+             <height>245</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_7">
@@ -1308,7 +1308,7 @@ or manually host your games.</string>
                  <x>10</x>
                  <y>20</y>
                  <width>191</width>
-                 <height>86</height>
+                 <height>98</height>
                 </rect>
                </property>
                <layout class="QVBoxLayout" name="verticalLayout__gb_126">
@@ -1379,7 +1379,7 @@ or manually host your games.</string>
                  <x>0</x>
                  <y>19</y>
                  <width>381</width>
-                 <height>22</height>
+                 <height>23</height>
                 </rect>
                </property>
                <layout class="QHBoxLayout" name="horizontalLayout_10">
@@ -1435,6 +1435,50 @@ or manually host your games.</string>
            <string>Open Client config file</string>
           </property>
          </widget>
+        </widget>
+        <widget class="QWidget" name="tabMm">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <attribute name="title">
+          <string>MM</string>
+         </attribute>
+         <layout class="QVBoxLayout" name="verticalLayout_10">
+          <property name="spacing">
+           <number>0</number>
+          </property>
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QWebEngineView" name="mmWebEngineView" native="true">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </widget>
         <widget class="QWidget" name="tabUpdate">
          <property name="sizePolicy">
@@ -1544,7 +1588,7 @@ or manually host your games.</string>
            <rect>
             <x>20</x>
             <y>20</y>
-            <width>395</width>
+            <width>471</width>
             <height>501</height>
            </rect>
           </property>
@@ -1586,6 +1630,14 @@ or manually host your games.</string>
   <widget class="QStatusBar" name="statusBar"/>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>QWebEngineView</class>
+   <extends>QWidget</extends>
+   <header>qwebengineview.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources>
   <include location="xpam.qrc"/>
  </resources>
