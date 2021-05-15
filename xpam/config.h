@@ -19,6 +19,9 @@ public:
     int PATCH;
     QString XPAM_CONFIG_PATH;
     QString GPROXY_CONFIG_PATH;
+    QString DOTA_CONFIG_PATH;
+    QString W3l_CONFIG_PATH_LATEST;
+    QString W3l_CONFIG_PATH_126;
     //QString GPROXY_CONFIG_PATH_CFG;
     QString ACTIVE_MODE_KEY;
     QString W3_KEY_126;

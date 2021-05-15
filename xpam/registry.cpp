@@ -313,3 +313,36 @@ bool Registry::createBlizzKey() {
         return false;
     }
 }
+
+bool Registry::createWebProtoKeys(QString clientPath) {
+    CRegKey reg;
+    if (reg.Open(HKEY_CLASSES_ROOT, _T("xpam"), KEY_WRITE | KEY_WOW64_64KEY)!=ERROR_SUCCESS) {
+        if (reg.Create(HKEY_CLASSES_ROOT, _T("xpam"), REG_NONE, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS | KEY_WOW64_64KEY, NULL, NULL) == ERROR_SUCCESS) {
+            this->setRegString(reg, "URL Protocol", "");
+            reg.Close();
+            reg.Open(HKEY_CLASSES_ROOT, _T("xpam"), KEY_WRITE | KEY_WOW64_64KEY);
+            this->setRegString(reg, "", "URL:Xpam");
+            reg.Close();
+
+            if (reg.Create(HKEY_CLASSES_ROOT, _T("xpam\\shell\\open\\command"), REG_NONE, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS | KEY_WOW64_64KEY, NULL, NULL) == ERROR_SUCCESS) {
+                clientPath = clientPath.replace("/", "\\");
+                clientPath = "\""+clientPath+"\"  \"%1\"";
+                this->setRegString(reg, "", clientPath);
+                reg.Close();
+                return true;
+            }
+            else {
+                reg.Close();
+                return false;
+            }
+        }
+        else {
+            reg.Close();
+            return false;
+        }
+    }
+    else {
+        reg.Close();
+        return false;
+    }
+}

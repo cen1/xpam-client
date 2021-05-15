@@ -7,6 +7,14 @@
             "mirror4" : "http://xpam.pl/update/update34.zip",
             "sha1" : "8622119e427e833314953146d0043d99f529a700"
     },
+	"38" : {
+            "version" : 39,
+            "mirror1" : "https://drive.google.com/uc?id=1Qhl2jBarLxMWeMPDuQaJIiCjNi9zwTwZ",
+            "mirror2" : "http://xpam.pl/update/update37.zip",
+            "mirror3" : "http://xpam.pl/update/update37.zip",
+            "mirror4" : "http://xpam.pl/update/update37.zip",
+            "sha1" : "bd24f32e6245835e817221bf775027daed7900e1"
+    },
     "37" : {
             "version" : 37,
             "mirror1" : "https://drive.google.com/uc?id=1Qhl2jBarLxMWeMPDuQaJIiCjNi9zwTwZ",

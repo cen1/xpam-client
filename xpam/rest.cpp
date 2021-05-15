@@ -7,6 +7,7 @@
 #include "QEventLoop"
 #include "QDebug"
 #include "QNetworkReply"
+#include "QJsonArray"
 
 bool Rest::authenticate(QString username, QString secret) {
 
@@ -41,5 +42,37 @@ bool Rest::authenticate(QString username, QString secret) {
     }
     else {
         return false;
+    }
+}
+
+QString Rest::getSeverStatus() {
+    QUrl serviceUrl = QUrl("https://eurobattle.net/new/api/pvpgn/status/json");
+    QNetworkRequest request(serviceUrl);
+    request.setTransferTimeout(2000);
+    request.setAttribute(QNetworkRequest::FollowRedirectsAttribute, true);
+
+    request.setHeader(QNetworkRequest::ContentTypeHeader,"application/json");
+
+    QNetworkAccessManager nam;
+    QNetworkReply * reply = nam.get(request);
+
+    QEventLoop loop;
+    connect(reply, SIGNAL(finished()), &loop, SLOT(quit()));
+    loop.exec();
+
+    if (reply->error() == QNetworkReply::NoError) {
+        QByteArray ba(reply->readAll());
+        reply->deleteLater();
+        QJsonDocument json =  QJsonDocument::fromJson(ba);
+        QJsonArray data=json.array();
+        if (data.size()>0) {
+            return data.at(0).toString();
+        }
+        else {
+            return "";
+        }
+    }
+    else {
+        return "";
     }
 }

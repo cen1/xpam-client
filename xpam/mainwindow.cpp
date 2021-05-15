@@ -70,15 +70,10 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     ui->tabWidget->setCurrentIndex(0);
+    ui->tabWidget->removeTab(4); //TODO: Remove when MM is ready, check other tab index setters
 
     isStartupUpdate=true;
-    ismax=false;
-
-    //Hide layout dummies
-    QSizePolicy sp_retain = ui->checkBox_dummy->sizePolicy();
-    sp_retain.setRetainSizeWhenHidden(true);
-    ui->checkBox_dummy->setSizePolicy(sp_retain);
-    ui->checkBox_dummy->hide();
+    ismax=false;    
 
     // GProxy options
     connect(ui->checkBox_console, SIGNAL(clicked(bool)), this, SLOT(handleCheckBoxGProxy(bool)));
@@ -115,6 +110,10 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->checkBox_windowed_126, SIGNAL(clicked(bool)), this, SLOT(handleCheckboxClient(bool)));
     connect(ui->checkBox_opengl_126, SIGNAL(clicked(bool)), this, SLOT(handleCheckboxClient(bool)));
     connect(ui->checkBox_gproxy_126, SIGNAL(clicked(bool)), this, SLOT(handleCheckboxClient(bool)));
+    connect(ui->checkBox_w3l_126_lobby, SIGNAL(clicked(bool)), this, SLOT(handleCheckboxW3l(bool)));
+
+    //DotA Options
+    connect(ui->checkBox_dota_GAMEOPTIONS_WideScreen, SIGNAL(clicked(bool)), this, SLOT(handleCheckboxDota(bool)));
 
     // XPAM options
     connect(ui->checkBox_updates, SIGNAL(clicked(bool)), this, SLOT(handleCheckboxXpam(bool)));
@@ -199,6 +198,31 @@ MainWindow::MainWindow(QWidget *parent) :
     qDebug() << mmUrl;
     this->ui->mmWebEngineView->load(QUrl(mmUrl));
     this->ui->mmWebEngineView->show();
+
+    //Web link init
+    setupWebLinkProtoHandlers();
+
+    //Server status
+    showServerStatus();
+    this->serverStatusTimer = new QTimer(this);
+    connect(this->serverStatusTimer, SIGNAL(timeout()), this, SLOT(showServerStatus()));
+    this->serverStatusTimer->start(1000*60*15);
+}
+
+//Method that is called after client is u to date and ready to be used
+void MainWindow::postUpdate() {
+
+    //Launch game
+    if (QCoreApplication::arguments().size()>=2) {
+        QString arg = QCoreApplication::arguments().at(1);
+        Logger::log(arg, config);
+        if ("xpam:126"==arg) {
+            on_pushButtonGWD_clicked();
+        }
+        else if ("xpam:128"==arg){
+            on_pushButtonGWN_clicked();
+        }
+    }
 }
 
 /**
@@ -571,7 +595,7 @@ void MainWindow::checkUpdates(){
     //disable beta button or all kind of hell will ensue
     ui->pushButtonBU->setDisabled(true);
 
-    ui->tabWidget->setCurrentIndex(3);
+    ui->tabWidget->setCurrentIndex(4);
     lockTabs(ui->tabWidget->currentIndex());
 
     updater=new Updater(config, 0);
@@ -724,6 +748,7 @@ void MainWindow::updateFinished(bool restartNeeded, bool ok, bool isUpToDate, bo
                 int mapret = checkMapUpdates();
                 if (mapret==0) {
                     ui->tabWidget->setCurrentIndex(0);
+                    postUpdate();
                 }
                 else if (mapret==1) {
                     enableButtons=false;
@@ -755,6 +780,7 @@ void MainWindow::updateFinished(bool restartNeeded, bool ok, bool isUpToDate, bo
         Logger::log("Map download successful", config);
         if (checkMapUpdates()==0) {
             ui->tabWidget->setCurrentIndex(0);
+            postUpdate();
         }
     }
     else {
@@ -783,6 +809,8 @@ void MainWindow::updateFinished(bool restartNeeded, bool ok, bool isUpToDate, bo
                     enableButtons=false;
                 }
             }
+
+            postUpdate();
         }
         else {
             //Client needed updating
@@ -800,12 +828,17 @@ void MainWindow::updateFinished(bool restartNeeded, bool ok, bool isUpToDate, bo
                     //We might not be in event loop yet
                     QTimer::singleShot(1000, this, SLOT(quit()));
                 }
+                else {
+                    postUpdate();
+                }
             }
             else {
                 Logger::log("Client update failed", config);
                 ui->textBrowserUpdate->append("Update failed. Check the log or update tab to find out the reason.");
                 status("Update failed due to critical error");
                 ui->pushButtonBU->setEnabled(true);
+
+                postUpdate();
             }
         }
     }
@@ -883,6 +916,43 @@ void MainWindow::handleCheckboxClient(bool checked)
     //126 gateway always uses gproxy
     if (!ui->checkBox_gproxy_126->isChecked()) {
         ui->checkBox_gproxy_126->setChecked(true);
+    }
+}
+
+//Handle DotA options
+void MainWindow::handleCheckboxDota(bool checked)
+{
+    QSettings settings(config->DOTA_CONFIG_PATH, QSettings::IniFormat);
+    QStringList tokens = QObject::sender()->objectName().split("_");
+
+    if (tokens.size() != 4 || tokens[1]!="dota") {
+        return;
+    }
+    // checkBox_dota_[group]_[option] e.g. checkBox_dota_GAMEOPTIONS_WideScreen
+    QString group = tokens[2];
+    QString option = tokens[3];
+
+    settings.setValue(group + "/" + option, QVariant(checked).toString());
+}
+
+//Handle w3l options
+void MainWindow::handleCheckboxW3l(bool checked)
+{
+    // checkBox_w3l_[126/latest]_option
+
+    QStringList tokens = QObject::sender()->objectName().split("_");
+
+    if (tokens.size() != 4) {
+        return;
+    }
+
+    QString configPath = tokens[2] == "126" ? config->W3l_CONFIG_PATH_126 : config->W3l_CONFIG_PATH_LATEST;
+
+    QSettings settings(configPath, QSettings::IniFormat);
+    QString option = tokens[3];
+
+    if (option=="lobby") {
+         settings.setValue("DOTA/lobby_overlay_enabled", QVariant(checked).toString());
     }
 }
 
@@ -1152,7 +1222,7 @@ void MainWindow::diffW3Update(QString version) {
 
     ui->pushButtonBU->setEnabled(false);
 
-    ui->tabWidget->setCurrentIndex(3);
+    ui->tabWidget->setCurrentIndex(4);
     lockTabs(ui->tabWidget->currentIndex());
 
     updater=new Updater(config, 1, version);
@@ -1234,7 +1304,7 @@ void MainWindow::on_checkBox_useGproxy_126_toggled(bool checked) {
 }
 
 void MainWindow::on_pushButton_DotaConfig_clicked() {
-    QString cfg = config->W3PATH_126+"/config.dota.ini";
+    QString cfg = config->DOTA_CONFIG_PATH;
     QFile f(cfg);
     if (f.exists()) {
         QDesktopServices::openUrl(QUrl("file:///"+cfg));
@@ -1415,4 +1485,40 @@ void MainWindow::on_pushButtonGPNOTEPAD_CFG_clicked()
 void MainWindow::on_pushButtonClientConfig_clicked()
 {
     QDesktopServices::openUrl(QUrl("file:///"+config->EUROPATH+"/xpam.ini"));
+}
+
+void MainWindow::on_tabWidget_currentChanged(int index)
+{
+    if (index==2) {
+        //W3l config
+        qDebug() << config->W3l_CONFIG_PATH_126;
+        QSettings settingsW3l126(config->W3l_CONFIG_PATH_126, QSettings::IniFormat);
+        bool lobby = settingsW3l126.value("DOTA/lobby_overlay_enabled", "false").toBool();
+        ui->checkBox_w3l_126_lobby->setChecked(lobby);
+    }
+    else if (index==3) {
+        //DotA config
+        QSettings settingsDota(config->DOTA_CONFIG_PATH, QSettings::IniFormat);
+        bool goWideScreen = settingsDota.value("GAMEOPTIONS/WideScreen", "false").toBool();
+        ui->checkBox_dota_GAMEOPTIONS_WideScreen->setChecked(goWideScreen);
+    }
+}
+
+void MainWindow::setupWebLinkProtoHandlers() {
+     Registry r;
+     bool s = r.createWebProtoKeys(config->EUROPATH+"/xpam.exe");
+     if (s) Logger::log("Web link proto initialized", config);
+     else Logger::log("Web link proto not initialized", config);
+}
+
+void MainWindow::showServerStatus() {
+    QString status = Rest::getSeverStatus();
+    if (""!=status) {
+        ui->statusBar->showMessage(status);
+        ui->statusBar->setStyleSheet("QLabel {color:#55aa00}");
+    }
+    else {
+        ui->statusBar->showMessage("Could not fetch server status.");
+        ui->statusBar->setStyleSheet("QLabel {color:red}");
+    }
 }

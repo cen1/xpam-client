@@ -51,15 +51,6 @@ public:
     QPushButton *pushButtonGWG;
     QPushButton *pushButtonGWD;
     QHBoxLayout *horizontalLayoutOptions;
-    QVBoxLayout *verticalLayout_11;
-    QLabel *label_register;
-    QLabel *label_offline;
-    QLabel *label_online;
-    QLineEdit *lineEdit_username;
-    QLineEdit *lineEdit_password;
-    QPushButton *pushButton_login;
-    QPushButton *pushButton_diff_account;
-    QSpacerItem *verticalSpacer;
     QSpacerItem *horizontalSpacer_5;
     QSpacerItem *hs2;
     QWidget *tabGproxy;
@@ -120,6 +111,16 @@ public:
     QCheckBox *checkBox_windowed_latest;
     QCheckBox *checkBox_gproxy_latest;
     QCheckBox *checkBox_pfEnable_latest;
+    QWidget *layoutWidget_2;
+    QVBoxLayout *verticalLayout_11;
+    QLabel *label_register;
+    QLabel *label_offline;
+    QLabel *label_online;
+    QLineEdit *lineEdit_username;
+    QLineEdit *lineEdit_password;
+    QPushButton *pushButton_login;
+    QPushButton *pushButton_diff_account;
+    QLabel *label_6;
     QGroupBox *war_latest_groupbox_2;
     QWidget *verticalLayoutWidget_4;
     QVBoxLayout *verticalLayout_7;
@@ -137,13 +138,22 @@ public:
     QCheckBox *checkBox_opengl_126;
     QCheckBox *checkBox_windowed_126;
     QCheckBox *checkBox_gproxy_126;
-    QCheckBox *checkBox_dummy;
+    QCheckBox *checkBox_w3l_126_lobby;
+    QPushButton *pushButtonClientConfig;
+    QWidget *tabDota;
+    QVBoxLayout *verticalLayout_13;
+    QHBoxLayout *horizontalLayout_11;
     QGroupBox *groupBox_DotAOptions;
     QWidget *horizontalLayoutWidget;
     QHBoxLayout *horizontalLayout_10;
     QPushButton *pushButton_DotaConfig;
+    QLabel *label_7;
     QSpacerItem *horizontalSpacer_4;
-    QPushButton *pushButtonClientConfig;
+    QLabel *label_8;
+    QGroupBox *groupBox_2;
+    QVBoxLayout *verticalLayout_12;
+    QCheckBox *checkBox_dota_GAMEOPTIONS_WideScreen;
+    QSpacerItem *verticalSpacer;
     QWidget *tabMm;
     QVBoxLayout *verticalLayout_10;
     QWebEngineView *mmWebEngineView;
@@ -274,6 +284,10 @@ public:
 "  border-image: url(\":/back.png\") 0 0 0 0 stretch stretch;\n"
 "  border-width: 0px;\n"
 "}\n"
+"#tabDota {\n"
+"  border-image: url(\":/back.png\") 0 0 0 0 stretch stretch;\n"
+"  border-width: 0px;\n"
+"}\n"
 "#tabUpdate {\n"
 "  border-image: url(\":/back.png\") 0 0 0 0 stretch stretch;\n"
 "  border-width: 0px;\n"
@@ -292,14 +306,14 @@ public:
 "  \n"
 "}\n"
 "\n"
-"#horizontalLayoutLogo {\n"
+""
+                        "#horizontalLayoutLogo {\n"
 " \n"
 "}\n"
 "\n"
 "QCheckBox {\n"
 "  color:white;\n"
-"  font-family: \"Lucida San"
-                        "s Unicode\";\n"
+"  font-family: \"Lucida Sans Unicode\";\n"
 "}\n"
 "\n"
 "QCheckBox::indicator {\n"
@@ -341,14 +355,14 @@ public:
 "  border-color: #007dc1;\n"
 "}\n"
 "#pushButtonGWG:hover {\n"
-"  border-color: #007dc1;\n"
+"  borde"
+                        "r-color: #007dc1;\n"
 "}\n"
 "#pushButtonGWD:hover {\n"
 "  border-color: #007dc1;\n"
 "}\n"
 "\n"
-"#checkBoxNoG"
-                        "p {\n"
+"#checkBoxNoGp {\n"
 "  margin-left: 6px;	\n"
 "}"));
         horizontalLayout = new QHBoxLayout(centralWidget);
@@ -430,63 +444,6 @@ public:
         horizontalLayoutOptions = new QHBoxLayout();
         horizontalLayoutOptions->setSpacing(6);
         horizontalLayoutOptions->setObjectName(QString::fromUtf8("horizontalLayoutOptions"));
-        verticalLayout_11 = new QVBoxLayout();
-        verticalLayout_11->setSpacing(6);
-        verticalLayout_11->setObjectName(QString::fromUtf8("verticalLayout_11"));
-        label_register = new QLabel(tabLauncher);
-        label_register->setObjectName(QString::fromUtf8("label_register"));
-        label_register->setStyleSheet(QString::fromUtf8(""));
-        label_register->setOpenExternalLinks(true);
-
-        verticalLayout_11->addWidget(label_register);
-
-        label_offline = new QLabel(tabLauncher);
-        label_offline->setObjectName(QString::fromUtf8("label_offline"));
-
-        verticalLayout_11->addWidget(label_offline);
-
-        label_online = new QLabel(tabLauncher);
-        label_online->setObjectName(QString::fromUtf8("label_online"));
-
-        verticalLayout_11->addWidget(label_online);
-
-        lineEdit_username = new QLineEdit(tabLauncher);
-        lineEdit_username->setObjectName(QString::fromUtf8("lineEdit_username"));
-        QSizePolicy sizePolicy2(QSizePolicy::Minimum, QSizePolicy::Fixed);
-        sizePolicy2.setHorizontalStretch(0);
-        sizePolicy2.setVerticalStretch(0);
-        sizePolicy2.setHeightForWidth(lineEdit_username->sizePolicy().hasHeightForWidth());
-        lineEdit_username->setSizePolicy(sizePolicy2);
-        lineEdit_username->setMinimumSize(QSize(100, 0));
-
-        verticalLayout_11->addWidget(lineEdit_username);
-
-        lineEdit_password = new QLineEdit(tabLauncher);
-        lineEdit_password->setObjectName(QString::fromUtf8("lineEdit_password"));
-        sizePolicy2.setHeightForWidth(lineEdit_password->sizePolicy().hasHeightForWidth());
-        lineEdit_password->setSizePolicy(sizePolicy2);
-        lineEdit_password->setMinimumSize(QSize(100, 0));
-        lineEdit_password->setEchoMode(QLineEdit::Password);
-
-        verticalLayout_11->addWidget(lineEdit_password);
-
-        pushButton_login = new QPushButton(tabLauncher);
-        pushButton_login->setObjectName(QString::fromUtf8("pushButton_login"));
-
-        verticalLayout_11->addWidget(pushButton_login);
-
-        pushButton_diff_account = new QPushButton(tabLauncher);
-        pushButton_diff_account->setObjectName(QString::fromUtf8("pushButton_diff_account"));
-
-        verticalLayout_11->addWidget(pushButton_diff_account);
-
-        verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
-
-        verticalLayout_11->addItem(verticalSpacer);
-
-
-        horizontalLayoutOptions->addLayout(verticalLayout_11);
-
         horizontalSpacer_5 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
         horizontalLayoutOptions->addItem(horizontalSpacer_5);
@@ -605,7 +562,7 @@ public:
 
         groupBox = new QGroupBox(tabGproxy);
         groupBox->setObjectName(QString::fromUtf8("groupBox"));
-        groupBox->setGeometry(QRect(40, 120, 361, 291));
+        groupBox->setGeometry(QRect(40, 120, 361, 331));
         verticalLayoutWidget_5 = new QWidget(groupBox);
         verticalLayoutWidget_5->setObjectName(QString::fromUtf8("verticalLayoutWidget_5"));
         verticalLayoutWidget_5->setGeometry(QRect(10, 20, 341, 308));
@@ -702,7 +659,7 @@ public:
         pushButtonClientLog->setMaximumSize(QSize(150, 16777215));
         war_latest_groupbox = new QGroupBox(tabW3);
         war_latest_groupbox->setObjectName(QString::fromUtf8("war_latest_groupbox"));
-        war_latest_groupbox->setGeometry(QRect(30, 90, 400, 291));
+        war_latest_groupbox->setGeometry(QRect(30, 90, 400, 451));
         verticalLayoutWidget_3 = new QWidget(war_latest_groupbox);
         verticalLayoutWidget_3->setObjectName(QString::fromUtf8("verticalLayoutWidget_3"));
         verticalLayoutWidget_3->setGeometry(QRect(10, 20, 381, 226));
@@ -739,6 +696,9 @@ public:
         horizontalLayout_8->setContentsMargins(5, -1, 5, -1);
         pushButton_warLatestPath = new QPushButton(verticalLayoutWidget_3);
         pushButton_warLatestPath->setObjectName(QString::fromUtf8("pushButton_warLatestPath"));
+        QSizePolicy sizePolicy2(QSizePolicy::Minimum, QSizePolicy::Fixed);
+        sizePolicy2.setHorizontalStretch(0);
+        sizePolicy2.setVerticalStretch(0);
         sizePolicy2.setHeightForWidth(pushButton_warLatestPath->sizePolicy().hasHeightForWidth());
         pushButton_warLatestPath->setSizePolicy(sizePolicy2);
         pushButton_warLatestPath->setMinimumSize(QSize(150, 0));
@@ -772,7 +732,7 @@ public:
         groupBox_latest->setMinimumSize(QSize(0, 150));
         verticalLayoutWidget = new QWidget(groupBox_latest);
         verticalLayoutWidget->setObjectName(QString::fromUtf8("verticalLayoutWidget"));
-        verticalLayoutWidget->setGeometry(QRect(10, 20, 151, 124));
+        verticalLayoutWidget->setGeometry(QRect(10, 20, 151, 131));
         verticalLayout_gb_latest = new QVBoxLayout(verticalLayoutWidget);
         verticalLayout_gb_latest->setSpacing(8);
         verticalLayout_gb_latest->setContentsMargins(11, 11, 11, 11);
@@ -813,12 +773,95 @@ public:
 
         verticalLayout_4->addWidget(groupBox_latest);
 
+        layoutWidget_2 = new QWidget(war_latest_groupbox);
+        layoutWidget_2->setObjectName(QString::fromUtf8("layoutWidget_2"));
+        layoutWidget_2->setGeometry(QRect(10, 250, 381, 186));
+        verticalLayout_11 = new QVBoxLayout(layoutWidget_2);
+        verticalLayout_11->setSpacing(6);
+        verticalLayout_11->setContentsMargins(11, 11, 11, 11);
+        verticalLayout_11->setObjectName(QString::fromUtf8("verticalLayout_11"));
+        verticalLayout_11->setSizeConstraint(QLayout::SetMaximumSize);
+        verticalLayout_11->setContentsMargins(0, 0, 0, 0);
+        label_register = new QLabel(layoutWidget_2);
+        label_register->setObjectName(QString::fromUtf8("label_register"));
+        QSizePolicy sizePolicy4(QSizePolicy::Maximum, QSizePolicy::Preferred);
+        sizePolicy4.setHorizontalStretch(0);
+        sizePolicy4.setVerticalStretch(0);
+        sizePolicy4.setHeightForWidth(label_register->sizePolicy().hasHeightForWidth());
+        label_register->setSizePolicy(sizePolicy4);
+        label_register->setStyleSheet(QString::fromUtf8(""));
+        label_register->setOpenExternalLinks(true);
+
+        verticalLayout_11->addWidget(label_register);
+
+        label_offline = new QLabel(layoutWidget_2);
+        label_offline->setObjectName(QString::fromUtf8("label_offline"));
+        sizePolicy4.setHeightForWidth(label_offline->sizePolicy().hasHeightForWidth());
+        label_offline->setSizePolicy(sizePolicy4);
+
+        verticalLayout_11->addWidget(label_offline);
+
+        label_online = new QLabel(layoutWidget_2);
+        label_online->setObjectName(QString::fromUtf8("label_online"));
+        sizePolicy4.setHeightForWidth(label_online->sizePolicy().hasHeightForWidth());
+        label_online->setSizePolicy(sizePolicy4);
+
+        verticalLayout_11->addWidget(label_online);
+
+        lineEdit_username = new QLineEdit(layoutWidget_2);
+        lineEdit_username->setObjectName(QString::fromUtf8("lineEdit_username"));
+        QSizePolicy sizePolicy5(QSizePolicy::Maximum, QSizePolicy::Fixed);
+        sizePolicy5.setHorizontalStretch(0);
+        sizePolicy5.setVerticalStretch(0);
+        sizePolicy5.setHeightForWidth(lineEdit_username->sizePolicy().hasHeightForWidth());
+        lineEdit_username->setSizePolicy(sizePolicy5);
+        lineEdit_username->setMinimumSize(QSize(150, 0));
+
+        verticalLayout_11->addWidget(lineEdit_username);
+
+        lineEdit_password = new QLineEdit(layoutWidget_2);
+        lineEdit_password->setObjectName(QString::fromUtf8("lineEdit_password"));
+        sizePolicy5.setHeightForWidth(lineEdit_password->sizePolicy().hasHeightForWidth());
+        lineEdit_password->setSizePolicy(sizePolicy5);
+        lineEdit_password->setMinimumSize(QSize(150, 0));
+        lineEdit_password->setEchoMode(QLineEdit::Password);
+
+        verticalLayout_11->addWidget(lineEdit_password);
+
+        pushButton_login = new QPushButton(layoutWidget_2);
+        pushButton_login->setObjectName(QString::fromUtf8("pushButton_login"));
+        sizePolicy5.setHeightForWidth(pushButton_login->sizePolicy().hasHeightForWidth());
+        pushButton_login->setSizePolicy(sizePolicy5);
+        pushButton_login->setMinimumSize(QSize(150, 0));
+
+        verticalLayout_11->addWidget(pushButton_login);
+
+        pushButton_diff_account = new QPushButton(layoutWidget_2);
+        pushButton_diff_account->setObjectName(QString::fromUtf8("pushButton_diff_account"));
+        sizePolicy5.setHeightForWidth(pushButton_diff_account->sizePolicy().hasHeightForWidth());
+        pushButton_diff_account->setSizePolicy(sizePolicy5);
+        pushButton_diff_account->setMinimumSize(QSize(150, 0));
+
+        verticalLayout_11->addWidget(pushButton_diff_account);
+
+        label_6 = new QLabel(layoutWidget_2);
+        label_6->setObjectName(QString::fromUtf8("label_6"));
+        QSizePolicy sizePolicy6(QSizePolicy::Maximum, QSizePolicy::Expanding);
+        sizePolicy6.setHorizontalStretch(0);
+        sizePolicy6.setVerticalStretch(0);
+        sizePolicy6.setHeightForWidth(label_6->sizePolicy().hasHeightForWidth());
+        label_6->setSizePolicy(sizePolicy6);
+        label_6->setMaximumSize(QSize(300, 16777215));
+        label_6->setWordWrap(true);
+
+        verticalLayout_11->addWidget(label_6);
+
         war_latest_groupbox_2 = new QGroupBox(tabW3);
         war_latest_groupbox_2->setObjectName(QString::fromUtf8("war_latest_groupbox_2"));
-        war_latest_groupbox_2->setGeometry(QRect(470, 90, 400, 291));
+        war_latest_groupbox_2->setGeometry(QRect(470, 90, 400, 251));
         verticalLayoutWidget_4 = new QWidget(war_latest_groupbox_2);
         verticalLayoutWidget_4->setObjectName(QString::fromUtf8("verticalLayoutWidget_4"));
-        verticalLayoutWidget_4->setGeometry(QRect(9, 19, 381, 245));
+        verticalLayoutWidget_4->setGeometry(QRect(9, 19, 381, 229));
         verticalLayout_7 = new QVBoxLayout(verticalLayoutWidget_4);
         verticalLayout_7->setSpacing(6);
         verticalLayout_7->setContentsMargins(11, 11, 11, 11);
@@ -827,6 +870,7 @@ public:
         horizontalLayout_7 = new QHBoxLayout();
         horizontalLayout_7->setSpacing(6);
         horizontalLayout_7->setObjectName(QString::fromUtf8("horizontalLayout_7"));
+        horizontalLayout_7->setSizeConstraint(QLayout::SetMaximumSize);
         label = new QLabel(verticalLayoutWidget_4);
         label->setObjectName(QString::fromUtf8("label"));
         label->setMinimumSize(QSize(0, 20));
@@ -877,14 +921,15 @@ public:
 
         groupBox_126 = new QGroupBox(verticalLayoutWidget_4);
         groupBox_126->setObjectName(QString::fromUtf8("groupBox_126"));
-        groupBox_126->setMinimumSize(QSize(0, 110));
+        groupBox_126->setMinimumSize(QSize(0, 150));
         verticalLayoutWidget_2 = new QWidget(groupBox_126);
         verticalLayoutWidget_2->setObjectName(QString::fromUtf8("verticalLayoutWidget_2"));
-        verticalLayoutWidget_2->setGeometry(QRect(10, 20, 191, 98));
+        verticalLayoutWidget_2->setGeometry(QRect(10, 20, 211, 101));
         verticalLayout__gb_126 = new QVBoxLayout(verticalLayoutWidget_2);
         verticalLayout__gb_126->setSpacing(8);
         verticalLayout__gb_126->setContentsMargins(11, 11, 11, 11);
         verticalLayout__gb_126->setObjectName(QString::fromUtf8("verticalLayout__gb_126"));
+        verticalLayout__gb_126->setSizeConstraint(QLayout::SetFixedSize);
         verticalLayout__gb_126->setContentsMargins(0, 0, 0, 0);
         checkBox_opengl_126 = new QCheckBox(verticalLayoutWidget_2);
         checkBox_opengl_126->setObjectName(QString::fromUtf8("checkBox_opengl_126"));
@@ -906,20 +951,43 @@ public:
 
         verticalLayout__gb_126->addWidget(checkBox_gproxy_126);
 
-        checkBox_dummy = new QCheckBox(verticalLayoutWidget_2);
-        checkBox_dummy->setObjectName(QString::fromUtf8("checkBox_dummy"));
+        checkBox_w3l_126_lobby = new QCheckBox(verticalLayoutWidget_2);
+        checkBox_w3l_126_lobby->setObjectName(QString::fromUtf8("checkBox_w3l_126_lobby"));
 
-        verticalLayout__gb_126->addWidget(checkBox_dummy);
+        verticalLayout__gb_126->addWidget(checkBox_w3l_126_lobby);
 
 
         verticalLayout_7->addWidget(groupBox_126);
 
-        groupBox_DotAOptions = new QGroupBox(verticalLayoutWidget_4);
+        pushButtonClientConfig = new QPushButton(tabW3);
+        pushButtonClientConfig->setObjectName(QString::fromUtf8("pushButtonClientConfig"));
+        pushButtonClientConfig->setGeometry(QRect(190, 30, 150, 19));
+        pushButtonClientConfig->setMaximumSize(QSize(150, 16777215));
+        tabWidget->addTab(tabW3, QString());
+        tabDota = new QWidget();
+        tabDota->setObjectName(QString::fromUtf8("tabDota"));
+        sizePolicy.setHeightForWidth(tabDota->sizePolicy().hasHeightForWidth());
+        tabDota->setSizePolicy(sizePolicy);
+        verticalLayout_13 = new QVBoxLayout(tabDota);
+        verticalLayout_13->setSpacing(6);
+        verticalLayout_13->setContentsMargins(11, 11, 11, 11);
+        verticalLayout_13->setObjectName(QString::fromUtf8("verticalLayout_13"));
+        horizontalLayout_11 = new QHBoxLayout();
+        horizontalLayout_11->setSpacing(6);
+        horizontalLayout_11->setObjectName(QString::fromUtf8("horizontalLayout_11"));
+        horizontalLayout_11->setSizeConstraint(QLayout::SetNoConstraint);
+        groupBox_DotAOptions = new QGroupBox(tabDota);
         groupBox_DotAOptions->setObjectName(QString::fromUtf8("groupBox_DotAOptions"));
-        groupBox_DotAOptions->setMinimumSize(QSize(0, 50));
+        QSizePolicy sizePolicy7(QSizePolicy::Fixed, QSizePolicy::Fixed);
+        sizePolicy7.setHorizontalStretch(0);
+        sizePolicy7.setVerticalStretch(0);
+        sizePolicy7.setHeightForWidth(groupBox_DotAOptions->sizePolicy().hasHeightForWidth());
+        groupBox_DotAOptions->setSizePolicy(sizePolicy7);
+        groupBox_DotAOptions->setMinimumSize(QSize(350, 50));
+        groupBox_DotAOptions->setMaximumSize(QSize(350, 16777215));
         horizontalLayoutWidget = new QWidget(groupBox_DotAOptions);
         horizontalLayoutWidget->setObjectName(QString::fromUtf8("horizontalLayoutWidget"));
-        horizontalLayoutWidget->setGeometry(QRect(0, 19, 381, 23));
+        horizontalLayoutWidget->setGeometry(QRect(0, 19, 161, 23));
         horizontalLayout_10 = new QHBoxLayout(horizontalLayoutWidget);
         horizontalLayout_10->setSpacing(5);
         horizontalLayout_10->setContentsMargins(11, 11, 11, 11);
@@ -927,23 +995,63 @@ public:
         horizontalLayout_10->setContentsMargins(5, 0, 0, 0);
         pushButton_DotaConfig = new QPushButton(horizontalLayoutWidget);
         pushButton_DotaConfig->setObjectName(QString::fromUtf8("pushButton_DotaConfig"));
+        QSizePolicy sizePolicy8(QSizePolicy::Preferred, QSizePolicy::Fixed);
+        sizePolicy8.setHorizontalStretch(0);
+        sizePolicy8.setVerticalStretch(0);
+        sizePolicy8.setHeightForWidth(pushButton_DotaConfig->sizePolicy().hasHeightForWidth());
+        pushButton_DotaConfig->setSizePolicy(sizePolicy8);
 
         horizontalLayout_10->addWidget(pushButton_DotaConfig);
 
+        label_7 = new QLabel(groupBox_DotAOptions);
+        label_7->setObjectName(QString::fromUtf8("label_7"));
+        label_7->setGeometry(QRect(170, 20, 171, 31));
+        label_7->setWordWrap(true);
+
+        horizontalLayout_11->addWidget(groupBox_DotAOptions);
+
         horizontalSpacer_4 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
-        horizontalLayout_10->addItem(horizontalSpacer_4);
+        horizontalLayout_11->addItem(horizontalSpacer_4);
+
+        label_8 = new QLabel(tabDota);
+        label_8->setObjectName(QString::fromUtf8("label_8"));
+        sizePolicy7.setHeightForWidth(label_8->sizePolicy().hasHeightForWidth());
+        label_8->setSizePolicy(sizePolicy7);
+        label_8->setOpenExternalLinks(true);
+
+        horizontalLayout_11->addWidget(label_8);
 
 
-        verticalLayout_7->addWidget(groupBox_DotAOptions);
+        verticalLayout_13->addLayout(horizontalLayout_11);
 
-        pushButtonClientConfig = new QPushButton(tabW3);
-        pushButtonClientConfig->setObjectName(QString::fromUtf8("pushButtonClientConfig"));
-        pushButtonClientConfig->setGeometry(QRect(190, 30, 150, 19));
-        pushButtonClientConfig->setMaximumSize(QSize(150, 16777215));
-        tabWidget->addTab(tabW3, QString());
+        groupBox_2 = new QGroupBox(tabDota);
+        groupBox_2->setObjectName(QString::fromUtf8("groupBox_2"));
+        QSizePolicy sizePolicy9(QSizePolicy::Maximum, QSizePolicy::Maximum);
+        sizePolicy9.setHorizontalStretch(0);
+        sizePolicy9.setVerticalStretch(0);
+        sizePolicy9.setHeightForWidth(groupBox_2->sizePolicy().hasHeightForWidth());
+        groupBox_2->setSizePolicy(sizePolicy9);
+        verticalLayout_12 = new QVBoxLayout(groupBox_2);
+        verticalLayout_12->setSpacing(6);
+        verticalLayout_12->setContentsMargins(11, 11, 11, 11);
+        verticalLayout_12->setObjectName(QString::fromUtf8("verticalLayout_12"));
+        checkBox_dota_GAMEOPTIONS_WideScreen = new QCheckBox(groupBox_2);
+        checkBox_dota_GAMEOPTIONS_WideScreen->setObjectName(QString::fromUtf8("checkBox_dota_GAMEOPTIONS_WideScreen"));
+
+        verticalLayout_12->addWidget(checkBox_dota_GAMEOPTIONS_WideScreen);
+
+
+        verticalLayout_13->addWidget(groupBox_2);
+
+        verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+
+        verticalLayout_13->addItem(verticalSpacer);
+
+        tabWidget->addTab(tabDota, QString());
         tabMm = new QWidget();
         tabMm->setObjectName(QString::fromUtf8("tabMm"));
+        tabMm->setEnabled(true);
         sizePolicy.setHeightForWidth(tabMm->sizePolicy().hasHeightForWidth());
         tabMm->setSizePolicy(sizePolicy);
         tabMm->setMaximumSize(QSize(16777215, 16777215));
@@ -988,11 +1096,8 @@ public:
         horizontalLayout_3->setObjectName(QString::fromUtf8("horizontalLayout_3"));
         betapinbox = new QLineEdit(layoutWidget1);
         betapinbox->setObjectName(QString::fromUtf8("betapinbox"));
-        QSizePolicy sizePolicy4(QSizePolicy::Fixed, QSizePolicy::Fixed);
-        sizePolicy4.setHorizontalStretch(0);
-        sizePolicy4.setVerticalStretch(0);
-        sizePolicy4.setHeightForWidth(betapinbox->sizePolicy().hasHeightForWidth());
-        betapinbox->setSizePolicy(sizePolicy4);
+        sizePolicy7.setHeightForWidth(betapinbox->sizePolicy().hasHeightForWidth());
+        betapinbox->setSizePolicy(sizePolicy7);
 
         horizontalLayout_3->addWidget(betapinbox);
 
@@ -1030,7 +1135,7 @@ public:
         tabAbout->setSizePolicy(sizePolicy);
         layoutWidget2 = new QWidget(tabAbout);
         layoutWidget2->setObjectName(QString::fromUtf8("layoutWidget2"));
-        layoutWidget2->setGeometry(QRect(20, 20, 471, 501));
+        layoutWidget2->setGeometry(QRect(20, 20, 652, 501));
         verticalLayout_3 = new QVBoxLayout(layoutWidget2);
         verticalLayout_3->setSpacing(10);
         verticalLayout_3->setContentsMargins(11, 11, 11, 11);
@@ -1060,7 +1165,7 @@ public:
 
         retranslateUi(MainWindow);
 
-        tabWidget->setCurrentIndex(3);
+        tabWidget->setCurrentIndex(0);
 
 
         QMetaObject::connectSlotsByName(MainWindow);
@@ -1082,14 +1187,6 @@ public:
         pushButtonGWD->setToolTip(QCoreApplication::translate("MainWindow", "Choose this gateway to play d1stats DotA on lagabuse.com, Warcraft patch 1.26.", nullptr));
 #endif // QT_CONFIG(tooltip)
         pushButtonGWD->setText(QString());
-        label_register->setText(QCoreApplication::translate("MainWindow", "<html><head/><body><p>Don't have an account yet? <a href=\"http://warden.eurobattle.net/pvpgn/createaccount\"><span style=\" text-decoration: underline; color:#85c3e5;\">Register</span></a></p></body></html>", nullptr));
-        label_offline->setText(QCoreApplication::translate("MainWindow", "<html><head/><body><p>You are currently <span style=\" color:#ff6b4e;\">offline</span>.</p></body></html>", nullptr));
-        label_online->setText(QCoreApplication::translate("MainWindow", "<html><head/><body><p>You are currently <span style=\" color:#55aa00;\">online</span> as </p></body></html>", nullptr));
-        lineEdit_username->setPlaceholderText(QCoreApplication::translate("MainWindow", "username", nullptr));
-        lineEdit_password->setText(QString());
-        lineEdit_password->setPlaceholderText(QCoreApplication::translate("MainWindow", "password", nullptr));
-        pushButton_login->setText(QCoreApplication::translate("MainWindow", "Login", nullptr));
-        pushButton_diff_account->setText(QCoreApplication::translate("MainWindow", "Use different account", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(tabLauncher), QCoreApplication::translate("MainWindow", " LAUNCHER ", nullptr));
         preloaderLabel1->setText(QString());
         labelGproxyout->setText(QCoreApplication::translate("MainWindow", "GProxy output", nullptr));
@@ -1133,6 +1230,18 @@ public:
         checkBox_windowed_latest->setText(QCoreApplication::translate("MainWindow", "Windowed", nullptr));
         checkBox_gproxy_latest->setText(QCoreApplication::translate("MainWindow", "Use GProxy", nullptr));
         checkBox_pfEnable_latest->setText(QCoreApplication::translate("MainWindow", "Use Port Forwarding", nullptr));
+        label_register->setText(QCoreApplication::translate("MainWindow", "<html><head/><body><p>Don't have an account yet? <a href=\"http://warden.eurobattle.net/pvpgn/createaccount\"><span style=\" text-decoration: underline; color:#85c3e5;\">Register</span></a></p></body></html>", nullptr));
+        label_offline->setText(QCoreApplication::translate("MainWindow", "<html><head/><body><p>You are currently <span style=\" color:#ff6b4e;\">offline</span>.</p></body></html>", nullptr));
+        label_online->setText(QCoreApplication::translate("MainWindow", "<html><head/><body><p>You are currently <span style=\" color:#55aa00;\">online</span> as </p></body></html>", nullptr));
+        lineEdit_username->setPlaceholderText(QCoreApplication::translate("MainWindow", "username", nullptr));
+        lineEdit_password->setText(QString());
+        lineEdit_password->setPlaceholderText(QCoreApplication::translate("MainWindow", "password", nullptr));
+#if QT_CONFIG(tooltip)
+        pushButton_login->setToolTip(QString());
+#endif // QT_CONFIG(tooltip)
+        pushButton_login->setText(QCoreApplication::translate("MainWindow", "Login", nullptr));
+        pushButton_diff_account->setText(QCoreApplication::translate("MainWindow", "Use different account", nullptr));
+        label_6->setText(QCoreApplication::translate("MainWindow", "This login allows you to use auto port forwarding function. It serves no other purpose for now. If you create a new account, this login only works after you do a bnet login through the game first.", nullptr));
         war_latest_groupbox_2->setTitle(QCoreApplication::translate("MainWindow", "Warcraft 1.26a gateway", nullptr));
         label->setText(QCoreApplication::translate("MainWindow", "Warcraft 1.26a location", nullptr));
         label_War126Path->setText(QCoreApplication::translate("MainWindow", "Loading...", nullptr));
@@ -1143,16 +1252,21 @@ public:
         checkBox_opengl_126->setText(QCoreApplication::translate("MainWindow", "OpenGL", nullptr));
         checkBox_windowed_126->setText(QCoreApplication::translate("MainWindow", "Windowed", nullptr));
         checkBox_gproxy_126->setText(QCoreApplication::translate("MainWindow", "Use GProxy (can't disable)", nullptr));
-        checkBox_dummy->setText(QCoreApplication::translate("MainWindow", "dummy", nullptr));
-        groupBox_DotAOptions->setTitle(QCoreApplication::translate("MainWindow", "DotA Options", nullptr));
-        pushButton_DotaConfig->setText(QCoreApplication::translate("MainWindow", "Edit DotA Config", nullptr));
+        checkBox_w3l_126_lobby->setText(QCoreApplication::translate("MainWindow", "Show DotA stats in lobby overlay", nullptr));
         pushButtonClientConfig->setText(QCoreApplication::translate("MainWindow", "Open Client config file", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(tabW3), QCoreApplication::translate("MainWindow", " WARCRAFT", nullptr));
+        groupBox_DotAOptions->setTitle(QCoreApplication::translate("MainWindow", "DotA Config File", nullptr));
+        pushButton_DotaConfig->setText(QCoreApplication::translate("MainWindow", "Edit DotA Config Manually", nullptr));
+        label_7->setText(QCoreApplication::translate("MainWindow", "Reload the tab to see checkboxes reflect your manual changes", nullptr));
+        label_8->setText(QCoreApplication::translate("MainWindow", "<html><head/><body><p><a href=\"http://d1stats.ru/\"><span style=\" text-decoration: underline; color:#85c3e5;\">Official DotA Map Website</span></a></p></body></html>", nullptr));
+        groupBox_2->setTitle(QCoreApplication::translate("MainWindow", "Game Options", nullptr));
+        checkBox_dota_GAMEOPTIONS_WideScreen->setText(QCoreApplication::translate("MainWindow", "True Widescreen", nullptr));
+        tabWidget->setTabText(tabWidget->indexOf(tabDota), QCoreApplication::translate("MainWindow", "DOTA", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(tabMm), QCoreApplication::translate("MainWindow", "MM", nullptr));
         pushButtonBU->setText(QCoreApplication::translate("MainWindow", "Get Beta patch", nullptr));
         checkBox_updates->setText(QCoreApplication::translate("MainWindow", "Automatic updates enabled", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(tabUpdate), QCoreApplication::translate("MainWindow", " UPDATE ", nullptr));
-        labelAbout->setText(QCoreApplication::translate("MainWindow", "<html><head/><body><p>Eurobattle.net Client version 1.2 (April 2020), developed by cen, additional contributions by deer</p><p><br/>We are searching for Qt/ C++ developers to further expand this client.</p><p><br/></p><p>TODO:</p><p>-bnet Chat client</p><p>-TS integration</p><p>-Displaying player's profile and league stats in the client</p><p>- Native Warkeys?</p><p>-and more...</p><p><br/></p><p>Special thanks to:</p><p><span style=\" font-weight:600;\">IStealSkills</span> - help with desig</p><p><span style=\" font-weight:600;\">Stefos007</span> - original GProxy implementation</p><p>BNETtdocs, Stormlib, PvPGN and GHost projects</p></body></html>", nullptr));
+        labelAbout->setText(QCoreApplication::translate("MainWindow", "<html><head/><body><p>Eurobattle.net Client version 1.3 (May 2021), developed by cen, additional contributions by deer</p><p><br/>We are searching for Qt/ C++ developers to further expand this client. This client is licensed under BSD 2-clause open source  license.</p><p><br/></p><p>Special thanks to:</p><p><span style=\" font-weight:600;\">IStealSkills</span> - help with desig</p><p><span style=\" font-weight:600;\">Stefos007</span> - original GProxy expansion</p><p>BNETtdocs, Stormlib, PvPGN and GHost projects.</p><p>D1stats for DotA development.</p><p>MyMGN for exchage of technical solutions and support.</p></body></html>", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(tabAbout), QCoreApplication::translate("MainWindow", " ABOUT ", nullptr));
     } // retranslateUi
 

@@ -1,16 +1,35 @@
 # xpam-client
 Desktop client application for eurobattle.net
 
-Msvc2015 with XP target is used for building.
-
 Setup instructions
 ----------
-## Building dependencies on your own
- 1. Get the Qt source for 5.7.1.
- 2. Build OpenSSL with XP target. If you don't want to get through this ordeal, just download our  binaries at http://files.eurobattle.net/random/openssl-x86-shared-release-vs2015-win10.zip
- 3. Open VS 2015 cmd. Install Windows 7.1A SDK and prepare your ENV for XP http://doc.qt.io/qt-5/windows-issues.html. Then configure Qt with something like: ```configure -target xp -release -qmake -opensource -nomake examples -opengl desktop -platform win32-msvc2015 -openssl -I path/to/to/openssl-x86-shared-release-vs2015-win10/include -L path/to/openssl-x86-shared-release-vs2015-win10/lib OPENSSL_LIBS="-llibeay32 -lssleay32 -lgdi32"```
- 4. Run ```nmake``` or ```jom```
- 5. Add the built kit to your Qt creator.
+## Qt
+Use the official Qt installer to install latest stable 5.X libraries for MSVC 2019 with OpenSSL and Qt WebEngine.
 
-## Use sigmoid Qt5 binaries (recommended)
-Use precompiled Qt5 binaries (shared) with openssl by sigmoid https://www.npcglib.org/~stathis/blog/precompiled-qt4-qt5/. Import project in Qt Creator, setup Qt kits and you are good to go.
+Build quazip as shared library with MSVC 2019.
+
+Afte building the project, copy the following files into your release folder:
+```
+libcrypto-1_1.dll
+libssl-1_1.dll
+Qt5WebEngineWidgets.dll
+Qt5WebEngineCore.dll
+Qt5Positioning.dll
+Qt5WebChannel.dll
+Qt5QuickWidgets.dll
+Qt5Quick.dll
+Qt5QmlModels.dll
+Qt5Qml.dll
+platforms\qwindows.dll
+Qt5Widgets.dll
+Qt5Network.dll
+Qt5Gui.dll
+Qt5Core.dll
+zlib.dll
+quazip.dll
+qtwebengine_resources_200p.pak
+qtwebengine_devtools_resources.pak
+qtwebengine_resources.pak
+qtwebengine_resources_100p.pak
+```
+

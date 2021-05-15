@@ -65,6 +65,8 @@ private slots:
     void handleSpinBoxGProxy(int value);
     void handleCheckboxXpam(bool checked);
     void handleCheckboxClient(bool checked);
+    void handleCheckboxDota(bool checked);
+    void handleCheckboxW3l(bool checked);
 
     void initGproxyOptions();
     void initXpamOptions();
@@ -108,6 +110,8 @@ private slots:
 
     void on_pushButtonClientConfig_clicked();
 
+    void on_tabWidget_currentChanged(int index);
+
 public slots:
     void gproxyReady(QString w3Exename, bool ft);
     void gproxyExiting(bool killedForcefully);
@@ -123,6 +127,7 @@ public slots:
 private:
     Ui::MainWindow *ui;
 
+    void postUpdate();
     void lockTabs(int except);
     void unlockTabs();
     void removeLastLine();
@@ -130,6 +135,7 @@ private:
     void initLogin();
 
     bool isStartupUpdate;
+    QTimer *serverStatusTimer;
 
     //window moving
     bool down;
@@ -149,6 +155,8 @@ private:
     //void rewriteGproxyCfg(QString username, QString secret);
     void tmpPlumbing();
     void doLogin();
+    void setupWebLinkProtoHandlers();
+    void showServerStatus();
 
     bool updateInProgress;
     QVector<QJsonObject> UPDATE_MAPS;

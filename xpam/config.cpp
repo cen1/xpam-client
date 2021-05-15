@@ -89,6 +89,11 @@ Config::Config()
     ASK_FOR_W3_FAST_UPDATE = true;
     HAS_QUICK_PATCH=true;
 
+    DOTA_CONFIG_PATH = W3PATH_126+"/config.dota.ini";
+
+    W3l_CONFIG_PATH_126 = W3PATH_126+"/w3l.ini";
+    W3l_CONFIG_PATH_LATEST = W3PATH_LATEST+"/w3l.ini";
+
 #ifdef _DEVELOPMENT
     json1 = "http://localhost:8080/update.json";
     json2 = "http://localhost:8080/update.json";

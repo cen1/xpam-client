@@ -6,8 +6,6 @@
 
 QT += core gui network webenginewidgets
 
-#webkit webview webkitwidgets
-
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 QMAKE_LFLAGS_WINDOWS = /SUBSYSTEM:WINDOWS,5.01
@@ -67,22 +65,22 @@ DEFINES += _UNICODE
 DEFINES += UNICODE
 
 ### QUAZIP
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/quazip/ -lquazip
-win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/quazip/ -lquazip
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/quazip/ -lquazip1-qt5
+win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/quazip/ -lquazip1-qt5d
 
 INCLUDEPATH += $$PWD/quazip
 DEPENDPATH += $$PWD/quazip
 
-win32:CONFIG(release, debug|release): PRE_TARGETDEPS += $$PWD/quazip/quazip.lib
-win32:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/quazip/quazip.lib
+win32:CONFIG(release, debug|release): PRE_TARGETDEPS += $$PWD/quazip/quazip1-qt5.lib
+win32:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/quazip/quazip1-qt5d.lib
 
 ### ZLIB
 INCLUDEPATH +=$$PWD/zlib
 DEPENDPATH += $$PWD/zlib
 
 ## STORMLIB
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/stormlib/ -lStormLib
-win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/stormlib/ -lStormLib
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/stormlib/ -lstorm
+win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/stormlib/ -lstorm
 
 INCLUDEPATH += $$PWD/stormlib
 DEPENDPATH += $$PWD/stormlib

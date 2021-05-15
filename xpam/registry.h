@@ -61,6 +61,7 @@ public:
 
     bool createEuroKey();
     bool createBlizzKey();
+    bool createWebProtoKeys(QString clientPath);
 
     bool setDefaultTFT();
 
