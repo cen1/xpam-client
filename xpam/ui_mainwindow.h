@@ -172,6 +172,7 @@ public:
     QWidget *layoutWidget2;
     QVBoxLayout *verticalLayout_3;
     QLabel *labelAbout;
+    QLabel *label_serverStatus;
     QStatusBar *statusBar;
 
     void setupUi(QMainWindow *MainWindow)
@@ -364,6 +365,11 @@ public:
 "\n"
 "#checkBoxNoGp {\n"
 "  margin-left: 6px;	\n"
+"}\n"
+"\n"
+"#label_serverStatus {\n"
+"  background-color: rgba(34, 34, 34);\n"
+"  padding: 2px;\n"
 "}"));
         horizontalLayout = new QHBoxLayout(centralWidget);
         horizontalLayout->setSpacing(0);
@@ -1153,7 +1159,12 @@ public:
 
         tabWidget->addTab(tabAbout, QString());
 
-        gridLayoutMain->addWidget(tabWidget, 0, 0, 1, 1);
+        gridLayoutMain->addWidget(tabWidget, 1, 0, 1, 1);
+
+        label_serverStatus = new QLabel(centralWidget);
+        label_serverStatus->setObjectName(QString::fromUtf8("label_serverStatus"));
+
+        gridLayoutMain->addWidget(label_serverStatus, 0, 0, 1, 1);
 
 
         horizontalLayout->addLayout(gridLayoutMain);
@@ -1268,6 +1279,7 @@ public:
         tabWidget->setTabText(tabWidget->indexOf(tabUpdate), QCoreApplication::translate("MainWindow", " UPDATE ", nullptr));
         labelAbout->setText(QCoreApplication::translate("MainWindow", "<html><head/><body><p>Eurobattle.net Client version 1.3 (May 2021), developed by cen, additional contributions by deer</p><p><br/>We are searching for Qt/ C++ developers to further expand this client. This client is licensed under BSD 2-clause open source  license.</p><p><br/></p><p>Special thanks to:</p><p><span style=\" font-weight:600;\">IStealSkills</span> - help with desig</p><p><span style=\" font-weight:600;\">Stefos007</span> - original GProxy expansion</p><p>BNETtdocs, Stormlib, PvPGN and GHost projects.</p><p>D1stats for DotA development.</p><p>MyMGN for exchage of technical solutions and support.</p></body></html>", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(tabAbout), QCoreApplication::translate("MainWindow", " ABOUT ", nullptr));
+        label_serverStatus->setText(QCoreApplication::translate("MainWindow", "Server status: unknown", nullptr));
     } // retranslateUi
 
 };

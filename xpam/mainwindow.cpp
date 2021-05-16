@@ -1514,11 +1514,11 @@ void MainWindow::setupWebLinkProtoHandlers() {
 void MainWindow::showServerStatus() {
     QString status = Rest::getSeverStatus();
     if (""!=status) {
-        ui->statusBar->showMessage(status);
-        ui->statusBar->setStyleSheet("QLabel {color:#55aa00}");
+        ui->label_serverStatus->setText(status);
+        ui->label_serverStatus->setStyleSheet("QLabel {color:#55aa00}");
     }
     else {
-        ui->statusBar->showMessage("Could not fetch server status.");
-        ui->statusBar->setStyleSheet("QLabel {color:red}");
+        ui->label_serverStatus->setText("Could not fetch server status.");
+        ui->label_serverStatus->setStyleSheet("QLabel {color:red}");
     }
 }
