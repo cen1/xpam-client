@@ -25,11 +25,12 @@ Qt5Widgets.dll
 Qt5Network.dll
 Qt5Gui.dll
 Qt5Core.dll
-zlib.dll
-quazip.dll
+zlib1.dll
+quazip1-qt5.dll
 qtwebengine_resources_200p.pak
 qtwebengine_devtools_resources.pak
 qtwebengine_resources.pak
 qtwebengine_resources_100p.pak
+QtWebEngineProcess.exe
 ```
 
