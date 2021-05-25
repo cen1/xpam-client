@@ -665,7 +665,7 @@ public:
         pushButtonClientLog->setMaximumSize(QSize(150, 16777215));
         war_latest_groupbox = new QGroupBox(tabW3);
         war_latest_groupbox->setObjectName(QString::fromUtf8("war_latest_groupbox"));
-        war_latest_groupbox->setGeometry(QRect(30, 90, 400, 451));
+        war_latest_groupbox->setGeometry(QRect(30, 60, 400, 451));
         verticalLayoutWidget_3 = new QWidget(war_latest_groupbox);
         verticalLayoutWidget_3->setObjectName(QString::fromUtf8("verticalLayoutWidget_3"));
         verticalLayoutWidget_3->setGeometry(QRect(10, 20, 381, 226));
@@ -864,7 +864,7 @@ public:
 
         war_latest_groupbox_2 = new QGroupBox(tabW3);
         war_latest_groupbox_2->setObjectName(QString::fromUtf8("war_latest_groupbox_2"));
-        war_latest_groupbox_2->setGeometry(QRect(470, 90, 400, 251));
+        war_latest_groupbox_2->setGeometry(QRect(470, 60, 400, 251));
         verticalLayoutWidget_4 = new QWidget(war_latest_groupbox_2);
         verticalLayoutWidget_4->setObjectName(QString::fromUtf8("verticalLayoutWidget_4"));
         verticalLayoutWidget_4->setGeometry(QRect(9, 19, 381, 229));
@@ -1176,7 +1176,7 @@ public:
 
         retranslateUi(MainWindow);
 
-        tabWidget->setCurrentIndex(0);
+        tabWidget->setCurrentIndex(2);
 
 
         QMetaObject::connectSlotsByName(MainWindow);

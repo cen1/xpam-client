@@ -112,6 +112,8 @@ private slots:
 
     void on_tabWidget_currentChanged(int index);
 
+    void showServerStatus();
+
 public slots:
     void gproxyReady(QString w3Exename, bool ft);
     void gproxyExiting(bool killedForcefully);
@@ -156,7 +158,6 @@ private:
     void tmpPlumbing();
     void doLogin();
     void setupWebLinkProtoHandlers();
-    void showServerStatus();
 
     bool updateInProgress;
     QVector<QJsonObject> UPDATE_MAPS;

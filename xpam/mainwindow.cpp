@@ -1512,6 +1512,7 @@ void MainWindow::setupWebLinkProtoHandlers() {
 }
 
 void MainWindow::showServerStatus() {
+    qDebug() << "server status update";
     QString status = Rest::getSeverStatus();
     if (""!=status) {
         ui->label_serverStatus->setText(status);
