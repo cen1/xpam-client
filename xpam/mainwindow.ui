@@ -248,13 +248,20 @@ QCheckBox::indicator:checked {
       <property name="spacing">
        <number>0</number>
       </property>
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_serverStatus">
+        <property name="text">
+         <string>Server status: unknown</string>
+        </property>
+       </widget>
+      </item>
       <item row="1" column="0">
        <widget class="QTabWidget" name="tabWidget">
         <property name="layoutDirection">
          <enum>Qt::LeftToRight</enum>
         </property>
         <property name="currentIndex">
-         <number>2</number>
+         <number>6</number>
         </property>
         <widget class="QWidget" name="tabLauncher">
          <property name="sizePolicy">
@@ -585,8 +592,8 @@ or manually host your games.</string>
            <property name="geometry">
             <rect>
              <x>10</x>
-             <y>140</y>
-             <width>454</width>
+             <y>160</y>
+             <width>411</width>
              <height>98</height>
             </rect>
            </property>
@@ -623,7 +630,7 @@ or manually host your games.</string>
             <item>
              <widget class="QLabel" name="label_4">
               <property name="text">
-               <string>Autojoin: delay before opening game list after game is created or followed player joins (sec):</string>
+               <string>Autojoin: delay before opening game list (sec):</string>
               </property>
              </widget>
             </item>
@@ -817,7 +824,7 @@ or manually host your games.</string>
         </widget>
         <widget class="QWidget" name="tabW3">
          <attribute name="title">
-          <string> WARCRAFT</string>
+          <string> WARCRAFT </string>
          </attribute>
          <widget class="QPushButton" name="pushButtonClientLog">
           <property name="geometry">
@@ -1473,7 +1480,7 @@ or manually host your games.</string>
           </sizepolicy>
          </property>
          <attribute name="title">
-          <string>DOTA</string>
+          <string> DOTA </string>
          </attribute>
          <layout class="QVBoxLayout" name="verticalLayout_13">
           <item>
@@ -1687,7 +1694,7 @@ or manually host your games.</string>
             <x>8</x>
             <y>8</y>
             <width>881</width>
-            <height>531</height>
+            <height>521</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_6">
@@ -1774,51 +1781,35 @@ or manually host your games.</string>
          <attribute name="title">
           <string> ABOUT </string>
          </attribute>
-         <widget class="QWidget" name="layoutWidget">
+         <widget class="QLabel" name="labelAbout">
           <property name="geometry">
            <rect>
-            <x>20</x>
-            <y>20</y>
-            <width>652</width>
-            <height>501</height>
+            <x>21</x>
+            <y>21</y>
+            <width>657</width>
+            <height>257</height>
            </rect>
           </property>
-          <layout class="QVBoxLayout" name="verticalLayout_3">
-           <property name="spacing">
-            <number>10</number>
-           </property>
-           <property name="sizeConstraint">
-            <enum>QLayout::SetDefaultConstraint</enum>
-           </property>
-           <item>
-            <widget class="QLabel" name="labelAbout">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="text">
-              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Eurobattle.net Client version 1.3 (May 2021), developed by cen, additional contributions by deer&lt;/p&gt;&lt;p&gt;&lt;br/&gt;We are searching for Qt/ C++ developers to further expand this client. This client is licensed under BSD 2-clause open source  license.&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;Special thanks to:&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;IStealSkills&lt;/span&gt; - help with desig&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Stefos007&lt;/span&gt; - original GProxy expansion&lt;/p&gt;&lt;p&gt;BNETtdocs, Stormlib, PvPGN and GHost projects.&lt;/p&gt;&lt;p&gt;D1stats for DotA development.&lt;/p&gt;&lt;p&gt;MyMGN for exchage of technical solutions and support.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-             </property>
-             <property name="openExternalLinks">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-          </layout>
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="frameShape">
+           <enum>QFrame::NoFrame</enum>
+          </property>
+          <property name="text">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Eurobattle.net Client version 1.3 (May 2021), developed by cen, additional contributions by deer&lt;/p&gt;&lt;p&gt;&lt;br/&gt;We are searching for Qt/ C++ developers to further expand this client. This client is licensed under BSD 2-clause open source license.&lt;/p&gt;&lt;p&gt;Repository at &lt;a href=&quot;https://github.com/cen1/xpam-client&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#85c3e5;&quot;&gt;https://github.com/cen1/xpam-client&lt;/span&gt;&lt;/a&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;Special thanks to:&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;IStealSkills&lt;/span&gt; - help with design&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Stefos007&lt;/span&gt; - original GProxy expansion&lt;/p&gt;&lt;p&gt;BNETtdocs, Stormlib, PvPGN and GHost projects.&lt;/p&gt;&lt;p&gt;D1stats for DotA development.&lt;/p&gt;&lt;p&gt;MyMGN for exchage of technical solutions and support.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+          </property>
+          <property name="openExternalLinks">
+           <bool>true</bool>
+          </property>
          </widget>
         </widget>
-       </widget>
-      </item>
-      <item row="0" column="0">
-       <widget class="QLabel" name="label_serverStatus">
-        <property name="text">
-         <string>Server status: unknown</string>
-        </property>
        </widget>
       </item>
      </layout>

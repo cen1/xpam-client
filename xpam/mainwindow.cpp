@@ -138,12 +138,14 @@ MainWindow::MainWindow(QWidget *parent) :
     // Set W3 path labels
     if (config->W3PATH_126!="") {
         ui->label_War126Path->setText(config->W3PATH_126);
+        ui->label_War126Path->setToolTip(config->W3PATH_126);
     }
     else {
         ui->label_War126Path->setText("NOT SET!");
     }
     if (config->W3PATH_LATEST!="") {
         ui->label_WarLatestPath->setText(config->W3PATH_LATEST);
+        ui->label_WarLatestPath->setToolTip(config->W3PATH_LATEST);
     }
     else {
         ui->label_WarLatestPath->setText("NOT SET!");
@@ -209,7 +211,7 @@ MainWindow::MainWindow(QWidget *parent) :
     this->serverStatusTimer->start(1000*60*15);
 }
 
-//Method that is called after client is u to date and ready to be used
+//Method that is called after client is up to date and ready to be used
 void MainWindow::postUpdate() {
 
     //Launch game
@@ -220,7 +222,7 @@ void MainWindow::postUpdate() {
             on_pushButtonGWD_clicked();
         }
         else if ("xpam:128"==arg){
-            on_pushButtonGWN_clicked();
+            on_pushButtonGWG_clicked();
         }
     }
 }
@@ -268,18 +270,6 @@ bool MainWindow::changeActiveMode(QString modeKey, bool shouldWarnUser) {
 MainWindow::~MainWindow()
 {
     delete ui;
-}
-
-
-//Start w3 only, NORMAL gateway
-// CURRENTLY NOT USED !!!
-void MainWindow::on_pushButtonGWN_clicked()
-{
-    if (changeActiveMode(config->W3_KEY_LATEST, true)) {
-        //Set normal gateway as default
-        Registry::setGateways();
-        runW3();
-    }
 }
 
 //Dota gateway, Start w3 and gproxy, switch version as needed

@@ -39,6 +39,7 @@ public:
     QWidget *centralWidget;
     QHBoxLayout *horizontalLayout;
     QGridLayout *gridLayoutMain;
+    QLabel *label_serverStatus;
     QTabWidget *tabWidget;
     QWidget *tabLauncher;
     QHBoxLayout *horizontalLayout_6;
@@ -169,10 +170,7 @@ public:
     QCheckBox *checkBox_updates;
     QSpacerItem *horizontalSpacer_2;
     QWidget *tabAbout;
-    QWidget *layoutWidget2;
-    QVBoxLayout *verticalLayout_3;
     QLabel *labelAbout;
-    QLabel *label_serverStatus;
     QStatusBar *statusBar;
 
     void setupUi(QMainWindow *MainWindow)
@@ -379,6 +377,11 @@ public:
         gridLayoutMain = new QGridLayout();
         gridLayoutMain->setSpacing(0);
         gridLayoutMain->setObjectName(QString::fromUtf8("gridLayoutMain"));
+        label_serverStatus = new QLabel(centralWidget);
+        label_serverStatus->setObjectName(QString::fromUtf8("label_serverStatus"));
+
+        gridLayoutMain->addWidget(label_serverStatus, 0, 0, 1, 1);
+
         tabWidget = new QTabWidget(centralWidget);
         tabWidget->setObjectName(QString::fromUtf8("tabWidget"));
         tabWidget->setLayoutDirection(Qt::LeftToRight);
@@ -532,7 +535,7 @@ public:
 
         verticalLayoutWidget_6 = new QWidget(gpoptionsgroupBox);
         verticalLayoutWidget_6->setObjectName(QString::fromUtf8("verticalLayoutWidget_6"));
-        verticalLayoutWidget_6->setGeometry(QRect(10, 140, 454, 98));
+        verticalLayoutWidget_6->setGeometry(QRect(10, 160, 411, 98));
         verticalLayout_9 = new QVBoxLayout(verticalLayoutWidget_6);
         verticalLayout_9->setSpacing(6);
         verticalLayout_9->setContentsMargins(11, 11, 11, 11);
@@ -1080,7 +1083,7 @@ public:
         tabUpdate->setSizePolicy(sizePolicy);
         layoutWidget1 = new QWidget(tabUpdate);
         layoutWidget1->setObjectName(QString::fromUtf8("layoutWidget1"));
-        layoutWidget1->setGeometry(QRect(8, 8, 881, 531));
+        layoutWidget1->setGeometry(QRect(8, 8, 881, 521));
         verticalLayout_6 = new QVBoxLayout(layoutWidget1);
         verticalLayout_6->setSpacing(6);
         verticalLayout_6->setContentsMargins(11, 11, 11, 11);
@@ -1139,32 +1142,20 @@ public:
         tabAbout->setObjectName(QString::fromUtf8("tabAbout"));
         sizePolicy.setHeightForWidth(tabAbout->sizePolicy().hasHeightForWidth());
         tabAbout->setSizePolicy(sizePolicy);
-        layoutWidget2 = new QWidget(tabAbout);
-        layoutWidget2->setObjectName(QString::fromUtf8("layoutWidget2"));
-        layoutWidget2->setGeometry(QRect(20, 20, 652, 501));
-        verticalLayout_3 = new QVBoxLayout(layoutWidget2);
-        verticalLayout_3->setSpacing(10);
-        verticalLayout_3->setContentsMargins(11, 11, 11, 11);
-        verticalLayout_3->setObjectName(QString::fromUtf8("verticalLayout_3"));
-        verticalLayout_3->setSizeConstraint(QLayout::SetDefaultConstraint);
-        verticalLayout_3->setContentsMargins(0, 0, 0, 0);
-        labelAbout = new QLabel(layoutWidget2);
+        labelAbout = new QLabel(tabAbout);
         labelAbout->setObjectName(QString::fromUtf8("labelAbout"));
-        sizePolicy.setHeightForWidth(labelAbout->sizePolicy().hasHeightForWidth());
-        labelAbout->setSizePolicy(sizePolicy);
+        labelAbout->setGeometry(QRect(21, 21, 657, 257));
+        QSizePolicy sizePolicy10(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
+        sizePolicy10.setHorizontalStretch(0);
+        sizePolicy10.setVerticalStretch(0);
+        sizePolicy10.setHeightForWidth(labelAbout->sizePolicy().hasHeightForWidth());
+        labelAbout->setSizePolicy(sizePolicy10);
+        labelAbout->setFrameShape(QFrame::NoFrame);
         labelAbout->setAlignment(Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop);
         labelAbout->setOpenExternalLinks(true);
-
-        verticalLayout_3->addWidget(labelAbout);
-
         tabWidget->addTab(tabAbout, QString());
 
         gridLayoutMain->addWidget(tabWidget, 1, 0, 1, 1);
-
-        label_serverStatus = new QLabel(centralWidget);
-        label_serverStatus->setObjectName(QString::fromUtf8("label_serverStatus"));
-
-        gridLayoutMain->addWidget(label_serverStatus, 0, 0, 1, 1);
 
 
         horizontalLayout->addLayout(gridLayoutMain);
@@ -1176,7 +1167,7 @@ public:
 
         retranslateUi(MainWindow);
 
-        tabWidget->setCurrentIndex(2);
+        tabWidget->setCurrentIndex(6);
 
 
         QMetaObject::connectSlotsByName(MainWindow);
@@ -1185,6 +1176,7 @@ public:
     void retranslateUi(QMainWindow *MainWindow)
     {
         MainWindow->setWindowTitle(QCoreApplication::translate("MainWindow", "Eurobattle.net Client", nullptr));
+        label_serverStatus->setText(QCoreApplication::translate("MainWindow", "Server status: unknown", nullptr));
 #if QT_CONFIG(tooltip)
         pushButtonGWN->setToolTip(QCoreApplication::translate("MainWindow", "Start without GProxy to play PG<br />\n"
 "or manually host your games.", nullptr));
@@ -1211,7 +1203,7 @@ public:
         checkBox_telemetry->setText(QCoreApplication::translate("MainWindow", "Telemetry logging", nullptr));
         checkBox_autojoin->setText(QCoreApplication::translate("MainWindow", "Game autojoin (experimental)", nullptr));
         label_3->setText(QCoreApplication::translate("MainWindow", "Autojoin: delay before typing the game name after game list opens (sec):", nullptr));
-        label_4->setText(QCoreApplication::translate("MainWindow", "Autojoin: delay before opening game list after game is created or followed player joins (sec):", nullptr));
+        label_4->setText(QCoreApplication::translate("MainWindow", "Autojoin: delay before opening game list (sec):", nullptr));
         groupBox->setTitle(QCoreApplication::translate("MainWindow", "GProxy Sounds", nullptr));
         checkBox_option_sounds->setText(QCoreApplication::translate("MainWindow", "Enable sounds", nullptr));
         checkBox_sound_1->setText(QCoreApplication::translate("MainWindow", "\"Game started\" sound", nullptr));
@@ -1265,21 +1257,20 @@ public:
         checkBox_gproxy_126->setText(QCoreApplication::translate("MainWindow", "Use GProxy (can't disable)", nullptr));
         checkBox_w3l_126_lobby->setText(QCoreApplication::translate("MainWindow", "Show DotA stats in lobby overlay", nullptr));
         pushButtonClientConfig->setText(QCoreApplication::translate("MainWindow", "Open Client config file", nullptr));
-        tabWidget->setTabText(tabWidget->indexOf(tabW3), QCoreApplication::translate("MainWindow", " WARCRAFT", nullptr));
+        tabWidget->setTabText(tabWidget->indexOf(tabW3), QCoreApplication::translate("MainWindow", " WARCRAFT ", nullptr));
         groupBox_DotAOptions->setTitle(QCoreApplication::translate("MainWindow", "DotA Config File", nullptr));
         pushButton_DotaConfig->setText(QCoreApplication::translate("MainWindow", "Edit DotA Config Manually", nullptr));
         label_7->setText(QCoreApplication::translate("MainWindow", "Reload the tab to see checkboxes reflect your manual changes", nullptr));
         label_8->setText(QCoreApplication::translate("MainWindow", "<html><head/><body><p><a href=\"http://d1stats.ru/\"><span style=\" text-decoration: underline; color:#85c3e5;\">Official DotA Map Website</span></a></p></body></html>", nullptr));
         groupBox_2->setTitle(QCoreApplication::translate("MainWindow", "Game Options", nullptr));
         checkBox_dota_GAMEOPTIONS_WideScreen->setText(QCoreApplication::translate("MainWindow", "True Widescreen", nullptr));
-        tabWidget->setTabText(tabWidget->indexOf(tabDota), QCoreApplication::translate("MainWindow", "DOTA", nullptr));
+        tabWidget->setTabText(tabWidget->indexOf(tabDota), QCoreApplication::translate("MainWindow", " DOTA ", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(tabMm), QCoreApplication::translate("MainWindow", "MM", nullptr));
         pushButtonBU->setText(QCoreApplication::translate("MainWindow", "Get Beta patch", nullptr));
         checkBox_updates->setText(QCoreApplication::translate("MainWindow", "Automatic updates enabled", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(tabUpdate), QCoreApplication::translate("MainWindow", " UPDATE ", nullptr));
-        labelAbout->setText(QCoreApplication::translate("MainWindow", "<html><head/><body><p>Eurobattle.net Client version 1.3 (May 2021), developed by cen, additional contributions by deer</p><p><br/>We are searching for Qt/ C++ developers to further expand this client. This client is licensed under BSD 2-clause open source  license.</p><p><br/></p><p>Special thanks to:</p><p><span style=\" font-weight:600;\">IStealSkills</span> - help with desig</p><p><span style=\" font-weight:600;\">Stefos007</span> - original GProxy expansion</p><p>BNETtdocs, Stormlib, PvPGN and GHost projects.</p><p>D1stats for DotA development.</p><p>MyMGN for exchage of technical solutions and support.</p></body></html>", nullptr));
+        labelAbout->setText(QCoreApplication::translate("MainWindow", "<html><head/><body><p>Eurobattle.net Client version 1.3 (May 2021), developed by cen, additional contributions by deer</p><p><br/>We are searching for Qt/ C++ developers to further expand this client. This client is licensed under BSD 2-clause open source license.</p><p>Repository at <a href=\"https://github.com/cen1/xpam-client\"><span style=\" text-decoration: underline; color:#85c3e5;\">https://github.com/cen1/xpam-client</span></a><br/></p><p>Special thanks to:</p><p><span style=\" font-weight:600;\">IStealSkills</span> - help with design</p><p><span style=\" font-weight:600;\">Stefos007</span> - original GProxy expansion</p><p>BNETtdocs, Stormlib, PvPGN and GHost projects.</p><p>D1stats for DotA development.</p><p>MyMGN for exchage of technical solutions and support.</p></body></html>", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(tabAbout), QCoreApplication::translate("MainWindow", " ABOUT ", nullptr));
-        label_serverStatus->setText(QCoreApplication::translate("MainWindow", "Server status: unknown", nullptr));
     } // retranslateUi
 
 };

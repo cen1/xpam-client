@@ -7,14 +7,6 @@
             "mirror4" : "http://xpam.pl/update/update34.zip",
             "sha1" : "8622119e427e833314953146d0043d99f529a700"
     },
-	"38" : {
-            "version" : 39,
-            "mirror1" : "https://drive.google.com/uc?id=1Qhl2jBarLxMWeMPDuQaJIiCjNi9zwTwZ",
-            "mirror2" : "http://xpam.pl/update/update37.zip",
-            "mirror3" : "http://xpam.pl/update/update37.zip",
-            "mirror4" : "http://xpam.pl/update/update37.zip",
-            "sha1" : "bd24f32e6245835e817221bf775027daed7900e1"
-    },
     "37" : {
             "version" : 37,
             "mirror1" : "https://drive.google.com/uc?id=1Qhl2jBarLxMWeMPDuQaJIiCjNi9zwTwZ",
@@ -315,14 +307,24 @@
             "sha1" : "3a8b1084455e6c21def70f49dfab6b40e9f7ba8f"
         },
         {
-            "name": "DotA_Allstars_7.00e6.w3x",
+            "name": "DotA_Allstars_7.03b0.w3x",
             "targetPath": "W3PATH_126",
             "version" : 1,
-            "mirror1" : "https://www.googleapis.com/drive/v3/files/1e5kYAu2r7dfZTN907vk1RGfNCUlA3mFf/?key=AIzaSyDexUMJldtp6pVsAeddDQFwT8HAJEhgJpY&alt=media",
-            "mirror2" : "https://www.googleapis.com/drive/v3/files/1RL8NnjSJU1dzrkHI2Ld_a0B7cJzoc8zb/?key=AIzaSyDexUMJldtp6pVsAeddDQFwT8HAJEhgJpY&alt=media",
-            "mirror3" : "http://xpam.pl/update/v7.00e6.zip",
-            "mirror4" : "http://xpam.pl/update/v7.00e6.zip",
-            "sha1" : "42f5509432e8ac54cea1f6fddf76536fdf19081a"
+            "mirror1" : "https://www.googleapis.com/drive/v3/files/1arBV8orJap8Uo6Ook2WHs17A_tTmZdYd/?key=AIzaSyDexUMJldtp6pVsAeddDQFwT8HAJEhgJpY&alt=media",
+            "mirror2" : "https://www.googleapis.com/drive/v3/files/1LzskE6xa-DsHMWUW31kTBFWLLOzegj1m/?key=AIzaSyDexUMJldtp6pVsAeddDQFwT8HAJEhgJpY&alt=media",
+            "mirror3" : "http://xpam.pl/update/v7.03b0.zip",
+            "mirror4" : "http://xpam.pl/update/v7.03b0.zip",
+            "sha1" : "1a70e8401e5967340d173a07ffd2c92bf176908b"
+        },
+        {
+            "name": "DotA_Allstars_7.03a1.w3x",
+            "targetPath": "W3PATH_126",
+            "version" : 1,
+            "mirror1" : "https://www.googleapis.com/drive/v3/files/1ieA7YJOg1B6Q9aiEZ9-Ps2MdQ3-KlkTL/?key=AIzaSyDexUMJldtp6pVsAeddDQFwT8HAJEhgJpY&alt=media",
+            "mirror2" : "https://www.googleapis.com/drive/v3/files/1PQzYFitmq3_jpYFvwnZG1k3qbaEhFE9H/?key=AIzaSyDexUMJldtp6pVsAeddDQFwT8HAJEhgJpY&alt=media",
+            "mirror3" : "http://xpam.pl/update/v7.03a1.zip",
+            "mirror4" : "http://xpam.pl/update/v7.03a1.zip",
+            "sha1" : "a89284e975d6669c940f76721c62d6f7ab3176c6"
         }
     ]
 }

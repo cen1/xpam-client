@@ -58,7 +58,6 @@ public:
     
 private slots:
     void on_pushButtonGWG_clicked();
-    void on_pushButtonGWN_clicked();
     void on_pushButtonGWD_clicked();
     void on_pushButtonBU_clicked();
     void handleCheckBoxGProxy(bool checked);
