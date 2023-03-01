@@ -101,7 +101,7 @@ Config::Config()
 #else
     json1 = "http://xpam.pl/update/update.json";
     json2 = "http://tools.eurobattle.net/update/update.json";
-    json3 = "https://xpam-update.herokuapp.com/update.json";
+    json3 = "https://gist.githubusercontent.com/cen1/6929fc3595b5af783d7db32222afb63d/raw/update.json";
 #endif    
     // List of checkboxes which are standing for Warcraft 3 arguments
     W3_OPTIONS.append("windowed");

@@ -156,15 +156,19 @@ MainWindow::MainWindow(QWidget *parent) :
     updatesEnabled = ui->checkBox_updates->isChecked();
 
     //Add CD keys if needed
+    Logger::log("CD keys", config);
     Updater::replaceCDKeys(config);
 
     //Rename war3Patch.mpq to war3Mod.mpw as of 1.28.2
+    Logger::log("war3Patch.mpq", config);;
     Updater::renamePatchMpqForLatestW3(config);
 
     //Sanity checks
+    Logger::log("sanity checks", config);;
     W3::sanityCheck(config);
 
     //Prefill map update info
+    Logger::log("map updates", config);
     if (updatesEnabled) {
         Logger::log("Prefilling map update info", config);
         QByteArray jsonba = Updater::getUpdateJson(config);
@@ -186,15 +190,18 @@ MainWindow::MainWindow(QWidget *parent) :
     }
 
     //Set TFT as default client
+    Logger::log("default client", config);
     Registry r;
     r.createEuroKey();
     r.createBlizzKey();
     r.setDefaultTFT();
 
     //Temporary hacks
+    Logger::log("workarounds", config);
     tmpPlumbing();
 
     //Mm web
+    Logger::log("web", config);
     QSettings settings(config->XPAM_CONFIG_PATH, QSettings::IniFormat);
     QString mmUrl = settings.value("mm_url").toString();
     qDebug() << mmUrl;
@@ -202,13 +209,17 @@ MainWindow::MainWindow(QWidget *parent) :
     this->ui->mmWebEngineView->show();
 
     //Web link init
+    Logger::log("weblink", config);
     setupWebLinkProtoHandlers();
 
     //Server status
+    Logger::log("server status", config);
     showServerStatus();
     this->serverStatusTimer = new QTimer(this);
     connect(this->serverStatusTimer, SIGNAL(timeout()), this, SLOT(showServerStatus()));
     this->serverStatusTimer->start(1000*60*15);
+
+    this->repaint();
 }
 
 //Method that is called after client is up to date and ready to be used
