@@ -325,14 +325,14 @@
             "sha1" : "52413de37f6d297d0c4717486571074758e31c16"
         },
         {
-            "name": "DotA_Allstars_7.04a1.w3x",
+            "name": "DotA_Allstars_7.04b0.w3x",
             "targetPath": "W3PATH_126",
             "version" : 1,
-            "mirror1" : "https://www.googleapis.com/drive/v3/files/17-NmFWkv1M3tbrb5Rcm52DFpcBMhiE1E/?key=AIzaSyDexUMJldtp6pVsAeddDQFwT8HAJEhgJpY&alt=media",
-            "mirror2" : "https://www.googleapis.com/drive/v3/files/1sG6shUMWC76vUwGA9v0Rd13LboNqtv24/?key=AIzaSyDexUMJldtp6pVsAeddDQFwT8HAJEhgJpY&alt=media",
-            "mirror3" : "http://xpam.pl/update/v7.04a1.zip",
-            "mirror4" : "http://xpam.pl/update/v7.04a1.zip",
-            "sha1" : "d03d40965e7c449ff9c722fae36899053088a8fb"
+            "mirror1" : "https://www.googleapis.com/drive/v3/files/1Su7OVccbUbUh3sOIDBf1BfRdCfqr0lRv/?key=AIzaSyDexUMJldtp6pVsAeddDQFwT8HAJEhgJpY&alt=media",
+            "mirror2" : "https://www.googleapis.com/drive/v3/files/1Su7OVccbUbUh3sOIDBf1BfRdCfqr0lRv/?key=AIzaSyDexUMJldtp6pVsAeddDQFwT8HAJEhgJpY&alt=media",
+            "mirror3" : "http://xpam.pl/update/v7.04b0.zip",
+            "mirror4" : "http://xpam.pl/update/v7.04b0.zip",
+            "sha1" : "e63601628f01c518f27c5db4a5e85323abdd19db"
         }
     ]
 }
