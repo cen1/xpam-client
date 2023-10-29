@@ -37,6 +37,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "QCryptographicHash"
 #include "QTextStream"
 #include "QEventLoop"
+#include "QRandomGenerator"
 
 #include "quazip.h"
 #include "util.h"
@@ -91,9 +92,6 @@ void Updater::startUpdate() {
      * UPLOAD INSTRUCTIONS
      * -Google Drive: make sure you mark as public
      */
-    QTime now = QTime::currentTime();
-    qsrand(now.msec());
-
     if (downloader!=nullptr) {
         emit sendLine("FORBIDDEN RESTART");
         emit updateFinished(restartNeeded, false, false, false, type);
@@ -178,8 +176,8 @@ void Updater::startUpdate() {
 
     QUrl url(mirrorUrl);
 
-    downloader=new Downloader(url, config);
     dlthread = new QThread();
+    downloader=new Downloader(url, config);
     downloader->moveToThread(dlthread);
 
     QObject::connect(dlthread, SIGNAL(started()), downloader, SLOT(startDl()));
@@ -191,7 +189,7 @@ void Updater::startUpdate() {
     QObject::connect(downloader, SIGNAL(finisheddl()), downloader, SLOT(deleteLater()));
     QObject::connect(dlthread, SIGNAL(finished()), dlthread, SLOT(deleteLater()));
 
-    progressTime = QTime().currentTime();
+    progressTime = QElapsedTimer();
     progressTime.start();
 
     dlthread->start();
@@ -208,33 +206,40 @@ bool Updater::extractZip() {
     zip.open(QuaZip::mdUnzip);
 
     if (zip.isOpen()) {
-        for( bool f = zip.goToFirstFile(); f; f = zip.goToNextFile() ) {
+        for (bool f = zip.goToFirstFile(); f; f=zip.goToNextFile()) {
 
             QString filePath = zip.getCurrentFileName();
-            QuaZipFile zFile( zip.getZipName(), filePath );
+            QuaZipFile zFile(zip.getZipName(), filePath);
+            qDebug() << filePath;
 
-            zFile.open(QIODevice::ReadOnly);
-            qint64 size=zFile.size();
-            char * buffer = (char *)malloc(size);
-            qint64 ret = zFile.read(buffer, size);
-            zFile.close();
+            if (zFile.open(QIODevice::ReadOnly)) {
+                qint64 size=zFile.size();
+                char * buffer = (char *)malloc(size);
+                qint64 ret = zFile.read(buffer, size);
+                zFile.close();
 
-            emit sendLine("Extracting "+filePath+" ("+QString::number(size)+") read "+QString::number(ret)+"-"+QString::number(sizeof(buffer)));
+                emit sendLine("Extracting "+filePath+" ("+QString::number(size)+") read "+QString::number(ret)+"-"+QString::number(sizeof(buffer)));
 
-            if (QFile::exists(config->APPDATA+"\\"+filePath)) QFile::remove(config->APPDATA+"\\"+filePath);
+                if (QFile::exists(config->APPDATA+"\\"+filePath)) QFile::remove(config->APPDATA+"\\"+filePath);
 
-            QFile dstFile(config->APPDATA+"\\"+filePath);
+                QFile dstFile(config->APPDATA+"\\"+filePath);
 
-            dstFile.open(QIODevice::WriteOnly);
-            if (dstFile.isOpen()){
-                dstFile.write(buffer, size);
-                dstFile.close();
+                dstFile.open(QIODevice::WriteOnly);
+                if (dstFile.isOpen()){
+                    dstFile.write(buffer, size);
+                    dstFile.close();
+                    free(buffer);
+                }
+                else {
+                    emit sendLine("Could not extract file "+filePath+" "+dstFile.errorString());
+                    free(buffer);
+                    return false;
+                }
             }
             else {
-                emit sendLine("Could not extract file "+filePath+" "+dstFile.errorString());
+                qDebug() << "Failed to open zipped file";
                 return false;
             }
-            delete buffer;
         }
     }
     else {
@@ -601,10 +606,10 @@ int Updater::setCurrentPlusOneJson() {
 }
 
 QByteArray Updater::simpleDl(QUrl url) {
+    qDebug() << "Downloading " << url.toString();
     QNetworkAccessManager nam;
     QNetworkRequest request(url);
-    request.setTransferTimeout(10000);
-    request.setAttribute(QNetworkRequest::FollowRedirectsAttribute, true);
+    request.setTransferTimeout(5000);
     QNetworkReply * reply = nam.get(request);
 
     QEventLoop loop;
@@ -617,6 +622,7 @@ QByteArray Updater::simpleDl(QUrl url) {
         return ba;
     }
     else {
+        qDebug() << "simpleDl error for url " << url.toString() << "error: " << reply->error();
         QByteArray ba;
         reply->deleteLater();
         return ba;
@@ -742,9 +748,9 @@ int Updater::getRandomMirror() {
 
     int high=3;
     int low=0;
-    int mirrorNo = qrand() % ((high + 1) - low) + low;
+    int mirrorNo = QRandomGenerator::global()->bounded(low, high);
     while (this->usedMirrors.contains(mirrorNo)) {
-        mirrorNo = qrand() % ((high + 1) - low) + low;
+        mirrorNo = QRandomGenerator::global()->bounded(low, high);
     }
     //Does not contain
     this->usedMirrors.append(mirrorNo);

@@ -27,7 +27,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "config.h"
 #include "registry.h"
 #include "winutils.h"
-#include "patcher.h"
 #include <QStandardPaths>
 #include <QDir>
 
@@ -99,8 +98,8 @@ Config::Config()
     json2 = "http://localhost:8080/update.json";
     json3 = "http://localhost:8080/update.json";
 #else
-    json1 = "http://xpam.pl/update/update.json";
-    json2 = "http://tools.eurobattle.net/update/update.json";
+    json1 = "https://xpam.pl/update/update.json";
+    json2 = "https://tools.eurobattle.net/update/update.json";
     json3 = "https://gist.githubusercontent.com/cen1/6929fc3595b5af783d7db32222afb63d/raw/update.json";
 #endif    
     // List of checkboxes which are standing for Warcraft 3 arguments
@@ -140,6 +139,9 @@ Config::Config()
     W3_VERSIONS.append("1.28.2");
     W3_VERSIONS.append("1.28.4");
     W3_VERSIONS.append("1.28.5");
+
+    W3_MAGNET_126 = "magnet:?xt=urn:btih:201ffc730e5986826acd7656d704d9fe4f8e773f&dn=Warcraft%5FIII%5F1.26.zip&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.open-internet.nl%3A6969%2Fannounce&tr=udp%3A%2F%2Fexodus.desync.com%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=udp%3A%2F%2Ftracker.internetwarriors.net%3A1337%2Fannounce&tr=udp%3A%2F%2F9.rarbg.to%3A2710%2Fannounce&tr=udp%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=udp%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=udp%3A%2F%2Fretracker.lanta-net.ru%3A2710%2Fannounce";
+    W3_MAGNET_128 = "magnet:?xt=urn:btih:5557ab5e6dacd83056bd0a290c9cdf22ee900a19&dn=Warcraft%5FIII%5F1.28.zip&tr=udp%3A%2F%2F9.rarbg.to%3A2710%2Fannounce&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=udp%3A%2F%2Fexodus.desync.com%3A6969%2Fannounce&tr=udp%3A%2F%2Fwww.torrent.eu.org%3A451%2Fannounce&tr=udp%3A%2F%2F3rt.tace.ru%3A60889%2Fannounce";
 }
 
 QString Config::getCorrectW3Key(QString modeKey) {

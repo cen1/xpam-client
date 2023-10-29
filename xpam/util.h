@@ -87,10 +87,6 @@ namespace Util {
         return false;
     }
 
-    inline int randInt(int low, int high) {
-        return qrand() % ((high + 1) - low) + low;
-    }
-
     inline QString getMiddleParam(QStringList list)
     {
         list.pop_front();
@@ -112,7 +108,7 @@ namespace Util {
 
     inline QString toCamelCase(const QString& s)
     {
-        QStringList parts = s.split('_', QString::SkipEmptyParts);
+        QStringList parts = s.split('_', Qt::SkipEmptyParts);
         for (int i=1; i<parts.size(); ++i)
             parts[i].replace(0, 1, parts[i][0].toUpper());
 

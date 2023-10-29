@@ -28,6 +28,8 @@ public:
     QString W3_KEY_LATEST;
     QString W3PATH_126;
     QString W3PATH_LATEST;
+    QString W3_MAGNET_126;
+    QString W3_MAGNET_128;
     QString DOCPATH;
     QString DOCMAPPATH;
     QString DOCMAPPATHDL;

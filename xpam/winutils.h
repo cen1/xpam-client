@@ -98,7 +98,7 @@ namespace Winutils
         TCHAR szPath[MAX_PATH];
         if(SUCCEEDED(SHGetFolderPath(NULL, CSIDL_APPDATA, NULL, 0, szPath)))
         {
-            return QString::fromWCharArray(szPath);
+            return QString::fromWCharArray(szPath).replace('\\', '/');
         }
         else
         {

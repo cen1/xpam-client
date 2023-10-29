@@ -28,25 +28,23 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <Qt>
 #include <QApplication>
 #include "QSplashScreen"
-#include "QTextCodec"
+#include "QWebEngineProfile"
 #include "QWebEngineSettings"
 
 int main(int argc, char *argv[])
 {
-    QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
-
     QApplication a(argc, argv);
     MainWindow w;
     w.setWindowIcon(QIcon(":/favicon.ico"));
 
     //Mm
-    QWebEngineSettings::defaultSettings()->setAttribute(QWebEngineSettings::ShowScrollBars, false);
-    QWebEngineSettings::defaultSettings()->setAttribute(QWebEngineSettings::PdfViewerEnabled, false);
-    QWebEngineSettings::defaultSettings()->setAttribute(QWebEngineSettings::WebGLEnabled, false);
-    QWebEngineSettings::defaultSettings()->setAttribute(QWebEngineSettings::LocalContentCanAccessFileUrls, false);
-    QWebEngineSettings::defaultSettings()->setAttribute(QWebEngineSettings::LocalContentCanAccessRemoteUrls, false);
-    QWebEngineSettings::defaultSettings()->setAttribute(QWebEngineSettings::JavascriptCanOpenWindows, false);
-    QWebEngineSettings::defaultSettings()->setAttribute(QWebEngineSettings::ShowScrollBars, false);
+    QWebEngineSettings *web_settings = QWebEngineProfile::defaultProfile()->settings();
+    web_settings->setAttribute(QWebEngineSettings::ShowScrollBars, true);
+    web_settings->setAttribute(QWebEngineSettings::PdfViewerEnabled, false);
+    web_settings->setAttribute(QWebEngineSettings::WebGLEnabled, false);
+    web_settings->setAttribute(QWebEngineSettings::LocalContentCanAccessFileUrls, false);
+    web_settings->setAttribute(QWebEngineSettings::LocalContentCanAccessRemoteUrls, false);
+    web_settings->setAttribute(QWebEngineSettings::JavascriptCanOpenWindows, false);
 
     //splash screen to hide the few seconds of update check
     QPixmap pixmap(":/splash.png");

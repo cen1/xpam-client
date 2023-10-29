@@ -50,6 +50,7 @@ private:
     QByteArray tmpBuffer;
     QFile* file;
     Config* config;
+
 signals:
     void progress(qint64 bytesReceived, qint64 bytesTotal);
     void finisheddl();

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>900</width>
-    <height>600</height>
+    <width>972</width>
+    <height>748</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -63,7 +63,7 @@
    </property>
    <property name="styleSheet">
     <string notr="true">#centralWidget {
-  background-color: rgba(150, 150, 150);
+  background-color: #969696;
   margin: 0px;
   padding: 0px;
   font-size: 14px;
@@ -116,18 +116,19 @@ a span {
 }
 
 QTabBar::tab {
-  background-color: rgba(150, 150, 150);
-  color:#ffffff;
+  background-color: #969696;
+  color: white;
   height: 30px;
   font-family: &quot;Lucida Sans Unicode&quot;;
 
 }
 QTabBar::tab:hover{  
-  background-color: rgba(180, 180, 180);
+  /*background-color: #969696;*/
+	background-color: #B4B4B4;
 }
 
 QTabBar::tab:selected{  
-  background-color: rgba(180, 180, 180);
+  background-color: #B4B4B4;
 }
 
 #tabLauncher {
@@ -223,7 +224,7 @@ QCheckBox::indicator:checked {
 }
 
 #label_serverStatus {
-  background-color: rgba(34, 34, 34);
+  background-color: #222222;
   padding: 2px;
 }</string>
    </property>
@@ -541,7 +542,7 @@ or manually host your games.</string>
              <x>10</x>
              <y>30</y>
              <width>411</width>
-             <height>116</height>
+             <height>126</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -594,7 +595,7 @@ or manually host your games.</string>
              <x>10</x>
              <y>160</y>
              <width>411</width>
-             <height>98</height>
+             <height>102</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_9">
@@ -665,7 +666,7 @@ or manually host your games.</string>
             <x>40</x>
             <y>120</y>
             <width>361</width>
-            <height>331</height>
+            <height>361</height>
            </rect>
           </property>
           <property name="title">
@@ -677,7 +678,7 @@ or manually host your games.</string>
              <x>10</x>
              <y>20</y>
              <width>341</width>
-             <height>308</height>
+             <height>334</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_8">
@@ -850,8 +851,8 @@ or manually host your games.</string>
            <rect>
             <x>30</x>
             <y>60</y>
-            <width>400</width>
-            <height>451</height>
+            <width>421</width>
+            <height>551</height>
            </rect>
           </property>
           <property name="title">
@@ -862,8 +863,8 @@ or manually host your games.</string>
             <rect>
              <x>10</x>
              <y>20</y>
-             <width>381</width>
-             <height>226</height>
+             <width>401</width>
+             <height>268</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_4">
@@ -936,7 +937,7 @@ or manually host your games.</string>
                 </property>
                 <property name="minimumSize">
                  <size>
-                  <width>150</width>
+                  <width>100</width>
                   <height>0</height>
                  </size>
                 </property>
@@ -951,6 +952,25 @@ or manually host your games.</string>
                 </property>
                 <property name="text">
                  <string>Change</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="pushButton_download_128">
+                <property name="minimumSize">
+                 <size>
+                  <width>130</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>100</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>Download</string>
                 </property>
                </widget>
               </item>
@@ -989,21 +1009,11 @@ or manually host your games.</string>
              </layout>
             </item>
             <item>
-             <widget class="QLabel" name="label_5">
-              <property name="text">
-               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Do not have Warcraft 1.28.5? Download it &lt;a href=&quot;http://wiki.eurobattle.net/index.php?title=How_to_install_Warcraft_III&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#85c3e5;&quot;&gt;here&lt;/span&gt;&lt;/a&gt;.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-              </property>
-              <property name="openExternalLinks">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item>
              <widget class="QGroupBox" name="groupBox_latest">
               <property name="minimumSize">
                <size>
                 <width>0</width>
-                <height>150</height>
+                <height>160</height>
                </size>
               </property>
               <property name="title">
@@ -1015,7 +1025,7 @@ or manually host your games.</string>
                  <x>10</x>
                  <y>20</y>
                  <width>151</width>
-                 <height>131</height>
+                 <height>134</height>
                 </rect>
                </property>
                <layout class="QVBoxLayout" name="verticalLayout_gb_latest">
@@ -1082,14 +1092,17 @@ or manually host your games.</string>
            <property name="geometry">
             <rect>
              <x>10</x>
-             <y>250</y>
-             <width>381</width>
-             <height>186</height>
+             <y>290</y>
+             <width>401</width>
+             <height>261</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_11">
             <property name="sizeConstraint">
              <enum>QLayout::SetMaximumSize</enum>
+            </property>
+            <property name="bottomMargin">
+             <number>0</number>
             </property>
             <item>
              <widget class="QLabel" name="label_register">
@@ -1251,8 +1264,8 @@ or manually host your games.</string>
            <rect>
             <x>470</x>
             <y>60</y>
-            <width>400</width>
-            <height>251</height>
+            <width>451</width>
+            <height>261</height>
            </rect>
           </property>
           <property name="title">
@@ -1263,8 +1276,8 @@ or manually host your games.</string>
             <rect>
              <x>9</x>
              <y>19</y>
-             <width>381</width>
-             <height>229</height>
+             <width>430</width>
+             <height>233</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_7">
@@ -1316,7 +1329,7 @@ or manually host your games.</string>
                 </property>
                 <property name="minimumSize">
                  <size>
-                  <width>150</width>
+                  <width>100</width>
                   <height>0</height>
                  </size>
                 </property>
@@ -1332,13 +1345,35 @@ or manually host your games.</string>
                </widget>
               </item>
               <item>
+               <widget class="QPushButton" name="pushButton_download_126">
+                <property name="minimumSize">
+                 <size>
+                  <width>130</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>100</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true"/>
+                </property>
+                <property name="text">
+                 <string>Download</string>
+                </property>
+               </widget>
+              </item>
+              <item>
                <spacer name="horizontalSpacer_3">
                 <property name="orientation">
                  <enum>Qt::Horizontal</enum>
                 </property>
                 <property name="sizeHint" stdset="0">
                  <size>
-                  <width>40</width>
+                  <width>20</width>
                   <height>20</height>
                  </size>
                 </property>
@@ -1391,8 +1426,8 @@ or manually host your games.</string>
                 <rect>
                  <x>10</x>
                  <y>20</y>
-                 <width>211</width>
-                 <height>101</height>
+                 <width>214</width>
+                 <height>106</height>
                 </rect>
                </property>
                <layout class="QVBoxLayout" name="verticalLayout__gb_126">
@@ -1488,6 +1523,9 @@ or manually host your games.</string>
             <property name="sizeConstraint">
              <enum>QLayout::SetNoConstraint</enum>
             </property>
+            <property name="bottomMargin">
+             <number>10</number>
+            </property>
             <item>
              <widget class="QGroupBox" name="groupBox_DotAOptions">
               <property name="sizePolicy">
@@ -1499,7 +1537,7 @@ or manually host your games.</string>
               <property name="minimumSize">
                <size>
                 <width>350</width>
-                <height>50</height>
+                <height>60</height>
                </size>
               </property>
               <property name="maximumSize">
@@ -1516,8 +1554,8 @@ or manually host your games.</string>
                 <rect>
                  <x>0</x>
                  <y>19</y>
-                 <width>161</width>
-                 <height>23</height>
+                 <width>163</width>
+                 <height>25</height>
                 </rect>
                </property>
                <layout class="QHBoxLayout" name="horizontalLayout_10">
@@ -1631,7 +1669,7 @@ or manually host your games.</string>
           </item>
          </layout>
         </widget>
-        <widget class="QWidget" name="tabMm">
+        <widget class="QWidget" name="tabNews">
          <property name="enabled">
           <bool>true</bool>
          </property>
@@ -1648,7 +1686,7 @@ or manually host your games.</string>
           </size>
          </property>
          <attribute name="title">
-          <string>MM</string>
+          <string>NEWS</string>
          </attribute>
          <layout class="QVBoxLayout" name="verticalLayout_10">
           <property name="spacing">
@@ -1786,7 +1824,7 @@ or manually host your games.</string>
            <rect>
             <x>21</x>
             <y>21</y>
-            <width>657</width>
+            <width>721</width>
             <height>257</height>
            </rect>
           </property>
@@ -1800,7 +1838,7 @@ or manually host your games.</string>
            <enum>QFrame::NoFrame</enum>
           </property>
           <property name="text">
-           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Eurobattle.net Client version 1.3 (May 2021), developed by cen, additional contributions by deer&lt;/p&gt;&lt;p&gt;&lt;br/&gt;We are searching for Qt/ C++ developers to further expand this client. This client is licensed under BSD 2-clause open source license.&lt;/p&gt;&lt;p&gt;Repository at &lt;a href=&quot;https://github.com/cen1/xpam-client&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#85c3e5;&quot;&gt;https://github.com/cen1/xpam-client&lt;/span&gt;&lt;/a&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;Special thanks to:&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;IStealSkills&lt;/span&gt; - help with design&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Stefos007&lt;/span&gt; - original GProxy expansion&lt;/p&gt;&lt;p&gt;BNETtdocs, Stormlib, PvPGN and GHost projects.&lt;/p&gt;&lt;p&gt;D1stats for DotA development.&lt;/p&gt;&lt;p&gt;MyMGN for exchage of technical solutions and support.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Eurobattle.net Client version 1.4 (November 2023), developed by cen, additional contributions by deer&lt;/p&gt;&lt;p&gt;&lt;br/&gt;We are searching for Qt/ C++ developers to further expand this client. This client is licensed under BSD 2-clause open source license.&lt;/p&gt;&lt;p&gt;Repository at &lt;a href=&quot;https://github.com/cen1/xpam-client&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#85c3e5;&quot;&gt;https://github.com/cen1/xpam-client&lt;/span&gt;&lt;/a&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;Special thanks to:&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;IStealSkills&lt;/span&gt; - help with design&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Stefos007&lt;/span&gt; - original GProxy expansion&lt;/p&gt;&lt;p&gt;BNETtdocs, Stormlib, PvPGN and GHost projects.&lt;/p&gt;&lt;p&gt;D1stats for DotA development.&lt;/p&gt;&lt;p&gt;MyMGN for exchage of technical solutions and support.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>

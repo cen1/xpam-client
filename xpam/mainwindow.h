@@ -30,6 +30,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "QString"
 #include "QMouseEvent"
 #include "QSettings"
+#include "QPushButton"
 //#include "QWebView"
 
 namespace Ui {
@@ -46,6 +47,7 @@ signals:
     void updateCheckFinished();     //terminates the splash screen event loop
     void cancelUpdate();
     void terminateCurrentGproxyInstance();
+    void cancelTorrentDownload();
 
 public:
     explicit MainWindow(QWidget *parent = 0);
@@ -86,7 +88,7 @@ private slots:
 
     void on_pushButton_war126Path_clicked();
 
-    void on_checkBox_useGproxy_126_toggled(bool checked);
+    void on_checkBoxUseGproxy126Toggled(bool checked);
 
     //void on_pushButton_updateW3_released();
 
@@ -113,6 +115,10 @@ private slots:
 
     void showServerStatus();
 
+    void on_pushButton_download_128_clicked();
+
+    void on_pushButton_download_126_clicked();
+
 public slots:
     void gproxyReady(QString w3Exename, bool ft);
     void gproxyExiting(bool killedForcefully);
@@ -124,6 +130,9 @@ public slots:
     void hideSplashScreen();
     void logUpdate(QString line);
     void modifyLastLineSlot(QString line);
+    void handleTorrentWorking();
+    void handleTorrentProgress(int percent);
+    void handleTorrentFinished(int code);
 
 private:
     Ui::MainWindow *ui;
@@ -157,9 +166,12 @@ private:
     void tmpPlumbing();
     void doLogin();
     void setupWebLinkProtoHandlers();
+    void initTorrentDownload();
 
     bool updateInProgress;
     QVector<QJsonObject> UPDATE_MAPS;
+    int currentTorrentVersionDl=0;
+    QPushButton * currentTorrentDlButton=nullptr;
 
     //QWebView *m_Mview;
 
