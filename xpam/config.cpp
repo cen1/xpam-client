@@ -98,9 +98,9 @@ Config::Config()
     json2 = "http://localhost:8080/update.json";
     json3 = "http://localhost:8080/update.json";
 #else
-    json1 = "https://xpam.pl/update/update.json";
-    json2 = "https://tools.eurobattle.net/update/update.json";
-    json3 = "https://gist.githubusercontent.com/cen1/6929fc3595b5af783d7db32222afb63d/raw/update.json";
+    json1 = "https://xpam.pl/update2/update.json";
+    json2 = "https://tools.eurobattle.net/update2/update.json";
+    json3 = "https://gist.githubusercontent.com/cen1/ed211e8ed3a3039f715bc649f9cad59e/raw/update2.json";
 #endif    
     // List of checkboxes which are standing for Warcraft 3 arguments
     W3_OPTIONS.append("windowed");

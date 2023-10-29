@@ -55,9 +55,9 @@ RESOURCES += \
     xpam.qrc
 
 OTHER_FILES += \
-    update.json \
     update.bat \
-    update.json.example
+    update.json.example \
+    update_qt5.json
 
 ### DEFINES
 #CONFIG += static
@@ -136,4 +136,4 @@ win32 {
 #DEFINES += PORTABLE
 
 DISTFILES += \
-    update2.json
+    update.json
