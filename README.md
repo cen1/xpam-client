@@ -44,3 +44,6 @@ windeployqt --release xpam.exe
 Finally, copy zlib, quazip, stormlib and libtorrent dlls manually.
 
 Additionally, copy qt6core5compat(d).dll, libssl-3-x64.dll, libcrypto-3-x64.dll from Qt installation.
+
+#  Update.json as gist
+There was an issue with line endings and hash mismatch which is now taken care of with a .gitattributes directive. You can copy and paste the file as is, do not remove the final newline.
