@@ -1,4 +1,4 @@
-# xpam-client
+# Xpam client
 Desktop client application for eurobattle.net
 
 Setup instructions
@@ -16,6 +16,17 @@ Use the official Qt installer to install latest 6.X libraries for MSVC 2022 with
 Build for x64, release and debug modes.
 
 We plan to migrate to cmake+conan to make this step automated.
+
+## Build dynamic StormLib
+```
+git clone git@github.com:ladislav-zezula/StormLib.git
+cd StormLib
+git checkout v9.25
+"C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Auxiliary/Build/vcvarsall.bat" amd64
+cmake -B ./build_dynamic -DBUILD_SHARED_LIBS=ON -DUNICODE=ON
+cd build_dynamic
+cmake --build . --config Release
+```
 
 ## Copy dependent libs to release folders
 

@@ -62,6 +62,7 @@ void TorrentDownloader::processLibtorrentEvents() {
         if (lt::alert_cast<lt::torrent_finished_alert>(a)) {
             //qDebug() << "TORRENT FINISHED";
             emit sendLine("tdl finished");
+            exitBool=true;
             emit finished(0);
         }
 
@@ -77,11 +78,12 @@ void TorrentDownloader::processLibtorrentEvents() {
 
         if (lt::alert_cast<lt::torrent_error_alert>(a)) {
             emit sendLine("tdl error");
+            exitBool=true;
             emit finished(1);
         }
 
     }
-    emit working();
+    emit working(exitBool);
     session.post_torrent_updates();
     //qDebug() << "processLibtorrentEvents";
 }

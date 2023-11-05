@@ -130,7 +130,7 @@ public slots:
     void hideSplashScreen();
     void logUpdate(QString line);
     void modifyLastLineSlot(QString line);
-    void handleTorrentWorking();
+    void handleTorrentWorking(bool finished);
     void handleTorrentProgress(int percent);
     void handleTorrentFinished(int code);
 

@@ -172,21 +172,28 @@ MainWindow::MainWindow(QWidget *parent) :
     Logger::log("map updates", config);
     if (updatesEnabled) {
         Logger::log("Prefilling map update info", config);
-        QByteArray jsonba = Updater::getUpdateJson(config);
-        QJsonDocument json = QJsonDocument::fromJson(jsonba);
-        QJsonObject obj=json.object();
-        QStringList keys = obj.keys();
+        DlResponse jsonResponse = Updater::getUpdateJson(config);
+        if (jsonResponse.getSuccess()) {
+            QByteArray jsonba = jsonResponse.getData();
+            QJsonDocument json = QJsonDocument::fromJson(jsonba);
+            QJsonObject obj=json.object();
+            QStringList keys = obj.keys();
 
-        if (keys.contains("maps")) {
-            Logger::log("Mandatory maps found on remote", config);
-            QJsonValue value = obj.value("maps");
-            QJsonArray maps = value.toArray();
+            if (keys.contains("maps")) {
+                Logger::log("Mandatory maps found on remote", config);
+                QJsonValue value = obj.value("maps");
+                QJsonArray maps = value.toArray();
 
-            foreach (const QJsonValue & value, maps) {
-                QJsonObject obj = value.toObject();
-                UPDATE_MAPS.append(obj);
-                Logger::log("Added remote map entry "+obj.value("name").toString(), config);
+                foreach (const QJsonValue & value, maps) {
+                    QJsonObject obj = value.toObject();
+                    UPDATE_MAPS.append(obj);
+                    Logger::log("Added remote map entry "+obj.value("name").toString(), config);
+                }
             }
+        }
+        else {
+            Logger::log("Failed to fetch map metadata", config);
+            Logger::log(jsonResponse.getErrorMessage(), config);
         }
     }
 
@@ -1568,7 +1575,7 @@ void MainWindow::initTorrentDownload()
     tdl->moveToThread(tdlt);
 
     connect(tdl, SIGNAL(progress(int)), this, SLOT(handleTorrentProgress(int)));
-    connect(tdl, SIGNAL(working()), this, SLOT(handleTorrentWorking()));
+    connect(tdl, SIGNAL(working(bool)), this, SLOT(handleTorrentWorking(bool)));
     connect(tdl, SIGNAL(finished(int)), this, SLOT(handleTorrentFinished(int)));
     connect(tdl, SIGNAL(sendLine(QString)), this, SLOT(logUpdate(QString)));
     connect(tdlt, SIGNAL(started()), tdl, SLOT(download()));
@@ -1579,8 +1586,10 @@ void MainWindow::initTorrentDownload()
     tdlt->start();
 }
 
-void MainWindow::handleTorrentWorking()
+void MainWindow::handleTorrentWorking(bool finished)
 {
+    if (finished) return;
+
     QString currentText = this->currentTorrentDlButton->text();
     if (currentText.endsWith("...")) {
         currentText.remove(currentText.length()-3, 3);

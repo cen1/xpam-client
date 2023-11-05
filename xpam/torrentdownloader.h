@@ -19,7 +19,7 @@ public slots:
 
 signals:
     void progress(int percent);
-    void working();
+    void working(bool finished);
     void finished(int code);
     void internalFinish();
     void sendLine(QString line);
