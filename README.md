@@ -32,12 +32,14 @@ cmake --build . --config Release
 
 We use Windows deployment tool to copy the necessary libraries to debug and release folders.
 
+```
 Visual Studio -> Tools -> Command line -> Developer command prompt
 C:/Qt/6.5.3/msvc2019_64/bin/qtenv2.bat
 cd C:/path/to/xpam-client/build-xpam-Desktop_Qt_6_5_3_MSVC2019_64bit-Debug/debug
 windeployqt --debug xpam.exe
 cd C:/path/to/xpam-client/build-xpam-Desktop_Qt_6_5_3_MSVC2019_64bit-Release/release
 windeployqt --release xpam.exe
+```
 
 Finally, copy zlib, quazip, stormlib and libtorrent dlls manually.
 
