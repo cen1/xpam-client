@@ -25,13 +25,13 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "torrentdownloader.h"
 #include "registry.h"
 #include "util.h"
 #include "logger.h"
 #include "QProcess"
 #include "QThread"
 #include "QTextStream"
-#include "QDesktopWidget"
 #include "QClipboard"
 #include "QDesktopServices"
 #include "gproxy.h"
@@ -57,10 +57,12 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 W3 * w3=nullptr;         //w3 process
 GProxy * gproxy=nullptr;        //gproxy object
 Updater * updater=nullptr;      //updater object
+TorrentDownloader * tdl=nullptr;
 
 QThread * w3t=nullptr;
 QThread * gpt=nullptr;          //gproxy thread
 QThread * upt=nullptr;          //updater thread
+QThread * tdlt=nullptr;
 
 Config * config=new Config();   //global config
 
@@ -70,7 +72,6 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     ui->tabWidget->setCurrentIndex(0);
-    ui->tabWidget->removeTab(4); //TODO: Remove when MM is ready, check other tab index setters
 
     isStartupUpdate=true;
     ismax=false;    
@@ -171,21 +172,28 @@ MainWindow::MainWindow(QWidget *parent) :
     Logger::log("map updates", config);
     if (updatesEnabled) {
         Logger::log("Prefilling map update info", config);
-        QByteArray jsonba = Updater::getUpdateJson(config);
-        QJsonDocument json = QJsonDocument::fromJson(jsonba);
-        QJsonObject obj=json.object();
-        QStringList keys = obj.keys();
+        DlResponse jsonResponse = Updater::getUpdateJson(config);
+        if (jsonResponse.getSuccess()) {
+            QByteArray jsonba = jsonResponse.getData();
+            QJsonDocument json = QJsonDocument::fromJson(jsonba);
+            QJsonObject obj=json.object();
+            QStringList keys = obj.keys();
 
-        if (keys.contains("maps")) {
-            Logger::log("Mandatory maps found on remote", config);
-            QJsonValue value = obj.value("maps");
-            QJsonArray maps = value.toArray();
+            if (keys.contains("maps")) {
+                Logger::log("Mandatory maps found on remote", config);
+                QJsonValue value = obj.value("maps");
+                QJsonArray maps = value.toArray();
 
-            foreach (const QJsonValue & value, maps) {
-                QJsonObject obj = value.toObject();
-                UPDATE_MAPS.append(obj);
-                Logger::log("Added remote map entry "+obj.value("name").toString(), config);
+                foreach (const QJsonValue & value, maps) {
+                    QJsonObject obj = value.toObject();
+                    UPDATE_MAPS.append(obj);
+                    Logger::log("Added remote map entry "+obj.value("name").toString(), config);
+                }
             }
+        }
+        else {
+            Logger::log("Failed to fetch map metadata", config);
+            Logger::log(jsonResponse.getErrorMessage(), config);
         }
     }
 
@@ -200,12 +208,12 @@ MainWindow::MainWindow(QWidget *parent) :
     Logger::log("workarounds", config);
     tmpPlumbing();
 
-    //Mm web
+    //News web
     Logger::log("web", config);
     QSettings settings(config->XPAM_CONFIG_PATH, QSettings::IniFormat);
-    QString mmUrl = settings.value("mm_url").toString();
-    qDebug() << mmUrl;
-    this->ui->mmWebEngineView->load(QUrl(mmUrl));
+    QString newsUrl = settings.value("news_url", "https://eurobattle.net/client/news").toString();
+    qDebug() << "News URL: " << newsUrl;
+    this->ui->mmWebEngineView->load(QUrl(newsUrl));
     this->ui->mmWebEngineView->show();
 
     //Web link init
@@ -554,7 +562,7 @@ bool MainWindow::checkW3Updates(){
         Logger::log("Warcraft needs to be updated, detected version "+w3version+", needed version "+config->W3_VERSION_LATEST, config);
 
         //Figure out which incremental version we need to dl
-        QRegExp rx("(\\.)");
+        QRegularExpression rx("(\\.)");
         QStringList query = w3version.split(rx);
         if (query.size()<2) {
             status("Could not parse w3 version");
@@ -596,7 +604,7 @@ void MainWindow::checkUpdates(){
     //disable beta button or all kind of hell will ensue
     ui->pushButtonBU->setDisabled(true);
 
-    ui->tabWidget->setCurrentIndex(4);
+    ui->tabWidget->setCurrentIndex(5);
     lockTabs(ui->tabWidget->currentIndex());
 
     updater=new Updater(config, 0);
@@ -1223,7 +1231,7 @@ void MainWindow::diffW3Update(QString version) {
 
     ui->pushButtonBU->setEnabled(false);
 
-    ui->tabWidget->setCurrentIndex(4);
+    ui->tabWidget->setCurrentIndex(5);
     lockTabs(ui->tabWidget->currentIndex());
 
     updater=new Updater(config, 1, version);
@@ -1300,7 +1308,8 @@ void MainWindow::quit() {
     QApplication::quit();
 }
 
-void MainWindow::on_checkBox_useGproxy_126_toggled(bool checked) {
+void MainWindow::on_checkBoxUseGproxy126Toggled(bool checked) {
+    UNREFERENCED_PARAMETER(checked);
     ui->checkBox_gproxy_126->setChecked(true);
 }
 
@@ -1524,3 +1533,125 @@ void MainWindow::showServerStatus() {
         ui->label_serverStatus->setStyleSheet("QLabel {color:red}");
     }
 }
+
+void MainWindow::on_pushButton_download_128_clicked()
+{
+    if (this->currentTorrentVersionDl==0) {
+        this->currentTorrentVersionDl = 128;
+        this->currentTorrentDlButton = ui->pushButton_download_128;
+        ui->pushButton_download_126->setDisabled(true);
+        this->initTorrentDownload();
+    }
+    else {
+        //cancel
+        qDebug() << "cancel";
+        emit cancelTorrentDownload();
+    }
+}
+
+void MainWindow::on_pushButton_download_126_clicked()
+{
+    if (this->currentTorrentVersionDl==0) {
+        this->currentTorrentVersionDl = 126;
+        this->currentTorrentDlButton = ui->pushButton_download_126;
+        ui->pushButton_download_128->setDisabled(true);
+        this->initTorrentDownload();
+    }
+    else {
+        //cancel
+        emit cancelTorrentDownload();
+    }
+}
+
+void MainWindow::initTorrentDownload()
+{
+    QString magnetLink = config->W3_MAGNET_128;
+    if (this->currentTorrentVersionDl == 126) {
+        magnetLink=config->W3_MAGNET_126;
+    }
+
+    tdl=new TorrentDownloader(magnetLink, config->APPDATA);
+    tdlt=new QThread();
+    tdl->moveToThread(tdlt);
+
+    connect(tdl, SIGNAL(progress(int)), this, SLOT(handleTorrentProgress(int)));
+    connect(tdl, SIGNAL(working(bool)), this, SLOT(handleTorrentWorking(bool)));
+    connect(tdl, SIGNAL(finished(int)), this, SLOT(handleTorrentFinished(int)));
+    connect(tdl, SIGNAL(sendLine(QString)), this, SLOT(logUpdate(QString)));
+    connect(tdlt, SIGNAL(started()), tdl, SLOT(download()));
+    connect(this, SIGNAL(cancelTorrentDownload()), tdl, SLOT(cancelDownload()));
+
+    this->currentTorrentDlButton->setStyleSheet("color: green");
+
+    tdlt->start();
+}
+
+void MainWindow::handleTorrentWorking(bool finished)
+{
+    if (finished) return;
+
+    QString currentText = this->currentTorrentDlButton->text();
+    if (currentText.endsWith("...")) {
+        currentText.remove(currentText.length()-3, 3);
+        this->currentTorrentDlButton->setText(currentText+".  ");
+    }
+    else if (currentText.endsWith("Download")) {
+        this->currentTorrentDlButton->setText(currentText+".  ");
+    }
+    else if (currentText.endsWith(".. ")) {
+        currentText.remove(currentText.length()-3, 3);
+        this->currentTorrentDlButton->setText(currentText+"...");
+    }
+    else if (currentText.endsWith(".  ")) {
+        currentText.remove(currentText.length()-3, 3);
+        this->currentTorrentDlButton->setText(currentText+".. ");
+    }
+}
+
+void MainWindow::handleTorrentProgress(int percent)
+{
+    QString currentText = this->currentTorrentDlButton->text();
+    if (!currentText.startsWith("(")) {
+        currentText = "(0%) "+currentText;
+    }
+    QRegularExpression pattern("\\((\\d+%)\\)");
+    QString resultString = currentText.replace(pattern, "("+QString::number(percent)+"%)");
+    this->currentTorrentDlButton->setText(resultString);
+}
+
+void MainWindow::handleTorrentFinished(int code)
+{
+    if (code==2) {
+        status("Download cancelled");
+    }
+    else if (code>0) {
+        status("Download failed with error code "+QString::number(code));
+    }
+    this->currentTorrentVersionDl = 0;
+
+    this->currentTorrentDlButton->setStyleSheet("color: white");
+    this->currentTorrentDlButton->setText("Download");
+    ui->pushButton_download_126->setDisabled(false);
+    ui->pushButton_download_128->setDisabled(false);
+    tdlt->quit();
+    tdl->deleteLater();
+    tdlt->deleteLater();
+
+    if (code==0) {
+        QMessageBox msgBox;
+        msgBox.setIcon(QMessageBox::Information);
+        msgBox.setText("Download completed to %appdata% folder");
+        msgBox.setInformativeText("Unpack the downloaded zip to a location of your choice (for example: D:/mygames/Warcraft III 1.2X), then set the game path location to that folder");
+        msgBox.addButton("Open download location", QMessageBox::AcceptRole);
+        msgBox.addButton("Close", QMessageBox::ActionRole);
+
+        int choice = msgBox.exec();
+
+        if (choice == 0) {
+            QUrl url(config->APPDATA);
+            QDesktopServices::openUrl(url);
+        }
+    }
+}
+
+

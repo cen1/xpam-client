@@ -8,8 +8,8 @@ QT += core gui network webenginewidgets
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-QMAKE_LFLAGS_WINDOWS = /SUBSYSTEM:WINDOWS,5.01
-DEFINES += _ATL_XP_TARGETING
+#QMAKE_LFLAGS_WINDOWS = /SUBSYSTEM:WINDOWS,5.01
+#DEFINES += _ATL_XP_TARGETING
 DEFINES += PSAPI_VERSION=1 #_DEVELOPMENT
 
 TARGET = xpam
@@ -23,6 +23,7 @@ SOURCES += main.cpp\
     gproxy.cpp \
     config.cpp \
     downloader.cpp \
+    torrentdownloader.cpp \
     updater.cpp \
     w3.cpp \
     test.cpp \
@@ -33,6 +34,7 @@ SOURCES += main.cpp\
 
 HEADERS  += mainwindow.h \
     registry.h \
+    torrentdownloader.h \
     util.h \
     gproxy.h \
     config.h \
@@ -53,9 +55,9 @@ RESOURCES += \
     xpam.qrc
 
 OTHER_FILES += \
-    update.json \
     update.bat \
-    update.json.example
+    update.json.example \
+    update_qt5.json
 
 ### DEFINES
 #CONFIG += static
@@ -63,24 +65,46 @@ OTHER_FILES += \
 DEFINES += NOMINMAX
 DEFINES += _UNICODE
 DEFINES += UNICODE
+DEFINES -= HAVE_UNISTD_H
 
 ### QUAZIP
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/quazip/ -lquazip1-qt5
-win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/quazip/ -lquazip1-qt5d
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/quazip/ -lquazip1-qt6
+win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/quazip/ -lquazip1-qt6d
 
 INCLUDEPATH += $$PWD/quazip
 DEPENDPATH += $$PWD/quazip
 
-win32:CONFIG(release, debug|release): PRE_TARGETDEPS += $$PWD/quazip/quazip1-qt5.lib
-win32:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/quazip/quazip1-qt5d.lib
+win32:CONFIG(release, debug|release): PRE_TARGETDEPS += $$PWD/quazip/quazip1-qt6.lib
+win32:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/quazip/quazip1-qt6.lib
+
+### LIBTORRENT
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/libtorrent/release/ -ltorrent-rasterbar
+win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/libtorrent/debug/ -ltorrent-rasterbar
+
+INCLUDEPATH += $$PWD/libtorrent/include
+DEPENDPATH += $$PWD/libtorrent/include
+
+win32:CONFIG(release, debug|release): PRE_TARGETDEPS += $$PWD/libtorrent/release/torrent-rasterbar.lib
+win32:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/libtorrent/debug/torrent-rasterbar.lib
+
+### BOOST
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../boost_1_82_0/
+win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../boost_1_82_0/stage/lib/ -llibboost_system-vc143-mt-gd-x64-1_82
+
+INCLUDEPATH +=$$PWD/../../boost_1_82_0
+DEPENDPATH += $$PWD/../../boost_1_82_0/stage/lib
+
+win32:CONFIG(release, debug|release): PRE_TARGETDEPS += $$PWD/../../boost_1_82_0/stage/lib/libboost_system-vc143-mt-x64-1_82.lib
+win32:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/../../boost_1_82_0/stage/lib/libboost_system-vc143-mt-gd-x64-1_82.lib
 
 ### ZLIB
 INCLUDEPATH +=$$PWD/zlib
 DEPENDPATH += $$PWD/zlib
 
 ## STORMLIB
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/stormlib/ -lstorm
-win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/stormlib/ -lstorm
+DEFINES += STORMLIB_NO_AUTO_LINK
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/stormlib/ -lStormLib
+win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/stormlib/ -lStormLib
 
 INCLUDEPATH += $$PWD/stormlib
 DEPENDPATH += $$PWD/stormlib
@@ -110,3 +134,6 @@ win32 {
 
 
 #DEFINES += PORTABLE
+
+DISTFILES += \
+    update.json

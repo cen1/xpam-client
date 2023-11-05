@@ -37,6 +37,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "QCryptographicHash"
 #include "QTextStream"
 #include "QEventLoop"
+#include "QRandomGenerator"
 
 #include "quazip.h"
 #include "util.h"
@@ -44,6 +45,20 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "registry.h"
 #include "mpq.h"
 #include "logger.h"
+
+DlResponse::DlResponse(bool success, QString errorMessage, QByteArray data) : success(success), errorMessage(errorMessage), data(data) {}
+
+bool DlResponse::getSuccess() {
+    return this->success;
+}
+
+QString DlResponse::getErrorMessage() {
+    return this->errorMessage;
+}
+
+QByteArray DlResponse::getData() {
+    return this->data;
+}
 
 /* Types
  * 0 = client
@@ -73,36 +88,56 @@ void Updater::startUpdate() {
      * 2. First object is latest stable patch, second object is beta patch. Each patch has current patch version,
      *    4 mirrors to the update zip archive and sha1 hash of the archive. Patches are full, not incremental.
      *    See Other Files->update.json
-     * 3. Mirrors are Google Drive, SkyDrive, Ubuntu ONE and files.eurobattle.net in that order
-     * 4. If JSON patch version is bigger than your current in registry, download the archive.
-     * 5. If you fail to download from the first mirror, fallback to the second etc
-     * 6. When the archive is downloaded, compare the hash
-     * 7. Download and extract the archive to %appdata%/Eurobattle.net
-     * 8. Open instructions.txt and execute the commands
-     * 9. COMMANDS
+     * 3. If JSON patch version is bigger than your current in registry, download the archive.
+     * 4. If you fail to download from the first mirror, fallback to the second etc
+     * 5. When the archive is downloaded, compare the hash
+     * 6. Download and extract the archive to %appdata%/Eurobattle.net
+     * 7. Open instructions.txt and execute the commands
+     * 8. COMMANDS
      *    MOVE <from> <to EUROPATH | W3PATH | W3PATH_126 | MAPPATH | MAPPATH_126> //always overwrite
      *    DELETE <filename> <location EUROPATH | W3PATH | MAPPATH>                //deletes a file
      *
-     * 10. Cleanup %appdata$ after update
-     * 11. If instructions.txt included a file called newxpam.exe then start update.bat and exit app.
+     * 9. Cleanup %appdata$ after update
+     * 10. If instructions.txt included a file called newxpam.exe then start update.bat and exit app.
      *     Update.bat removes xpam.exe and renames newxpam.exe (if it exists). Then starts xpam.exe
      *
      *
      * UPLOAD INSTRUCTIONS
      * -Google Drive: make sure you mark as public
      */
-    QTime now = QTime::currentTime();
-    qsrand(now.msec());
-
     if (downloader!=nullptr) {
         emit sendLine("FORBIDDEN RESTART");
         emit updateFinished(restartNeeded, false, false, false, type);
         return;
     }
 
-    QByteArray j1=simpleDl(config->json1);
-    QByteArray j2=simpleDl(config->json2);
-    QByteArray j3=simpleDl(config->json3);
+    DlResponse dlr1=simpleDl(config->json1);
+    DlResponse dlr2=simpleDl(config->json2);
+    DlResponse dlr3=simpleDl(config->json3);
+
+    int failures = 0;
+    if (!dlr1.getSuccess()) {
+        emit sendLine(dlr1.getErrorMessage());
+        failures++;
+    }
+    if (!dlr2.getSuccess()) {
+        emit sendLine(dlr2.getErrorMessage());
+        failures++;
+    }
+    if (!dlr3.getSuccess()) {
+        emit sendLine(dlr3.getErrorMessage());
+        failures++;
+    }
+
+    if (failures>=2) {
+        emit sendLine("2 or more failures when trying to fetch update metadata, there might be issue with update servers");
+        emit updateFinished(restartNeeded, false, false, false, type);
+        return;
+    }
+
+    QByteArray j1=dlr1.getData();
+    QByteArray j2=dlr2.getData();
+    QByteArray j3=dlr3.getData();
 
     if ((j1.isEmpty() && j2.isEmpty()) || (j1.isEmpty() && j3.isEmpty()) || (j2.isEmpty() && j3.isEmpty())) {
         emit sendLine("Update info is empty. Update servers are down or there might be a problem with your internet connection");
@@ -178,8 +213,8 @@ void Updater::startUpdate() {
 
     QUrl url(mirrorUrl);
 
-    downloader=new Downloader(url, config);
     dlthread = new QThread();
+    downloader=new Downloader(url, config);
     downloader->moveToThread(dlthread);
 
     QObject::connect(dlthread, SIGNAL(started()), downloader, SLOT(startDl()));
@@ -191,7 +226,7 @@ void Updater::startUpdate() {
     QObject::connect(downloader, SIGNAL(finisheddl()), downloader, SLOT(deleteLater()));
     QObject::connect(dlthread, SIGNAL(finished()), dlthread, SLOT(deleteLater()));
 
-    progressTime = QTime().currentTime();
+    progressTime = QElapsedTimer();
     progressTime.start();
 
     dlthread->start();
@@ -208,33 +243,40 @@ bool Updater::extractZip() {
     zip.open(QuaZip::mdUnzip);
 
     if (zip.isOpen()) {
-        for( bool f = zip.goToFirstFile(); f; f = zip.goToNextFile() ) {
+        for (bool f = zip.goToFirstFile(); f; f=zip.goToNextFile()) {
 
             QString filePath = zip.getCurrentFileName();
-            QuaZipFile zFile( zip.getZipName(), filePath );
+            QuaZipFile zFile(zip.getZipName(), filePath);
+            qDebug() << filePath;
 
-            zFile.open(QIODevice::ReadOnly);
-            qint64 size=zFile.size();
-            char * buffer = (char *)malloc(size);
-            qint64 ret = zFile.read(buffer, size);
-            zFile.close();
+            if (zFile.open(QIODevice::ReadOnly)) {
+                qint64 size=zFile.size();
+                char * buffer = (char *)malloc(size);
+                qint64 ret = zFile.read(buffer, size);
+                zFile.close();
 
-            emit sendLine("Extracting "+filePath+" ("+QString::number(size)+") read "+QString::number(ret)+"-"+QString::number(sizeof(buffer)));
+                emit sendLine("Extracting "+filePath+" ("+QString::number(size)+") read "+QString::number(ret)+"-"+QString::number(sizeof(buffer)));
 
-            if (QFile::exists(config->APPDATA+"\\"+filePath)) QFile::remove(config->APPDATA+"\\"+filePath);
+                if (QFile::exists(config->APPDATA+"\\"+filePath)) QFile::remove(config->APPDATA+"\\"+filePath);
 
-            QFile dstFile(config->APPDATA+"\\"+filePath);
+                QFile dstFile(config->APPDATA+"\\"+filePath);
 
-            dstFile.open(QIODevice::WriteOnly);
-            if (dstFile.isOpen()){
-                dstFile.write(buffer, size);
-                dstFile.close();
+                dstFile.open(QIODevice::WriteOnly);
+                if (dstFile.isOpen()){
+                    dstFile.write(buffer, size);
+                    dstFile.close();
+                    free(buffer);
+                }
+                else {
+                    emit sendLine("Could not extract file "+filePath+" "+dstFile.errorString());
+                    free(buffer);
+                    return false;
+                }
             }
             else {
-                emit sendLine("Could not extract file "+filePath+" "+dstFile.errorString());
+                qDebug() << "Failed to open zipped file";
                 return false;
             }
-            delete buffer;
         }
     }
     else {
@@ -600,11 +642,10 @@ int Updater::setCurrentPlusOneJson() {
     return 1;
 }
 
-QByteArray Updater::simpleDl(QUrl url) {
+DlResponse Updater::simpleDl(QUrl url) {
     QNetworkAccessManager nam;
     QNetworkRequest request(url);
-    request.setTransferTimeout(10000);
-    request.setAttribute(QNetworkRequest::FollowRedirectsAttribute, true);
+    request.setTransferTimeout(5000);
     QNetworkReply * reply = nam.get(request);
 
     QEventLoop loop;
@@ -614,41 +655,40 @@ QByteArray Updater::simpleDl(QUrl url) {
     if (reply->error() == QNetworkReply::NoError) {
         QByteArray ba(reply->readAll());
         reply->deleteLater();
-        return ba;
+        return DlResponse(true, "", ba);
     }
     else {
         QByteArray ba;
         reply->deleteLater();
-        return ba;
+        return DlResponse(false, "Error for url " + url.toString() + ", error: " + reply->errorString(), ba);
     }
 }
 
-QByteArray Updater::getUpdateJson(Config * config) {
+DlResponse Updater::getUpdateJson(Config * config) {
 
-    QByteArray jsonba;
+    DlResponse dlr1=simpleDl(config->json1);
+    DlResponse dlr2=simpleDl(config->json2);
+    DlResponse dlr3=simpleDl(config->json3);
 
-    QByteArray j1=simpleDl(config->json1);
-    QByteArray j2=simpleDl(config->json2);
-    QByteArray j3=simpleDl(config->json3);
-
-    if ((j1.isEmpty() && j2.isEmpty()) || (j1.isEmpty() && j3.isEmpty()) || (j2.isEmpty() && j3.isEmpty())) {
-        return QByteArray();
+    if (dlr1.getSuccess() && dlr2.getSuccess() && dlr1.getData()==dlr2.getData()) {
+        return dlr1;
+    }
+    else if (dlr1.getSuccess() && dlr3.getSuccess() && dlr1.getData()==dlr3.getData()){
+        return dlr1;
+    }
+    else if (dlr2.getSuccess() && dlr3.getSuccess() && dlr2.getData()==dlr3.getData()){
+        return dlr2;
     }
 
-    if (j1==j2){
-        jsonba=j1;
+    if (!dlr1.getSuccess()) {
+        return dlr1;
     }
-    else if (j1==j3){
-        jsonba=j1;
-    }
-    else if (j2==j3){
-        jsonba=j2;
+    else if (!dlr2.getSuccess()) {
+        return dlr2;
     }
     else {
-        return QByteArray();
+        return dlr3;
     }
-
-    return jsonba;
 }
 
 QString Updater::moveToDocuments(Config *config) {
@@ -742,9 +782,9 @@ int Updater::getRandomMirror() {
 
     int high=3;
     int low=0;
-    int mirrorNo = qrand() % ((high + 1) - low) + low;
+    int mirrorNo = QRandomGenerator::global()->bounded(low, high);
     while (this->usedMirrors.contains(mirrorNo)) {
-        mirrorNo = qrand() % ((high + 1) - low) + low;
+        mirrorNo = QRandomGenerator::global()->bounded(low, high);
     }
     //Does not contain
     this->usedMirrors.append(mirrorNo);

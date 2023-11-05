@@ -14,7 +14,6 @@ bool Rest::authenticate(QString username, QString secret) {
     QUrl serviceUrl = QUrl("https://eurobattle.net/api/pvpgn/auth");
     QNetworkRequest request(serviceUrl);
     request.setTransferTimeout(10000);
-    request.setAttribute(QNetworkRequest::FollowRedirectsAttribute, true);
 
     QJsonObject json;
     json.insert("username",username);
@@ -49,7 +48,6 @@ QString Rest::getSeverStatus() {
     QUrl serviceUrl = QUrl("https://eurobattle.net/new/api/pvpgn/status/json");
     QNetworkRequest request(serviceUrl);
     request.setTransferTimeout(2000);
-    request.setAttribute(QNetworkRequest::FollowRedirectsAttribute, true);
 
     request.setHeader(QNetworkRequest::ContentTypeHeader,"application/json");
 

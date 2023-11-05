@@ -32,10 +32,24 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "QJsonObject"
 #include "QStringList"
 #include "QByteArray"
-#include "QTime"
+#include "QElapsedTimer"
 
 #include "config.h"
 #include "downloader.h"
+
+class DlResponse
+{
+public:
+    DlResponse(bool success, QString errorMessage, QByteArray data);
+    bool getSuccess();
+    QString getErrorMessage();
+    QByteArray getData();
+
+private:
+    bool success;
+    QString errorMessage;
+    QByteArray data;
+};
 
 class Updater : public QObject
 {
@@ -44,11 +58,11 @@ public:
     Updater(Config * c, int t, QString w="");
     ~Updater();
 
-    static QString Updater::moveToDocuments(Config *config);
-    static void Updater::replaceCDKeys(Config *config);
-    static void Updater::renamePatchMpqForLatestW3(Config *config);
-    static QByteArray simpleDl(QUrl url);
-    static QByteArray getUpdateJson(Config * config);
+    static QString moveToDocuments(Config *config);
+    static void replaceCDKeys(Config *config);
+    static void renamePatchMpqForLatestW3(Config *config);
+    static DlResponse simpleDl(QUrl url);
+    static DlResponse getUpdateJson(Config * config);
     
 private:
     Config *        config;
@@ -63,7 +77,7 @@ private:
     QJsonObject     real;
     QStringList     mirrors;
     QVector<int>    usedMirrors;
-    QTime           progressTime;
+    QElapsedTimer   progressTime;
     int             latestVersion;
     bool            restartNeeded;
     bool            isW3Update;
@@ -88,5 +102,6 @@ public slots:
     void receiveFinishdl();
     void cancelUpdate();
 };
+
 
 #endif // UPDATER_H

@@ -26,7 +26,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "downloader.h"
 #include "QDir"
 
-Downloader::Downloader(QUrl u, Config* c) {
+Downloader::Downloader(QUrl u, Config* c) : nam(this) {
     url=u;
     reply=nullptr;
     erroremitted=false;
@@ -60,8 +60,8 @@ void Downloader::startDl() {
         emit sendInfo(""); //empty line which will be removed for the progress text
 
         QObject::connect(reply, SIGNAL(finished()), this, SLOT(finishedSlot()));
-        QObject::connect(reply, SIGNAL(error(QNetworkReply::NetworkError)), this, SLOT(errorSlot(QNetworkReply::NetworkError)));
-        QObject::connect(reply, SIGNAL(downloadProgress(qint64, qint64)), this, SLOT(progressSlot(qint64, qint64)));
+        QObject::connect(reply, SIGNAL(errorOccurred(QNetworkReply::NetworkError)), this, SLOT(errorSlot(QNetworkReply::NetworkError)));
+        QObject::connect(reply, SIGNAL(downloadProgress(qint64,qint64)), this, SLOT(progressSlot(qint64,qint64)));
         QObject::connect(reply, SIGNAL(readyRead()), this, SLOT(writeToFileSlot()));
     }
     else {
