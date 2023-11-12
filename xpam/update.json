@@ -9,11 +9,11 @@
     },
     "0" : {
             "version" : 0,
-            "mirror1" : "",
+            "mirror1" : "https://xpam.pl/update2/update1.zip",
             "mirror2" : "https://xpam.pl/update2/update1.zip",
             "mirror3" : "https://xpam.pl/update2/update1.zip",
             "mirror4" : "https://xpam.pl/update2/update1.zip",
-            "sha1" : ""
+            "sha1" : "a6eaad0b382a816a16e872946dc9257720547c70"
     },
     "maps" : [
         {

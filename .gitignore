@@ -9,4 +9,5 @@ xpam/release/
 xpam/updates/dota/
 xpam/updates/update*
 xpam/updates/zip_archives/
+xpam/updates/client/
 *.pdb
