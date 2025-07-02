@@ -2,6 +2,7 @@
 *.obj
 *.exe
 *.user
+*.autosave
 build*/
 build*/
 xpam/debug/
@@ -10,4 +11,5 @@ xpam/updates/dota/
 xpam/updates/update*
 xpam/updates/zip_archives/
 xpam/updates/client/
+xpam/updates/w3/
 *.pdb

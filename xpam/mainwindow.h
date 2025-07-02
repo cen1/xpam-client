@@ -162,6 +162,7 @@ private:
 
     void diffW3Update(QString version);
     int checkMapUpdates();
+    int checkW3LoaderFiles();
     //void rewriteGproxyCfg(QString username, QString secret);
     void tmpPlumbing();
     void doLogin();
@@ -170,6 +171,7 @@ private:
 
     bool updateInProgress;
     QVector<QJsonObject> UPDATE_MAPS;
+    int w3LoaderCheckCounter = 1;
     int currentTorrentVersionDl=0;
     QPushButton * currentTorrentDlButton=nullptr;
 

@@ -626,6 +626,20 @@ int Updater::setCurrentPlusOneJson() {
             return 2;
         }
     }
+    else if (type==5) {
+        //Loader quick patch
+        emit sendLine("Requested patch: loader fix "+jsonKey);
+
+        if (obj.contains(jsonKey)) {
+            QJsonValue value = obj.value(jsonKey);
+
+            real = value.toObject();
+        }
+        else {
+            emit sendLine("Could not find quick loader patch JSON key.");
+            return 2;
+        }
+    }
     else {
         emit sendLine("Requested patch: stable");
         int incremental=config->PATCH+1;

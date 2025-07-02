@@ -1,11 +1,11 @@
 {
     "beta" : {
         "version" : 1,
-        "mirror1" : "",
-        "mirror2" : "",
-        "mirror3" : "",
-        "mirror4" : "",
-        "sha1" : ""
+        "mirror1" : "https://xpam.pl/update2/beta.zip",
+        "mirror2" : "https://xpam.pl/update2/beta.zip",
+        "mirror3" : "https://xpam.pl/update2/beta.zip",
+        "mirror4" : "https://xpam.pl/update2/beta.zip",
+        "sha1" : "f192c46cbed260479e0385bdd96bf727b4c4aa4e"
     },
     "0" : {
             "version" : 0,
@@ -15,26 +15,48 @@
             "mirror4" : "https://xpam.pl/update2/update1.zip",
             "sha1" : "a6eaad0b382a816a16e872946dc9257720547c70"
     },
+    "1" : {
+            "version" : 1,
+            "mirror1" : "https://xpam.pl/update2/update2.zip",
+            "mirror2" : "https://xpam.pl/update2/update2.zip",
+            "mirror3" : "https://milan.eurobattle.net/update2.zip",
+            "mirror4" : "https://milan.eurobattle.net/update2.zip",
+            "sha1" : "34b9475b54c18b14be80a9e5a1b78a12443e1319"
+    },
+    "126_quick" : {
+        "mirror1" : "https://xpam.pl/update2/126_quick.zip",
+        "mirror2" : "https://xpam.pl/update2/126_quick.zip",
+        "mirror3" : "https://xpam.pl/update2/126_quick.zip",
+        "mirror4" : "https://xpam.pl/update2/126_quick.zip",
+        "sha1" : "6bfecf6aa5a993822130ec3e416e2ade7eb2716b"
+    },
+    "128_quick" : {
+        "mirror1" : "https://xpam.pl/update2/128_quick.zip",
+        "mirror2" : "https://xpam.pl/update2/128_quick.zip",
+        "mirror3" : "https://xpam.pl/update2/128_quick.zip",
+        "mirror4" : "https://xpam.pl/update2/128_quick.zip",
+        "sha1" : "b12a8e56ca29430dbd3441e553e4160904a63483"
+    },
     "maps" : [
         {
-            "name": "DotA_Allstars_6.90a8.w3x",
+            "name": "DotA_Allstars_7.04f9.w3x",
             "targetPath": "W3PATH_126",
             "version" : 1,
-            "mirror1" : "https://www.googleapis.com/drive/v3/files/1kgVdZoFACERjUZQAzsgW_vW2jZ-FBE37/?key=AIzaSyDexUMJldtp6pVsAeddDQFwT8HAJEhgJpY&alt=media",
-            "mirror2" : "https://www.googleapis.com/drive/v3/files/1rT8bdhTqRIjEx31xnHR0Y_p_zPUECuRl/?key=AIzaSyDexUMJldtp6pVsAeddDQFwT8HAJEhgJpY&alt=media",
-            "mirror3" : "http://xpam.pl/update/v6.90a8.zip",
-            "mirror4" : "http://xpam.pl/update/v6.90a8.zip",
-            "sha1" : "3a8b1084455e6c21def70f49dfab6b40e9f7ba8f"
+            "mirror1" : "https://www.googleapis.com/drive/v3/files/1863TjM-2V5Nyz6M9YA05iWOzxNTA27Wn/?key=AIzaSyDexUMJldtp6pVsAeddDQFwT8HAJEhgJpY&alt=media",
+            "mirror2" : "https://seedbox.eurobattle.net/v7.04f9.zip",
+            "mirror3" : "https://r2.eurobattle.net/v7.04f9.zip",
+            "mirror4" : "https://xpam.pl/update2/v7.04f9.zip",
+            "sha1" : "aa8ca7604a6bd90c7408a3a2244cb1da3dc50bf3"
         },
         {
-            "name": "DotA_Allstars_7.04c1.w3x",
+            "name": "DotA_Allstars_7.04h0.w3x",
             "targetPath": "W3PATH_126",
             "version" : 1,
-            "mirror1" : "https://www.googleapis.com/drive/v3/files/19-cCxRajgJMJ3m4UTuvhCbZpODskSYEM/?key=AIzaSyDexUMJldtp6pVsAeddDQFwT8HAJEhgJpY&alt=media",
-            "mirror2" : "https://www.googleapis.com/drive/v3/files/19-cCxRajgJMJ3m4UTuvhCbZpODskSYEM/?key=AIzaSyDexUMJldtp6pVsAeddDQFwT8HAJEhgJpY&alt=media",
-            "mirror3" : "http://xpam.pl/update/v7.04c1.zip",
-            "mirror4" : "http://xpam.pl/update/v7.04c1.zip",
-            "sha1" : "c6bdf58de9a47cd51dd6c38ed52e71db698f3f9e"
+            "mirror1" : "https://seedbox.eurobattle.net/v7.04h0.zip",
+            "mirror2" : "https://r2.eurobattle.net/v7.04h0.zip",
+            "mirror3" : "https://xpam.pl/update2/v7.04h0.zip",
+            "mirror4" : "https://maps.d1map.net/v7.04h0.zip",
+            "sha1" : "b99cecad45bd37eb3589dc102acb8148e04282f4"
         }
     ]
 }

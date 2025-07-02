@@ -723,6 +723,68 @@ int MainWindow::checkMapUpdates() {
     return 0;
 }
 
+// Checks if core files are missing from W3 installs
+// First counter pass is for latest, second is for 126
+// Returns 1 if update is needed
+int MainWindow::checkW3LoaderFiles() {
+
+    if (this->w3LoaderCheckCounter<0) return 0;
+
+    QString path = config->W3PATH_LATEST;
+    if (this->w3LoaderCheckCounter==0)
+        path = config->W3PATH_126;
+
+    this->w3LoaderCheckCounter--;
+
+    if (path == "") checkW3LoaderFiles(); // go to next w3
+
+    if (!QFile::exists(path+"\\w3l.exe") ||
+        !QFile::exists(path+"\\w3lh.dll") ||
+        !QFile::exists(path+"\\wl27.dll") ||
+        !QFile::exists(path+"\\libssl-3.dll") ||
+        !QFile::exists(path+"\\libcrypto-3.dll") ||
+        !QFile::exists(path+"\\zlib1.dll")) {
+
+        Logger::log("Missing loader file detected", config);
+
+        isStartupUpdate=false;
+
+        lockTabs(ui->tabWidget->currentIndex());
+
+        QString jsonKey = "126_quick";
+        if (path == config->W3PATH_LATEST) jsonKey = "128_quick";
+
+        updater=new Updater(config, 5, jsonKey);
+        upt=new QThread();
+        updater->moveToThread(upt);
+
+        QObject::connect(upt, SIGNAL(started()), updater, SLOT(startUpdate()));
+        QObject::connect(updater, SIGNAL(updateFinished(bool, bool, bool, bool, int)), this, SLOT(updateFinished(bool, bool, bool, bool, int)));
+        QObject::connect(updater, SIGNAL(sendLine(QString)), this, SLOT(logUpdate(QString)));
+        QObject::connect(updater, SIGNAL(sendLine(QString)), ui->textBrowserUpdate, SLOT(append(QString)), Qt::QueuedConnection);
+        QObject::connect(updater, SIGNAL(modifyLastLine(QString)), this, SLOT(modifyLastLineSlot(QString)));
+
+        QObject::connect(updater, SIGNAL(updateFinished(bool, bool, bool, bool, int)), upt, SLOT(quit()));
+        QObject::connect(updater, SIGNAL(updateFinished(bool, bool, bool, bool, int)), updater, SLOT(deleteLater()));
+        QObject::connect(upt, SIGNAL(finished()), upt, SLOT(deleteLater()));
+
+        updateInProgress=true;
+        ui->pushButtonBU->setEnabled(false);
+
+        Logger::log(path+" has missing loader files, downloading.", config);
+
+        upt->start();
+
+        return 1;
+    }
+    else {
+        Logger::log("Loader files for "+path+" are present", config);
+        checkW3LoaderFiles(); // go to next w3
+    }
+
+    return 0;
+}
+
 void MainWindow::updateFinished(bool restartNeeded, bool ok, bool isUpToDate, bool canceled, int type) {
 
     Logger::log("Update finished", config);
@@ -792,6 +854,19 @@ void MainWindow::updateFinished(bool restartNeeded, bool ok, bool isUpToDate, bo
             postUpdate();
         }
     }
+    else if (type==5 && ok) {
+        Logger::log("Loader files fixed successfully", config);
+        if (checkW3LoaderFiles()==0) {
+            //Map dl is always last step, bad design but it is what it is..
+            int mapret = checkMapUpdates();
+            if (mapret==0) {
+                ui->tabWidget->setCurrentIndex(0);
+            }
+            else if (mapret==1) {
+                enableButtons=false;
+            }
+        }
+    }
     else {
         Logger::log("Client update finished", config);
 
@@ -809,13 +884,19 @@ void MainWindow::updateFinished(bool restartNeeded, bool ok, bool isUpToDate, bo
                 //No W3 updates needed
                 Logger::log("W3 is up to date", config);
 
-                //Return 0 means no updates are needed (anymore), go to initial tab
-                int mapret = checkMapUpdates();
-                if (mapret==0) {
-                    ui->tabWidget->setCurrentIndex(0);
-                }
-                else if (mapret==1) {
+                if (checkW3LoaderFiles()) {
+                    Logger::log("W3 loader files need to be updated", config);
                     enableButtons=false;
+                }
+                else {
+                    //Return 0 means no updates are needed (anymore), go to initial tab
+                    int mapret = checkMapUpdates();
+                    if (mapret==0) {
+                        ui->tabWidget->setCurrentIndex(0);
+                    }
+                    else if (mapret==1) {
+                        enableButtons=false;
+                    }
                 }
             }
 
