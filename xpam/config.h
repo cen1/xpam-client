@@ -76,6 +76,8 @@ public:
 
     QString getW3ExePath(QString modeKey);
     QString getCurrentW3ExePath();
+
+    QString getPathFromKey(QString key);
 };
 
 #endif //CONFIG_H

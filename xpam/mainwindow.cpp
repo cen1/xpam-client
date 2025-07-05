@@ -661,9 +661,11 @@ int MainWindow::checkMapUpdates() {
 
     if (this->UPDATE_MAPS.size() > 0 && this->lastCheckedMap < this->UPDATE_MAPS.size()) {
 
-        QString mapName = this->UPDATE_MAPS.at(this->lastCheckedMap).value("name").toString();
-        QString w3Path = this->UPDATE_MAPS.at(this->lastCheckedMap)
-                .value("targetPath")=="W3PATH_126" ? config->W3PATH_126 : config->W3PATH_LATEST;
+        QJsonObject mapEntry = this->UPDATE_MAPS.at(this->lastCheckedMap);
+
+        QString mapName = mapEntry.value("name").toString();
+        QString targetPathKey = mapEntry.value("targetPath").toString();
+        QString w3Path = (targetPathKey == "W3PATH_126") ? config->W3PATH_126 : config->W3PATH_LATEST;
 
         // If dl path does not exist, skip
         if (w3Path==config->W3PATH_LATEST && (config->W3PATH_LATEST=="" || !QDir(config->DOCMAPPATHDL).exists())) {
@@ -682,11 +684,38 @@ int MainWindow::checkMapUpdates() {
             dlPath=config->MAPPATH_126DL;
         }
 
+        // Check main map file
+        bool needsDownload = false;
         QFile map(dlPath+"/"+mapName);
-        if (map.exists()) {
-            Logger::log(mapName+" exists.", config);
+        if (!map.exists()) {
+            needsDownload = true;
+            Logger::log("Main map missing: " + mapName, config);
+        }
+
+        // Check additional files
+        if (!needsDownload && mapEntry.contains("additional_files") && mapEntry.value("additional_files").isArray()) {
+            QJsonArray additionalFiles = mapEntry.value("additional_files").toArray();
+            for (const QJsonValue& fileEntry : additionalFiles) {
+                if (!fileEntry.isObject()) continue; //malformed..
+
+                QJsonObject fileObj = fileEntry.toObject();
+                QString extraFileName = fileObj.value("name").toString();
+                QString extraPathKey = fileObj.value("path").toString();
+                QString extraPath = config->getPathFromKey(extraPathKey);
+
+                QFile extraFile(extraPath + "/" + extraFileName);
+                if (!extraFile.exists()) {
+                    Logger::log("Additional file missing: " + extraFileName, config);
+                    needsDownload = true;
+                    break;
+                }
+            }
+        }
+
+        if (!needsDownload) {
+            Logger::log(mapName + " and all additional files exist.", config);
             this->lastCheckedMap++;
-            return checkMapUpdates();
+            return checkMapUpdates(); // recursive call to continue
         }
 
         isStartupUpdate=false;
@@ -714,7 +743,7 @@ int MainWindow::checkMapUpdates() {
         //Increment
         this->lastCheckedMap++;
 
-        Logger::log(mapName+" does not exist, downloading.", config);
+        Logger::log(mapName+" does not exist or is missing extra files, downloading.", config);
 
         upt->start();
 
@@ -736,7 +765,10 @@ int MainWindow::checkW3LoaderFiles() {
 
     this->w3LoaderCheckCounter--;
 
-    if (path == "") checkW3LoaderFiles(); // go to next w3
+    if (path == "") {
+        checkW3LoaderFiles(); // go to next w3
+        return 0;
+    }
 
     if (!QFile::exists(path+"\\w3l.exe") ||
         !QFile::exists(path+"\\w3lh.dll") ||

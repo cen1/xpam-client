@@ -32,7 +32,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 Config::Config()
 {
-    VERSION_CLIENT = "1.1.0.0";
+    VERSION_CLIENT = "1.1.1.0";
 
     W3_VERSION_LATEST = "1.28.5.7680";
     W3_VERSION_126 = "1.26.0.6401";
@@ -179,5 +179,35 @@ QString Config::getW3Version(QString modeKey) {
 
 QString Config::getCurrentW3Version() {
     return getW3Exename(ACTIVE_MODE_KEY);
+}
+
+QString Config::getPathFromKey(QString key) {
+    if (key=="W3PATH_126") {
+        return this->W3PATH_126;
+    }
+    else if (key=="W3PATH_LATEST") {
+        return this->W3PATH_LATEST;
+    }
+    else if (key=="MAPPATH_126") {
+        return this->MAPPATH_126;
+    }
+    else if (key=="MAPPATH_126DL") {
+        return this->MAPPATH_126DL;
+    }
+    else if (key=="DOCPATH") {
+        return this->DOCPATH;
+    }
+    else if (key=="DOCMAPPATH") {
+        return this->DOCMAPPATH;
+    }
+    else if (key=="DOCMAPPATHDL") {
+        return this->DOCMAPPATHDL;
+    }
+    else if (key=="EUROPATH") {
+        return this->EUROPATH;
+    }
+    else {
+        return this->EUROPATH;
+    }
 }
 

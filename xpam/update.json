@@ -1,11 +1,11 @@
 {
     "beta" : {
-        "version" : 1,
+        "version" : 2,
         "mirror1" : "https://xpam.pl/update2/beta.zip",
         "mirror2" : "https://xpam.pl/update2/beta.zip",
         "mirror3" : "https://xpam.pl/update2/beta.zip",
         "mirror4" : "https://xpam.pl/update2/beta.zip",
-        "sha1" : "f192c46cbed260479e0385bdd96bf727b4c4aa4e"
+        "sha1" : "36e11aac40ac0e93b295f95526b89b867fbb5236"
     },
     "0" : {
             "version" : 0,
