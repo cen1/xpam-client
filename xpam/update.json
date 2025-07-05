@@ -56,6 +56,12 @@
             "mirror2" : "https://r2.eurobattle.net/v7.04h0.zip",
             "mirror3" : "https://xpam.pl/update2/v7.04h0.zip",
             "mirror4" : "https://maps.d1map.net/v7.04h0.zip",
+            "additional_files": [
+                {
+                    "name": "dota704h0files.mpq",
+                    "path": "W3PATH_126"
+                }
+            ],
             "sha1" : "b99cecad45bd37eb3589dc102acb8148e04282f4"
         }
     ]
