@@ -23,6 +23,14 @@
             "mirror4" : "https://milan.eurobattle.net/update2.zip",
             "sha1" : "34b9475b54c18b14be80a9e5a1b78a12443e1319"
     },
+    "2" : {
+            "version" : 2,
+            "mirror1" : "https://seedbox.eurobattle.net/update3.zip",
+            "mirror2" : "https://milan.eurobattle.net/update3.zip",
+            "mirror3" : "https://r2.eurobattle.net/update3.zip",
+            "mirror4" : "https://xpam.pl/update2/update3.zip",
+            "sha1" : "f0c619149368cf499bea94fde4454d803c2f1534"
+    },
     "126_quick" : {
         "mirror1" : "https://xpam.pl/update2/126_quick.zip",
         "mirror2" : "https://xpam.pl/update2/126_quick.zip",
