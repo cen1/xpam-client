@@ -57,20 +57,20 @@
             "sha1" : "aa8ca7604a6bd90c7408a3a2244cb1da3dc50bf3"
         },
         {
-            "name": "DotA_Allstars_7.04h0.w3x",
+            "name": "DotA_Allstars_7.04h1.w3x",
             "targetPath": "W3PATH_126",
             "version" : 1,
-            "mirror1" : "https://seedbox.eurobattle.net/v7.04h0.zip",
-            "mirror2" : "https://r2.eurobattle.net/v7.04h0.zip",
-            "mirror3" : "https://xpam.pl/update2/v7.04h0.zip",
-            "mirror4" : "https://maps.d1map.net/v7.04h0.zip",
+            "mirror1" : "https://seedbox.eurobattle.net/v7.04h1.zip",
+            "mirror2" : "https://r2.eurobattle.net/v7.04h1.zip",
+            "mirror3" : "https://xpam.pl/update2/v7.04h1.zip",
+            "mirror4" : "https://maps.d1map.net/v7.04h1.zip",
             "additional_files": [
                 {
-                    "name": "dota704h0files.mpq",
+                    "name": "dota704h1files.mpq",
                     "path": "W3PATH_126"
                 }
             ],
-            "sha1" : "b99cecad45bd37eb3589dc102acb8148e04282f4"
+            "sha1" : "21509fb25bfbd229dc8e3e288c25a7abbb2c2200"
         }
     ]
 }
