@@ -47,7 +47,7 @@
     },
     "maps" : [
         {
-            "name": "DotA_Allstars_7.07a3.w3x",
+            "name": "DotA_Allstars_7.07a5.w3x",
             "targetPath": "W3PATH_126",
             "version" : 1,
             "mirror1" : "https://seedbox.eurobattle.net/v7.07a5.zip",
