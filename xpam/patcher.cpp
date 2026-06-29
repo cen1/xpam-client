@@ -31,7 +31,7 @@ bool Patcher::patch(Config * config) {
         Logger::log("Missing hash file, unable to continue the patching.", config);
         return false;
     }
-    hashes.open(QIODevice::ReadOnly);
+    (void)hashes.open(QIODevice::ReadOnly);
 
     QJsonDocument json = QJsonDocument::fromJson(hashes.readAll());
     QJsonObject obj=json.object();
@@ -45,7 +45,7 @@ bool Patcher::patch(Config * config) {
 
         QCryptographicHash crypto(QCryptographicHash::Sha1);
         QFile fz(config->W3PATH_LATEST+"/"+fileToPatch);
-        fz.open(QFile::ReadOnly);
+        (void)fz.open(QFile::ReadOnly);
         while(!fz.atEnd()){
           crypto.addData(fz.read(8192));
         }

@@ -1,0 +1,5 @@
+{
+  "name": "qt5compat",
+  "version": "6.11.1",
+  "description": "System-provided Qt6 Core5Compat module"
+}

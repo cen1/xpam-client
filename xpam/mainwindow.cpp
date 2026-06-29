@@ -133,7 +133,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // Clear the update log on every startup
     QFile log(config->EUROPATH+"/xpam.log");
-    log.open(QFile::WriteOnly | QFile::Truncate);
+    (void)log.open(QFile::WriteOnly | QFile::Truncate);
     log.close();
 
     // Set W3 path labels
@@ -396,6 +396,7 @@ void MainWindow::startW3AndGproxy(bool ft) {
     status("Launching GProxy...");
     ui->labelGproxyout->setText("Working directory: "+gpdir);
 
+    // gproxy.exe restricted "server.eurobattle.net" "war3.exe" "D:\local_games\Warcraft III 1.26" "plink_value" "filetime_value"
     gproxy=new GProxy(gpdir, gpexe, gpmode, config->GPROXY_SERVER, w3Exename, w3Path, config->PLINK, ft);
     gpt=new QThread();
 

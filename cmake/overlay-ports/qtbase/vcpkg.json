@@ -1,0 +1,33 @@
+{
+  "name": "qtbase",
+  "version": "6.11.1",
+  "description": "System-provided Qt6 installation",
+  "supports": "windows",
+  "default-features": ["gui", "widgets", "network"],
+  "features": {
+    "gui": {
+      "description": "GUI support"
+    },
+    "widgets": {
+      "description": "Widgets support"
+    },
+    "network": {
+      "description": "Network support"
+    },
+    "concurrent": {
+      "description": "Concurrent support"
+    },
+    "sql": {
+      "description": "SQL support"
+    },
+    "xml": {
+      "description": "XML support"
+    },
+    "opengl": {
+      "description": "OpenGL support"
+    },
+    "printsupport": {
+      "description": "Print support"
+    }
+  }
+}

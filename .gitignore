@@ -13,3 +13,31 @@ xpam/updates/zip_archives/
 xpam/updates/client/
 xpam/updates/w3/
 *.pdb
+.claude/
+
+# CMake
+cmake-build-*/
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+CTestTestfile.cmake
+compile_commands.json
+*.dir/
+
+# vcpkg
+vcpkg_installed/
+.vcpkg-root
+
+# Build artifacts
+bin/
+lib/
+*.dll
+*.lib
+*.exp
+
+# Qt generated files
+*.qm
+ui_*.h
+moc_*.cpp
+qrc_*.cpp
+.qtcreator/

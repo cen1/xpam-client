@@ -161,7 +161,7 @@ DWORD Registry :: setGateways() {
             offset+=len;
         }        
 
-        DWORD r = RegSetValueEx(reg, _T("Battle.net Gateways"), 0, REG_MULTI_SZ, pString, totalSize);
+        DWORD r = RegSetValueEx(reg, _T("Battle.net Gateways"), 0, REG_MULTI_SZ, pString, static_cast<DWORD>(totalSize));
 
         reg.Close();
         delete pString;
@@ -215,7 +215,7 @@ DWORD Registry :: setGproxyGateways() {
             offset+=len;
         }
 
-        DWORD r = RegSetValueEx(reg, _T("Battle.net Gateways"), 0, REG_MULTI_SZ, pString, totalSize);
+        DWORD r = RegSetValueEx(reg, _T("Battle.net Gateways"), 0, REG_MULTI_SZ, pString, static_cast<DWORD>(totalSize));
 
         reg.Close();
         delete pString;

@@ -370,7 +370,7 @@ QString Bnethash::getHashString(QString input) {
     const char * in = ba.data();
     t_hash hash;
 
-    this->bnet_hash(&hash, std::strlen(in), in);
+    this->bnet_hash(&hash, static_cast<unsigned int>(std::strlen(in)), in);
     const char * const hashCStr = this->hash_get_str(hash);
 
     return QString::fromUtf8(hashCStr);

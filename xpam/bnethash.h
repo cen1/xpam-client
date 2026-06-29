@@ -4,7 +4,7 @@
 #include <stdint.h>
 #include <QDebug>
 
-#define ROTL(x,n,w) (((x)<<((n)&(w-1))) | ((x)>>(((-(n))&(w-1)))))
+#define ROTL(x,n,w) (((x)<<((n)&(w-1))) | ((x)>>(((w)-(n))&(w-1))))
 #define ROTL32(x,n) ROTL(x,n,32)
 #define ROTL16(x,n) ROTL(x,n,16)
 

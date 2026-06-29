@@ -261,7 +261,7 @@ bool Updater::extractZip() {
 
                 QFile dstFile(config->APPDATA+"\\"+filePath);
 
-                dstFile.open(QIODevice::WriteOnly);
+                (void)dstFile.open(QIODevice::WriteOnly);
                 if (dstFile.isOpen()){
                     dstFile.write(buffer, size);
                     dstFile.close();
@@ -404,7 +404,7 @@ bool Updater::updateMPQ(QString w3path)
             }
             else if(l[0]=="a") {
                 QFile f(config->APPDATA+"\\"+l[1]);
-                f.open(QIODevice::ReadOnly);
+                (void)f.open(QIODevice::ReadOnly);
                 QByteArray ba;
                 ba = f.readAll();
                 DWORD size=ba.size();
@@ -470,7 +470,7 @@ void Updater::receiveFinishdl() {
     if (fz.exists() && fz.size()!=0) {
 
         QCryptographicHash crypto(QCryptographicHash::Sha1);
-        fz.open(QFile::ReadOnly);
+        (void)fz.open(QFile::ReadOnly);
         while(!fz.atEnd()){
           crypto.addData(fz.read(8192));
         }
@@ -547,7 +547,7 @@ void Updater::receiveFinishdl() {
             config->PATCH=Registry::getPatchVersion();
 
             QFile f(config->EUROPATH+"\\changelog.txt");
-            f.open(QFile::ReadOnly);
+            (void)f.open(QFile::ReadOnly);
             if (f.isOpen()) {
                 QString changelog(f.readAll());
                 emit sendLine(changelog);

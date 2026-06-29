@@ -1,49 +1,47 @@
 # Xpam client
 Desktop client application for eurobattle.net
 
-Setup instructions
-----------
-## Qt
-Use the official Qt installer to install latest 6.X libraries for MSVC 2022 with OpenSSL and Qt WebEngine.
+## Build Instructions
 
-## Build dependent libraries
-- zlib
-- quazip
-- stormlib
-- boost
-- libtorrent
+### Prerequisites
 
-Build for x64, release and debug modes.
+- CMake 3.25+
+- Visual Studio 2022 with MSVC toolchain
+- vcpkg (included with VS2022)
+- Qt 6.11.1+ for MSVC 2022 64-bit
 
-We plan to migrate to cmake+conan to make this step automated.
+### Qt Installation
 
-## Build dynamic StormLib
-```
-git clone git@github.com:ladislav-zezula/StormLib.git
-cd StormLib
-git checkout v9.25
-"C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Auxiliary/Build/vcvarsall.bat" amd64
-cmake -B ./build_dynamic -DBUILD_SHARED_LIBS=ON -DUNICODE=ON
-cd build_dynamic
-cmake --build . --config Release
-```
+Install Qt 6.11.1 using Qt Online Installer. Under **Qt 6.x.x → MSVC 2022 64-bit**, install:
 
-## Copy dependent libs to release folders
+- Qt Base (Core, GUI, Widgets, Network)
+- Qt WebEngine
+- Qt WebChannel
+- Qt 5 Compatibility Module (Core5Compat)
 
-We use Windows deployment tool to copy the necessary libraries to debug and release folders.
+Default install path: `C:\Qt\6.11.1\msvc2022_64`
 
-```
-Visual Studio -> Tools -> Command line -> Developer command prompt
-C:/Qt/6.5.3/msvc2019_64/bin/qtenv2.bat
-cd C:/path/to/xpam-client/build-xpam-Desktop_Qt_6_5_3_MSVC2019_64bit-Debug/debug
-windeployqt --debug xpam.exe
-cd C:/path/to/xpam-client/build-xpam-Desktop_Qt_6_5_3_MSVC2019_64bit-Release/release
-windeployqt --release xpam.exe
+### Build
+
+```bash
+git clone https://github.com/cen1/xpam-client.git
+cd xpam-client
+
+cmake -B build -G "Visual Studio 17 2022" -A x64 ^
+  -DCMAKE_TOOLCHAIN_FILE="C:/Program Files/Microsoft Visual Studio/2022/Community/VC/vcpkg/scripts/buildsystems/vcpkg.cmake"
+
+cmake --build build --config Release
 ```
 
-Finally, copy zlib, quazip, stormlib and libtorrent dlls manually.
+First build downloads and compiles dependencies via vcpkg (10-30 minutes).
 
-Additionally, copy qt6core5compat(d).dll, libssl-3-x64.dll, libcrypto-3-x64.dll from Qt installation.
+Output: `build/bin/Release/xpam.exe`
+
+### Dependencies
+
+Managed by vcpkg: zlib, boost-system, libtorrent, quazip, stormlib
+
+Qt from system installation.
 
 #  Update.json as gist
 There was an issue with line endings and hash mismatch which is now taken care of with a .gitattributes directive. You can copy and paste the file as is, do not remove the final newline.

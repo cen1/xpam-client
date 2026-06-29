@@ -34,9 +34,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #ifndef WINDOWS_H
     #include <windows.h>
 #endif
-#ifndef _SHLOBJ_H_
-    #include "Shlobj.h"
-#endif
+#include <shlobj.h>
 #ifndef __ATLBASE_H__
     #include <atlbase.h>
 #endif
@@ -52,31 +50,14 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 namespace Winutils
 {
-    inline bool IsWinXP32() {
-        DWORD version = GetVersion();
-        DWORD major = (DWORD) (LOBYTE(LOWORD(version)));
-        DWORD minor = (DWORD) (HIBYTE(LOWORD(version)));
-        return ((major == 5) && (minor == 1));
-    }
-
     inline QString getProgramFiles()
     {
         TCHAR szPath[MAX_PATH];
-        if (Winutils::IsWinXP32()) {
-            if(SUCCEEDED(SHGetFolderPath(NULL, CSIDL_PROGRAM_FILES, NULL, SHGFP_TYPE_DEFAULT, szPath))) {
-                return QString::fromWCharArray(szPath);
-            }
-            else {
-                return "";
-            }
+        if(SUCCEEDED(SHGetFolderPath(NULL, CSIDL_PROGRAM_FILESX86, NULL, SHGFP_TYPE_DEFAULT, szPath))) {
+            return QString::fromWCharArray(szPath);
         }
         else {
-            if(SUCCEEDED(SHGetFolderPath(NULL, CSIDL_PROGRAM_FILESX86, NULL, SHGFP_TYPE_DEFAULT, szPath))) {
-                return QString::fromWCharArray(szPath);
-            }
-            else {
-                return "";
-            }
+            return "";
         }
     }
 
@@ -239,7 +220,7 @@ namespace Winutils
                        FORMAT_MESSAGE_IGNORE_INSERTS,
                        NULL, err, 0, (LPWSTR)&bufPtr, 0, NULL);
         const QString result =
-            (bufPtr) ? QString::fromUtf16((const ushort*)bufPtr).trimmed() :
+            (bufPtr) ? QString::fromUtf16((const char16_t*)bufPtr).trimmed() :
                        QString("Unknown Error %1").arg(err);
         LocalFree(bufPtr);
         return result;

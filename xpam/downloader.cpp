@@ -49,7 +49,7 @@ void Downloader::startDl() {
             QDir().mkpath(config->APPDATA);
         }
         file = new QFile(config->APPDATA+"\\patch.zip");
-        file->open(QFile::WriteOnly | QFile::Truncate);
+        (void)file->open(QFile::WriteOnly | QFile::Truncate);
 
         //nam.setNetworkAccessible(QNetworkAccessManager::Accessible);
         QNetworkRequest request(url);

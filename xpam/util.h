@@ -49,7 +49,7 @@ namespace Util {
                        FORMAT_MESSAGE_IGNORE_INSERTS,
                        NULL, err, 0, (LPWSTR)&bufPtr, 0, NULL);
         const QString result =
-            (bufPtr) ? QString::fromUtf16((const ushort*)bufPtr).trimmed() :
+            (bufPtr) ? QString::fromUtf16((const char16_t*)bufPtr).trimmed() :
                        QString("Unknown Error %1").arg(err);
         LocalFree(bufPtr);
         return result;
