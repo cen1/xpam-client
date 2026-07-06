@@ -30,6 +30,7 @@ public:
     QString W3PATH_LATEST;
     QString W3_MAGNET_126;
     QString W3_MAGNET_128;
+    QString W3_MAGNET_129;
     QString DOCPATH;
     QString DOCMAPPATH;
     QString DOCMAPPATHDL;
@@ -52,7 +53,6 @@ public:
     QVector<QString> XPAM_OPTIONS;
     QVector<QString> W3_OPTIONS;
     QVector<QString> GPROXY_OPTIONS;
-    QVector<QString> W3_VERSIONS;
 
     QUrl json1;
     QUrl json2;

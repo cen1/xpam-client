@@ -90,10 +90,6 @@ private slots:
 
     void on_checkBoxUseGproxy126Toggled(bool checked);
 
-    //void on_pushButton_updateW3_released();
-
-    //void on_pushButton_updateW3_clicked();
-
     void on_pushButton_warLatestClear_clicked();
     void on_pushButton_war126Clear_clicked();
 
@@ -115,7 +111,7 @@ private slots:
 
     void showServerStatus();
 
-    void on_pushButton_download_128_clicked();
+    void on_pushButton_download_latest_clicked();
 
     void on_pushButton_download_126_clicked();
 

@@ -35,7 +35,7 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
     MainWindow w;
-    w.setWindowIcon(QIcon(":/favicon.ico"));
+    w.setWindowIcon(QIcon(":/assets/favicon.ico"));
 
     //Mm
     QWebEngineSettings *web_settings = QWebEngineProfile::defaultProfile()->settings();
@@ -47,7 +47,7 @@ int main(int argc, char *argv[])
     web_settings->setAttribute(QWebEngineSettings::JavascriptCanOpenWindows, false);
 
     //splash screen to hide the few seconds of update check
-    QPixmap pixmap(":/splash.png");
+    QPixmap pixmap(":/assets/splash.png");
     QSplashScreen splash(pixmap);
     splash.show();
     splash.showMessage("Checking for updates...", Qt::AlignLeft, Qt::white);

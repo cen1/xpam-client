@@ -60,7 +60,7 @@ void GProxy::readStdout() {
     args << exedir;
     args << "--w3exe=\"" + w3Path + "/" + w3Exename + "\"";
     args << "--mode=" + mode;
-    args << "--server=" + server;
+    args << "--pvpgn-server=" + server;
 
     if (ft) {
         args << "--ft=1";

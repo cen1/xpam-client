@@ -53,6 +53,8 @@ public:
 
     static DWORD setGateways();
     static DWORD setGproxyGateways();
+    static bool writeRealmsIni(QString w3PathLatest, QString gproxyServer);
+    static bool setBnetGatewayIndex(int index);
     static bool setPatchVersion(int version);
 
     bool setW3dir(QString w3dir);

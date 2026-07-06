@@ -1,5 +1,7 @@
 #include "registry.h"
 #include "util.h"
+#include <QFile>
+#include <QTextStream>
 
 Registry::Registry() {}
 
@@ -226,6 +228,48 @@ DWORD Registry :: setGproxyGateways() {
         return GetLastError();
     }
     return GetLastError();
+}
+
+bool Registry::writeRealmsIni(QString w3PathLatest, QString gproxyServer) {
+    //WC3 1.29+ no longer reads "Battle.net Gateways" from the registry.
+    //Custom gateways are instead read from realms.ini in the install directory.
+    QFile file(w3PathLatest + "/realms.ini");
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate | QIODevice::Text)) {
+        return false;
+    }
+
+    QTextStream out(&file);
+    out << "[Server List Version]\r\n";
+    out << "VER=1001\r\n";
+    out << "\r\n";
+    out << "[Server Gateways]\r\n";
+    out << "1=" << gproxyServer << "\r\n";
+    out << "2=localhost\r\n";
+    out << "\r\n";
+    out << "[" << gproxyServer << "]\r\n";
+    out << "ZONE=-1\r\n";
+    out << "ENU=Eurobattle.net\r\n";
+    out << "\r\n";
+    out << "[localhost]\r\n";
+    out << "ZONE=-1\r\n";
+    out << "ENU=Eurobattle.net GProxy\r\n";
+
+    file.close();
+    return true;
+}
+
+bool Registry::setBnetGatewayIndex(int index) {
+    //WC3 1.29+ persists the selected gateway as an index into the combined
+    //(Blizzard defaults + realms.ini) gateway list, under Misc\bnetGateway,
+    //instead of embedding it in the legacy "Battle.net Gateways" registry list.
+    CRegKey reg;
+    if (reg.Create(HKEY_CURRENT_USER, _T("Software\\Blizzard Entertainment\\Warcraft III\\Misc"),
+            REG_NONE, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS | KEY_WOW64_64KEY, NULL, NULL) != ERROR_SUCCESS) {
+        return false;
+    }
+    bool r = Registry::setRegDWORD(reg, "bnetGateway", (DWORD)index);
+    reg.Close();
+    return r;
 }
 
 bool Registry::setPatchVersion(int version) {

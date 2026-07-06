@@ -160,7 +160,7 @@ MainWindow::MainWindow(QWidget *parent) :
     Logger::log("CD keys", config);
     Updater::replaceCDKeys(config);
 
-    //Rename war3Patch.mpq to war3Mod.mpw as of 1.28.2
+    //Rename war3Patch.mpq to war3Mod.mpq as of 1.28.2+
     Logger::log("war3Patch.mpq", config);;
     Updater::renamePatchMpqForLatestW3(config);
 
@@ -240,7 +240,7 @@ void MainWindow::postUpdate() {
         if ("xpam:126"==arg) {
             on_pushButtonGWD_clicked();
         }
-        else if ("xpam:128"==arg){
+        else if ("xpam:129"==arg){
             on_pushButtonGWG_clicked();
         }
     }
@@ -304,16 +304,19 @@ void MainWindow::on_pushButtonGWD_clicked()
 void MainWindow::on_pushButtonGWG_clicked()
 {
     if (changeActiveMode(config->W3_KEY_LATEST, true)) {
+        Registry::writeRealmsIni(config->W3PATH_LATEST, config->GPROXY_SERVER);
         if (ui->checkBox_pfEnable_latest->isChecked()) {
-            Registry::setGateways();
+            //Auto port forward: game connects directly to Eurobattle.net, GProxy forwards behind the scenes
+            Registry::setBnetGatewayIndex(4);
             startW3AndGproxy(true);
         }
         else if (ui->checkBox_gproxy_latest->isChecked()) {
-            Registry::setGproxyGateways();
+            //Regular GProxy relay: game connects to the local GProxy instance
+            Registry::setBnetGatewayIndex(5);
             startW3AndGproxy();
         }
         else {
-            Registry::setGateways();
+            Registry::setBnetGatewayIndex(4);
             runW3();
         }
     }
@@ -381,12 +384,12 @@ void MainWindow::startW3AndGproxy(bool ft) {
     }
 
     //Preloader
-    QMovie *movie = new QMovie(":/preloader.gif");
+    QMovie *movie = new QMovie(":/assets/preloader.gif");
     ui->preloaderLabel1->setMovie(movie);
     ui->preloaderLabel1->movie()->start();
 
-    //Set gproxy gateway as default
-    if (!ft) {
+    //Set gproxy gateway as default (WC3 1.26 only; 1.29+ uses realms.ini, written in on_pushButtonGWG_clicked)
+    if (!ft && config->ACTIVE_MODE_KEY == config->W3_KEY_126) {
         Registry::setGproxyGateways();
     }
 
@@ -577,7 +580,7 @@ bool MainWindow::checkW3Updates(){
         if (config->ASK_FOR_W3_FAST_UPDATE) {
             QMessageBox patchW3;
             patchW3.setWindowTitle("Patch W3?");
-            patchW3.setText("Client can automatically update your W3 to the latest required patch. Accept or update manually. Please wait until all partial updates finish.");
+            patchW3.setText("Detected version "+w3version+", needed version "+config->W3_VERSION_LATEST+". Click Yes to update automatically or No to update manually.");
             patchW3.setStandardButtons(QMessageBox::Yes);
             patchW3.addButton(QMessageBox::No);
             patchW3.setDefaultButton(QMessageBox::No);
@@ -785,7 +788,7 @@ int MainWindow::checkW3LoaderFiles() {
         lockTabs(ui->tabWidget->currentIndex());
 
         QString jsonKey = "126_quick";
-        if (path == config->W3PATH_LATEST) jsonKey = "128_quick";
+        if (path == config->W3PATH_LATEST) jsonKey = "129_quick";
 
         updater=new Updater(config, 5, jsonKey);
         upt=new QThread();
@@ -1648,11 +1651,11 @@ void MainWindow::showServerStatus() {
     }
 }
 
-void MainWindow::on_pushButton_download_128_clicked()
+void MainWindow::on_pushButton_download_latest_clicked()
 {
     if (this->currentTorrentVersionDl==0) {
-        this->currentTorrentVersionDl = 128;
-        this->currentTorrentDlButton = ui->pushButton_download_128;
+        this->currentTorrentVersionDl = 129;
+        this->currentTorrentDlButton = ui->pushButton_download_latest;
         ui->pushButton_download_126->setDisabled(true);
         this->initTorrentDownload();
     }
@@ -1668,7 +1671,7 @@ void MainWindow::on_pushButton_download_126_clicked()
     if (this->currentTorrentVersionDl==0) {
         this->currentTorrentVersionDl = 126;
         this->currentTorrentDlButton = ui->pushButton_download_126;
-        ui->pushButton_download_128->setDisabled(true);
+        ui->pushButton_download_latest->setDisabled(true);
         this->initTorrentDownload();
     }
     else {
@@ -1679,7 +1682,7 @@ void MainWindow::on_pushButton_download_126_clicked()
 
 void MainWindow::initTorrentDownload()
 {
-    QString magnetLink = config->W3_MAGNET_128;
+    QString magnetLink = config->W3_MAGNET_129;
     if (this->currentTorrentVersionDl == 126) {
         magnetLink=config->W3_MAGNET_126;
     }
@@ -1746,7 +1749,7 @@ void MainWindow::handleTorrentFinished(int code)
     this->currentTorrentDlButton->setStyleSheet("color: white");
     this->currentTorrentDlButton->setText("Download");
     ui->pushButton_download_126->setDisabled(false);
-    ui->pushButton_download_128->setDisabled(false);
+    ui->pushButton_download_latest->setDisabled(false);
     tdlt->quit();
     tdl->deleteLater();
     tdlt->deleteLater();

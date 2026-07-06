@@ -1,11 +1,10 @@
 <RCC>
     <qresource prefix="/">
-        <file>favicon.ico</file>
-        <file>splash.png</file>
-        <file>back.png</file>
-        <file>preloader.gif</file>
-        <file>gwselect1.png</file>
-        <file>gwselect2.png</file>
-        <file>gwselect3.png</file>
+        <file>assets/favicon.ico</file>
+        <file>assets/splash.png</file>
+        <file>assets/back.png</file>
+        <file>assets/preloader.gif</file>
+        <file>assets/gwselect2.png</file>
+        <file>assets/gwselect3.png</file>
     </qresource>
 </RCC>

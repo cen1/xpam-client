@@ -27,7 +27,7 @@
   </property>
   <property name="windowIcon">
    <iconset resource="xpam.qrc">
-    <normaloff>:/favicon.ico</normaloff>:/favicon.ico</iconset>
+    <normaloff>:/assets/favicon.ico</normaloff>:/assets/favicon.ico</iconset>
   </property>
   <property name="styleSheet">
    <string notr="true">QStatusBar {
@@ -59,7 +59,7 @@
     </font>
    </property>
    <property name="layoutDirection">
-    <enum>Qt::LeftToRight</enum>
+    <enum>Qt::LayoutDirection::LeftToRight</enum>
    </property>
    <property name="styleSheet">
     <string notr="true">#centralWidget {
@@ -132,27 +132,27 @@ QTabBar::tab:selected{
 }
 
 #tabLauncher {
-  border-image: url(&quot;:/back.png&quot;) 0 0 0 0 stretch stretch;
+  border-image: url(&quot;:/assets/back.png&quot;) 0 0 0 0 stretch stretch;
   border-width: 0px;
 }
 #tabGproxy {
-  border-image: url(&quot;:/back.png&quot;) 0 0 0 0 stretch stretch;
+  border-image: url(&quot;:/assets/back.png&quot;) 0 0 0 0 stretch stretch;
   border-width: 0px;
 }
 #tabW3 {
-  border-image: url(&quot;:/back.png&quot;) 0 0 0 0 stretch stretch;
+  border-image: url(&quot;:/assets/back.png&quot;) 0 0 0 0 stretch stretch;
   border-width: 0px;
 }
 #tabDota {
-  border-image: url(&quot;:/back.png&quot;) 0 0 0 0 stretch stretch;
+  border-image: url(&quot;:/assets/back.png&quot;) 0 0 0 0 stretch stretch;
   border-width: 0px;
 }
 #tabUpdate {
-  border-image: url(&quot;:/back.png&quot;) 0 0 0 0 stretch stretch;
+  border-image: url(&quot;:/assets/back.png&quot;) 0 0 0 0 stretch stretch;
   border-width: 0px;
 }
 #tabAbout {
-  border-image: url(&quot;:/back.png&quot;) 0 0 0 0 stretch stretch;
+  border-image: url(&quot;:/assets/back.png&quot;) 0 0 0 0 stretch stretch;
   border-width: 0px;
 }
 
@@ -201,11 +201,11 @@ QCheckBox::indicator:checked {
   background-repeat: no-repeat;
 }
 #pushButtonGWG {
-  background-image: url(&quot;:/gwselect2.png&quot;);
+  background-image: url(&quot;:/assets/gwselect2.png&quot;);
   background-repeat: no-repeat;
 }
 #pushButtonGWD {
-  background-image: url(&quot;:/gwselect3.png&quot;);
+  background-image: url(&quot;:/assets/gwselect3.png&quot;);
   background-repeat: no-repeat;
 }
 
@@ -259,7 +259,7 @@ QCheckBox::indicator:checked {
       <item row="1" column="0">
        <widget class="QTabWidget" name="tabWidget">
         <property name="layoutDirection">
-         <enum>Qt::LeftToRight</enum>
+         <enum>Qt::LayoutDirection::LeftToRight</enum>
         </property>
         <property name="currentIndex">
          <number>6</number>
@@ -280,7 +280,7 @@ QCheckBox::indicator:checked {
             <item>
              <spacer name="hs1">
               <property name="orientation">
-               <enum>Qt::Horizontal</enum>
+               <enum>Qt::Orientation::Horizontal</enum>
               </property>
               <property name="sizeHint" stdset="0">
                <size>
@@ -403,7 +403,7 @@ or manually host your games.</string>
                 <item>
                  <spacer name="horizontalSpacer_5">
                   <property name="orientation">
-                   <enum>Qt::Horizontal</enum>
+                   <enum>Qt::Orientation::Horizontal</enum>
                   </property>
                   <property name="sizeHint" stdset="0">
                    <size>
@@ -420,7 +420,7 @@ or manually host your games.</string>
             <item>
              <spacer name="hs2">
               <property name="orientation">
-               <enum>Qt::Horizontal</enum>
+               <enum>Qt::Orientation::Horizontal</enum>
               </property>
               <property name="sizeHint" stdset="0">
                <size>
@@ -470,7 +470,7 @@ or manually host your games.</string>
            <string>GProxy output</string>
           </property>
           <property name="textInteractionFlags">
-           <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+           <set>Qt::TextInteractionFlag::LinksAccessibleByMouse|Qt::TextInteractionFlag::TextSelectableByMouse</set>
           </property>
          </widget>
          <widget class="QLabel" name="labelGproxywarnings">
@@ -486,13 +486,13 @@ or manually host your games.</string>
            <string/>
           </property>
           <property name="textFormat">
-           <enum>Qt::RichText</enum>
+           <enum>Qt::TextFormat::RichText</enum>
           </property>
           <property name="openExternalLinks">
            <bool>true</bool>
           </property>
           <property name="textInteractionFlags">
-           <set>Qt::TextBrowserInteraction</set>
+           <set>Qt::TextInteractionFlag::TextBrowserInteraction</set>
           </property>
          </widget>
          <widget class="QPushButton" name="pushButtonGPCL">
@@ -549,7 +549,7 @@ or manually host your games.</string>
             <item>
              <widget class="QCheckBox" name="checkBox_console">
               <property name="layoutDirection">
-               <enum>Qt::LeftToRight</enum>
+               <enum>Qt::LayoutDirection::LeftToRight</enum>
               </property>
               <property name="text">
                <string>Visible console (must start manually)</string>
@@ -559,7 +559,7 @@ or manually host your games.</string>
             <item>
              <widget class="QCheckBox" name="checkBox_chatbuffer">
               <property name="layoutDirection">
-               <enum>Qt::LeftToRight</enum>
+               <enum>Qt::LayoutDirection::LeftToRight</enum>
               </property>
               <property name="text">
                <string>Chat buffer (experimental)</string>
@@ -683,12 +683,12 @@ or manually host your games.</string>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_8">
             <property name="sizeConstraint">
-             <enum>QLayout::SetMaximumSize</enum>
+             <enum>QLayout::SizeConstraint::SetMaximumSize</enum>
             </property>
             <item>
              <widget class="QCheckBox" name="checkBox_option_sounds">
               <property name="layoutDirection">
-               <enum>Qt::LeftToRight</enum>
+               <enum>Qt::LayoutDirection::LeftToRight</enum>
               </property>
               <property name="text">
                <string>Enable sounds</string>
@@ -698,7 +698,7 @@ or manually host your games.</string>
             <item>
              <widget class="QCheckBox" name="checkBox_sound_1">
               <property name="layoutDirection">
-               <enum>Qt::LeftToRight</enum>
+               <enum>Qt::LayoutDirection::LeftToRight</enum>
               </property>
               <property name="text">
                <string>&quot;Game started&quot; sound</string>
@@ -708,7 +708,7 @@ or manually host your games.</string>
             <item>
              <widget class="QCheckBox" name="checkBox_sound_2">
               <property name="layoutDirection">
-               <enum>Qt::LeftToRight</enum>
+               <enum>Qt::LayoutDirection::LeftToRight</enum>
               </property>
               <property name="text">
                <string>&quot;Join the game&quot; sound</string>
@@ -718,7 +718,7 @@ or manually host your games.</string>
             <item>
              <widget class="QCheckBox" name="checkBox_sound_3">
               <property name="layoutDirection">
-               <enum>Qt::LeftToRight</enum>
+               <enum>Qt::LayoutDirection::LeftToRight</enum>
               </property>
               <property name="text">
                <string>&quot;Slap&quot; sound</string>
@@ -728,7 +728,7 @@ or manually host your games.</string>
             <item>
              <widget class="QCheckBox" name="checkBox_sound_4">
               <property name="layoutDirection">
-               <enum>Qt::LeftToRight</enum>
+               <enum>Qt::LayoutDirection::LeftToRight</enum>
               </property>
               <property name="text">
                <string>&quot;Channel moderated&quot; sound</string>
@@ -738,7 +738,7 @@ or manually host your games.</string>
             <item>
              <widget class="QCheckBox" name="checkBox_sound_5">
               <property name="layoutDirection">
-               <enum>Qt::LeftToRight</enum>
+               <enum>Qt::LayoutDirection::LeftToRight</enum>
               </property>
               <property name="text">
                <string>&quot;Channel unmoderated&quot; sound</string>
@@ -748,7 +748,7 @@ or manually host your games.</string>
             <item>
              <widget class="QCheckBox" name="checkBox_sound_6">
               <property name="layoutDirection">
-               <enum>Qt::LeftToRight</enum>
+               <enum>Qt::LayoutDirection::LeftToRight</enum>
               </property>
               <property name="text">
                <string>&quot;Challenge started&quot; sound</string>
@@ -758,7 +758,7 @@ or manually host your games.</string>
             <item>
              <widget class="QCheckBox" name="checkBox_sound_7">
               <property name="layoutDirection">
-               <enum>Qt::LeftToRight</enum>
+               <enum>Qt::LayoutDirection::LeftToRight</enum>
               </property>
               <property name="text">
                <string>&quot;Challenge completed&quot; sound</string>
@@ -768,7 +768,7 @@ or manually host your games.</string>
             <item>
              <widget class="QCheckBox" name="checkBox_sound_8">
               <property name="layoutDirection">
-               <enum>Qt::LeftToRight</enum>
+               <enum>Qt::LayoutDirection::LeftToRight</enum>
               </property>
               <property name="text">
                <string>&quot;Friend joined game&quot; sound</string>
@@ -785,7 +785,7 @@ or manually host your games.</string>
             <item>
              <widget class="QCheckBox" name="checkBox_sound_10">
               <property name="layoutDirection">
-               <enum>Qt::LeftToRight</enum>
+               <enum>Qt::LayoutDirection::LeftToRight</enum>
               </property>
               <property name="text">
                <string>&quot;You were kicked&quot; sound</string>
@@ -856,7 +856,7 @@ or manually host your games.</string>
            </rect>
           </property>
           <property name="title">
-           <string>Latest Warcraft gateway (1.28.5)</string>
+           <string>Latest Warcraft gateway (1.29.2)</string>
           </property>
           <widget class="QWidget" name="verticalLayoutWidget_3">
            <property name="geometry">
@@ -874,7 +874,7 @@ or manually host your games.</string>
             <item>
              <layout class="QHBoxLayout" name="horizontalLayout_2">
               <property name="sizeConstraint">
-               <enum>QLayout::SetDefaultConstraint</enum>
+               <enum>QLayout::SizeConstraint::SetDefaultConstraint</enum>
               </property>
               <item>
                <widget class="QLabel" name="war_latest_label_2">
@@ -894,7 +894,7 @@ or manually host your games.</string>
                  <string>Warcraft location</string>
                 </property>
                 <property name="textFormat">
-                 <enum>Qt::AutoText</enum>
+                 <enum>Qt::TextFormat::AutoText</enum>
                 </property>
                </widget>
               </item>
@@ -956,7 +956,7 @@ or manually host your games.</string>
                </widget>
               </item>
               <item>
-               <widget class="QPushButton" name="pushButton_download_128">
+               <widget class="QPushButton" name="pushButton_download_latest">
                 <property name="minimumSize">
                  <size>
                   <width>130</width>
@@ -977,7 +977,7 @@ or manually host your games.</string>
               <item>
                <spacer name="horizontalSpacer">
                 <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
+                 <enum>Qt::Orientation::Horizontal</enum>
                 </property>
                 <property name="sizeHint" stdset="0">
                  <size>
@@ -1033,7 +1033,7 @@ or manually host your games.</string>
                  <number>8</number>
                 </property>
                 <property name="sizeConstraint">
-                 <enum>QLayout::SetDefaultConstraint</enum>
+                 <enum>QLayout::SizeConstraint::SetDefaultConstraint</enum>
                 </property>
                 <item>
                  <widget class="QCheckBox" name="checkBox_fullscreen_latest">
@@ -1099,7 +1099,7 @@ or manually host your games.</string>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_11">
             <property name="sizeConstraint">
-             <enum>QLayout::SetMaximumSize</enum>
+             <enum>QLayout::SizeConstraint::SetMaximumSize</enum>
             </property>
             <property name="bottomMargin">
              <number>0</number>
@@ -1186,7 +1186,7 @@ or manually host your games.</string>
                <string/>
               </property>
               <property name="echoMode">
-               <enum>QLineEdit::Password</enum>
+               <enum>QLineEdit::EchoMode::Password</enum>
               </property>
               <property name="placeholderText">
                <string>password</string>
@@ -1284,7 +1284,7 @@ or manually host your games.</string>
             <item>
              <layout class="QHBoxLayout" name="horizontalLayout_7">
               <property name="sizeConstraint">
-               <enum>QLayout::SetMaximumSize</enum>
+               <enum>QLayout::SizeConstraint::SetMaximumSize</enum>
               </property>
               <item>
                <widget class="QLabel" name="label">
@@ -1298,7 +1298,7 @@ or manually host your games.</string>
                  <string>Warcraft 1.26a location</string>
                 </property>
                 <property name="textFormat">
-                 <enum>Qt::AutoText</enum>
+                 <enum>Qt::TextFormat::AutoText</enum>
                 </property>
                </widget>
               </item>
@@ -1369,7 +1369,7 @@ or manually host your games.</string>
               <item>
                <spacer name="horizontalSpacer_3">
                 <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
+                 <enum>Qt::Orientation::Horizontal</enum>
                 </property>
                 <property name="sizeHint" stdset="0">
                  <size>
@@ -1435,7 +1435,7 @@ or manually host your games.</string>
                  <number>8</number>
                 </property>
                 <property name="sizeConstraint">
-                 <enum>QLayout::SetFixedSize</enum>
+                 <enum>QLayout::SizeConstraint::SetFixedSize</enum>
                 </property>
                 <item>
                  <widget class="QCheckBox" name="checkBox_opengl_126">
@@ -1521,7 +1521,7 @@ or manually host your games.</string>
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_11">
             <property name="sizeConstraint">
-             <enum>QLayout::SetNoConstraint</enum>
+             <enum>QLayout::SizeConstraint::SetNoConstraint</enum>
             </property>
             <property name="bottomMargin">
              <number>10</number>
@@ -1601,10 +1601,10 @@ or manually host your games.</string>
             <item>
              <spacer name="horizontalSpacer_4">
               <property name="orientation">
-               <enum>Qt::Horizontal</enum>
+               <enum>Qt::Orientation::Horizontal</enum>
               </property>
               <property name="sizeType">
-               <enum>QSizePolicy::Expanding</enum>
+               <enum>QSizePolicy::Policy::Expanding</enum>
               </property>
               <property name="sizeHint" stdset="0">
                <size>
@@ -1657,7 +1657,7 @@ or manually host your games.</string>
           <item>
            <spacer name="verticalSpacer">
             <property name="orientation">
-             <enum>Qt::Vertical</enum>
+             <enum>Qt::Orientation::Vertical</enum>
             </property>
             <property name="sizeHint" stdset="0">
              <size>
@@ -1794,7 +1794,7 @@ or manually host your games.</string>
              <item>
               <spacer name="horizontalSpacer_2">
                <property name="orientation">
-                <enum>Qt::Horizontal</enum>
+                <enum>Qt::Orientation::Horizontal</enum>
                </property>
                <property name="sizeHint" stdset="0">
                 <size>
@@ -1835,13 +1835,13 @@ or manually host your games.</string>
            </sizepolicy>
           </property>
           <property name="frameShape">
-           <enum>QFrame::NoFrame</enum>
+           <enum>QFrame::Shape::NoFrame</enum>
           </property>
           <property name="text">
-           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Eurobattle.net Client version 1.5 (May 2025), developed by cen, additional contributions by deer&lt;/p&gt;&lt;p&gt;&lt;br/&gt;We are searching for Qt/ C++ developers to further expand this client. This client is licensed under BSD 2-clause open source license.&lt;/p&gt;&lt;p&gt;Repository at &lt;a href=&quot;https://github.com/cen1/xpam-client&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#85c3e5;&quot;&gt;https://github.com/cen1/xpam-client&lt;/span&gt;&lt;/a&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;Special thanks to:&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;IStealSkills&lt;/span&gt; - help with design&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Stefos007&lt;/span&gt; - original GProxy expansion&lt;/p&gt;&lt;p&gt;BNETtdocs, Stormlib, PvPGN and GHost projects.&lt;/p&gt;&lt;p&gt;D1stats for DotA development.&lt;/p&gt;&lt;p&gt;MyMGN for exchage of technical solutions and support.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Eurobattle.net Client version 1.6 (June 2026), developed by cen, additional contributions by deer&lt;/p&gt;&lt;p&gt;&lt;br/&gt;We are searching for Qt/C++ developers to further expand this client. This client is licensed under BSD 2-clause open source license.&lt;/p&gt;&lt;p&gt;Repository at &lt;a href=&quot;https://github.com/cen1/xpam-client&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#85c3e5;&quot;&gt;https://github.com/cen1/xpam-client&lt;/span&gt;&lt;/a&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;Special thanks to:&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;IStealSkills&lt;/span&gt; - help with design&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Stefos007&lt;/span&gt; - original GProxy expansion&lt;/p&gt;&lt;p&gt;BNETtdocs, StormLib, PvPGN, GHost and HiveWorkshop projects.&lt;/p&gt;&lt;p&gt;D1stats for DotA development.&lt;/p&gt;&lt;p&gt;MyMGN for exchage of technical solutions and support.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
           <property name="alignment">
-           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+           <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignTop</set>
           </property>
           <property name="openExternalLinks">
            <bool>true</bool>
