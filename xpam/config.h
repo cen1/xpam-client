@@ -37,6 +37,7 @@ public:
     QString MAPPATH_126;
     QString MAPPATH_126DL;
     QString EUROPATH;
+    QString GPROXYPATH;
     QString SOUNDPATH;
     QString APPDATA;
     QString APPDATA_BNET_CACHE;

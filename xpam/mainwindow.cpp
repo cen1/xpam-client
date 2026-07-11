@@ -366,7 +366,7 @@ void MainWindow::startW3AndGproxy(bool ft) {
     w3Exename = config->getCurrentW3Exename();
 
     //Check if gproxy.exe exists and was not deleted by AV
-    QFile gproxyFile(config->EUROPATH+"/gproxy.exe");
+    QFile gproxyFile(config->GPROXYPATH+"/gproxy.exe");
     if (!gproxyFile.exists()) {
         QMessageBox mb(QMessageBox::Critical, "GProxy missing",
            "GProxy.exe is missing from Eurobattle.net folder. Maybe your AV deleted it?", QMessageBox::Ok);
@@ -393,7 +393,7 @@ void MainWindow::startW3AndGproxy(bool ft) {
         Registry::setGproxyGateways();
     }
 
-    QString gpdir=config->EUROPATH;
+    QString gpdir=config->GPROXYPATH;
     QString gpexe="\""+gpdir+"\\gproxy.exe\"";
     QString gpmode=(config->ACTIVE_MODE_KEY == config->W3_KEY_126) ? "restricted" : "normal";
     status("Launching GProxy...");
@@ -1195,7 +1195,7 @@ void MainWindow::status(QString status) {
 //Copy gproxy log to clipboard
 void MainWindow::on_pushButtonGPCL_clicked()
 {
-    QFile logfile(config->EUROPATH+"/gproxy.log");
+    QFile logfile(config->GPROXYPATH+"/gproxy.log");
     if (logfile.open(QFile::ReadOnly))
     {
         QString s(logfile.readAll());
@@ -1206,7 +1206,7 @@ void MainWindow::on_pushButtonGPCL_clicked()
 //Open gproxy log in notepad
 void MainWindow::on_pushButtonGPNOTEPAD_clicked()
 {
-    QDesktopServices::openUrl(QUrl("file:///"+config->EUROPATH+"/gproxy.log"));
+    QDesktopServices::openUrl(QUrl("file:///"+config->GPROXYPATH+"/gproxy.log"));
 }
 
 //Open client log in notepad
@@ -1285,59 +1285,6 @@ void MainWindow::on_pushButton_war126Clear_clicked()
     QSettings settings(config->XPAM_CONFIG_PATH, QSettings::IniFormat);
     setNewW3PathSetting(config->W3_KEY_126, &settings, "");
 }
-
-//Full W3 update
-/*void MainWindow::on_pushButton_updateW3_released()
-{
-    if (updateInProgress) {
-        Logger::log("Update is in progress, cancelling", config);
-        //User wants to cancel
-        emit cancelUpdate();
-        ui->pushButton_updateW3->setText("Perform full W3 update (1GB download)");
-        return;
-    }
-    Logger::log("Starting W3 update", config);
-
-    QMessageBox patchW3;
-    patchW3.setWindowTitle("Patch W3 to "+config->W3_VERSION_LATEST);
-    QString text = "This will download 1GB of files and replace your W3 with version"+config->W3_VERSION_LATEST+". You should only do this if quick update failed or you think your files might be corrupted. Proceed anyway?";
-
-    patchW3.setText(text);
-    patchW3.setStandardButtons(QMessageBox::Yes);
-    patchW3.addButton(QMessageBox::No);
-    patchW3.setDefaultButton(QMessageBox::No);
-    if(patchW3.exec() == QMessageBox::Yes) {
-
-        isStartupUpdate=false;
-        ui->textBrowserUpdate->clear();
-
-        ui->pushButtonBU->setEnabled(false);
-
-        ui->tabWidget->setCurrentIndex(3);
-        lockTabs(ui->tabWidget->currentIndex());
-
-        updater=new Updater(config, 2, config->W3_VERSION_LATEST+".FULL");
-        upt=new QThread();
-        updater->moveToThread(upt);
-
-        QObject::connect(upt, SIGNAL(started()), updater, SLOT(startUpdate()));
-        QObject::connect(updater, SIGNAL(updateFinished(bool, bool, bool, bool, int)), this, SLOT(updateFinished(bool, bool, bool, bool, int)));
-        QObject::connect(updater, SIGNAL(sendLine(QString)), this, SLOT(logUpdate(QString)));
-        QObject::connect(updater, SIGNAL(sendLine(QString)), ui->textBrowserUpdate, SLOT(append(QString)), Qt::QueuedConnection);
-        QObject::connect(updater, SIGNAL(modifyLastLine(QString)), this, SLOT(modifyLastLineSlot(QString)));
-
-        QObject::connect(this, SIGNAL(cancelUpdate()), updater, SLOT(cancelUpdate()));
-
-        QObject::connect(updater, SIGNAL(updateFinished(bool, bool, bool, bool, int)), upt, SLOT(quit()));
-        QObject::connect(updater, SIGNAL(updateFinished(bool, bool, bool ,bool, int)), updater, SLOT(deleteLater()));
-        QObject::connect(upt, SIGNAL(finished()), upt, SLOT(deleteLater()));
-
-        updateInProgress=true;
-        ui->pushButton_updateW3->setText("Cancel");
-
-        upt->start();
-    }
-}*/
 
 //Diff W3 update
 void MainWindow::diffW3Update(QString version) {
@@ -1606,7 +1553,7 @@ void MainWindow::tmpPlumbing() {
 
 void MainWindow::on_pushButtonGPNOTEPAD_CFG_clicked()
 {
-    QDesktopServices::openUrl(QUrl("file:///"+config->EUROPATH+"/gproxy.ini"));
+    QDesktopServices::openUrl(QUrl("file:///"+config->GPROXY_CONFIG_PATH));
 }
 
 void MainWindow::on_pushButtonClientConfig_clicked()
@@ -1759,14 +1706,13 @@ void MainWindow::handleTorrentFinished(int code)
         msgBox.setIcon(QMessageBox::Information);
         msgBox.setText("Download completed to %appdata% folder");
         msgBox.setInformativeText("Unpack the downloaded zip to a location of your choice (for example: D:/mygames/Warcraft III 1.2X), then set the game path location to that folder");
-        msgBox.addButton("Open download location", QMessageBox::AcceptRole);
+        QPushButton *openButton = msgBox.addButton("Open download location", QMessageBox::AcceptRole);
         msgBox.addButton("Close", QMessageBox::ActionRole);
 
-        int choice = msgBox.exec();
+        msgBox.exec();
 
-        if (choice == 0) {
-            QUrl url(config->APPDATA);
-            QDesktopServices::openUrl(url);
+        if (msgBox.clickedButton() == openButton) {
+            QDesktopServices::openUrl(QUrl::fromLocalFile(config->APPDATA));
         }
     }
 }

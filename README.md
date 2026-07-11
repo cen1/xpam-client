@@ -62,7 +62,7 @@ MOVE dota704h0files.mpq W3PATH_126
 ```
 ```
 Possible actions: `MOVE, DELETE or ICONS`  
-Possible locations: `EUROPATH, SOUNDPATH, W3PATH, W3PATH_126, MAPPATH, MAPPATH_126`  
+Possible locations: `EUROPATH, GPROXYPATH, SOUNDPATH, W3PATH, W3PATH_126, MAPPATH, MAPPATH_126`  
 ```
 4. Select all files and create a .zip (do not zip the folder!)
 5. Calculate hash: `sha1sum v7.04h0.zip`

@@ -297,7 +297,7 @@ bool Updater::instructions() {
     /*
      * MOVE, DELETE or ICONS
      * Filename
-     * EUROPATH, SOUNDPATH, W3PATH, W3PATH_126, MAPPATH, MAPPATH_126
+     * EUROPATH, GPROXYPATH, SOUNDPATH, W3PATH, W3PATH_126, MAPPATH, MAPPATH_126
     */
     QFile inst(config->APPDATA+"\\instructions.txt");
     if (inst.open(QIODevice::ReadOnly)) {
@@ -311,6 +311,7 @@ bool Updater::instructions() {
 
             QString dstPath;
             if      (l.last()=="EUROPATH") dstPath=config->EUROPATH;
+            else if (l.last()=="GPROXYPATH") dstPath=config->GPROXYPATH;
             else if (l.last()=="W3PATH") dstPath=config->W3PATH_LATEST;
             else if (l.last()=="W3PATH_126") dstPath=config->W3PATH_126;
             else if (l.last()=="MAPPATH") dstPath=config->DOCMAPPATHDL;
@@ -332,8 +333,8 @@ bool Updater::instructions() {
                 QFile from(config->APPDATA+"\\"+midParam);
                 if (QFile::exists(dstPath+"\\"+midParam)) QFile::remove(dstPath+"\\"+midParam);
 
-                //check if download folder exists
-                if(l.last()=="MAPPATH" || l.last()=="MAPPATH_126")
+                //check if destination folder exists
+                if(l.last()=="MAPPATH" || l.last()=="MAPPATH_126" || l.last()=="GPROXYPATH")
                 {
                     if (!QDir().exists(dstPath))
                         QDir().mkdir(dstPath);

@@ -53,9 +53,10 @@ Config::Config()
     IS_PORTABLE = false;
 
     EUROPATH    = Registry::getEuroPath().replace(QChar('\\'), QChar('/'));
+    GPROXYPATH  = EUROPATH+"/gproxy";
     XPAM_CONFIG_PATH = EUROPATH+"/xpam.ini";
-    GPROXY_CONFIG_PATH = EUROPATH+"/gproxy.ini";
-    //GPROXY_CONFIG_PATH_CFG = EUROPATH+"/gproxy.cfg";
+    GPROXY_CONFIG_PATH = GPROXYPATH+"/gproxy.ini";
+    //GPROXY_CONFIG_PATH_CFG = GPROXYPATH+"/gproxy.cfg";
     SOUNDPATH   = EUROPATH+"/sounds";
 
     QSettings settings(XPAM_CONFIG_PATH, QSettings::IniFormat);
@@ -198,6 +199,9 @@ QString Config::getPathFromKey(QString key) {
     }
     else if (key=="EUROPATH") {
         return this->EUROPATH;
+    }
+    else if (key=="GPROXYPATH") {
+        return this->GPROXYPATH;
     }
     else {
         return this->EUROPATH;
