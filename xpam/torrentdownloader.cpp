@@ -5,6 +5,7 @@
 #include <libtorrent/torrent_handle.hpp>
 #include <libtorrent/alert_types.hpp>
 #include <libtorrent/magnet_uri.hpp>
+#include <libtorrent/torrent_info.hpp>
 #include "QDebug"
 #include "QThread"
 #include "QTimer"
@@ -22,8 +23,12 @@ TorrentDownloader::TorrentDownloader(const QString& magnetLink, const QString& d
 }
 
 void TorrentDownloader::cancelDownload() {
+    //Already finished, failed or cancelled (e.g. repeated cancel clicks)
+    if (exitBool) return;
+    exitBool=true;
+
     emit sendLine("tdl cancelled by user");
-    timer->stop();
+    if (timer) timer->stop();
     session.pause();
     int tries = 0;
     while (!session.is_paused()) {
@@ -58,12 +63,19 @@ void TorrentDownloader::processLibtorrentEvents() {
 
     for (lt::alert const* a : alerts) {
         //qDebug() << QString::fromStdString(a->message());
+        if (exitBool) break;
 
-        if (lt::alert_cast<lt::torrent_finished_alert>(a)) {
+        if (auto tf = lt::alert_cast<lt::torrent_finished_alert>(a)) {
             //qDebug() << "TORRENT FINISHED";
             emit sendLine("tdl finished");
             exitBool=true;
+            timer->stop();
+            auto ti = tf->handle.torrent_file();
+            if (ti) {
+                emit downloadedFile(downloadDir+"/"+QString::fromStdString(ti->files().file_path(lt::file_index_t(0))));
+            }
             emit finished(0);
+            continue;
         }
 
         if (auto st = lt::alert_cast<lt::state_update_alert>(a)) {
@@ -79,6 +91,7 @@ void TorrentDownloader::processLibtorrentEvents() {
         if (lt::alert_cast<lt::torrent_error_alert>(a)) {
             emit sendLine("tdl error");
             exitBool=true;
+            timer->stop();
             emit finished(1);
         }
 

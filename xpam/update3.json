@@ -1,0 +1,54 @@
+{
+    "beta" : {
+        
+    },
+    "126_quick" : {
+        "mirror1" : "https://milan.eurobattle.net/update3/126_quick.zip",
+        "mirror2" : "https://milan.eurobattle.net/update3/126_quick.zip",
+        "mirror3" : "https://milan.eurobattle.net/update3/126_quick.zip",
+        "mirror4" : "https://milan.eurobattle.net/update3/126_quick.zip",
+        "sha1" : "74c3eb0b83a7d95ac421038fa2c3be3e317316e6"
+    },
+    "128_quick" : {
+        "mirror1" : "https://milan.eurobattle.net/update3/128_quick.zip",
+        "mirror2" : "https://milan.eurobattle.net/update3/128_quick.zip",
+        "mirror3" : "https://milan.eurobattle.net/update3/128_quick.zip",
+        "mirror4" : "https://milan.eurobattle.net/update3/128_quick.zip",
+        "sha1" : "24b8703c10c58cc2ed6b39c11bb2ccfb9faa92bc"
+    },
+	"129_quick" : {
+        "mirror1" : "https://milan.eurobattle.net/update3/129_quick.zip",
+        "mirror2" : "https://milan.eurobattle.net/update3/129_quick.zip",
+        "mirror3" : "https://milan.eurobattle.net/update3/129_quick.zip",
+        "mirror4" : "https://milan.eurobattle.net/update3/129_quick.zip",
+        "sha1" : "cd33db217eb04c120f0f9f6e327fa30a049e961a"
+    },
+    "maps" : [
+        {
+            "name": "DotA_Allstars_7.04f9.w3x",
+            "targetPath": "W3PATH_126",
+            "version" : 1,
+            "mirror1" : "https://www.googleapis.com/drive/v3/files/1863TjM-2V5Nyz6M9YA05iWOzxNTA27Wn/?key=AIzaSyDexUMJldtp6pVsAeddDQFwT8HAJEhgJpY&alt=media",
+            "mirror2" : "https://seedbox.eurobattle.net/v7.04f9.zip",
+            "mirror3" : "https://r2.eurobattle.net/v7.04f9.zip",
+            "mirror4" : "https://xpam.pl/update3/v7.04f9.zip",
+            "sha1" : "aa8ca7604a6bd90c7408a3a2244cb1da3dc50bf3"
+        },
+        {
+            "name": "DotA_Allstars_7.04h0.w3x",
+            "targetPath": "W3PATH_126",
+            "version" : 1,
+            "mirror1" : "https://seedbox.eurobattle.net/v7.04h0.zip",
+            "mirror2" : "https://r2.eurobattle.net/v7.04h0.zip",
+            "mirror3" : "https://xpam.pl/update3/v7.04h0.zip",
+            "mirror4" : "https://maps.d1map.net/v7.04h0.zip",
+            "additional_files": [
+                {
+                    "name": "dota704h0files.mpq",
+                    "path": "W3PATH_126"
+                }
+            ],
+            "sha1" : "b99cecad45bd37eb3589dc102acb8148e04282f4"
+        }
+    ]
+}

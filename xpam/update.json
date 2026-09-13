@@ -45,6 +45,14 @@
         "mirror4" : "https://xpam.pl/update2/128_quick.zip",
         "sha1" : "b12a8e56ca29430dbd3441e553e4160904a63483"
     },
+	,
+    "129_quick" : {
+        "mirror1" : "https://xpam.pl/update2/129_quick.zip",
+        "mirror2" : "https://xpam.pl/update2/129_quick.zip",
+        "mirror3" : "https://xpam.pl/update2/129_quick.zip",
+        "mirror4" : "https://xpam.pl/update2/129_quick.zip",
+        "sha1" : "cd33db217eb04c120f0f9f6e327fa30a049e961a"
+    },
     "maps" : [
         {
             "name": "DotA_Allstars_7.04f9.w3x",

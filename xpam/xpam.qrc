@@ -6,5 +6,6 @@
         <file>assets/preloader.gif</file>
         <file>assets/gwselect2.png</file>
         <file>assets/gwselect3.png</file>
+        <file>assets/gwselect_128.png</file>
     </qresource>
 </RCC>

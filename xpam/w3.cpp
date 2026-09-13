@@ -96,14 +96,15 @@ void W3::sanityCheck(Config * config) {
     Registry reg;
     QString installPath = reg.getInstallPath();
     if (installPath=="") {
-        reg.setInstallPath(config->W3PATH_LATEST);
+        reg.setInstallPath(config->getCurrentW3Path());
     }
     QString installPathX = reg.getInstallPathX();
     if (installPathX=="") {
-        reg.setInstallPathX(config->W3PATH_LATEST);
+        reg.setInstallPathX(config->getCurrentW3Path());
     }
 
     Logger::log("EUROPATH="+config->EUROPATH, config);
-    Logger::log("W3PATH_LATEST="+config->W3PATH_LATEST, config);
     Logger::log("W3PATH_126="+config->W3PATH_126, config);
+    Logger::log("W3PATH_128="+config->W3PATH_128, config);
+    Logger::log("W3PATH_129="+config->W3PATH_129, config);
 }

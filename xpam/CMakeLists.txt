@@ -7,6 +7,8 @@ set(XPAM_SOURCES
     config.cpp
     downloader.cpp
     torrentdownloader.cpp
+    w3extractor.cpp
+    w3downloaddialog.cpp
     updater.cpp
     w3.cpp
     test.cpp
@@ -21,6 +23,8 @@ set(XPAM_HEADERS
     mainwindow.h
     registry.h
     torrentdownloader.h
+    w3extractor.h
+    w3downloaddialog.h
     util.h
     gproxy.h
     config.h

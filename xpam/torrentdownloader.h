@@ -21,15 +21,16 @@ signals:
     void progress(int percent);
     void working(bool finished);
     void finished(int code);
+    void downloadedFile(QString path); // emitted right before finished(0)
     void internalFinish();
     void sendLine(QString line);
 
 private:
     lt::session session;
-    bool exitBool=false;
+    bool exitBool=false; //set once finished() has been emitted, it must only be emitted once
     const QString magnetLink;
     const QString downloadDir;
-    QTimer *timer;
+    QTimer *timer=nullptr;
 
 private slots:
     void processLibtorrentEvents();

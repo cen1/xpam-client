@@ -36,6 +36,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 namespace Ui {
 class MainWindow;
 }
+class W3DownloadDialog;
 
 class MainWindow : public QMainWindow
 {
@@ -59,8 +60,9 @@ public:
     void setNewW3PathSetting(QString modeKey, QSettings *settings, QString newPath);
     
 private slots:
-    void on_pushButtonGWG_clicked();
-    void on_pushButtonGWD_clicked();
+    void on_pushButton128_clicked();
+    void on_pushButton126_clicked();
+    void on_pushButton129_clicked();
     void on_pushButtonBU_clicked();
     void handleCheckBoxGProxy(bool checked);
     void handleSpinBoxGProxy(int value);
@@ -84,14 +86,15 @@ private slots:
 
     bool showW3PathDialog(QString modeKey);
 
-    void on_pushButton_warLatestPath_clicked();
-
     void on_pushButton_war126Path_clicked();
+    void on_pushButton_war128Path_clicked();
+    void on_pushButton_war129Path_clicked();
 
     void on_checkBoxUseGproxy126Toggled(bool checked);
 
-    void on_pushButton_warLatestClear_clicked();
     void on_pushButton_war126Clear_clicked();
+    void on_pushButton_war128Clear_clicked();
+    void on_pushButton_war129Clear_clicked();
 
     void on_pushButton_DotaConfig_clicked();
 
@@ -111,9 +114,9 @@ private slots:
 
     void showServerStatus();
 
-    void on_pushButton_download_latest_clicked();
-
     void on_pushButton_download_126_clicked();
+    void on_pushButton_download_128_clicked();
+    void on_pushButton_download_129_clicked();
 
 public slots:
     void gproxyReady(QString w3Exename, bool ft);
@@ -126,9 +129,9 @@ public slots:
     void hideSplashScreen();
     void logUpdate(QString line);
     void modifyLastLineSlot(QString line);
-    void handleTorrentWorking(bool finished);
-    void handleTorrentProgress(int percent);
     void handleTorrentFinished(int code);
+    void handleTorrentFile(QString path);
+    void handleW3ExtractFinished(bool ok, QString error);
 
 private:
     Ui::MainWindow *ui;
@@ -164,12 +167,19 @@ private:
     void doLogin();
     void setupWebLinkProtoHandlers();
     void initTorrentDownload();
+    void startW3Download(int version);
+    void extractW3Archive();
+    void installQuickPatchIntoW3Target();
+    void finishW3Download(bool ok, QString message);
+    void resetW3DownloadUi();
 
     bool updateInProgress;
     QVector<QJsonObject> UPDATE_MAPS;
-    int w3LoaderCheckCounter = 1;
+    int w3LoaderCheckCounter = 2;
     int currentTorrentVersionDl=0;
-    QPushButton * currentTorrentDlButton=nullptr;
+    W3DownloadDialog * w3DlDialog=nullptr;
+    QString currentW3DlTarget;      //<user selected dir>/Warcraft_III_<version>
+    QString currentW3DlArchive;     //downloaded zip in appdata
 
     //QWebView *m_Mview;
 

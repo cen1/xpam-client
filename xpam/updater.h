@@ -63,7 +63,10 @@ public:
     static void renamePatchMpqForLatestW3(Config *config);
     static DlResponse simpleDl(QUrl url);
     static DlResponse getUpdateJson(Config * config);
-    
+
+    // Redirects W3PATH* instruction targets to this directory instead of the configured W3 paths
+    void setW3PathOverride(QString path);
+
 private:
     Config *        config;
     int             type;
@@ -81,6 +84,7 @@ private:
     int             latestVersion;
     bool            restartNeeded;
     bool            isW3Update;
+    QString         w3PathOverride;
 
     bool extractZip();
     bool instructions();

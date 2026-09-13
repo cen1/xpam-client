@@ -26,6 +26,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "torrentdownloader.h"
+#include "w3extractor.h"
+#include "w3downloaddialog.h"
+#include "QDir"
 #include "registry.h"
 #include "util.h"
 #include "logger.h"
@@ -66,6 +69,13 @@ QThread * tdlt=nullptr;
 
 Config * config=new Config();   //global config
 
+//Maps a UI widget version postfix ("126"/"128"/"129") to the matching W3 mode key
+static QString w3KeyForPostfix(const QString &pf) {
+    if (pf=="126") return config->W3_KEY_126;
+    if (pf=="128") return config->W3_KEY_128;
+    return config->W3_KEY_129;
+}
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -96,17 +106,25 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->checkBox_sound_10, SIGNAL(clicked(bool)), this, SLOT(handleCheckBoxGProxy(bool)));
     connect(ui->checkBox_sound_11, SIGNAL(clicked(bool)), this, SLOT(handleCheckBoxGProxy(bool)));
     connect(ui->checkBox_sound_12, SIGNAL(clicked(bool)), this, SLOT(handleCheckBoxGProxy(bool)));
-    connect(ui->checkBox_pfEnable_latest, SIGNAL(clicked(bool)), this, SLOT(handleCheckBoxGProxy(bool)));
+    connect(ui->checkBox_pfEnable_128, SIGNAL(clicked(bool)), this, SLOT(handleCheckBoxGProxy(bool)));
+    connect(ui->checkBox_pfEnable_129, SIGNAL(clicked(bool)), this, SLOT(handleCheckBoxGProxy(bool)));
 
     connect(ui->spinBox_autojoin_delay, SIGNAL(valueChanged(int)), this, SLOT(handleSpinBoxGProxy(int)));
     connect(ui->spinBox_autojoin_gndelay, SIGNAL(valueChanged(int)), this, SLOT(handleSpinBoxGProxy(int)));
 
-    // W3 options
-    connect(ui->checkBox_windowed_latest, SIGNAL(clicked(bool)), this, SLOT(handleCheckboxClient(bool)));
-    connect(ui->checkBox_opengl_latest, SIGNAL(clicked(bool)), this, SLOT(handleCheckboxClient(bool)));
-    connect(ui->checkBox_fullscreen_latest, SIGNAL(clicked(bool)), this, SLOT(handleCheckboxClient(bool)));
-    connect(ui->checkBox_gproxy_latest, SIGNAL(clicked(bool)), this, SLOT(handleCheckboxClient(bool)));
-    connect(ui->checkBox_pfEnable_latest, SIGNAL(clicked(bool)), this, SLOT(handleCheckboxClient(bool)));
+    // W3 options (1.28)
+    connect(ui->checkBox_windowed_128, SIGNAL(clicked(bool)), this, SLOT(handleCheckboxClient(bool)));
+    connect(ui->checkBox_opengl_128, SIGNAL(clicked(bool)), this, SLOT(handleCheckboxClient(bool)));
+    connect(ui->checkBox_fullscreen_128, SIGNAL(clicked(bool)), this, SLOT(handleCheckboxClient(bool)));
+    connect(ui->checkBox_gproxy_128, SIGNAL(clicked(bool)), this, SLOT(handleCheckboxClient(bool)));
+    connect(ui->checkBox_pfEnable_128, SIGNAL(clicked(bool)), this, SLOT(handleCheckboxClient(bool)));
+
+    // W3 options (1.29)
+    connect(ui->checkBox_windowed_129, SIGNAL(clicked(bool)), this, SLOT(handleCheckboxClient(bool)));
+    connect(ui->checkBox_opengl_129, SIGNAL(clicked(bool)), this, SLOT(handleCheckboxClient(bool)));
+    connect(ui->checkBox_fullscreen_129, SIGNAL(clicked(bool)), this, SLOT(handleCheckboxClient(bool)));
+    connect(ui->checkBox_gproxy_129, SIGNAL(clicked(bool)), this, SLOT(handleCheckboxClient(bool)));
+    connect(ui->checkBox_pfEnable_129, SIGNAL(clicked(bool)), this, SLOT(handleCheckboxClient(bool)));
 
     connect(ui->checkBox_windowed_126, SIGNAL(clicked(bool)), this, SLOT(handleCheckboxClient(bool)));
     connect(ui->checkBox_opengl_126, SIGNAL(clicked(bool)), this, SLOT(handleCheckboxClient(bool)));
@@ -144,12 +162,19 @@ MainWindow::MainWindow(QWidget *parent) :
     else {
         ui->label_War126Path->setText("NOT SET!");
     }
-    if (config->W3PATH_LATEST!="") {
-        ui->label_WarLatestPath->setText(config->W3PATH_LATEST);
-        ui->label_WarLatestPath->setToolTip(config->W3PATH_LATEST);
+    if (config->W3PATH_128!="") {
+        ui->label_War128Path->setText(config->W3PATH_128);
+        ui->label_War128Path->setToolTip(config->W3PATH_128);
     }
     else {
-        ui->label_WarLatestPath->setText("NOT SET!");
+        ui->label_War128Path->setText("NOT SET!");
+    }
+    if (config->W3PATH_129!="") {
+        ui->label_War129Path->setText(config->W3PATH_129);
+        ui->label_War129Path->setToolTip(config->W3PATH_129);
+    }
+    else {
+        ui->label_War129Path->setText("NOT SET!");
     }
 
     changeActiveMode(config->ACTIVE_MODE_KEY);
@@ -238,10 +263,13 @@ void MainWindow::postUpdate() {
         QString arg = QCoreApplication::arguments().at(1);
         Logger::log(arg, config);
         if ("xpam:126"==arg) {
-            on_pushButtonGWD_clicked();
+            on_pushButton126_clicked();
+        }
+        else if ("xpam:128"==arg){
+            on_pushButton128_clicked();
         }
         else if ("xpam:129"==arg){
-            on_pushButtonGWG_clicked();
+            on_pushButton129_clicked();
         }
     }
 }
@@ -254,8 +282,8 @@ void MainWindow::postUpdate() {
  * @return
  */
 bool MainWindow::checkModeAvailability(QString modeKey, bool shouldWarnUser) {
-    if ((modeKey == config->W3_KEY_126 && config->W3PATH_126 != "") ||
-        (modeKey == config->W3_KEY_LATEST && config->W3PATH_LATEST != "")) {
+    modeKey = config->getCorrectW3Key(modeKey);
+    if (config->getW3Path(modeKey) != "") {
         return true;
     }
     if (shouldWarnUser) {
@@ -265,12 +293,17 @@ bool MainWindow::checkModeAvailability(QString modeKey, bool shouldWarnUser) {
            "Please, select the Warcraft " + version + " directory path in order to use this gateway", QMessageBox::Ok);
         mb.exec();
 
-        // Go to W3 tab
+        // Go to W3 tab and focus the relevant version's path button
         ui->tabWidget->setCurrentIndex(2);
         if (modeKey == config->W3_KEY_126) {
+            ui->tabWidgetWarcraft->setCurrentWidget(ui->tabW3_126);
             ui->pushButton_war126Path->setFocus();
+        } else if (modeKey == config->W3_KEY_128) {
+            ui->tabWidgetWarcraft->setCurrentWidget(ui->tabW3_128);
+            ui->pushButton_war128Path->setFocus();
         } else {
-            ui->pushButton_warLatestPath->setFocus();
+            ui->tabWidgetWarcraft->setCurrentWidget(ui->tabW3_129);
+            ui->pushButton_war129Path->setFocus();
         }
     }
     return false;
@@ -292,7 +325,7 @@ MainWindow::~MainWindow()
 }
 
 //Dota gateway, Start w3 and gproxy, switch version as needed
-void MainWindow::on_pushButtonGWD_clicked()
+void MainWindow::on_pushButton126_clicked()
 {
     if (changeActiveMode(config->W3_KEY_126, true)) {
         //Start gproxy gateway
@@ -300,17 +333,40 @@ void MainWindow::on_pushButtonGWD_clicked()
     }
 }
 
-//GProxy gateway (WAR3_LATEST), Start w3 and optionally gproxy
-void MainWindow::on_pushButtonGWG_clicked()
+//GProxy gateway (1.28), Start w3 and optionally gproxy
+//1.28 uses the legacy registry "Battle.net Gateways" mechanism (same as 1.26).
+void MainWindow::on_pushButton128_clicked()
 {
-    if (changeActiveMode(config->W3_KEY_LATEST, true)) {
-        Registry::writeRealmsIni(config->W3PATH_LATEST, config->GPROXY_SERVER);
-        if (ui->checkBox_pfEnable_latest->isChecked()) {
+    if (changeActiveMode(config->W3_KEY_128, true)) {
+        if (ui->checkBox_pfEnable_128->isChecked()) {
+            //Auto port forward: game connects directly to Eurobattle.net, GProxy forwards behind the scenes
+            Registry::setGateways();
+            startW3AndGproxy(true);
+        }
+        else if (ui->checkBox_gproxy_128->isChecked()) {
+            //Regular GProxy relay: game connects to the local GProxy instance
+            Registry::setGproxyGateways();
+            startW3AndGproxy();
+        }
+        else {
+            Registry::setGateways();
+            runW3();
+        }
+    }
+}
+
+//GProxy gateway (1.29), Start w3 and optionally gproxy
+//1.29+ uses realms.ini + Misc\bnetGateway index instead of the registry list.
+void MainWindow::on_pushButton129_clicked()
+{
+    if (changeActiveMode(config->W3_KEY_129, true)) {
+        Registry::writeRealmsIni(config->W3PATH_129, config->GPROXY_SERVER);
+        if (ui->checkBox_pfEnable_129->isChecked()) {
             //Auto port forward: game connects directly to Eurobattle.net, GProxy forwards behind the scenes
             Registry::setBnetGatewayIndex(4);
             startW3AndGproxy(true);
         }
-        else if (ui->checkBox_gproxy_latest->isChecked()) {
+        else if (ui->checkBox_gproxy_129->isChecked()) {
             //Regular GProxy relay: game connects to the local GProxy instance
             Registry::setBnetGatewayIndex(5);
             startW3AndGproxy();
@@ -348,7 +404,7 @@ void MainWindow::startW3AndGproxy(bool ft) {
     qDebug("Starting W3 and GProxy ");
 
     //Hard WINAPI checks for w3 and gproxy running, all kind of problems if they are...
-    if (Util::isRunning(config->W3_EXENAME_LATEST) || Util::isRunning(config->W3_EXENAME_LATEST)) {
+    if (Util::isRunning("war3.exe") || Util::isRunning("Warcraft III.exe")) {
         qDebug() << "w3r";
         status("Warcraft III is already running");
         return;
@@ -388,7 +444,9 @@ void MainWindow::startW3AndGproxy(bool ft) {
     ui->preloaderLabel1->setMovie(movie);
     ui->preloaderLabel1->movie()->start();
 
-    //Set gproxy gateway as default (WC3 1.26 only; 1.29+ uses realms.ini, written in on_pushButtonGWG_clicked)
+    //Set gproxy gateway as default. Only needed here for 1.26 (DotA gateway calls
+    //startW3AndGproxy directly). 1.28 sets it in on_pushButton128_clicked, 1.29 uses
+    //realms.ini written in on_pushButton129_clicked.
     if (!ft && config->ACTIVE_MODE_KEY == config->W3_KEY_126) {
         Registry::setGproxyGateways();
     }
@@ -422,7 +480,7 @@ void MainWindow::runW3(bool ft) {
     if (ft) qDebug() << "ft enabled";
 
     //Again, hard WINAPI check
-    if (Util::isRunning(config->W3_EXENAME_LATEST) || Util::isRunning(config->W3_EXENAME_LATEST)) {
+    if (Util::isRunning("war3.exe") || Util::isRunning("Warcraft III.exe")) {
         status("Warcraft III is already running");
         return;
     }
@@ -445,9 +503,13 @@ void MainWindow::runW3(bool ft) {
         if (ui->checkBox_windowed_126->isChecked()) list << "-windowed";
         if (ui->checkBox_opengl_126->isChecked()) list << "-opengl";
     } else {
-        if (ui->checkBox_windowed_latest->isChecked()) list << "-windowed";
-        if (ui->checkBox_fullscreen_latest->isChecked()) list << "-nativefullscr";
-        if (ui->checkBox_opengl_latest->isChecked()) list << "-opengl";
+        QString pf = (config->ACTIVE_MODE_KEY == config->W3_KEY_128) ? "128" : "129";
+        QCheckBox *cbWindowed = findChild<QCheckBox *>("checkBox_windowed_" + pf);
+        QCheckBox *cbFullscreen = findChild<QCheckBox *>("checkBox_fullscreen_" + pf);
+        QCheckBox *cbOpengl = findChild<QCheckBox *>("checkBox_opengl_" + pf);
+        if (cbWindowed && cbWindowed->isChecked()) list << "-windowed";
+        if (cbFullscreen && cbFullscreen->isChecked()) list << "-nativefullscr";
+        if (cbOpengl && cbOpengl->isChecked()) list << "-opengl";
     }
 
     w3=new W3(w3dir, w3exe, list, config, ft);
@@ -558,12 +620,17 @@ bool MainWindow::checkW3Updates(){
         return true;
     }
 
-    if (config->W3PATH_LATEST == "") return false; //no latest w3 installed
+    //1.26 is a fixed repack and is not patched by the client
+    if (config->isW3126(config->ACTIVE_MODE_KEY)) return false;
+
+    if (config->getCurrentW3Path() == "") return false; //active w3 version not installed
+
+    QString neededVersion = config->getCurrentW3Version();
 
     //Either autopatch fails or there is no autopatch and W3 version is incorrect
     QString w3version = Patcher::getCurrentW3Version(config);
-    if (w3version!=config->W3_VERSION_LATEST) {
-        Logger::log("Warcraft needs to be updated, detected version "+w3version+", needed version "+config->W3_VERSION_LATEST, config);
+    if (w3version!=neededVersion) {
+        Logger::log("Warcraft needs to be updated, detected version "+w3version+", needed version "+neededVersion, config);
 
         //Figure out which incremental version we need to dl
         QRegularExpression rx("(\\.)");
@@ -580,7 +647,7 @@ bool MainWindow::checkW3Updates(){
         if (config->ASK_FOR_W3_FAST_UPDATE) {
             QMessageBox patchW3;
             patchW3.setWindowTitle("Patch W3?");
-            patchW3.setText("Detected version "+w3version+", needed version "+config->W3_VERSION_LATEST+". Click Yes to update automatically or No to update manually.");
+            patchW3.setText("Detected version "+w3version+", needed version "+neededVersion+". Click Yes to update automatically or No to update manually.");
             patchW3.setStandardButtons(QMessageBox::Yes);
             patchW3.addButton(QMessageBox::No);
             patchW3.setDefaultButton(QMessageBox::No);
@@ -634,6 +701,9 @@ void MainWindow::checkUpdates(){
 //Beta update
 void MainWindow::on_pushButtonBU_clicked()
 {
+    //Only one updater may run at a time, W3 download flow uses it for the quick patch
+    if (updateInProgress || this->currentTorrentVersionDl!=0) return;
+
     isStartupUpdate=false;
     ui->textBrowserUpdate->clear();
 
@@ -669,24 +739,28 @@ int MainWindow::checkMapUpdates() {
 
         QString mapName = mapEntry.value("name").toString();
         QString targetPathKey = mapEntry.value("targetPath").toString();
-        QString w3Path = (targetPathKey == "W3PATH_126") ? config->W3PATH_126 : config->W3PATH_LATEST;
+        bool is126 = (targetPathKey == "W3PATH_126");
 
-        // If dl path does not exist, skip
-        if (w3Path==config->W3PATH_LATEST && (config->W3PATH_LATEST=="" || !QDir(config->DOCMAPPATHDL).exists())) {
-            Logger::log("Map path does not exist, ignoring map download.", config);
-            return 0;
+        // Modern versions (1.28/1.29) store maps in the shared Documents folder.
+        QString dlPath;
+        if (is126) {
+            // If dl path does not exist, skip
+            if (config->W3PATH_126=="" || !QDir(config->MAPPATH_126DL).exists()) {
+                Logger::log("Map path does not exist, ignoring map download.", config);
+                return 0;
+            }
+            dlPath = config->MAPPATH_126DL;
         }
-        if (w3Path==config->W3PATH_126 && (config->W3PATH_126=="" || !QDir(config->MAPPATH_126DL).exists())) {
-            Logger::log("Map path does not exist, ignoring map download.", config);
-            return 0;
+        else {
+            bool anyModernInstalled = (config->W3PATH_128 != "" || config->W3PATH_129 != "");
+            if (!anyModernInstalled || !QDir(config->DOCMAPPATHDL).exists()) {
+                Logger::log("Map path does not exist, ignoring map download.", config);
+                return 0;
+            }
+            dlPath = config->DOCMAPPATHDL;
         }
 
         Logger::log("Checking if map exist: "+mapName, config);
-
-        QString dlPath = config->DOCMAPPATHDL;
-        if (w3Path==config->W3PATH_126) {
-            dlPath=config->MAPPATH_126DL;
-        }
 
         // Check main map file
         bool needsDownload = false;
@@ -756,16 +830,20 @@ int MainWindow::checkMapUpdates() {
     return 0;
 }
 
-// Checks if core files are missing from W3 installs
-// First counter pass is for latest, second is for 126
+// Checks if core files are missing from W3 installs.
+// Iterates all installed versions (counter 2->1.29, 1->1.28, 0->1.26).
 // Returns 1 if update is needed
 int MainWindow::checkW3LoaderFiles() {
 
     if (this->w3LoaderCheckCounter<0) return 0;
 
-    QString path = config->W3PATH_LATEST;
-    if (this->w3LoaderCheckCounter==0)
-        path = config->W3PATH_126;
+    QString modeKey;
+    switch (this->w3LoaderCheckCounter) {
+        case 2:  modeKey = config->W3_KEY_129; break;
+        case 1:  modeKey = config->W3_KEY_128; break;
+        default: modeKey = config->W3_KEY_126; break;
+    }
+    QString path = config->getW3Path(modeKey);
 
     this->w3LoaderCheckCounter--;
 
@@ -774,12 +852,31 @@ int MainWindow::checkW3LoaderFiles() {
         return 0;
     }
 
-    if (!QFile::exists(path+"\\w3l.exe") ||
-        !QFile::exists(path+"\\w3lh.dll") ||
-        !QFile::exists(path+"\\wl27.dll") ||
-        !QFile::exists(path+"\\libssl-3.dll") ||
-        !QFile::exists(path+"\\libcrypto-3.dll") ||
-        !QFile::exists(path+"\\zlib1.dll")) {
+    // Minimal loader files per version (matches the installer's quick_patch/<ver>_quick):
+    //  - 1.26: classic launcher + classic patch dll (which links openssl+zlib)
+    //  - 1.28: classic launcher + the self-contained wl27.dll (no openssl/zlib)
+    //  - 1.29: exe_29 launcher + the self-contained w3lh29.dll (no openssl/zlib)
+    QStringList required;
+    required << "w3l.exe";
+    if (config->usesRealmsIni(modeKey)) {
+        required << "w3lh29.dll";
+    }
+    else if (modeKey == config->W3_KEY_128) {
+        required << "wl27.dll";
+    }
+    else {
+        required << "w3lh.dll" << "libssl-3.dll" << "libcrypto-3.dll" << "zlib1.dll";
+    }
+
+    bool missing = false;
+    for (const QString &f : required) {
+        if (!QFile::exists(path + "\\" + f)) {
+            missing = true;
+            break;
+        }
+    }
+
+    if (missing) {
 
         Logger::log("Missing loader file detected", config);
 
@@ -787,8 +884,7 @@ int MainWindow::checkW3LoaderFiles() {
 
         lockTabs(ui->tabWidget->currentIndex());
 
-        QString jsonKey = "126_quick";
-        if (path == config->W3PATH_LATEST) jsonKey = "129_quick";
+        QString jsonKey = config->getQuickJsonKey(modeKey);
 
         updater=new Updater(config, 5, jsonKey);
         upt=new QThread();
@@ -838,7 +934,7 @@ void MainWindow::updateFinished(bool restartNeeded, bool ok, bool isUpToDate, bo
         if (!patchResult) {
             Patcher::cleanMetadata(config);
             QMessageBox msgBox;
-            msgBox.setText("Unable to do fast incremental update to W3 "+config->W3_VERSION_LATEST+".");
+            msgBox.setText("Unable to do fast incremental update to W3 "+config->getCurrentW3Version()+".");
             msgBox.setStandardButtons(QMessageBox::Yes);
             if(msgBox.exec() == QMessageBox::Yes){
                 //Execute manual update
@@ -867,7 +963,7 @@ void MainWindow::updateFinished(bool restartNeeded, bool ok, bool isUpToDate, bo
         status("Could not find an incremental W3 patch, full upgrade needed.");
         Logger::log("Could not find an incremental W3 patch, full upgrade needed.", config);
         QMessageBox msgBox;
-        msgBox.setText("Unable to do fast incremental update to W3 "+config->W3_VERSION_LATEST+".");
+        msgBox.setText("Unable to do fast incremental update to W3 "+config->getCurrentW3Version()+".");
         msgBox.setStandardButtons(QMessageBox::Yes);
         if(msgBox.exec() == QMessageBox::Yes){
             //Execute manual update
@@ -888,6 +984,17 @@ void MainWindow::updateFinished(bool restartNeeded, bool ok, bool isUpToDate, bo
         if (checkMapUpdates()==0) {
             ui->tabWidget->setCurrentIndex(0);
             postUpdate();
+        }
+    }
+    else if (type==6) {
+        if (!ok) {
+            finishW3Download(false, "Warcraft III was extracted, but installing the loader files failed. Check the client log for details.");
+        }
+        else if (isUpToDate) {
+            finishW3Download(false, "Warcraft III was extracted, but no loader patch is published for this version.");
+        }
+        else {
+            finishW3Download(true, "");
         }
     }
     else if (type==5 && ok) {
@@ -988,7 +1095,9 @@ void MainWindow::handleCheckboxXpam(bool checked)
 //Handle GProxy checkbox options
 void MainWindow::handleCheckBoxGProxy(bool checked)
 {
-    QString option = Util::fromCamelCase(QObject::sender()->objectName().remove("checkBox_").remove("_latest"));
+    QString name = QObject::sender()->objectName().remove("checkBox_");
+    name = name.remove("_129").remove("_128").remove("_126").remove("_latest");
+    QString option = Util::fromCamelCase(name);
     QString value = "0";
     if (checked) value="1";
     QSettings settings(config->GPROXY_CONFIG_PATH, QSettings::IniFormat);
@@ -1012,27 +1121,33 @@ void MainWindow::handleCheckboxClient(bool checked)
     if (tokens.size() != 3) {
         return;
     }
-    // checkBox_[option_name]_[126/latest]
+    // checkBox_[option_name]_[126/128/129]
     QString option = tokens[1];
-    QString mode_key = tokens[2] == "126" ? config->W3_KEY_126 : config->W3_KEY_LATEST;
-    if (mode_key == config->W3_KEY_LATEST) {
-        // fullscreen/windowed handling for LATEST version
-        if (QObject::sender()==ui->checkBox_fullscreen_latest && ui->checkBox_windowed_latest->isChecked()) {
-            ui->checkBox_windowed_latest->setChecked(false);
-            settings.setValue(config->W3_KEY_LATEST + "/windowed", "0");
+    QString postfix = tokens[2];
+    QString mode_key = w3KeyForPostfix(postfix);
+    if (mode_key != config->W3_KEY_126) {
+        // fullscreen/windowed and gproxy/pfEnable are mutually exclusive on modern versions
+        QCheckBox *cbFull = findChild<QCheckBox *>("checkBox_fullscreen_" + postfix);
+        QCheckBox *cbWin  = findChild<QCheckBox *>("checkBox_windowed_" + postfix);
+        QCheckBox *cbGp   = findChild<QCheckBox *>("checkBox_gproxy_" + postfix);
+        QCheckBox *cbPf   = findChild<QCheckBox *>("checkBox_pfEnable_" + postfix);
+
+        if (QObject::sender()==cbFull && cbWin && cbWin->isChecked()) {
+            cbWin->setChecked(false);
+            settings.setValue(mode_key + "/windowed", "0");
         }
-        if (QObject::sender()==ui->checkBox_windowed_latest && ui->checkBox_fullscreen_latest->isChecked()) {
-            ui->checkBox_fullscreen_latest->setChecked(false);
-            settings.setValue(config->W3_KEY_LATEST + "/fullscreen", "0");
+        if (QObject::sender()==cbWin && cbFull && cbFull->isChecked()) {
+            cbFull->setChecked(false);
+            settings.setValue(mode_key + "/fullscreen", "0");
         }
         //Pf and gproxy exclusivity
-        if (QObject::sender()==ui->checkBox_pfEnable_latest && ui->checkBox_gproxy_latest->isChecked()) {
-            ui->checkBox_gproxy_latest->setChecked(false);
-            settings.setValue(config->W3_KEY_LATEST + "/gproxy", "0");
+        if (QObject::sender()==cbPf && cbGp && cbGp->isChecked()) {
+            cbGp->setChecked(false);
+            settings.setValue(mode_key + "/gproxy", "0");
         }
-        if (QObject::sender()==ui->checkBox_gproxy_latest && ui->checkBox_pfEnable_latest->isChecked()) {
-            ui->checkBox_pfEnable_latest->setChecked(false);
-            settings.setValue(config->W3_KEY_LATEST + "/pfEnable", "0");
+        if (QObject::sender()==cbGp && cbPf && cbPf->isChecked()) {
+            cbPf->setChecked(false);
+            settings.setValue(mode_key + "/pfEnable", "0");
         }
     }
     if (mode_key!=config->W3_KEY_126 || option!="gproxy") {
@@ -1072,7 +1187,7 @@ void MainWindow::handleCheckboxW3l(bool checked)
         return;
     }
 
-    QString configPath = tokens[2] == "126" ? config->W3l_CONFIG_PATH_126 : config->W3l_CONFIG_PATH_LATEST;
+    QString configPath = config->getW3lConfigPath(w3KeyForPostfix(tokens[2]));
 
     QSettings settings(configPath, QSettings::IniFormat);
     QString option = tokens[3];
@@ -1110,37 +1225,44 @@ void MainWindow::initGproxyOptions() {
 //Init client checkboxes according to ini file
 void MainWindow::initClientOptions() {
     QSettings settings(config->XPAM_CONFIG_PATH, QSettings::IniFormat);
-    QVector<QString> checkbox_postfixes = {"126", "latest"};
+    QVector<QString> checkbox_postfixes = {"126", "128", "129"};
 
     foreach (const QString &postfix, checkbox_postfixes) {
         foreach (const QString &option_name, config->W3_OPTIONS) {
-            qDebug() << "checkBox_"+option_name + "_" + postfix;
             QCheckBox * find = this->findChild<QCheckBox *>("checkBox_"+option_name + "_" + postfix);
             if (find != 0) {
-                QString mode_key = postfix == "126" ? config->W3_KEY_126 : config->W3_KEY_LATEST;
+                QString mode_key = w3KeyForPostfix(postfix);
                 find->setChecked(settings.value(mode_key + "/" + option_name, "0") == "1" ? true : false);
             }
         }
     }
 
-   //Can't have windowed and fullscreen at the same time
-   if (ui->checkBox_fullscreen_latest->isChecked() && ui->checkBox_windowed_latest->isChecked()) {
-       ui->checkBox_fullscreen_latest->setChecked(true);
-       ui->checkBox_windowed_latest->setChecked(false);
-       settings.setValue(config->W3_KEY_LATEST + "/windowed", "0");
+   //Can't have windowed and fullscreen at the same time; pf and gproxy are exclusive.
+   //Applies to the modern versions (1.28, 1.29).
+   const QStringList modernPostfixes = {"128", "129"};
+   foreach (const QString &postfix, modernPostfixes) {
+       QString mode_key = w3KeyForPostfix(postfix);
+       QCheckBox *cbFull = findChild<QCheckBox *>("checkBox_fullscreen_" + postfix);
+       QCheckBox *cbWin  = findChild<QCheckBox *>("checkBox_windowed_" + postfix);
+       QCheckBox *cbGp   = findChild<QCheckBox *>("checkBox_gproxy_" + postfix);
+       QCheckBox *cbPf   = findChild<QCheckBox *>("checkBox_pfEnable_" + postfix);
+
+       if (cbFull && cbWin && cbFull->isChecked() && cbWin->isChecked()) {
+           cbFull->setChecked(true);
+           cbWin->setChecked(false);
+           settings.setValue(mode_key + "/windowed", "0");
+       }
+       if (cbGp && cbGp->isChecked() && cbPf) {
+           cbPf->setChecked(false);
+       }
+       if (cbPf && cbPf->isChecked() && cbGp) {
+           cbGp->setChecked(false);
+       }
    }
 
    //126 gateway always uses gproxy
    if (!ui->checkBox_gproxy_126->isChecked()) {
        ui->checkBox_gproxy_126->setChecked(true);
-   }
-
-   //Pf and gproxy exclusivity
-   if (ui->checkBox_gproxy_latest->isChecked()) {
-       ui->checkBox_pfEnable_latest->setChecked(false);
-   }
-   if (ui->checkBox_pfEnable_latest->isChecked()) {
-       ui->checkBox_gproxy_latest->setChecked(false);
    }
 }
 
@@ -1251,26 +1373,17 @@ void MainWindow::setNewW3PathSetting(QString modeKey, QSettings *settings, QStri
     newPath = newPath.replace(QChar('\\'), QChar('/'));
 
     settings->setValue(modeKey + "/path", newPath);
+    modeKey = config->getCorrectW3Key(modeKey);
     if (modeKey == config->W3_KEY_126) {
         ui->label_War126Path->setText(newPath);
         config->W3PATH_126 = newPath;
+    } else if (modeKey == config->W3_KEY_128) {
+        ui->label_War128Path->setText(newPath);
+        config->W3PATH_128 = newPath;
     } else {
-        ui->label_WarLatestPath->setText(newPath);
-        config->W3PATH_LATEST = newPath;
+        ui->label_War129Path->setText(newPath);
+        config->W3PATH_129 = newPath;
     }
-}
-
-//Set new W3 path for latest
-void MainWindow::on_pushButton_warLatestPath_clicked()
-{
-    showW3PathDialog(config->W3_KEY_LATEST);
-}
-
-//Clear path for W3 latest
-void MainWindow::on_pushButton_warLatestClear_clicked()
-{
-    QSettings settings(config->XPAM_CONFIG_PATH, QSettings::IniFormat);
-    setNewW3PathSetting(config->W3_KEY_LATEST, &settings, "");
 }
 
 //Set new W3 path for 1.26
@@ -1284,6 +1397,32 @@ void MainWindow::on_pushButton_war126Clear_clicked()
 {
     QSettings settings(config->XPAM_CONFIG_PATH, QSettings::IniFormat);
     setNewW3PathSetting(config->W3_KEY_126, &settings, "");
+}
+
+//Set new W3 path for 1.28
+void MainWindow::on_pushButton_war128Path_clicked()
+{
+    showW3PathDialog(config->W3_KEY_128);
+}
+
+//Clear path for W3 1.28
+void MainWindow::on_pushButton_war128Clear_clicked()
+{
+    QSettings settings(config->XPAM_CONFIG_PATH, QSettings::IniFormat);
+    setNewW3PathSetting(config->W3_KEY_128, &settings, "");
+}
+
+//Set new W3 path for 1.29
+void MainWindow::on_pushButton_war129Path_clicked()
+{
+    showW3PathDialog(config->W3_KEY_129);
+}
+
+//Clear path for W3 1.29
+void MainWindow::on_pushButton_war129Clear_clicked()
+{
+    QSettings settings(config->XPAM_CONFIG_PATH, QSettings::IniFormat);
+    setNewW3PathSetting(config->W3_KEY_129, &settings, "");
 }
 
 //Diff W3 update
@@ -1321,7 +1460,7 @@ void MainWindow::diffW3Update(QString version) {
 
 bool MainWindow::checkW3PathUnicode() {
     bool isUnicode = false;
-    QString w3path = config->W3PATH_LATEST;
+    QString w3path = config->W3PATH_129;
 
     if (w3path != "") {
         for(int i = 0; i < w3path.size(); i++) {
@@ -1332,7 +1471,7 @@ bool MainWindow::checkW3PathUnicode() {
         }
 
         //Check if w3 path contains .exe
-        QFile f(config->W3PATH_LATEST+"\\"+config->W3_EXENAME_LATEST);
+        QFile f(config->W3PATH_129+"\\"+config->W3_EXENAME_129);
         if (!f.exists()) {
 
             // Try to set from w3dir registry
@@ -1340,13 +1479,13 @@ bool MainWindow::checkW3PathUnicode() {
             QString wp = r.getW3dir();
             if (wp!="") {
                 QSettings settings(config->XPAM_CONFIG_PATH, QSettings::IniFormat);
-                this->setNewW3PathSetting(config->W3_KEY_LATEST, &settings, wp);
+                this->setNewW3PathSetting(config->W3_KEY_129, &settings, wp);
             }
 
-            QFile f2(config->W3PATH_LATEST+"\\"+config->W3_EXENAME_LATEST);
+            QFile f2(config->W3PATH_129+"\\"+config->W3_EXENAME_129);
             if (!f2.exists()) {
                 QMessageBox mb(QMessageBox::Critical, "W3 path alert",
-                   "Your W3 path is missing 'Warcraft III.exe' which probably means the path is incorrect.",
+                   "Your W3 1.29.2 path is missing '"+config->W3_EXENAME_129+"' which probably means the path is incorrect.\n\nPath: "+config->W3PATH_129,
                    QMessageBox::Ok);
                  mb.exec();
                  return false;
@@ -1598,33 +1737,61 @@ void MainWindow::showServerStatus() {
     }
 }
 
-void MainWindow::on_pushButton_download_latest_clicked()
-{
-    if (this->currentTorrentVersionDl==0) {
-        this->currentTorrentVersionDl = 129;
-        this->currentTorrentDlButton = ui->pushButton_download_latest;
-        ui->pushButton_download_126->setDisabled(true);
-        this->initTorrentDownload();
-    }
-    else {
-        //cancel
-        qDebug() << "cancel";
-        emit cancelTorrentDownload();
-    }
-}
-
 void MainWindow::on_pushButton_download_126_clicked()
 {
-    if (this->currentTorrentVersionDl==0) {
-        this->currentTorrentVersionDl = 126;
-        this->currentTorrentDlButton = ui->pushButton_download_126;
-        ui->pushButton_download_latest->setDisabled(true);
-        this->initTorrentDownload();
+    startW3Download(126);
+}
+
+void MainWindow::on_pushButton_download_128_clicked()
+{
+    startW3Download(128);
+}
+
+void MainWindow::on_pushButton_download_129_clicked()
+{
+    startW3Download(129);
+}
+
+//Download -> extract -> quick patch for the given version, blocking on a modal until everything finishes
+void MainWindow::startW3Download(int version)
+{
+    if (this->currentTorrentVersionDl!=0) return;
+
+    QString shortVersion = config->getW3ShortVersion(w3KeyForPostfix(QString::number(version)));
+    QString baseDir = QFileDialog::getExistingDirectory(this, "Select where to install Warcraft III "+shortVersion);
+    if (baseDir.isEmpty()) {  //On Cancel it returns empty
+        return;
     }
-    else {
-        //cancel
-        emit cancelTorrentDownload();
+    QString target = QDir::cleanPath(baseDir+"/Warcraft_III_"+shortVersion);
+
+    QMessageBox confirm(this);
+    confirm.setIcon(QMessageBox::Question);
+    confirm.setWindowTitle("Install Warcraft III "+shortVersion);
+    confirm.setText("Warcraft III "+shortVersion+" will be downloaded and installed to:\n\n"+QDir::toNativeSeparators(target));
+    QDir targetDir(target);
+    if (targetDir.exists() && !targetDir.isEmpty()) {
+        confirm.setInformativeText("This folder already exists and is not empty. Existing files will be overwritten.");
     }
+    QPushButton *continueButton = confirm.addButton("Continue", QMessageBox::AcceptRole);
+    confirm.addButton(QMessageBox::Cancel);
+    confirm.setDefaultButton(continueButton);
+    confirm.exec();
+    if (confirm.clickedButton() != continueButton) {
+        return;
+    }
+
+    Logger::log("W3 "+shortVersion+" download target: "+target, config);
+
+    this->currentW3DlTarget = target;
+    this->currentW3DlArchive.clear();
+    this->currentTorrentVersionDl = version;
+
+    this->w3DlDialog = new W3DownloadDialog(this);
+    connect(this->w3DlDialog, SIGNAL(cancelRequested()), this, SIGNAL(cancelTorrentDownload()));
+    this->w3DlDialog->setStage("Downloading Warcraft III "+shortVersion+" to "+QDir::toNativeSeparators(config->APPDATA)+"...", true);
+    this->w3DlDialog->show();
+
+    this->initTorrentDownload();
 }
 
 void MainWindow::initTorrentDownload()
@@ -1633,87 +1800,192 @@ void MainWindow::initTorrentDownload()
     if (this->currentTorrentVersionDl == 126) {
         magnetLink=config->W3_MAGNET_126;
     }
+    else if (this->currentTorrentVersionDl == 128) {
+        magnetLink=config->W3_MAGNET_128;
+    }
 
     tdl=new TorrentDownloader(magnetLink, config->APPDATA);
     tdlt=new QThread();
     tdl->moveToThread(tdlt);
 
-    connect(tdl, SIGNAL(progress(int)), this, SLOT(handleTorrentProgress(int)));
-    connect(tdl, SIGNAL(working(bool)), this, SLOT(handleTorrentWorking(bool)));
+    connect(tdl, SIGNAL(progress(int)), this->w3DlDialog, SLOT(setProgress(int)));
+    connect(tdl, SIGNAL(downloadedFile(QString)), this, SLOT(handleTorrentFile(QString)));
     connect(tdl, SIGNAL(finished(int)), this, SLOT(handleTorrentFinished(int)));
     connect(tdl, SIGNAL(sendLine(QString)), this, SLOT(logUpdate(QString)));
     connect(tdlt, SIGNAL(started()), tdl, SLOT(download()));
     connect(this, SIGNAL(cancelTorrentDownload()), tdl, SLOT(cancelDownload()));
 
-    this->currentTorrentDlButton->setStyleSheet("color: green");
-
     tdlt->start();
 }
 
-void MainWindow::handleTorrentWorking(bool finished)
+void MainWindow::handleTorrentFile(QString path)
 {
-    if (finished) return;
-
-    QString currentText = this->currentTorrentDlButton->text();
-    if (currentText.endsWith("...")) {
-        currentText.remove(currentText.length()-3, 3);
-        this->currentTorrentDlButton->setText(currentText+".  ");
-    }
-    else if (currentText.endsWith("Download")) {
-        this->currentTorrentDlButton->setText(currentText+".  ");
-    }
-    else if (currentText.endsWith(".. ")) {
-        currentText.remove(currentText.length()-3, 3);
-        this->currentTorrentDlButton->setText(currentText+"...");
-    }
-    else if (currentText.endsWith(".  ")) {
-        currentText.remove(currentText.length()-3, 3);
-        this->currentTorrentDlButton->setText(currentText+".. ");
-    }
-}
-
-void MainWindow::handleTorrentProgress(int percent)
-{
-    QString currentText = this->currentTorrentDlButton->text();
-    if (!currentText.startsWith("(")) {
-        currentText = "(0%) "+currentText;
-    }
-    QRegularExpression pattern("\\((\\d+%)\\)");
-    QString resultString = currentText.replace(pattern, "("+QString::number(percent)+"%)");
-    this->currentTorrentDlButton->setText(resultString);
+    Logger::log("Torrent downloaded file: "+path, config);
+    this->currentW3DlArchive = path;
 }
 
 void MainWindow::handleTorrentFinished(int code)
 {
-    if (code==2) {
-        status("Download cancelled");
-    }
-    else if (code>0) {
-        status("Download failed with error code "+QString::number(code));
-    }
-    this->currentTorrentVersionDl = 0;
+    //Stale finish for a downloader that was already cleaned up
+    if (tdl==nullptr || QObject::sender()!=tdl) return;
 
-    this->currentTorrentDlButton->setStyleSheet("color: white");
-    this->currentTorrentDlButton->setText("Download");
-    ui->pushButton_download_126->setDisabled(false);
-    ui->pushButton_download_latest->setDisabled(false);
     tdlt->quit();
     tdl->deleteLater();
     tdlt->deleteLater();
+    tdl=nullptr;
+    tdlt=nullptr;
 
-    if (code==0) {
-        QMessageBox msgBox;
-        msgBox.setIcon(QMessageBox::Information);
-        msgBox.setText("Download completed to %appdata% folder");
-        msgBox.setInformativeText("Unpack the downloaded zip to a location of your choice (for example: D:/mygames/Warcraft III 1.2X), then set the game path location to that folder");
-        QPushButton *openButton = msgBox.addButton("Open download location", QMessageBox::AcceptRole);
-        msgBox.addButton("Close", QMessageBox::ActionRole);
-
-        msgBox.exec();
-
-        if (msgBox.clickedButton() == openButton) {
-            QDesktopServices::openUrl(QUrl::fromLocalFile(config->APPDATA));
+    if (code!=0) {
+        if (code==2) {
+            status("Download cancelled");
         }
+        else {
+            status("Download failed with error code "+QString::number(code));
+        }
+        resetW3DownloadUi();
+        return;
+    }
+
+    extractW3Archive();
+}
+
+void MainWindow::extractW3Archive()
+{
+    if (this->currentW3DlArchive.isEmpty() || !QFile::exists(this->currentW3DlArchive)) {
+        finishW3Download(false, "Download finished but the archive could not be found in "+config->APPDATA);
+        return;
+    }
+
+    Logger::log("Extracting "+this->currentW3DlArchive+" to "+this->currentW3DlTarget, config);
+    status("Extracting Warcraft III to "+this->currentW3DlTarget);
+
+    //Extraction can't be cancelled
+    this->w3DlDialog->setStage("Extracting Warcraft III to "+QDir::toNativeSeparators(this->currentW3DlTarget)+"...", false);
+
+    W3Extractor *extractor = new W3Extractor(this->currentW3DlArchive, this->currentW3DlTarget);
+    QThread *extractorThread = new QThread();
+    extractor->moveToThread(extractorThread);
+
+    connect(extractorThread, SIGNAL(started()), extractor, SLOT(extract()));
+    connect(extractor, SIGNAL(progress(int)), this->w3DlDialog, SLOT(setProgress(int)));
+    connect(extractor, SIGNAL(sendLine(QString)), this, SLOT(logUpdate(QString)));
+    connect(extractor, SIGNAL(finished(bool, QString)), this, SLOT(handleW3ExtractFinished(bool, QString)));
+
+    connect(extractor, SIGNAL(finished(bool, QString)), extractorThread, SLOT(quit()));
+    connect(extractorThread, SIGNAL(finished()), extractor, SLOT(deleteLater()));
+    connect(extractorThread, SIGNAL(finished()), extractorThread, SLOT(deleteLater()));
+
+    extractorThread->start();
+}
+
+void MainWindow::handleW3ExtractFinished(bool ok, QString error)
+{
+    if (!ok) {
+        Logger::log("W3 extraction failed: "+error, config);
+        finishW3Download(false, "Extracting Warcraft III failed: "+error);
+        return;
+    }
+    Logger::log("W3 extraction finished", config);
+    installQuickPatchIntoW3Target();
+}
+
+//Fetches the per-version quick loader patch from update.json into the freshly extracted W3
+void MainWindow::installQuickPatchIntoW3Target()
+{
+    if (updateInProgress) {
+        finishW3Download(false, "Warcraft III was extracted, but the loader files could not be installed because another update is running. They will be installed on next client start once the game path is set.");
+        return;
+    }
+
+    this->w3DlDialog->setStage("Installing loader files...", false);
+    status("Installing loader files into "+this->currentW3DlTarget);
+
+    QString modeKey = w3KeyForPostfix(QString::number(this->currentTorrentVersionDl));
+
+    isStartupUpdate=false;
+    updater=new Updater(config, 6, config->getQuickJsonKey(modeKey));
+    updater->setW3PathOverride(this->currentW3DlTarget);
+    upt=new QThread();
+    updater->moveToThread(upt);
+
+    QObject::connect(upt, SIGNAL(started()), updater, SLOT(startUpdate()));
+    QObject::connect(updater, SIGNAL(updateFinished(bool, bool, bool, bool, int)), this, SLOT(updateFinished(bool, bool, bool, bool, int)));
+    QObject::connect(updater, SIGNAL(sendLine(QString)), this, SLOT(logUpdate(QString)));
+    QObject::connect(updater, SIGNAL(sendLine(QString)), ui->textBrowserUpdate, SLOT(append(QString)), Qt::QueuedConnection);
+    QObject::connect(updater, SIGNAL(modifyLastLine(QString)), this, SLOT(modifyLastLineSlot(QString)));
+
+    QObject::connect(updater, SIGNAL(updateFinished(bool, bool, bool, bool, int)), upt, SLOT(quit()));
+    QObject::connect(updater, SIGNAL(updateFinished(bool, bool, bool, bool, int)), updater, SLOT(deleteLater()));
+    QObject::connect(upt, SIGNAL(finished()), upt, SLOT(deleteLater()));
+
+    updateInProgress=true;
+
+    upt->start();
+}
+
+void MainWindow::finishW3Download(bool ok, QString message)
+{
+    QString modeKey = w3KeyForPostfix(QString::number(this->currentTorrentVersionDl));
+    QString shortVersion = config->getW3ShortVersion(modeKey);
+    QString target = this->currentW3DlTarget;
+    QString archive = this->currentW3DlArchive;
+
+    resetW3DownloadUi();
+
+    if (ok) {
+        //Always switch to the fresh install, replacing any previously set path
+        QSettings settings(config->XPAM_CONFIG_PATH, QSettings::IniFormat);
+        setNewW3PathSetting(modeKey, &settings, target);
+
+        Logger::log("W3 "+shortVersion+" installed to "+target+", game path set", config);
+        status("Warcraft III "+shortVersion+" installed");
+
+        QMessageBox msgBox(this);
+        msgBox.setIcon(QMessageBox::Information);
+        msgBox.setWindowTitle("Warcraft III installed");
+        msgBox.setText("Warcraft III "+shortVersion+" was successfully installed to "+target+" and set as your game path.");
+        msgBox.setInformativeText("Do you want to delete the temporarily downloaded archive?\n"+QDir::toNativeSeparators(archive));
+        msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+        msgBox.setDefaultButton(QMessageBox::Yes);
+
+        if (msgBox.exec() == QMessageBox::Yes) {
+            if (QFile::remove(archive)) {
+                Logger::log("Deleted "+archive, config);
+            }
+            else {
+                Logger::log("Could not delete "+archive, config);
+                status("Could not delete "+QDir::toNativeSeparators(archive));
+            }
+        }
+        return;
+    }
+
+    Logger::log(message, config);
+    status(message);
+
+    QMessageBox msgBox(this);
+    msgBox.setIcon(QMessageBox::Warning);
+    msgBox.setText(message);
+    QPushButton *openButton = msgBox.addButton("Open folder", QMessageBox::ActionRole);
+    msgBox.addButton("Close", QMessageBox::RejectRole);
+
+    msgBox.exec();
+
+    if (msgBox.clickedButton() == openButton) {
+        QDesktopServices::openUrl(QUrl::fromLocalFile(QDir(target).exists() ? target : config->APPDATA));
+    }
+}
+
+void MainWindow::resetW3DownloadUi()
+{
+    this->currentTorrentVersionDl = 0;
+    this->currentW3DlTarget.clear();
+    this->currentW3DlArchive.clear();
+
+    if (this->w3DlDialog) {
+        this->w3DlDialog->finish();
+        this->w3DlDialog->deleteLater();
+        this->w3DlDialog=nullptr;
     }
 }
 

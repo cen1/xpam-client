@@ -66,6 +66,8 @@ QByteArray DlResponse::getData() {
  * 2 = full w3 upate
  * 3 = beta
  * 4 = map
+ * 5 = quick loader patch
+ * 6 = quick loader patch into a freshly extracted W3 (see setW3PathOverride)
  */
 Updater::Updater(Config * c, int t, QString w) {
     config=c;
@@ -81,6 +83,10 @@ Updater::~Updater() {
 
 }
 
+void Updater::setW3PathOverride(QString path) {
+    w3PathOverride = path;
+}
+
 void Updater::startUpdate() {
     /*
      * XPAM CLIENT UPDATE PROCEDURE - DOCUMENTATION
@@ -94,7 +100,7 @@ void Updater::startUpdate() {
      * 6. Download and extract the archive to %appdata%/Eurobattle.net
      * 7. Open instructions.txt and execute the commands
      * 8. COMMANDS
-     *    MOVE <from> <to EUROPATH | W3PATH | W3PATH_126 | MAPPATH | MAPPATH_126> //always overwrite
+     *    MOVE <from> <to EUROPATH | W3PATH | W3PATH_126 | W3PATH_128 | W3PATH_129 | MAPPATH | MAPPATH_126> //always overwrite (W3PATH = active version's install)
      *    DELETE <filename> <location EUROPATH | W3PATH | MAPPATH>                //deletes a file
      *
      * 9. Cleanup %appdata$ after update
@@ -297,7 +303,7 @@ bool Updater::instructions() {
     /*
      * MOVE, DELETE or ICONS
      * Filename
-     * EUROPATH, GPROXYPATH, SOUNDPATH, W3PATH, W3PATH_126, MAPPATH, MAPPATH_126
+     * EUROPATH, GPROXYPATH, SOUNDPATH, W3PATH, W3PATH_126, W3PATH_128, W3PATH_129, MAPPATH, MAPPATH_126
     */
     QFile inst(config->APPDATA+"\\instructions.txt");
     if (inst.open(QIODevice::ReadOnly)) {
@@ -312,13 +318,17 @@ bool Updater::instructions() {
             QString dstPath;
             if      (l.last()=="EUROPATH") dstPath=config->EUROPATH;
             else if (l.last()=="GPROXYPATH") dstPath=config->GPROXYPATH;
-            else if (l.last()=="W3PATH") dstPath=config->W3PATH_LATEST;
+            else if (l.last()=="W3PATH") dstPath=config->getCurrentW3Path();
             else if (l.last()=="W3PATH_126") dstPath=config->W3PATH_126;
+            else if (l.last()=="W3PATH_128") dstPath=config->W3PATH_128;
+            else if (l.last()=="W3PATH_129") dstPath=config->W3PATH_129;
             else if (l.last()=="MAPPATH") dstPath=config->DOCMAPPATHDL;
             else if (l.last()=="MAPPATH_126") dstPath=config->MAPPATH_126DL;
             else if (l.last()=="SOUNDPATH") dstPath=config->SOUNDPATH;
             else if (l.last()=="APPDATA_BNET_CACHE") dstPath=config->APPDATA_BNET_CACHE;
             else if (l.last()=="APPDATA_BNET_DOWNLOADS") dstPath=config->APPDATA_BNET_DOWNLOADS;
+
+            if (!w3PathOverride.isEmpty() && l.last().startsWith("W3PATH")) dstPath=w3PathOverride;
 
             if (l[0]=="MOVE") {
 
@@ -393,7 +403,7 @@ bool Updater::updateMPQ(QString w3path)
 
             if (l[0]=="O") {
                 if (mpq.open(w3path+"\\"+l[1])==false) {
-                    emit sendLine(Util::getLastErrorMsg()+config->W3PATH_LATEST+"\\"+l[1]);
+                    emit sendLine(Util::getLastErrorMsg()+config->getCurrentW3Path()+"\\"+l[1]);
                     return false;
                 }
             }
@@ -532,10 +542,12 @@ void Updater::receiveFinishdl() {
 
         if (!extractZip()){
             emit sendLine("Extraction process failed. Aborting update");
+            emit updateFinished(restartNeeded, false, false, false, type);
             return;
         }
         if (!instructions()){
             emit sendLine("Instruction process failed. Aborting update");
+            emit updateFinished(restartNeeded, false, false, false, type);
             return;
         }
         //Change registry version
@@ -627,7 +639,7 @@ int Updater::setCurrentPlusOneJson() {
             return 2;
         }
     }
-    else if (type==5) {
+    else if (type==5 || type==6) {
         //Loader quick patch
         emit sendLine("Requested patch: loader fix "+jsonKey);
 
@@ -637,8 +649,11 @@ int Updater::setCurrentPlusOneJson() {
             real = value.toObject();
         }
         else {
-            emit sendLine("Could not find quick loader patch JSON key.");
-            return 2;
+            //No quick loader patch published for this version (e.g. a new/experimental
+            //W3 version). Treat it as "nothing to do" and continue gracefully instead
+            //of failing the whole updater.
+            emit sendLine("No quick loader patch available for "+jsonKey+", skipping.");
+            return 0;
         }
     }
     else {
@@ -729,9 +744,9 @@ QString Updater::moveToDocuments(Config *config) {
     QDir dir;
 
     for (int i = 0; i < folders.size(); ++i) {
-        boolean moved = dir.rename(config->W3PATH_LATEST+"\\"+folders.at(i), config->DOCPATH+"/"+folders.at(i));
+        boolean moved = dir.rename(config->getCurrentW3Path()+"\\"+folders.at(i), config->DOCPATH+"/"+folders.at(i));
 
-        log+="<br />"+config->W3PATH_LATEST+"\\"+folders.at(i)+" -> "+config->DOCPATH+"/"+folders.at(i);
+        log+="<br />"+config->getCurrentW3Path()+"\\"+folders.at(i)+" -> "+config->DOCPATH+"/"+folders.at(i);
         if (moved) {
             log+=" (MOVED)";
         }
@@ -748,29 +763,35 @@ QString Updater::moveToDocuments(Config *config) {
 }
 
 void Updater::replaceCDKeys(Config *config) {
-       QFile roc(config->W3PATH_LATEST+"\\roc.w3k");
+       QFile roc(config->getCurrentW3Path()+"\\roc.w3k");
        if (!roc.exists()) {
-           QFile rocNew(config->W3PATH_LATEST+"\\roc.w3k.new");
+           QFile rocNew(config->getCurrentW3Path()+"\\roc.w3k.new");
            if (rocNew.exists()) {
-               rocNew.rename(config->W3PATH_LATEST+"\\roc.w3k");
+               rocNew.rename(config->getCurrentW3Path()+"\\roc.w3k");
            }
        }
 
-       QFile tft(config->W3PATH_LATEST+"\\tft.w3k");
+       QFile tft(config->getCurrentW3Path()+"\\tft.w3k");
        if (!tft.exists()) {
-           QFile tftnew(config->W3PATH_LATEST+"\\tft.w3k.new");
+           QFile tftnew(config->getCurrentW3Path()+"\\tft.w3k.new");
            if (tftnew.exists()) {
-               tftnew.rename(config->W3PATH_LATEST+"\\tft.w3k");
+               tftnew.rename(config->getCurrentW3Path()+"\\tft.w3k");
            }
        }
 }
 
 void Updater::renamePatchMpqForLatestW3(Config *config) {
-    QFile modMpq(config->W3PATH_LATEST+"\\War3Mod.mpq");
-    if (!modMpq.exists()) {
-        QFile patchMpq(config->W3PATH_LATEST+"\\War3Patch.mpq");
-        if (patchMpq.exists()) {
-            patchMpq.copy(config->W3PATH_LATEST+"\\War3Mod.mpq");
+    //War3Patch.mpq was renamed to War3Mod.mpq as of 1.28.2. Applies to the modern
+    //installs (1.28 and 1.29) only; a 1.26 install legitimately ships War3Patch.mpq.
+    QStringList modernPaths = { config->W3PATH_128, config->W3PATH_129 };
+    for (const QString &p : modernPaths) {
+        if (p=="") continue;
+        QFile modMpq(p+"\\War3Mod.mpq");
+        if (!modMpq.exists()) {
+            QFile patchMpq(p+"\\War3Patch.mpq");
+            if (patchMpq.exists()) {
+                patchMpq.copy(p+"\\War3Mod.mpq");
+            }
         }
     }
 }

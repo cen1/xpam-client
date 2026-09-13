@@ -107,11 +107,12 @@ void GProxy::readStdout() {
             else if (tokens.size() >= 3 && tokens[2]=="ERROR") {
                 abort=true;
             }
+        }
 
-            if (process->state() != QProcess::Running) {
-                emit sendLine("GProxy process exited");
-                abort=true;
-            }
+        //Checked after draining output, otherwise a silent exit is never noticed
+        if (!abort && process->state() != QProcess::Running) {
+            emit sendLine("GProxy process exited");
+            abort=true;
         }
     }
     process->waitForFinished();
